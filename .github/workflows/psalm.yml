@@ -6,14 +6,14 @@ on:
 
 jobs:
   psalm:
-    name: PHP ${{ matrix.php }}-${{ matrix.os }}
-
-    runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
         os: [ubuntu-latest]
-        php: [8.1]
+        php: [8.1, 8.2]
+
+    name: ${{ matrix.os }}, PHP ${{ matrix.php }}
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout.
@@ -22,9 +22,9 @@ jobs:
       - name: Install PHP with extensions.
         uses: shivammathur/setup-php@v2
         with:
-          coverage: none
           php-version: ${{ matrix.php }}
           tools: composer:v2, cs2pr
+          coverage: none
 
       - name: Determine composer cache directory on Linux.
         run: echo "COMPOSER_CACHE_DIR=$(composer config cache-dir)" >> $GITHUB_ENV
