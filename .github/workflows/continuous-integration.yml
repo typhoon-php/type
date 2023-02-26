@@ -1,0 +1,26 @@
+name: Continuous Integration
+
+on:
+  pull_request: ~
+  push:
+    branches: ['*.x']
+
+jobs:
+  composer-validate:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dependencies: [lowest, highest, locked]
+        php: [8.1, 8.2]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2, cs2pr
+          coverage: none
+      - uses: ramsey/composer-install@v2
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+          composer-options: --optimize-autoloader
+      - run: composer validate --strict
