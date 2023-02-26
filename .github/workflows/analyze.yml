@@ -32,7 +32,7 @@ jobs:
         uses: actions/cache@v3.2.6
         with:
           path: ${{ env.COMPOSER_CACHE_DIR }}
-          key: php-${{ matrix.php }}-composer-${{ hashFiles('composer.lock') }}
+          key: php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
           restore-keys: php-${{ matrix.php }}-composer-
 
       - name: Install dependencies with composer
