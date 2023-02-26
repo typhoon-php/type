@@ -10,8 +10,38 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        dependencies: [lowest, highest, locked]
-        php: [8.1, 8.2]
+        php: [8.1]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - run: composer validate --strict --ansi
+
+  composer-normalize:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - uses: ramsey/composer-install@v2
+        with:
+          composer-options: --optimize-autoloader
+      - run: composer normalize --dry-run --ansi --diff
+
+  php-cs-fixer:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1]
     steps:
       - uses: actions/checkout@v3.3.0
       - uses: shivammathur/setup-php@v2
@@ -21,6 +51,22 @@ jobs:
           coverage: none
       - uses: ramsey/composer-install@v2
         with:
-          dependency-versions: ${{ matrix.dependencies }}
           composer-options: --optimize-autoloader
-      - run: composer validate --strict
+      - run: composer fixcs -- --dry-run --ansi --diff --format=checkstyle | cs2pr
+
+  psalm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.1, 8.2]
+    steps:
+      - uses: actions/checkout@v3.3.0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+      - uses: ramsey/composer-install@v2
+        with:
+          composer-options: --optimize-autoloader
+      - run: composer psalm -- --stats --output-format=github --php-version=${{ matrix.php }}
