@@ -13,6 +13,8 @@ final class ArrayKeyT extends TypeAlias
 {
     public function type(): Type
     {
+
+
         return new UnionT(new IntT(), new StringT());
     }
 }
