@@ -6,7 +6,6 @@ namespace PHP\ExtendedTypeSystem\Type;
 
 /**
  * @psalm-api
- * @psalm-immutable
  * @template-covariant T
  */
 final class ArrayShapeItem
