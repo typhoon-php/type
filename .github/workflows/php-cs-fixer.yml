@@ -3,9 +3,6 @@ name: PHP CS Fixer
 on:
   push:
     branches: [main]
-    paths:
-      - .php-cs-fixer.dist.php
-      - '**.php'
 
   pull_request:
     paths:
