@@ -39,7 +39,7 @@ jobs:
         run: composer install --optimize-autoloader --ansi --no-interaction
 
       - name: Run PHP CS Fixer
-        run: composer fixcs -- --dry-run --ansi
+        run: composer fixcs -- --dry-run --ansi --diff --format=checkstyle | cs2pr
 
   psalm:
     strategy:
