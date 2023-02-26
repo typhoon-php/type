@@ -2,15 +2,15 @@ name: Psalm
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths:
-      - composer.json
-      - composer.lock
+      - psalm.xml.dist
+      - '**.php'
 
   pull_request:
     paths:
-      - composer.json
-      - composer.lock
+      - psalm.xml.dist
+      - '**.php'
 
 jobs:
   psalm:

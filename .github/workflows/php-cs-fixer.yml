@@ -2,15 +2,15 @@ name: PHP CS Fixer
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths:
-      - composer.json
-      - composer.lock
+      - .php-cs-fixer.dist.php
+      - '**.php'
 
   pull_request:
     paths:
-      - composer.json
-      - composer.lock
+      - .php-cs-fixer.dist.php
+      - '**.php'
 
 jobs:
   php-cs-fixer:

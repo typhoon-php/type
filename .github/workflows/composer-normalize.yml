@@ -2,7 +2,7 @@ name: Composer normalize
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - composer.json
       - composer.lock
