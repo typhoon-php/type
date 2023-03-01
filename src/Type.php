@@ -7,6 +7,7 @@ namespace ExtendedTypeSystem;
 /**
  * This interface must not be implemented outside ExtendedTypeSystem!
  *
+ * @psalm-internal ExtendedTypeSystem
  * @psalm-api
  * @psalm-immutable
  * @template-covariant T
