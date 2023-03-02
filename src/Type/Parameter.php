@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ExtendedTypeSystem\Type;
 
+use ExtendedTypeSystem\php;
 use ExtendedTypeSystem\Type;
 
 /**
@@ -14,10 +15,12 @@ use ExtendedTypeSystem\Type;
 final class Parameter
 {
     /**
+     * @internal
+     * @psalm-internal ExtendedTypeSystem
      * @param Type<TType> $type
      */
     public function __construct(
-        public readonly Type $type = new MixedT(),
+        public readonly Type $type = php::mixed,
         public readonly bool $default = false,
         public readonly bool $variadic = false,
     ) {

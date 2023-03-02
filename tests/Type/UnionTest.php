@@ -4,17 +4,19 @@ declare(strict_types=1);
 
 namespace ExtendedTypeSystem\Type;
 
+use ExtendedTypeSystem\php;
+
 /** @psalm-check-type-exact $_doubleUnion = true|string */
-$_doubleUnion = extractType(new UnionT(new TrueT(), new StringT()));
+$_doubleUnion = extractType(new UnionType(php::true, php::string));
 
 /** @psalm-check-type-exact $_tripleUnion = true|string|int */
-$_tripleUnion = extractType(new UnionT(new TrueT(), new StringT(), new IntT()));
+$_tripleUnion = extractType(new UnionType(php::true, php::string, php::int));
 
 /**
- * @param UnionT<int|string|float> $_type
+ * @param UnionType<int|string|float> $_type
  */
-function testUnionIsCovariant(UnionT $_type): void
+function testUnionIsCovariant(UnionType $_type): void
 {
 }
 
-testUnionIsCovariant(new UnionT(new IntT(), new StringT()));
+testUnionIsCovariant(new UnionType(php::int, php::string));

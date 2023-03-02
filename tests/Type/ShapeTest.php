@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace ExtendedTypeSystem\Type;
 
+use ExtendedTypeSystem\php;
+
 /** @psalm-check-type-exact $_emptyShape = array */
-$_emptyShape = extractType(new ShapeT());
+$_emptyShape = extractType(new ShapeType());
 
-/** @var ShapeT<array{a?: string, 10: int}> */
-$_arrayShapeType = new ShapeT([
-    'a' => new ShapeElement(new StringT(), optional: true),
-    10 => new IntT(),
+/** @var ShapeType<array{a?: string, 10: int}> */
+$_shapeType = new ShapeType([
+    'a' => new ShapeElement(php::string, optional: true),
+    10 => php::int,
 ]);
-/** @psalm-check-type-exact $_arrayShape = array{a?: string, 10: int} */
-$_arrayShape = extractType($_arrayShapeType);
+/** @psalm-check-type-exact $_shape = array{a?: string, 10: int} */
+$_shape = extractType($_shapeType);
 
-function testShapeIsCovariant(ShapeT $_type): void
+function testShapeIsCovariant(ShapeType $_type): void
 {
 }
 
-testShapeIsCovariant($_arrayShapeType);
+testShapeIsCovariant($_shapeType);

@@ -5,22 +5,23 @@ declare(strict_types=1);
 namespace ExtendedTypeSystem\Type;
 
 use ExtendedTypeSystem\Type;
+use ExtendedTypeSystem\TypeVisitor;
 
 /**
  * @psalm-api
  * @psalm-immutable
- * @template-covariant TType
+ * @implements Type<mixed>
  */
-final class ShapeElement
+enum MixedType implements Type
 {
     /**
      * @internal
      * @psalm-internal ExtendedTypeSystem
-     * @param Type<TType> $type
      */
-    public function __construct(
-        public readonly Type $type,
-        public readonly bool $optional = false,
-    ) {
+    case self;
+
+    public function accept(TypeVisitor $visitor): mixed
+    {
+        return $visitor->visitMixed($this);
     }
 }
