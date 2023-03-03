@@ -1,12 +1,12 @@
 # PHP Extended Type System • Type
 
 Collection of value objects that represent the types of PHP Extended Type System.
-Currently, all the types are inspired by popular PHP static analysis tools: [Psalm](https://psalm.dev/) and [PHPStan](https://phpstan.org/).
-
-All implementations of `Type` should be treated as sealed, `Type` interface MUST NOT be implemented in userland!
-If you need an alias for a complex compound type, extend `TypeAlias`.
+All the types are inspired by popular PHP static analysis tools: [Psalm](https://psalm.dev/) and [PHPStan](https://phpstan.org/).
 
 This library will never have any dependencies. Once full and stable, it might be proposed as a [PSR](https://www.php-fig.org/psr/) or [PER](https://www.php-fig.org/per/).
+
+Please, note that this is a low-level API for static analysers and reflectors. It's not designed for convenient general usage in a project.
+For that purpose we plan to release a special package. 
 
 ## Installation
 
@@ -14,8 +14,51 @@ This library will never have any dependencies. Once full and stable, it might be
 composer require extended-type-system/type
 ```
 
-## Naming
+## Usage
 
-Value objects, representing native PHP types cannot be named after them, because words like `Int`, `Strind` etc. are [reserved](https://www.php.net/manual/en/reserved.php).
-A suffix might be introduced to fix this problem. `Type` suffix is too verbose, so we have chosen `T`: `int -> IntT`, `float -> FloatT`.
-Although types like `non-empty-list` can be safely named `NonEmptyList`, for now we have decided to follow the T-convention for all types.
+```php
+use ExtendedTypeSystem\Type\CallableType;
+use ExtendedTypeSystem\Type\ClassConstantType;
+use ExtendedTypeSystem\Type\ClassTemplateType;
+use ExtendedTypeSystem\Type\FalseType;
+use ExtendedTypeSystem\Type\FloatType;
+use ExtendedTypeSystem\Type\IntType;
+use ExtendedTypeSystem\Type\MixedType;
+use ExtendedTypeSystem\Type\NamedObjectType;
+use ExtendedTypeSystem\Type\NonEmptyListType;
+use ExtendedTypeSystem\Type\NumericType;
+use ExtendedTypeSystem\Type\Parameter;
+use ExtendedTypeSystem\Type\ShapeElement;
+use ExtendedTypeSystem\Type\ShapeType;
+use ExtendedTypeSystem\Type\UnionType;
+use ExtendedTypeSystem\Type\VoidType;
+
+/**
+ * array{
+ *     a: non-empty-list,
+ *     b?: int|float,
+ *     c: Traversable<numeric-string, false>,
+ *     d: callable(PDO::*, T:Generator=, mixed...): void,
+ *     ...
+ * }
+ */
+$type = new ShapeType(
+    [
+        'a' => new ShapeElement(new NonEmptyListType()),
+        'b' => new ShapeElement(new UnionType(IntType::self, FloatType::self), optional: true),
+        'c' => new ShapeElement(new NamedObjectType(
+            class: Traversable::class,
+            templateArguments: [NumericType::self, FalseType::self],
+        )),
+        'd' => new ShapeElement(new CallableType(
+            parameters: [
+                new Parameter(new ClassConstantType(PDO::class, '*')),
+                new Parameter(new ClassTemplateType('TSend', Generator::class), hasDefault: true),
+                new Parameter(MixedType::self, variadic: true),
+            ],
+            returnType: VoidType::self,
+        )),
+    ],
+    sealed: false,
+);
+```
