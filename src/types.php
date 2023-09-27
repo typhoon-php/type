@@ -83,6 +83,17 @@ final class types
 
     /**
      * @psalm-pure
+     * @no-named-arguments
+     * @param positive-int $int
+     * @param positive-int ...$ints
+     */
+    public static function intMask(int $int, int ...$ints): IntMaskType
+    {
+        return new IntMaskType([$int, ...$ints]);
+    }
+
+    /**
+     * @psalm-pure
      */
     public static function int(?int $min = null, ?int $max = null): IntRangeType
     {
