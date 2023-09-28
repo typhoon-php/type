@@ -105,7 +105,7 @@ interface TypeVisitor
     public function visitList(ListType $type): mixed;
 
     /** @return TReturn */
-    public function visitShape(ArrayShapeType $type): mixed;
+    public function visitArrayShape(ArrayShapeType $type): mixed;
 
     /** @return TReturn */
     public function visitNonEmptyArray(NonEmptyArrayType $type): mixed;

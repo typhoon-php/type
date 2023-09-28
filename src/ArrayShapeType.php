@@ -28,12 +28,12 @@ final class ArrayShapeType implements Type
         array $elements = [],
         bool $sealed = true,
     ) {
-        $this->sealed = $sealed;
         $this->elements = $elements;
+        $this->sealed = $sealed;
     }
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->visitShape($this);
+        return $visitor->visitArrayShape($this);
     }
 }
