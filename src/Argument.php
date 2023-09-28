@@ -11,9 +11,18 @@ namespace Typhoon\Type;
 final class Argument
 {
     /**
+     * @var non-empty-string
+     */
+    public readonly string $name;
+
+    /**
+     * @internal
+     * @psalm-internal Typhoon\Type
      * @param non-empty-string $name
      */
     public function __construct(
-        public readonly string $name,
-    ) {}
+        string $name,
+    ) {
+        $this->name = $name;
+    }
 }

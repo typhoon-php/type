@@ -499,6 +499,15 @@ final class types
     {
         return new UnionType([$type1, $type2, ...$moreTypes]);
     }
+
+    /**
+     * @psalm-pure
+     * @param non-empty-string $name
+     */
+    public function arg(string $name): Argument
+    {
+        return new Argument($name);
+    }
 }
 
 /**
