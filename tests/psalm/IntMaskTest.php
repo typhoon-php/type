@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Typhoon\Type\IntMaskOfTest;
+namespace Typhoon\Type\IntMaskTest;
 
 use Typhoon\Type\IntMaskType;
 use function Typhoon\Type\extractType;

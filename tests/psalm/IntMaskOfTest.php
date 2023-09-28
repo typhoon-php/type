@@ -8,11 +8,18 @@ use Typhoon\Type\IntMaskOfType;
 use Typhoon\Type\Type;
 use function Typhoon\Type\extractType;
 
-/**
- * @param Type<\ReflectionClass::IS_*> $constantType
- */
-function a(Type $constantType): void
+final class X
 {
-    /** @psalm-check-type-exact $_int = 16|32|64|65536 */
+    const A = 1;
+    const B = 2;
+    const C = 4;
+}
+
+/**
+ * @param Type<X::*> $constantType
+ */
+function testItPreservesPassedType(Type $constantType): void
+{
+    /** @psalm-check-type-exact $_int = 1|2|4 */
     $_int = extractType(new IntMaskOfType($constantType));
 }
