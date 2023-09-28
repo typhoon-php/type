@@ -322,6 +322,15 @@ final class types
      * @psalm-pure
      * @no-named-arguments
      */
+    public static function this(Type ...$templateArguments): ThisType
+    {
+        return new ThisType($templateArguments);
+    }
+
+    /**
+     * @psalm-pure
+     * @no-named-arguments
+     */
     public static function static(Type ...$templateArguments): StaticType
     {
         return new StaticType($templateArguments);

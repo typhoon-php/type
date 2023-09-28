@@ -123,6 +123,9 @@ interface TypeVisitor
     public function visitStatic(StaticType $type): mixed;
 
     /** @return TReturn */
+    public function visitThis(ThisType $type): mixed;
+
+    /** @return TReturn */
     public function visitObject(ObjectType $type): mixed;
 
     /** @return TReturn */
