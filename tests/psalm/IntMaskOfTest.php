@@ -13,6 +13,6 @@ use function Typhoon\Type\extractType;
  */
 function a(Type $constantType): void
 {
-    /** @psalm-check-type $_int = 16|32|64|65536 */
+    /** @psalm-check-type-exact $_int = 16|32|64|65536 */
     $_int = extractType(new IntMaskOfType($constantType));
 }
