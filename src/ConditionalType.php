@@ -11,7 +11,7 @@ namespace Typhoon\Type;
  */
 final class ConditionalType implements Type
 {
-    public readonly ArgumentName|TemplateType $subject;
+    public readonly Argument|TemplateType $subject;
 
     public readonly Type $is;
 
@@ -24,7 +24,7 @@ final class ConditionalType implements Type
      * @psalm-internal Typhoon\Type
      */
     public function __construct(
-        TemplateType|ArgumentName $subject,
+        Argument|TemplateType $subject,
         Type $is,
         Type $if,
         Type $else,

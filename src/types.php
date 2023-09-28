@@ -460,7 +460,7 @@ final class types
     /**
      * @psalm-pure
      */
-    public static function conditional(TemplateType|ArgumentName $subject, Type $is, Type $if, Type $else): ConditionalType
+    public static function conditional(Argument|TemplateType $subject, Type $is, Type $if, Type $else): ConditionalType
     {
         return new ConditionalType($subject, $is, $if, $else);
     }

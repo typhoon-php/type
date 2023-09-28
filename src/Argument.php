@@ -8,7 +8,7 @@ namespace Typhoon\Type;
  * @api
  * @psalm-immutable
  */
-final class ArgumentName
+final class Argument
 {
     /**
      * @param non-empty-string $name
