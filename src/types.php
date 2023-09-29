@@ -310,7 +310,7 @@ final class types
 
     /**
      * @psalm-pure
-     * @param array<string, Property> $properties
+     * @param array<string, Type|Property> $properties
      */
     public static function objectShape(array $properties = []): ObjectShapeType
     {
