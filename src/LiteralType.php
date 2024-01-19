@@ -7,15 +7,15 @@ namespace Typhoon\Type;
 /**
  * @api
  * @psalm-immutable
- * @template-covariant TValue of string
+ * @template-covariant TValue of int|float|string
  * @implements Type<TValue>
  */
-final class StringLiteralType implements Type
+final class LiteralType implements Type
 {
     /**
      * @var TValue
      */
-    public readonly string $value;
+    public readonly int|float|string $value;
 
     /**
      * @internal
@@ -23,13 +23,13 @@ final class StringLiteralType implements Type
      * @param TValue $value
      */
     public function __construct(
-        string $value,
+        int|float|string $value,
     ) {
         $this->value = $value;
     }
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->visitStringLiteral($this);
+        return $visitor->visitLiteral($this);
     }
 }

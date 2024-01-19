@@ -117,66 +117,13 @@ final class types
 
     /**
      * @psalm-pure
-     * @psalm-suppress NoValue, InvalidTemplateParam, TypeDoesNotContainType
      * @template TValue of int|float|string
      * @param TValue $value
-     * @return ($value is int ? IntLiteralType<TValue> : ($value is float ? FloatLiteralType<TValue> : StringLiteralType<TValue>))
+     * @return LiteralType<TValue>
      */
-    public static function literal(int|float|string $value): IntLiteralType|FloatLiteralType|StringLiteralType
+    public static function literal(int|float|string $value): LiteralType
     {
-        if (\is_int($value)) {
-            return new IntLiteralType($value);
-        }
-
-        if (\is_float($value)) {
-            return new FloatLiteralType($value);
-        }
-
-        return new StringLiteralType($value);
-    }
-
-    /**
-     * @psalm-pure
-     * @template TValue of int
-     * @param TValue $value
-     * @return IntLiteralType<TValue>
-     */
-    public static function intLiteral(int $value): IntLiteralType
-    {
-        return new IntLiteralType($value);
-    }
-
-    /**
-     * @psalm-pure
-     * @template TValue of float
-     * @param TValue $value
-     * @return FloatLiteralType<TValue>
-     */
-    public static function floatLiteral(float $value): FloatLiteralType
-    {
-        return new FloatLiteralType($value);
-    }
-
-    /**
-     * @psalm-pure
-     * @template TValue of string
-     * @param TValue $value
-     * @return StringLiteralType<TValue>
-     */
-    public static function stringLiteral(string $value): StringLiteralType
-    {
-        return new StringLiteralType($value);
-    }
-
-    /**
-     * @psalm-pure
-     * @template TClass of class-string
-     * @param TClass $class
-     * @return ClassStringLiteralType<TClass>
-     */
-    public static function classStringLiteral(string $class): ClassStringLiteralType
-    {
-        return new ClassStringLiteralType($class);
+        return new LiteralType($value);
     }
 
     /**
