@@ -15,7 +15,10 @@
     "require-dev": {
         "ergebnis/composer-normalize": "^2.36.0",
         "friendsofphp/php-cs-fixer": "^3.26.1",
+        "phpunit/phpunit": "^10.5",
         "phpyh/coding-standard": "^2.5.0",
+        "symfony/console": "^6.4",
+        "symfony/var-dumper": "^7.0",
         "vimeo/psalm": "^5.15.0"
     },
     "autoload": {
@@ -25,11 +28,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Typhoon\\Type\\": "tests/psalm/"
-        },
-        "files": [
-            "tests/psalm/functions.php"
-        ]
+            "StaticAnalysisTester\\": "static-analysis-tester/",
+            "Typhoon\\Type\\": "tests/"
+        }
     },
     "config": {
         "allow-plugins": {
@@ -40,6 +41,7 @@
     "scripts": {
         "fixcs": "PHP_CS_FIXER_IGNORE_ENV=1 vendor/bin/php-cs-fixer fix -v",
         "pre-command-run": "mkdir -p var",
-        "psalm": "psalm --show-info --no-diff"
+        "psalm": "psalm --show-info --no-diff",
+        "test": "phpunit"
     }
 }

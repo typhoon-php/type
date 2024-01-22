@@ -50,4 +50,9 @@
         <function name="sleep"/>
         <function name="usleep"/>
     </forbiddenFunctions>
+
+    <ignoreExceptions>
+        <classAndDescendants name="LogicException"/>
+        <classAndDescendants name="RuntimeException"/>
+    </ignoreExceptions>
 </psalm>
