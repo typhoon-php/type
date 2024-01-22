@@ -20,7 +20,7 @@ final class PsalmTester
 
     public static function create(
         ?string $psalmPath = null,
-        string $defaultArguments = '--no-progress --config=' . __DIR__ . '/psalm.xml',
+        string $defaultArguments = '--no-progress --no-diff --config=' . __DIR__ . '/psalm.xml',
         ?string $temporaryDirectory = null,
     ): self {
         if ($psalmPath === null) {
