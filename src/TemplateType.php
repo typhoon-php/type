@@ -19,12 +19,16 @@ final class TemplateType implements Type
 
     public readonly AtMethod|AtClass|AtFunction $declaredAt;
 
+    /**
+     * @var Type<TType>
+     */
     public readonly Type $constraint;
 
     /**
      * @internal
      * @psalm-internal Typhoon\Type
      * @param non-empty-string $name
+     * @param Type<TType> $constraint
      */
     public function __construct(
         string $name,

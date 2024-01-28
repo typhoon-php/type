@@ -370,7 +370,10 @@ final class types
 
     /**
      * @psalm-pure
+     * @template TType
      * @param non-empty-string $name
+     * @param Type<TType> $constraint
+     * @return TemplateType<TType>
      */
     public static function template(string $name, AtMethod|AtClass|AtFunction $declaredAt, Type $constraint = self::mixed): TemplateType
     {
