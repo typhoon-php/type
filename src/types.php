@@ -133,6 +133,33 @@ final class types
 
     /**
      * @psalm-pure
+     * @param class-string $declaredAtClass
+     */
+    public static function selfClassString(string $declaredAtClass): SelfClassStringLiteralType
+    {
+        return new SelfClassStringLiteralType($declaredAtClass);
+    }
+
+    /**
+     * @psalm-pure
+     * @param class-string $declaredAtClass
+     */
+    public static function parentClassString(string $declaredAtClass): ParentClassStringLiteralType
+    {
+        return new ParentClassStringLiteralType($declaredAtClass);
+    }
+
+    /**
+     * @psalm-pure
+     * @param class-string $declaredAtClass
+     */
+    public static function staticClassString(string $declaredAtClass): StaticClassStringLiteralType
+    {
+        return new StaticClassStringLiteralType($declaredAtClass);
+    }
+
+    /**
+     * @psalm-pure
      * @template TValue
      * @param Type<TValue> $valueType
      * @return NonEmptyListType<TValue>
@@ -265,9 +292,27 @@ final class types
     /**
      * @psalm-pure
      * @no-named-arguments
-     * @template TObject of object
-     * @param class-string<TObject> $declaredAtClass
-     * @return StaticType<TObject>
+     * @param class-string $declaredAtClass
+     */
+    public static function self(string $declaredAtClass, Type ...$templateArguments): SelfType
+    {
+        return new SelfType($declaredAtClass, $templateArguments);
+    }
+
+    /**
+     * @psalm-pure
+     * @no-named-arguments
+     * @param class-string $declaredAtClass
+     */
+    public static function parent(string $declaredAtClass, Type ...$templateArguments): ParentType
+    {
+        return new ParentType($declaredAtClass, $templateArguments);
+    }
+
+    /**
+     * @psalm-pure
+     * @no-named-arguments
+     * @param class-string $declaredAtClass
      */
     public static function static(string $declaredAtClass, Type ...$templateArguments): StaticType
     {

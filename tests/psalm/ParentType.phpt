@@ -3,7 +3,7 @@
 
 namespace Typhoon\Type;
 
-$_type = PsalmTest::extractType(new StaticType(\stdClass::class));
+$_type = PsalmTest::extractType(new ParentType(\stdClass::class));
 /** @psalm-check-type-exact $_type = \object */
 
 --EXPECT--

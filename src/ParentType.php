@@ -8,10 +8,10 @@ namespace Typhoon\Type;
  * @api
  * @psalm-immutable
  * @implements Type<object>
- * Absence of a template declaration for the object type is intentional. Consider a trait: self type declared in
+ * Absence of a template declaration for the object type is intentional. Consider a trait: parent type declared in
  * this trait does not represent instance of the trait, but an instance of a class that uses this trait.
  */
-final class StaticType implements Type
+final class ParentType implements Type
 {
     /**
      * @var class-string
@@ -39,6 +39,6 @@ final class StaticType implements Type
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->visitStatic($this);
+        return $visitor->visitParent($this);
     }
 }

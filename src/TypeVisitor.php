@@ -66,6 +66,15 @@ interface TypeVisitor
     public function visitClassStringLiteral(ClassStringLiteralType $type): mixed;
 
     /** @return TReturn */
+    public function visitSelfClassStringLiteral(SelfClassStringLiteralType $type): mixed;
+
+    /** @return TReturn */
+    public function visitParentClassStringLiteral(ParentClassStringLiteralType $type): mixed;
+
+    /** @return TReturn */
+    public function visitStaticClassStringLiteral(StaticClassStringLiteralType $type): mixed;
+
+    /** @return TReturn */
     public function visitNamedClassString(NamedClassStringType $type): mixed;
 
     /** @return TReturn */
@@ -124,6 +133,12 @@ interface TypeVisitor
 
     /** @return TReturn */
     public function visitNamedObject(NamedObjectType $type): mixed;
+
+    /** @return TReturn */
+    public function visitSelf(SelfType $type): mixed;
+
+    /** @return TReturn */
+    public function visitParent(ParentType $type): mixed;
 
     /** @return TReturn */
     public function visitStatic(StaticType $type): mixed;
