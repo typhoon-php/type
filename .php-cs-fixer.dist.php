@@ -8,6 +8,7 @@ use PHPyh\CodingStandard\PhpCsFixerCodingStandard;
 
 $finder = Finder::create()
     ->in([
+        __DIR__ . '/dev',
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])

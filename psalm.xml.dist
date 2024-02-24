@@ -22,6 +22,7 @@
     </enableExtensions>
 
     <projectFiles>
+        <directory name="dev"/>
         <directory name="src"/>
         <directory name="tests"/>
         <ignoreFiles>

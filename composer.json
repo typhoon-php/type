@@ -30,7 +30,10 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Typhoon\\Type\\": "tests/"
+            "Typhoon\\Type\\": [
+                "dev/",
+                "tests/"
+            ]
         }
     },
     "config": {
@@ -44,6 +47,8 @@
         "phpstan": "vendor/bin/phpstan --verbose",
         "pre-command-run": "mkdir -p var",
         "psalm": "psalm --show-info --no-diff",
-        "test": "phpunit"
+        "test": "phpunit",
+        "type-matcher-generate": "@php dev/TypeMatcherGenerator/generate.php",
+        "type-matcher-validate": "@php dev/TypeMatcherGenerator/validate.php"
     }
 }
