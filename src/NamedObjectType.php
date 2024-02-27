@@ -13,7 +13,7 @@ final class NamedObjectType implements Type
 {
     /**
      * @param non-empty-string $class
-     * @param list<Type> $templateArguments
+     * @param list<Type|VarianceAwareType> $templateArguments
      */
     public function __construct(
         private readonly string $class,

@@ -196,11 +196,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function varianceAware(Type $self, Type $type, Variance $variance): mixed
-    {
-        return $this->default($self);
-    }
-
     public function void(Type $self): mixed
     {
         return $this->default($self);

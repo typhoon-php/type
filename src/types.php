@@ -344,7 +344,7 @@ enum types implements Type
      * @param class-string<TObject>|non-empty-string $class
      * @return ($class is class-string ? Type<TObject> : Type<object>)
      */
-    public static function object(string $class, Type ...$templateArguments): Type
+    public static function object(string $class, Type|VarianceAwareType ...$templateArguments): Type
     {
         if ($class === \Closure::class && $templateArguments === []) {
             return self::closure;
@@ -419,16 +419,6 @@ enum types implements Type
     public static function value(Type $type): Type
     {
         return new ValueType($type);
-    }
-
-    /**
-     * @template TType
-     * @param Type<TType> $type
-     * @return Type<TType>
-     */
-    public static function varianceAware(Type $type, Variance $variance): Type
-    {
-        return new VarianceAwareType($type, $variance);
     }
 
     public function accept(TypeVisitor $visitor): mixed

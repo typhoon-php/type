@@ -151,7 +151,7 @@ interface TypeVisitor
     /**
      * @param Type<object> $self
      * @param non-empty-string $class
-     * @param list<Type> $templateArguments
+     * @param list<Type|VarianceAwareType> $templateArguments
      * @return TReturn
      */
     public function namedObject(Type $self, string $class, array $templateArguments): mixed;
@@ -231,11 +231,6 @@ interface TypeVisitor
      * @return TReturn
      */
     public function value(Type $self, Type $type): mixed;
-
-    /**
-     * @return TReturn
-     */
-    public function varianceAware(Type $self, Type $type, Variance $variance): mixed;
 
     /**
      * @param Type<void> $self
