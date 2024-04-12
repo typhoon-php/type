@@ -46,9 +46,9 @@ enum types implements Type
      * @param non-empty-string $class
      * @param non-empty-string $name
      */
-    public static function alias(string $class, string $name, Type ...$arguments): Type
+    public static function alias(string $name, string $class, Type ...$arguments): Type
     {
-        return new Internal\AliasType($class, $name, $arguments);
+        return new Internal\AliasType($name, $class, $arguments);
     }
 
     /**

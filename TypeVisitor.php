@@ -11,12 +11,12 @@ namespace Typhoon\Type;
 interface TypeVisitor
 {
     /**
-     * @param non-empty-string $class
      * @param non-empty-string $name
+     * @param non-empty-string $class
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function alias(Type $self, string $class, string $name, array $arguments): mixed;
+    public function alias(Type $self, string $name, string $class, array $arguments): mixed;
 
     /**
      * @param Type<array<mixed>> $self
