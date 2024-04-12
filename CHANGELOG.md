@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed `TypeVisitor::classStringLiteral()` and `DefaultVisitor::classStringLiteral()`.
 - Added `@no-named-arguments` phpDocs to `types::alias()`, `types::template()` and `types::object()`.
 
+## 0.3.3
+
+- Deprecated not declaring `$min` and `$max` parameters when implementing `TypeVisitor::int()`.
+- Deprecated `TypeVisitor::intRange()` and `DefaultVisitor::intRange()`.
+
 ## 0.3.2
 
 - Deprecated `TypeVisitor::classStringLiteral()` and `DefaultVisitor::classStringLiteral()`.

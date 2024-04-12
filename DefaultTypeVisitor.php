@@ -61,7 +61,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function int(Type $self): mixed
+    public function int(Type $self/** ?int $min, ?int $max */): mixed
     {
         return $this->default($self);
     }
@@ -76,8 +76,13 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
+    /**
+     * @deprecated will be removed in 0.4.0
+     */
     public function intRange(Type $self, ?int $min, ?int $max): mixed
     {
+        trigger_deprecation('typhoon/reflection', '0.3.3', 'Method %s() is deprecated and will be removed in 0.4.0. Use %s::int() instead.', __METHOD__, self::class);
+
         return $this->default($self);
     }
 
