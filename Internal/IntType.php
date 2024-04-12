@@ -22,17 +22,6 @@ final class IntType implements Type
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        if ((new \ReflectionMethod($visitor, 'int'))->getNumberOfParameters() !== 3) {
-            trigger_deprecation('typhoon/reflection', '0.3.3', 'Not declaring $min and $max parameters in method %s::int() is deprecated.', self::class);
-
-            /** @psalm-suppress DeprecatedMethod */
-            return $visitor->intRange($this, $this->min, $this->max);
-        }
-
-        /**
-         * @psalm-suppress TooManyArguments
-         * @phpstan-ignore arguments.count
-         */
         return $visitor->int($this, $this->min, $this->max);
     }
 }
