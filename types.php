@@ -388,6 +388,15 @@ enum types implements Type
 
     /**
      * @no-named-arguments
+     * @param non-empty-string $class
+     */
+    public static function static(string $class, Type ...$arguments): Type
+    {
+        return new Internal\StaticType($class, $arguments);
+    }
+
+    /**
+     * @no-named-arguments
      * @param non-empty-string $name
      */
     public static function template(string $name, AtMethod|AtClass|AtFunction $declaredAt, Type ...$arguments): Type

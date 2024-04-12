@@ -181,6 +181,13 @@ interface TypeVisitor
     public function resource(Type $self): mixed;
 
     /**
+     * @param non-empty-string $class
+     * @param list<Type> $arguments
+     * @return TReturn
+     */
+    public function static(Type $self, string $class, array $arguments): mixed;
+
+    /**
      * @param Type<string> $self
      * @return TReturn
      */
