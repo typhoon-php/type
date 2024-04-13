@@ -1,0 +1,173 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Typhoon\Type;
+
+/**
+ * @api
+ * @extends DefaultTypeVisitor<Type>
+ */
+abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
+{
+    public function alias(Type $self, string $name, string $class, array $arguments): mixed
+    {
+        return types::alias($name, $class, ...array_map(
+            fn(Type $templateArgument): Type => $templateArgument->accept($this),
+            $arguments,
+        ));
+    }
+
+    public function array(Type $self, Type $key, Type $value, array $elements): mixed
+    {
+        return types::arrayShape(array_map(
+            fn(ArrayElement $element): ArrayElement => types::arrayElement(
+                $element->type->accept($this),
+                $element->optional,
+            ),
+            $elements,
+        ), $key->accept($this), $value->accept($this));
+    }
+
+    public function callable(Type $self, array $parameters, Type $return): mixed
+    {
+        return types::callable(
+            array_map(
+                fn(Parameter $parameter): Parameter => types::param(
+                    type: $parameter->type->accept($this),
+                    hasDefault: $parameter->hasDefault,
+                    variadic: $parameter->variadic,
+                    byReference: $parameter->byReference,
+                    name: $parameter->name,
+                ),
+                $parameters,
+            ),
+            $return->accept($this),
+        );
+    }
+
+    public function classConstant(Type $self, Type $class, string $name): mixed
+    {
+        return types::classConstant($class->accept($this), $name);
+    }
+
+    public function closure(Type $self, array $parameters, Type $return): mixed
+    {
+        return types::closure(
+            array_map(
+                fn(Parameter $parameter): Parameter => types::param(
+                    type: $parameter->type->accept($this),
+                    hasDefault: $parameter->hasDefault,
+                    variadic: $parameter->variadic,
+                    byReference: $parameter->byReference,
+                    name: $parameter->name,
+                ),
+                $parameters,
+            ),
+            $return->accept($this),
+        );
+    }
+
+    public function conditional(Type $self, Argument|Type $subject, Type $if, Type $then, Type $else): mixed
+    {
+        return types::conditional($subject, $if->accept($this), $then->accept($this), $else->accept($this));
+    }
+
+    public function intersection(Type $self, array $types): mixed
+    {
+        return types::intersection(...array_map(fn(Type $part): Type => $part->accept($this), $types));
+    }
+
+    public function intMask(Type $self, Type $type): mixed
+    {
+        return types::intMask($type->accept($this));
+    }
+
+    public function iterable(Type $self, Type $key, Type $value): mixed
+    {
+        return types::iterable($key->accept($this), $value->accept($this));
+    }
+
+    public function key(Type $self, Type $type): mixed
+    {
+        return types::key($type->accept($this));
+    }
+
+    public function list(Type $self, Type $value, array $elements): mixed
+    {
+        return types::listShape(array_map(
+            fn(ArrayElement $element): ArrayElement => types::arrayElement(
+                $element->type->accept($this),
+                $element->optional,
+            ),
+            $elements,
+        ), $value->accept($this));
+    }
+
+    public function literal(Type $self, Type $type): mixed
+    {
+        return types::literal($type->accept($this));
+    }
+
+    public function namedObject(Type $self, string $class, array $arguments): mixed
+    {
+        return types::object($class, ...array_map(
+            fn(Type $templateArgument): Type => $templateArgument->accept($this),
+            $arguments,
+        ));
+    }
+
+    public function nonEmpty(Type $self, Type $type): mixed
+    {
+        return types::nonEmpty($type->accept($this));
+    }
+
+    public function objectShape(Type $self, array $properties): mixed
+    {
+        return types::objectShape(
+            array_map(
+                fn(Property $property): Property => types::prop(
+                    $property->type->accept($this),
+                    $property->optional,
+                ),
+                $properties,
+            ),
+        );
+    }
+
+    public function offset(Type $self, Type $type, Type $offset): mixed
+    {
+        return types::offset($type->accept($this), $offset->accept($this));
+    }
+
+    public function static(Type $self, string $class, array $arguments): mixed
+    {
+        return types::static($class, ...array_map(
+            fn(Type $templateArgument): Type => $templateArgument->accept($this),
+            $arguments,
+        ));
+    }
+
+    public function template(Type $self, string $name, AtClass|AtFunction|AtMethod $declaredAt, array $arguments): mixed
+    {
+        return types::template($name, $declaredAt, ...array_map(
+            fn(Type $templateArgument): Type => $templateArgument->accept($this),
+            $arguments,
+        ));
+    }
+
+    public function union(Type $self, array $types): mixed
+    {
+        return types::union(...array_map(fn(Type $part): Type => $part->accept($this), $types));
+    }
+
+    public function varianceAware(Type $self, Type $type, Variance $variance): mixed
+    {
+        return types::varianceAware($type->accept($this), $variance);
+    }
+
+    protected function default(Type $self): mixed
+    {
+        return $self;
+    }
+}
