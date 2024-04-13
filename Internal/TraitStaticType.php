@@ -35,6 +35,6 @@ final class TraitStaticType implements Type
             return $visitor->traitStatic($this->arguments);
         }
 
-        return $visitor->alias($this, 'static', 'trait-' . $this->trait, $this->arguments);
+        return $visitor->alias($this, 'static', $this->trait, $this->arguments);
     }
 }

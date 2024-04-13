@@ -35,6 +35,6 @@ final class TraitSelfType implements Type
             return $visitor->traitSelf($this->arguments);
         }
 
-        return $visitor->alias($this, 'self', 'trait-' . $this->trait, $this->arguments);
+        return $visitor->alias($this, 'self', $this->trait, $this->arguments);
     }
 }

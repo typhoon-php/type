@@ -35,6 +35,6 @@ final class TraitParentType implements Type
             return $visitor->traitParent($this->arguments);
         }
 
-        return $visitor->alias($this, 'parent', 'trait-' . $this->trait, $this->arguments);
+        return $visitor->alias($this, 'parent', $this->trait, $this->arguments);
     }
 }
