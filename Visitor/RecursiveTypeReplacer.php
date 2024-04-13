@@ -2,7 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Typhoon\Type;
+namespace Typhoon\Type\Visitor;
+
+use Typhoon\Type\Argument;
+use Typhoon\Type\ArrayElement;
+use Typhoon\Type\AtClass;
+use Typhoon\Type\AtFunction;
+use Typhoon\Type\AtMethod;
+use Typhoon\Type\DefaultTypeVisitor;
+use Typhoon\Type\Parameter;
+use Typhoon\Type\Property;
+use Typhoon\Type\Type;
+use Typhoon\Type\types;
+use Typhoon\Type\Variance;
 
 /**
  * @api

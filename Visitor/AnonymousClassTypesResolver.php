@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
-use Typhoon\Type\RecursiveTypeReplacer;
 use Typhoon\Type\Type;
 
 /**
