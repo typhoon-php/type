@@ -9,7 +9,6 @@ use Typhoon\Type\ArrayElement;
 use Typhoon\Type\AtClass;
 use Typhoon\Type\AtFunction;
 use Typhoon\Type\AtMethod;
-use Typhoon\Type\DefaultTypeVisitor;
 use Typhoon\Type\Parameter;
 use Typhoon\Type\Property;
 use Typhoon\Type\Type;
