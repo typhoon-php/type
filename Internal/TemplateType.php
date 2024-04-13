@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
-use Typhoon\Type\At;
-use Typhoon\Type\AtClass;
-use Typhoon\Type\AtFunction;
-use Typhoon\Type\AtMethod;
+use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 
@@ -19,18 +16,12 @@ use Typhoon\Type\TypeVisitor;
  */
 final class TemplateType implements Type
 {
-    /**
-     * @param non-empty-string $name
-     * @param list<Type> $arguments
-     */
     public function __construct(
-        private readonly string $name,
-        private readonly At|AtFunction|AtClass|AtMethod $declaredAt,
-        private readonly array $arguments,
+        private readonly TemplateId $template,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->template($this, $this->name, $this->declaredAt, $this->arguments);
+        return $visitor->template($this, $this->template);
     }
 }

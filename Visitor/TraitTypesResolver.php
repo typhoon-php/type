@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
+use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\ClassId;
 use Typhoon\Type\Type;
 use Typhoon\Type\types;
 
@@ -12,13 +14,9 @@ use Typhoon\Type\types;
  */
 final class TraitTypesResolver extends RecursiveTypeReplacer
 {
-    /**
-     * @param ?non-empty-string $class
-     * @param ?non-empty-string $parent
-     */
     public function __construct(
-        private readonly ?string $class,
-        private readonly ?string $parent = null,
+        private readonly ClassId|AnonymousClassId $class,
+        private readonly ?ClassId $parent = null,
     ) {}
 
     /**
@@ -26,10 +24,6 @@ final class TraitTypesResolver extends RecursiveTypeReplacer
      */
     public function traitSelf(array $arguments): Type
     {
-        if ($this->class === null) {
-            return types::anonymousClassSelf(...$this->processTypes($arguments));
-        }
-
         return types::object($this->class, ...$this->processTypes($arguments));
     }
 
@@ -46,10 +40,6 @@ final class TraitTypesResolver extends RecursiveTypeReplacer
      */
     public function traitStatic(array $arguments): Type
     {
-        if ($this->class === null) {
-            return types::anonymousClassSelf(...$this->processTypes($arguments));
-        }
-
         return types::static($this->class, ...$this->processTypes($arguments));
     }
 }

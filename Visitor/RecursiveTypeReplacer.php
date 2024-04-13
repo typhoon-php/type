@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
+use Typhoon\DeclarationId\AliasId;
+use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\ClassId;
 use Typhoon\Type\Argument;
 use Typhoon\Type\ArrayElement;
-use Typhoon\Type\At;
-use Typhoon\Type\AtClass;
-use Typhoon\Type\AtFunction;
-use Typhoon\Type\AtMethod;
 use Typhoon\Type\Parameter;
 use Typhoon\Type\Property;
 use Typhoon\Type\Type;
@@ -22,9 +21,9 @@ use Typhoon\Type\Variance;
  */
 abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 {
-    public function alias(Type $self, string $name, string $class, array $arguments): mixed
+    public function alias(Type $self, AliasId $alias, array $arguments): mixed
     {
-        return types::alias($name, $class, ...$this->processTypes($arguments));
+        return types::alias($alias, ...$this->processTypes($arguments));
     }
 
     public function array(Type $self, Type $key, Type $value, array $elements): mixed
@@ -125,7 +124,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::literal($type->accept($this));
     }
 
-    public function namedObject(Type $self, string $class, array $arguments): mixed
+    public function namedObject(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed
     {
         return types::object($class, ...$this->processTypes($arguments));
     }
@@ -153,14 +152,9 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::offset($type->accept($this), $offset->accept($this));
     }
 
-    public function static(Type $self, string $class, array $arguments): mixed
+    public function static(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed
     {
         return types::static($class, ...$this->processTypes($arguments));
-    }
-
-    public function template(Type $self, string $name, At|AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed
-    {
-        return types::template($name, $declaredAt, ...$this->processTypes($arguments));
     }
 
     public function union(Type $self, array $types): mixed

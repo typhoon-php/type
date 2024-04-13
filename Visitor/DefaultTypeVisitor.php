@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
+use Typhoon\DeclarationId\AliasId;
+use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Argument;
-use Typhoon\Type\At;
-use Typhoon\Type\AtClass;
-use Typhoon\Type\AtFunction;
-use Typhoon\Type\AtMethod;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 use Typhoon\Type\Variance;
@@ -20,7 +20,7 @@ use Typhoon\Type\Variance;
  */
 abstract class DefaultTypeVisitor implements TypeVisitor
 {
-    public function alias(Type $self, string $name, string $class, array $arguments): mixed
+    public function alias(Type $self, AliasId $alias, array $arguments): mixed
     {
         return $this->default($self);
     }
@@ -115,7 +115,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function namedObject(Type $self, string $class, array $arguments): mixed
+    public function namedObject(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed
     {
         return $this->default($self);
     }
@@ -160,7 +160,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function static(Type $self, string $class, array $arguments): mixed
+    public function static(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed
     {
         return $this->default($self);
     }
@@ -170,7 +170,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function template(Type $self, string $name, At|AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed
+    public function template(Type $self, TemplateId $template): mixed
     {
         return $this->default($self);
     }

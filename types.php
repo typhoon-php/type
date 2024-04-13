@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use Typhoon\DeclarationId\AliasId;
+use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\TemplateId;
+use function Typhoon\DeclarationId\classId;
+
 /**
  * @api
  * @psalm-immutable
@@ -41,25 +47,12 @@ enum types implements Type
     case truthyString;
     case void;
 
-    public const atAnonymousClass = At::anonymousClass;
-    public const atAnonymousFunction = At::anonymousFunction;
-
-    /**
-     * @no-named-arguments
-     * @param non-empty-string $class
-     * @param non-empty-string $name
-     */
-    public static function alias(string $name, string $class, Type ...$arguments): Type
-    {
-        return new Internal\AliasType($name, $class, $arguments);
-    }
-
     /**
      * @no-named-arguments
      */
-    public static function anonymousClassSelf(Type ...$arguments): Type
+    public static function alias(AliasId $alias, Type ...$arguments): Type
     {
-        return new Internal\AnonymousClassSelfType($arguments);
+        return new Internal\AliasType($alias, $arguments);
     }
 
     /**
@@ -102,31 +95,6 @@ enum types implements Type
             static fn(Type|ArrayElement $element): ArrayElement => $element instanceof Type ? new ArrayElement($element) : $element,
             $elements,
         ));
-    }
-
-    /**
-     * @param non-empty-string $name
-     */
-    public static function atClass(string $name): AtClass
-    {
-        return new AtClass($name);
-    }
-
-    /**
-     * @param non-empty-string $name
-     */
-    public static function atFunction(string $name): AtFunction
-    {
-        return new AtFunction($name);
-    }
-
-    /**
-     * @param non-empty-string $class
-     * @param non-empty-string $name
-     */
-    public static function atMethod(string $class, string $name): AtMethod
-    {
-        return new AtMethod($class, $name);
     }
 
     /**
@@ -347,13 +315,15 @@ enum types implements Type
 
     /**
      * @no-named-arguments
-     * @template TObject of object
-     * @param class-string<TObject>|non-empty-string $class
-     * @return ($class is class-string ? Type<TObject> : Type<object>)
+     * @return Type<object>
      */
-    public static function object(string $class, Type ...$arguments): Type
+    public static function object(string|ClassId|AnonymousClassId $class, Type ...$arguments): Type
     {
-        if ($class === \Closure::class && $arguments === []) {
+        if (\is_string($class)) {
+            $class = classId($class);
+        }
+
+        if ($class->name === \Closure::class && $arguments === []) {
             return self::closure;
         }
 
@@ -399,46 +369,57 @@ enum types implements Type
 
     /**
      * @no-named-arguments
-     * @param non-empty-string $class
      */
-    public static function static(string $class, Type ...$arguments): Type
+    public static function static(string|ClassId|AnonymousClassId $class, Type ...$arguments): Type
     {
+        if (\is_string($class)) {
+            $class = classId($class);
+        }
+
         return new Internal\StaticType($class, $arguments);
     }
 
-    /**
-     * @no-named-arguments
-     * @param non-empty-string $name
-     */
-    public static function template(string $name, At|AtFunction|AtClass|AtMethod $declaredAt, Type ...$arguments): Type
+    public static function template(TemplateId $id): Type
     {
-        return new Internal\TemplateType($name, $declaredAt, $arguments);
+        return new Internal\TemplateType($id);
     }
 
     /**
      * @no-named-arguments
-     * @param non-empty-string $trait
      */
-    public static function traitParent(string $trait, Type ...$arguments): Type
+    public static function traitParent(string|ClassId $trait, Type ...$arguments): Type
     {
+        if (\is_string($trait)) {
+            $trait = classId($trait);
+            \assert($trait instanceof ClassId);
+        }
+
         return new Internal\TraitParentType($trait, $arguments);
     }
 
     /**
      * @no-named-arguments
-     * @param non-empty-string $trait
      */
-    public static function traitSelf(string $trait, Type ...$arguments): Type
+    public static function traitSelf(string|ClassId $trait, Type ...$arguments): Type
     {
+        if (\is_string($trait)) {
+            $trait = classId($trait);
+            \assert($trait instanceof ClassId);
+        }
+
         return new Internal\TraitSelfType($trait, $arguments);
     }
 
     /**
      * @no-named-arguments
-     * @param non-empty-string $trait
      */
-    public static function traitStatic(string $trait, Type ...$arguments): Type
+    public static function traitStatic(string|ClassId $trait, Type ...$arguments): Type
     {
+        if (\is_string($trait)) {
+            $trait = classId($trait);
+            \assert($trait instanceof ClassId);
+        }
+
         return new Internal\TraitStaticType($trait, $arguments);
     }
 

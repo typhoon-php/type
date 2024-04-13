@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
+use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\ClassId;
 use Typhoon\Type\Type;
 use Typhoon\Type\types;
 
@@ -12,20 +14,13 @@ use Typhoon\Type\types;
  */
 final class StaticTypeResolver extends RecursiveTypeReplacer
 {
-    /**
-     * @param ?non-empty-string $class
-     */
     public function __construct(
-        private readonly ?string $class,
+        private readonly ClassId|AnonymousClassId $class,
         private readonly bool $final = false,
     ) {}
 
     public function static(Type $self, string $class, array $arguments): mixed
     {
-        if ($this->class === null) {
-            return types::anonymousClassSelf(...$this->processTypes($arguments));
-        }
-
         if ($this->final) {
             return types::object($this->class, ...$this->processTypes($arguments));
         }

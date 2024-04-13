@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use Typhoon\DeclarationId\AliasId;
+use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\TemplateId;
+
 /**
  * @api
  * @template-covariant TReturn
@@ -11,12 +16,10 @@ namespace Typhoon\Type;
 interface TypeVisitor
 {
     /**
-     * @param non-empty-string $name
-     * @param non-empty-string $class
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function alias(Type $self, string $name, string $class, array $arguments): mixed;
+    public function alias(Type $self, AliasId $alias, array $arguments): mixed;
 
     /**
      * @param Type<array<mixed>> $self
@@ -127,11 +130,10 @@ interface TypeVisitor
 
     /**
      * @param Type<object> $self
-     * @param non-empty-string $class
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function namedObject(Type $self, string $class, array $arguments): mixed;
+    public function namedObject(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed;
 
     /**
      * @param Type<never> $self
@@ -181,11 +183,10 @@ interface TypeVisitor
     public function resource(Type $self): mixed;
 
     /**
-     * @param non-empty-string $class
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function static(Type $self, string $class, array $arguments): mixed;
+    public function static(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed;
 
     /**
      * @param Type<string> $self
@@ -194,11 +195,9 @@ interface TypeVisitor
     public function string(Type $self): mixed;
 
     /**
-     * @param non-empty-string $name
-     * @param list<Type> $arguments
      * @return TReturn
      */
-    public function template(Type $self, string $name, At|AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed;
+    public function template(Type $self, TemplateId $template): mixed;
 
     /**
      * @param Type<truthy-string> $self

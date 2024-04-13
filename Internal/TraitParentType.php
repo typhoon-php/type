@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
+use Typhoon\DeclarationId\ClassId;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 use Typhoon\Type\Visitor\TraitTypesResolver;
+use function Typhoon\DeclarationId\aliasId;
 
 /**
  * @internal
@@ -17,11 +19,10 @@ use Typhoon\Type\Visitor\TraitTypesResolver;
 final class TraitParentType implements Type
 {
     /**
-     * @param non-empty-string $trait
      * @param list<Type> $arguments
      */
     public function __construct(
-        private readonly string $trait,
+        private readonly ClassId $trait,
         private readonly array $arguments,
     ) {}
 
@@ -35,6 +36,6 @@ final class TraitParentType implements Type
             return $visitor->traitParent($this->arguments);
         }
 
-        return $visitor->alias($this, 'parent', $this->trait, $this->arguments);
+        return $visitor->alias($this, aliasId($this->trait, 'parent'), $this->arguments);
     }
 }

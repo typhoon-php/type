@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
+use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\ClassId;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 
@@ -16,11 +18,10 @@ use Typhoon\Type\TypeVisitor;
 final class StaticType implements Type
 {
     /**
-     * @param non-empty-string $class
      * @param list<Type> $arguments
      */
     public function __construct(
-        private readonly string $class,
+        private readonly ClassId|AnonymousClassId $class,
         private readonly array $arguments,
     ) {}
 
