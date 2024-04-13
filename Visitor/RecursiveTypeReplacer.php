@@ -6,6 +6,7 @@ namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type\Argument;
 use Typhoon\Type\ArrayElement;
+use Typhoon\Type\At;
 use Typhoon\Type\AtClass;
 use Typhoon\Type\AtFunction;
 use Typhoon\Type\AtMethod;
@@ -159,7 +160,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         ));
     }
 
-    public function template(Type $self, string $name, AtClass|AtFunction|AtMethod $declaredAt, array $arguments): mixed
+    public function template(Type $self, string $name, At|AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed
     {
         return types::template($name, $declaredAt, ...array_map(
             fn(Type $templateArgument): Type => $templateArgument->accept($this),

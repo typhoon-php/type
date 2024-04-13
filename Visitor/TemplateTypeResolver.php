@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
+use Typhoon\Type\At;
 use Typhoon\Type\AtClass;
 use Typhoon\Type\AtFunction;
 use Typhoon\Type\AtMethod;
@@ -25,9 +26,10 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
      * @param non-empty-string $name
      * @return non-empty-string
      */
-    private static function hash(string $name, AtClass|AtFunction|AtMethod $declaredAt): string
+    private static function hash(string $name, At|AtFunction|AtClass|AtMethod $declaredAt): string
     {
         return $name . '.' . match (true) {
+            $declaredAt instanceof At => $declaredAt->name,
             $declaredAt instanceof AtClass => $declaredAt->name,
             $declaredAt instanceof AtFunction => $declaredAt->name,
             $declaredAt instanceof AtMethod => $declaredAt->class . '.' . $declaredAt->name,
@@ -45,7 +47,7 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
         return $resolver;
     }
 
-    public function template(Type $self, string $name, AtClass|AtFunction|AtMethod $declaredAt, array $arguments): mixed
+    public function template(Type $self, string $name, At|AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed
     {
         return $this->typesByHash[self::hash($name, $declaredAt)] ?? $self;
     }

@@ -198,7 +198,7 @@ interface TypeVisitor
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function template(Type $self, string $name, AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed;
+    public function template(Type $self, string $name, At|AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed;
 
     /**
      * @param Type<truthy-string> $self

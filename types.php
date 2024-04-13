@@ -41,6 +41,9 @@ enum types implements Type
     case truthyString;
     case void;
 
+    public const atAnonymousClass = At::anonymousClass;
+    public const atAnonymousFunction = At::anonymousFunction;
+
     /**
      * @no-named-arguments
      * @param non-empty-string $class
@@ -407,7 +410,7 @@ enum types implements Type
      * @no-named-arguments
      * @param non-empty-string $name
      */
-    public static function template(string $name, AtMethod|AtClass|AtFunction $declaredAt, Type ...$arguments): Type
+    public static function template(string $name, At|AtFunction|AtClass|AtMethod $declaredAt, Type ...$arguments): Type
     {
         return new Internal\TemplateType($name, $declaredAt, $arguments);
     }

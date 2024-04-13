@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type\Argument;
+use Typhoon\Type\At;
 use Typhoon\Type\AtClass;
 use Typhoon\Type\AtFunction;
 use Typhoon\Type\AtMethod;
@@ -169,7 +170,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function template(Type $self, string $name, AtClass|AtFunction|AtMethod $declaredAt, array $arguments): mixed
+    public function template(Type $self, string $name, At|AtFunction|AtClass|AtMethod $declaredAt, array $arguments): mixed
     {
         return $this->default($self);
     }
