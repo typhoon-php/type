@@ -52,6 +52,14 @@ enum types implements Type
     }
 
     /**
+     * @no-named-arguments
+     */
+    public static function anonymousClassSelf(Type ...$arguments): Type
+    {
+        return new Internal\AnonymousClassSelfType($arguments);
+    }
+
+    /**
      * @param non-empty-string $name
      */
     public static function arg(string $name): Argument
@@ -402,6 +410,33 @@ enum types implements Type
     public static function template(string $name, AtMethod|AtClass|AtFunction $declaredAt, Type ...$arguments): Type
     {
         return new Internal\TemplateType($name, $declaredAt, $arguments);
+    }
+
+    /**
+     * @no-named-arguments
+     * @param non-empty-string $trait
+     */
+    public static function traitParent(string $trait, Type ...$arguments): Type
+    {
+        return new Internal\TraitParentType($trait, $arguments);
+    }
+
+    /**
+     * @no-named-arguments
+     * @param non-empty-string $trait
+     */
+    public static function traitSelf(string $trait, Type ...$arguments): Type
+    {
+        return new Internal\TraitSelfType($trait, $arguments);
+    }
+
+    /**
+     * @no-named-arguments
+     * @param non-empty-string $trait
+     */
+    public static function traitStatic(string $trait, Type ...$arguments): Type
+    {
+        return new Internal\TraitStaticType($trait, $arguments);
     }
 
     /**
