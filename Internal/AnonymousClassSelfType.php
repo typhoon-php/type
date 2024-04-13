@@ -24,14 +24,12 @@ final class AnonymousClassSelfType implements Type
     ) {}
 
     /**
-     * @template TReturn
-     * @param TypeVisitor<TReturn> $visitor
-     * @return TReturn
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      */
     public function accept(TypeVisitor $visitor): mixed
     {
         if ($visitor instanceof AnonymousClassTypesResolver) {
-            /** @var TReturn */
+            /** @phpstan-ignore return.type */
             return $visitor->objectType;
         }
 

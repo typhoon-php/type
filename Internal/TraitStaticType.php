@@ -26,14 +26,12 @@ final class TraitStaticType implements Type
     ) {}
 
     /**
-     * @template TReturn
-     * @param TypeVisitor<TReturn> $visitor
-     * @return TReturn
+     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
      */
     public function accept(TypeVisitor $visitor): mixed
     {
         if ($visitor instanceof TraitTypesResolver) {
-            /** @var TReturn */
+            /** @phpstan-ignore return.type */
             return $visitor->traitStatic($this->arguments);
         }
 
