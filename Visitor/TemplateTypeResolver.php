@@ -39,10 +39,10 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
     /**
      * @param non-empty-string $name
      */
-    public function with(string $name, AtClass|AtFunction|AtMethod $declaredAt, Type $type): self
+    public function withArgument(string $name, At|AtClass|AtFunction|AtMethod $declaredAt, Type $argument): self
     {
         $resolver = clone $this;
-        $resolver->typesByHash[self::hash($name, $declaredAt)] = $type;
+        $resolver->typesByHash[self::hash($name, $declaredAt)] = $argument;
 
         return $resolver;
     }
