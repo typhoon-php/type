@@ -13,11 +13,11 @@ use Typhoon\Type\types;
 final class TraitTypesResolver extends RecursiveTypeReplacer
 {
     /**
-     * @param non-empty-string $class
+     * @param ?non-empty-string $class
      * @param ?non-empty-string $parent
      */
-    private function __construct(
-        private readonly string $class,
+    public function __construct(
+        private readonly ?string $class,
         private readonly ?string $parent = null,
     ) {}
 
@@ -26,7 +26,11 @@ final class TraitTypesResolver extends RecursiveTypeReplacer
      */
     public function traitSelf(array $arguments): Type
     {
-        return types::object($this->class, ...$arguments);
+        if ($this->class === null) {
+            return types::anonymousClassSelf(...$this->processTypes($arguments));
+        }
+
+        return types::object($this->class, ...$this->processTypes($arguments));
     }
 
     /**
@@ -34,7 +38,7 @@ final class TraitTypesResolver extends RecursiveTypeReplacer
      */
     public function traitParent(array $arguments): Type
     {
-        return types::object($this->parent ?? throw new \LogicException(), ...$arguments);
+        return types::object($this->parent ?? throw new \LogicException(), ...$this->processTypes($arguments));
     }
 
     /**
@@ -42,6 +46,10 @@ final class TraitTypesResolver extends RecursiveTypeReplacer
      */
     public function traitStatic(array $arguments): Type
     {
-        return types::static($this->class, ...$arguments);
+        if ($this->class === null) {
+            return types::anonymousClassSelf(...$this->processTypes($arguments));
+        }
+
+        return types::static($this->class, ...$this->processTypes($arguments));
     }
 }
