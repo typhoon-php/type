@@ -13,17 +13,23 @@ use Typhoon\Type\types;
 final class StaticTypeResolver extends RecursiveTypeReplacer
 {
     /**
-     * @param non-empty-string $class
+     * @param ?non-empty-string $class
      */
     public function __construct(
-        private readonly string $class,
+        private readonly ?string $class,
+        private readonly bool $final = false,
     ) {}
 
     public function static(Type $self, string $class, array $arguments): mixed
     {
-        return types::object($this->class, ...array_map(
-            fn(Type $templateArgument): Type => $templateArgument->accept($this),
-            $arguments,
-        ));
+        if ($this->class === null) {
+            return types::anonymousClassSelf(...$this->processTypes($arguments));
+        }
+
+        if ($this->final) {
+            return types::object($this->class, ...$this->processTypes($arguments));
+        }
+
+        return types::static($this->class, ...$this->processTypes($arguments));
     }
 }
