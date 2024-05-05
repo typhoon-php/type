@@ -19,7 +19,7 @@ final class StaticTypeResolver extends RecursiveTypeReplacer
         private readonly bool $final = false,
     ) {}
 
-    public function static(Type $self, string $class, array $arguments): mixed
+    public function static(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed
     {
         if ($this->final) {
             return types::object($this->class, ...$this->processTypes($arguments));
