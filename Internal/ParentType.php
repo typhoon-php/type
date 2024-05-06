@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
-use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
@@ -15,18 +14,18 @@ use Typhoon\Type\TypeVisitor;
  * @psalm-immutable
  * @implements Type<object>
  */
-final class StaticType implements Type
+final class ParentType implements Type
 {
     /**
      * @param list<Type> $arguments
      */
     public function __construct(
-        private readonly null|ClassId|AnonymousClassId $resolvedClass,
+        private readonly ?ClassId $resolvedClass,
         private readonly array $arguments,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->static($this, $this->resolvedClass, $this->arguments);
+        return $visitor->parent($this, $this->resolvedClass, $this->arguments);
     }
 }

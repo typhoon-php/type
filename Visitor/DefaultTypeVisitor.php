@@ -160,7 +160,17 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function static(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed
+    public function self(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed
+    {
+        return $this->default($self);
+    }
+
+    public function parent(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
+    {
+        return $this->default($self);
+    }
+
+    public function static(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed
     {
         return $this->default($self);
     }

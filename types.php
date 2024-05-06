@@ -370,13 +370,38 @@ enum types implements Type
     /**
      * @no-named-arguments
      */
-    public static function static(string|ClassId|AnonymousClassId $class, Type ...$arguments): Type
+    public static function self(null|string|ClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
     {
-        if (\is_string($class)) {
-            $class = classId($class);
+        if (\is_string($resolvedClass)) {
+            $resolvedClass = classId($resolvedClass);
         }
 
-        return new Internal\StaticType($class, $arguments);
+        return new Internal\SelfType($resolvedClass, $arguments);
+    }
+
+    /**
+     * @no-named-arguments
+     */
+    public static function parent(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
+    {
+        if (\is_string($resolvedClass)) {
+            $resolvedClass = classId($resolvedClass);
+            \assert($resolvedClass instanceof ClassId);
+        }
+
+        return new Internal\ParentType($resolvedClass, $arguments);
+    }
+
+    /**
+     * @no-named-arguments
+     */
+    public static function static(null|string|ClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
+    {
+        if (\is_string($resolvedClass)) {
+            $resolvedClass = classId($resolvedClass);
+        }
+
+        return new Internal\StaticType($resolvedClass, $arguments);
     }
 
     public static function template(TemplateId $id): Type

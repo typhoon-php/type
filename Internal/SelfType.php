@@ -15,7 +15,7 @@ use Typhoon\Type\TypeVisitor;
  * @psalm-immutable
  * @implements Type<object>
  */
-final class StaticType implements Type
+final class SelfType implements Type
 {
     /**
      * @param list<Type> $arguments
@@ -27,6 +27,6 @@ final class StaticType implements Type
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->static($this, $this->resolvedClass, $this->arguments);
+        return $visitor->self($this, $this->resolvedClass, $this->arguments);
     }
 }

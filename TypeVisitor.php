@@ -186,7 +186,19 @@ interface TypeVisitor
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function static(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed;
+    public function self(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed;
+
+    /**
+     * @param list<Type> $arguments
+     * @return TReturn
+     */
+    public function parent(Type $self, ?ClassId $resolvedClass, array $arguments): mixed;
+
+    /**
+     * @param list<Type> $arguments
+     * @return TReturn
+     */
+    public function static(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed;
 
     /**
      * @param Type<string> $self
