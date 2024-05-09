@@ -182,7 +182,6 @@ enum types implements Type
         return match (\count($types)) {
             0 => self::never,
             1 => $types[array_key_first($types)],
-            /** @phpstan-ignore argument.type */
             default => new Internal\IntersectionType(array_values($types)),
         };
     }
@@ -458,7 +457,6 @@ enum types implements Type
         return match (\count($types)) {
             0 => self::never,
             1 => $types[array_key_first($types)],
-            /** @phpstan-ignore argument.type */
             default => new Internal\UnionType(array_values($types)),
         };
     }
