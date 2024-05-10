@@ -8,6 +8,7 @@ use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
 use Typhoon\DeclarationId\TemplateId;
+use function Typhoon\DeclarationId\anyClassId;
 use function Typhoon\DeclarationId\classId;
 
 /**
@@ -319,7 +320,7 @@ enum types implements Type
     public static function object(string|ClassId|AnonymousClassId $class, Type ...$arguments): Type
     {
         if (\is_string($class)) {
-            $class = classId($class);
+            $class = anyClassId($class);
         }
 
         if ($class->name === \Closure::class && $arguments === []) {
@@ -372,7 +373,7 @@ enum types implements Type
     public static function self(null|string|ClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = classId($resolvedClass);
+            $resolvedClass = anyClassId($resolvedClass);
         }
 
         return new Internal\SelfType($resolvedClass, $arguments);
@@ -385,7 +386,6 @@ enum types implements Type
     {
         if (\is_string($resolvedClass)) {
             $resolvedClass = classId($resolvedClass);
-            \assert($resolvedClass instanceof ClassId);
         }
 
         return new Internal\ParentType($resolvedClass, $arguments);
@@ -397,7 +397,7 @@ enum types implements Type
     public static function static(null|string|ClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = classId($resolvedClass);
+            $resolvedClass = anyClassId($resolvedClass);
         }
 
         return new Internal\StaticType($resolvedClass, $arguments);
@@ -414,7 +414,7 @@ enum types implements Type
     public static function traitParent(string|ClassId $trait, Type ...$arguments): Type
     {
         if (\is_string($trait)) {
-            $trait = classId($trait);
+            $trait = anyClassId($trait);
             \assert($trait instanceof ClassId);
         }
 
@@ -427,7 +427,7 @@ enum types implements Type
     public static function traitSelf(string|ClassId $trait, Type ...$arguments): Type
     {
         if (\is_string($trait)) {
-            $trait = classId($trait);
+            $trait = anyClassId($trait);
             \assert($trait instanceof ClassId);
         }
 
@@ -440,7 +440,7 @@ enum types implements Type
     public static function traitStatic(string|ClassId $trait, Type ...$arguments): Type
     {
         if (\is_string($trait)) {
-            $trait = classId($trait);
+            $trait = anyClassId($trait);
             \assert($trait instanceof ClassId);
         }
 
