@@ -411,45 +411,6 @@ enum types implements Type
     }
 
     /**
-     * @no-named-arguments
-     */
-    public static function traitParent(string|ClassId $trait, Type ...$arguments): Type
-    {
-        if (\is_string($trait)) {
-            $trait = anyClassId($trait);
-            \assert($trait instanceof ClassId);
-        }
-
-        return new Internal\TraitParentType($trait, $arguments);
-    }
-
-    /**
-     * @no-named-arguments
-     */
-    public static function traitSelf(string|ClassId $trait, Type ...$arguments): Type
-    {
-        if (\is_string($trait)) {
-            $trait = anyClassId($trait);
-            \assert($trait instanceof ClassId);
-        }
-
-        return new Internal\TraitSelfType($trait, $arguments);
-    }
-
-    /**
-     * @no-named-arguments
-     */
-    public static function traitStatic(string|ClassId $trait, Type ...$arguments): Type
-    {
-        if (\is_string($trait)) {
-            $trait = anyClassId($trait);
-            \assert($trait instanceof ClassId);
-        }
-
-        return new Internal\TraitStaticType($trait, $arguments);
-    }
-
-    /**
      * @template TType
      * @param Type<TType> ...$types
      * @return Type<TType>
