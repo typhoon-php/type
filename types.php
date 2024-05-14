@@ -197,19 +197,21 @@ enum types implements Type
 
     /**
      * @return Type<int>
+     * @psalm-suppress PossiblyNullArgument
      */
     public static function intRange(?int $min = null, ?int $max = null): Type
     {
-        if ($min === null && $max === null) {
-            return self::int;
-        }
-
-        if ($min === $max) {
-            /** @var int $min */
-            return self::literalValue($min);
-        }
-
-        return new Internal\IntType($min, $max);
+        /** @phpstan-ignore return.type */
+        return match (true) {
+            $min === null && $max === null => self::int,
+            $min === null && $max === -1 => self::negativeInt,
+            $min === null && $max === 0 => self::nonPositiveInt,
+            $min === 0 && $max === null => self::nonNegativeInt,
+            $min === 1 && $max === null => self::positiveInt,
+            /** @phpstan-ignore argument.type, argument.templateType */
+            $min === $max => self::literalValue($min),
+            default => new Internal\IntType($min, $max),
+        };
     }
 
     /**
@@ -280,6 +282,10 @@ enum types implements Type
      */
     public static function nonEmpty(Type $type): Type
     {
+        if ($type === self::string) {
+            return self::nonEmptyString;
+        }
+
         return new Internal\NonEmptyType($type);
     }
 
