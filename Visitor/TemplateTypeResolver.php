@@ -18,12 +18,18 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
      */
     private array $arguments = [];
 
-    public function withArgument(TemplateId $id, Type $argument): self
+    /**
+     * @param iterable<array{TemplateId, Type}> $arguments
+     */
+    public function __construct(iterable $arguments)
     {
-        $resolver = clone $this;
-        $resolver->arguments[$id->toString()] = $argument;
+        $resolved = [];
 
-        return $resolver;
+        foreach ($arguments as [$templateId, $type]) {
+            $resolved[$templateId->toString()] = $type;
+        }
+
+        $this->arguments = $resolved;
     }
 
     public function template(Type $self, TemplateId $template): mixed

@@ -15,17 +15,25 @@ use Typhoon\Type\types;
 final class SelfParentStaticTypeResolver extends RecursiveTypeReplacer
 {
     public function __construct(
-        private readonly null|ClassId|AnonymousClassId $self,
+        private readonly ClassId|AnonymousClassId $self,
         private readonly ?ClassId $parent,
     ) {}
 
     public function self(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed
     {
+        if ($resolvedClass !== null) {
+            return $self;
+        }
+
         return types::self($this->self, ...$this->processTypes($arguments));
     }
 
     public function parent(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
     {
+        if ($resolvedClass !== null) {
+            return $self;
+        }
+
         return types::parent($this->parent, ...$this->processTypes($arguments));
     }
 
