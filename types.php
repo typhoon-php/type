@@ -199,7 +199,7 @@ enum types implements Type
      * @return Type<int>
      * @psalm-suppress PossiblyNullArgument
      */
-    public static function intRange(?int $min = null, ?int $max = null): Type
+    public static function int(?int $min = null, ?int $max = null): Type
     {
         /** @phpstan-ignore return.type */
         return match (true) {
