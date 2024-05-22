@@ -197,19 +197,15 @@ enum types implements Type
 
     /**
      * @return Type<int>
-     * @psalm-suppress PossiblyNullArgument
      */
     public static function int(?int $min = null, ?int $max = null): Type
     {
-        /** @phpstan-ignore return.type */
         return match (true) {
             $min === null && $max === null => self::int,
             $min === null && $max === -1 => self::negativeInt,
             $min === null && $max === 0 => self::nonPositiveInt,
             $min === 0 && $max === null => self::nonNegativeInt,
             $min === 1 && $max === null => self::positiveInt,
-            /** @phpstan-ignore argument.type, argument.templateType */
-            $min === $max => self::literalValue($min),
             default => new Internal\IntType($min, $max),
         };
     }
@@ -266,13 +262,34 @@ enum types implements Type
     }
 
     /**
-     * @template TValue of bool|int|float|string
+     * @template TValue of int
      * @param TValue $value
      * @return Type<TValue>
      */
-    public static function literalValue(bool|int|float|string $value): Type
+    public static function intValue(int $value): Type
     {
-        return new Internal\LiteralValueType($value);
+        /** @var Internal\IntType<TValue> */
+        return new Internal\IntType($value, $value);
+    }
+
+    /**
+     * @template TValue of float
+     * @param TValue $value
+     * @return Type<TValue>
+     */
+    public static function floatValue(float $value): Type
+    {
+        return new Internal\FloatValueType($value);
+    }
+
+    /**
+     * @template TValue of string
+     * @param TValue $value
+     * @return Type<TValue>
+     */
+    public static function stringValue(string $value): Type
+    {
+        return new Internal\StringValueType($value);
     }
 
     /**
@@ -454,7 +471,7 @@ enum types implements Type
             self::callable => $visitor->callable($this, [], self::mixed),
             self::classString => $visitor->classString($this, types::object),
             self::closure => $visitor->closure($this, [], types::mixed),
-            self::false => $visitor->literalValue($this, false),
+            self::false => $visitor->false($this),
             self::float => $visitor->float($this),
             self::int => $visitor->int($this, null, null),
             self::iterable => $visitor->iterable($this, self::mixed, self::mixed),
@@ -474,7 +491,7 @@ enum types implements Type
             self::resource => $visitor->resource($this),
             self::scalar => $visitor->union($this, [self::bool, self::int, self::float, self::string]),
             self::string => $visitor->string($this),
-            self::true => $visitor->literalValue($this, true),
+            self::true => $visitor->true($this),
             self::truthyString => $visitor->truthyString($this),
             self::void => $visitor->void($this),
         };

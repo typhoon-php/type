@@ -105,7 +105,22 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function literalValue(Type $self, float|bool|int|string $value): mixed
+    public function true(Type $self): mixed
+    {
+        return $this->default($self);
+    }
+
+    public function false(Type $self): mixed
+    {
+        return $this->default($self);
+    }
+
+    public function floatValue(Type $self, float $value): mixed
+    {
+        return $this->default($self);
+    }
+
+    public function stringValue(Type $self, string $value): mixed
     {
         return $this->default($self);
     }

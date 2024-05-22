@@ -10,19 +10,21 @@ use Typhoon\Type\TypeVisitor;
 /**
  * @internal
  * @psalm-internal Typhoon\Type
- * @readonly
- * @template-covariant TValue of int
+ * @psalm-immutable
+ * @template-covariant TValue of float
  * @implements Type<TValue>
  */
-final class IntType implements Type
+final class FloatValueType implements Type
 {
+    /**
+     * @param TValue $value
+     */
     public function __construct(
-        private readonly ?int $min,
-        private readonly ?int $max,
+        private readonly float $value,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->int($this, $this->min, $this->max);
+        return $visitor->floatValue($this, $this->value);
     }
 }

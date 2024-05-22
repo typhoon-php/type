@@ -121,7 +121,22 @@ interface TypeVisitor
     /**
      * @return TReturn
      */
-    public function literalValue(Type $self, bool|int|float|string $value): mixed;
+    public function true(Type $self): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function false(Type $self): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function floatValue(Type $self, float $value): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function stringValue(Type $self, string $value): mixed;
 
     /**
      * @return TReturn

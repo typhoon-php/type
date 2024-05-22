@@ -11,20 +11,20 @@ use Typhoon\Type\TypeVisitor;
  * @internal
  * @psalm-internal Typhoon\Type
  * @psalm-immutable
- * @template-covariant TValue of bool|int|float|string
+ * @template-covariant TValue of string
  * @implements Type<TValue>
  */
-final class LiteralValueType implements Type
+final class StringValueType implements Type
 {
     /**
      * @param TValue $value
      */
     public function __construct(
-        private readonly bool|int|float|string $value,
+        private readonly string $value,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->literalValue($this, $this->value);
+        return $visitor->stringValue($this, $this->value);
     }
 }
