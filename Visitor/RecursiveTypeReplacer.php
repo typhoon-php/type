@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\DeclarationId\AliasId;
-use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\Type\Argument;
 use Typhoon\Type\ArrayElement;
 use Typhoon\Type\Parameter;
@@ -124,7 +124,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::literal($type->accept($this));
     }
 
-    public function namedObject(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed
+    public function namedObject(Type $self, ClassId $class, array $arguments): mixed
     {
         return types::object($class, ...$this->processTypes($arguments));
     }
@@ -152,17 +152,17 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::offset($type->accept($this), $offset->accept($this));
     }
 
-    public function self(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed
+    public function self(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
     {
         return types::self($resolvedClass, ...$this->processTypes($arguments));
     }
 
-    public function parent(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
+    public function parent(Type $self, ?NamedClassId $resolvedClass, array $arguments): mixed
     {
         return types::parent($resolvedClass, ...$this->processTypes($arguments));
     }
 
-    public function static(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed
+    public function static(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
     {
         return types::static($resolvedClass, ...$this->processTypes($arguments));
     }

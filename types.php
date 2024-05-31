@@ -7,9 +7,10 @@ namespace Typhoon\Type;
 use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
-use function Typhoon\DeclarationId\anyClassId;
 use function Typhoon\DeclarationId\classId;
+use function Typhoon\DeclarationId\namedClassId;
 
 /**
  * @api
@@ -340,10 +341,10 @@ enum types implements Type
      * @no-named-arguments
      * @return Type<object>
      */
-    public static function object(string|ClassId|AnonymousClassId $class, Type ...$arguments): Type
+    public static function object(string|ClassId $class, Type ...$arguments): Type
     {
         if (\is_string($class)) {
-            $class = anyClassId($class);
+            $class = classId($class);
         }
 
         if (!$class instanceof AnonymousClassId && $class->name === \Closure::class) {
@@ -395,10 +396,10 @@ enum types implements Type
     /**
      * @no-named-arguments
      */
-    public static function self(null|string|ClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function self(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = anyClassId($resolvedClass);
+            $resolvedClass = classId($resolvedClass);
         }
 
         return new Internal\SelfType($resolvedClass, $arguments);
@@ -407,10 +408,10 @@ enum types implements Type
     /**
      * @no-named-arguments
      */
-    public static function parent(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function parent(null|string|NamedClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = classId($resolvedClass);
+            $resolvedClass = namedClassId($resolvedClass);
         }
 
         return new Internal\ParentType($resolvedClass, $arguments);
@@ -419,10 +420,10 @@ enum types implements Type
     /**
      * @no-named-arguments
      */
-    public static function static(null|string|ClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function static(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = anyClassId($resolvedClass);
+            $resolvedClass = classId($resolvedClass);
         }
 
         return new Internal\StaticType($resolvedClass, $arguments);

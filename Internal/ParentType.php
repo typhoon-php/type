@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
-use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 
@@ -20,7 +20,7 @@ final class ParentType implements Type
      * @param list<Type> $arguments
      */
     public function __construct(
-        private readonly ?ClassId $resolvedClass,
+        private readonly ?NamedClassId $resolvedClass,
         private readonly array $arguments,
     ) {}
 

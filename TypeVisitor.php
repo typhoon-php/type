@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\DeclarationId\AliasId;
-use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 
 /**
@@ -148,7 +148,7 @@ interface TypeVisitor
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function namedObject(Type $self, ClassId|AnonymousClassId $class, array $arguments): mixed;
+    public function namedObject(Type $self, ClassId $class, array $arguments): mixed;
 
     /**
      * @param Type<never> $self
@@ -195,19 +195,19 @@ interface TypeVisitor
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function self(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed;
+    public function self(Type $self, ?ClassId $resolvedClass, array $arguments): mixed;
 
     /**
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function parent(Type $self, ?ClassId $resolvedClass, array $arguments): mixed;
+    public function parent(Type $self, ?NamedClassId $resolvedClass, array $arguments): mixed;
 
     /**
      * @param list<Type> $arguments
      * @return TReturn
      */
-    public function static(Type $self, null|ClassId|AnonymousClassId $resolvedClass, array $arguments): mixed;
+    public function static(Type $self, ?ClassId $resolvedClass, array $arguments): mixed;
 
     /**
      * @param Type<string> $self
