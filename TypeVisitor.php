@@ -6,6 +6,7 @@ namespace Typhoon\Type;
 
 use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 
@@ -66,10 +67,9 @@ interface TypeVisitor
     public function conditional(Type $self, Argument|Type $subject, Type $if, Type $then, Type $else): mixed;
 
     /**
-     * @param non-empty-string $name
      * @return TReturn
      */
-    public function constant(Type $self, string $name): mixed;
+    public function constant(Type $self, ConstantId $constant): mixed;
 
     /**
      * @param Type<float> $self

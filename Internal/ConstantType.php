@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
+use Typhoon\DeclarationId\ConstantId;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 
@@ -15,15 +16,12 @@ use Typhoon\Type\TypeVisitor;
  */
 final class ConstantType implements Type
 {
-    /**
-     * @param non-empty-string $name
-     */
     public function __construct(
-        private readonly string $name,
+        private readonly ConstantId $constant,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->constant($this, $this->name);
+        return $visitor->constant($this, $this->constant);
     }
 }

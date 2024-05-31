@@ -6,6 +6,7 @@ namespace Typhoon\Type\Visitor;
 
 use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Argument;
@@ -60,7 +61,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function constant(Type $self, string $name): mixed
+    public function constant(Type $self, ConstantId $constant): mixed
     {
         return $this->default($self);
     }

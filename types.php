@@ -7,9 +7,11 @@ namespace Typhoon\Type;
 use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 use function Typhoon\DeclarationId\classId;
+use function Typhoon\DeclarationId\constantId;
 use function Typhoon\DeclarationId\namedClassId;
 
 /**
@@ -171,11 +173,12 @@ enum types implements Type
         return new Internal\ConditionalType($subject, $if, $then, $else);
     }
 
-    /**
-     * @param non-empty-string $name
-     */
-    public static function constant(string $name): Type
+    public static function constant(string|ConstantId $name): Type
     {
+        if (!$name instanceof ConstantId) {
+            $name = constantId($name);
+        }
+
         return new Internal\ConstantType($name);
     }
 
