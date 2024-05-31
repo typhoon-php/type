@@ -8,11 +8,15 @@ use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
 use Typhoon\DeclarationId\ConstantId;
+use Typhoon\DeclarationId\FunctionId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 use function Typhoon\DeclarationId\classId;
 use function Typhoon\DeclarationId\constantId;
+use function Typhoon\DeclarationId\functionId;
+use function Typhoon\DeclarationId\methodId;
 use function Typhoon\DeclarationId\namedClassId;
+use function Typhoon\DeclarationId\templateId;
 
 /**
  * @api
@@ -125,28 +129,18 @@ enum types implements Type
     /**
      * @param non-empty-string $name
      */
-    public static function classConstant(Type $class, string $name): Type
+    public static function classConstant(string|ClassId|Type $class, string $name): Type
     {
+        if (!$class instanceof Type) {
+            $class = self::object($class);
+        }
+
         return new Internal\ClassConstantType($class, $name);
     }
 
-    /**
-     * @template TObject of object
-     * @return ($object is Type<TObject> ? Type<class-string<TObject>> : Type<non-empty-string>)
-     */
     public static function classString(Type $object): Type
     {
         return new Internal\ClassStringType($object);
-    }
-
-    /**
-     * @param non-empty-string $class
-     * @return Type<non-empty-string>
-     * @psalm-suppress MixedReturnTypeCoercion
-     */
-    public static function classStringLiteral(string $class): Type
-    {
-        return self::classConstant(self::object($class), 'class');
     }
 
     /**
@@ -435,6 +429,33 @@ enum types implements Type
     public static function template(TemplateId $id): Type
     {
         return new Internal\TemplateType($id);
+    }
+
+    public static function functionTemplate(string|FunctionId $function, string $name): Type
+    {
+        if (!$function instanceof FunctionId) {
+            $function = functionId($function);
+        }
+
+        return new Internal\TemplateType(templateId($function, $name));
+    }
+
+    public static function classTemplate(string|ClassId $class, string $name): Type
+    {
+        if (!$class instanceof ClassId) {
+            $class = classId($class);
+        }
+
+        return new Internal\TemplateType(templateId($class, $name));
+    }
+
+    public static function methodTemplate(string|ClassId $class, string $method, string $name): Type
+    {
+        if (!$class instanceof ClassId) {
+            $class = classId($class);
+        }
+
+        return new Internal\TemplateType(templateId(methodId($class, $method), $name));
     }
 
     /**
