@@ -8,15 +8,12 @@ use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
 use Typhoon\DeclarationId\ConstantId;
+use Typhoon\DeclarationId\DeclarationId;
 use Typhoon\DeclarationId\FunctionId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 use function Typhoon\DeclarationId\classId;
-use function Typhoon\DeclarationId\constantId;
-use function Typhoon\DeclarationId\methodId;
 use function Typhoon\DeclarationId\namedClassId;
-use function Typhoon\DeclarationId\namedFunctionId;
-use function Typhoon\DeclarationId\templateId;
 
 /**
  * @api
@@ -61,6 +58,14 @@ enum types implements Type
     public static function alias(AliasId $alias, Type ...$arguments): Type
     {
         return new Internal\AliasType($alias, $arguments);
+    }
+
+    /**
+     * @no-named-arguments
+     */
+    public static function classAlias(string|NamedClassId $class, string $name, Type ...$arguments): Type
+    {
+        return new Internal\AliasType(DeclarationId::alias($class, $name), $arguments);
     }
 
     /**
@@ -170,7 +175,7 @@ enum types implements Type
     public static function constant(string|ConstantId $name): Type
     {
         if (!$name instanceof ConstantId) {
-            $name = constantId($name);
+            $name = DeclarationId::constant($name);
         }
 
         return new Internal\ConstantType($name);
@@ -434,28 +439,24 @@ enum types implements Type
     public static function functionTemplate(string|FunctionId $function, string $name): Type
     {
         if (!$function instanceof FunctionId) {
-            $function = namedFunctionId($function);
+            $function = DeclarationId::namedFunction($function);
         }
 
-        return new Internal\TemplateType(templateId($function, $name));
+        return new Internal\TemplateType(DeclarationId::template($function, $name));
     }
 
     public static function classTemplate(string|ClassId $class, string $name): Type
     {
         if (!$class instanceof ClassId) {
-            $class = classId($class);
+            $class = DeclarationId::class($class);
         }
 
-        return new Internal\TemplateType(templateId($class, $name));
+        return new Internal\TemplateType(DeclarationId::template($class, $name));
     }
 
     public static function methodTemplate(string|ClassId $class, string $method, string $name): Type
     {
-        if (!$class instanceof ClassId) {
-            $class = classId($class);
-        }
-
-        return new Internal\TemplateType(templateId(methodId($class, $method), $name));
+        return new Internal\TemplateType(DeclarationId::template(DeclarationId::method($class, $method), $name));
     }
 
     /**
