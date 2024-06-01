@@ -13,9 +13,9 @@ use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 use function Typhoon\DeclarationId\classId;
 use function Typhoon\DeclarationId\constantId;
-use function Typhoon\DeclarationId\functionId;
 use function Typhoon\DeclarationId\methodId;
 use function Typhoon\DeclarationId\namedClassId;
+use function Typhoon\DeclarationId\namedFunctionId;
 use function Typhoon\DeclarationId\templateId;
 
 /**
@@ -434,7 +434,7 @@ enum types implements Type
     public static function functionTemplate(string|FunctionId $function, string $name): Type
     {
         if (!$function instanceof FunctionId) {
-            $function = functionId($function);
+            $function = namedFunctionId($function);
         }
 
         return new Internal\TemplateType(templateId($function, $name));
