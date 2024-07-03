@@ -35,12 +35,6 @@ interface TypeVisitor
     public function null(Type $self): mixed;
 
     /**
-     * @param Type<bool> $self
-     * @return TReturn
-     */
-    public function bool(Type $self): mixed;
-
-    /**
      * @return TReturn
      */
     public function true(Type $self): mixed;
@@ -89,18 +83,6 @@ interface TypeVisitor
      * @return TReturn
      */
     public function classString(Type $self, Type $class): mixed;
-
-    /**
-     * @param Type<numeric-string> $self
-     * @return TReturn
-     */
-    public function numericString(Type $self): mixed;
-
-    /**
-     * @param Type<truthy-string> $self
-     * @return TReturn
-     */
-    public function truthyString(Type $self): mixed;
 
     /**
      * @param Type<resource> $self
@@ -178,13 +160,6 @@ interface TypeVisitor
     public function callable(Type $self, array $parameters, Type $return): mixed;
 
     /**
-     * @param Type<\Closure> $self
-     * @param list<Parameter> $parameters
-     * @return TReturn
-     */
-    public function closure(Type $self, array $parameters, Type $return): mixed;
-
-    /**
      * @param non-empty-list<Type> $types
      * @return TReturn
      */
@@ -200,6 +175,17 @@ interface TypeVisitor
      * @return TReturn
      */
     public function mixed(Type $self): mixed;
+
+    /**
+     * @param Type<numeric> $self
+     * @return TReturn
+     */
+    public function numeric(Type $self): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function truthy(Type $self): mixed;
 
     /**
      * @return TReturn

@@ -36,11 +36,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function bool(Type $self): mixed
-    {
-        return $this->default($self);
-    }
-
     public function true(Type $self): mixed
     {
         return $this->default($self);
@@ -82,16 +77,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
     }
 
     public function classString(Type $self, Type $class): mixed
-    {
-        return $this->default($self);
-    }
-
-    public function numericString(Type $self): mixed
-    {
-        return $this->default($self);
-    }
-
-    public function truthyString(Type $self): mixed
     {
         return $this->default($self);
     }
@@ -156,11 +141,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($self);
     }
 
-    public function closure(Type $self, array $parameters, Type $return): mixed
-    {
-        return $this->default($self);
-    }
-
     public function union(Type $self, array $types): mixed
     {
         return $this->default($self);
@@ -172,6 +152,16 @@ abstract class DefaultTypeVisitor implements TypeVisitor
     }
 
     public function mixed(Type $self): mixed
+    {
+        return $this->default($self);
+    }
+
+    public function numeric(Type $self): mixed
+    {
+        return $this->default($self);
+    }
+
+    public function truthy(Type $self): mixed
     {
         return $this->default($self);
     }

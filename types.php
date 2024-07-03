@@ -12,6 +12,8 @@ use Typhoon\DeclarationId\DeclarationId;
 use Typhoon\DeclarationId\FunctionId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
+use Typhoon\Type\Internal\IntersectionType;
+use Typhoon\Type\Internal\NamedObjectType;
 use function Typhoon\DeclarationId\classId;
 use function Typhoon\DeclarationId\namedClassId;
 
@@ -49,6 +51,7 @@ enum types implements Type
     case scalar;
     case string;
     case true;
+    case truthy;
     case truthyString;
     case void;
 
@@ -158,13 +161,16 @@ enum types implements Type
             return self::closure;
         }
 
-        return new Internal\ClosureType(
-            array_map(
-                static fn(Type|Parameter $parameter): Parameter => $parameter instanceof Type ? new Parameter($parameter) : $parameter,
-                $parameters,
+        return new IntersectionType([
+            self::closure,
+            new Internal\CallableType(
+                array_map(
+                    static fn(Type|Parameter $parameter): Parameter => $parameter instanceof Type ? new Parameter($parameter) : $parameter,
+                    $parameters,
+                ),
+                $return,
             ),
-            $return,
-        );
+        ]);
     }
 
     public static function conditional(Argument|Type $subject, Type $if, Type $then, Type $else): Type
@@ -186,7 +192,7 @@ enum types implements Type
         return match (\count($types)) {
             0 => self::never,
             1 => $types[array_key_first($types)],
-            default => new Internal\IntersectionType(array_values($types)),
+            default => new IntersectionType(array_values($types)),
         };
     }
 
@@ -355,7 +361,7 @@ enum types implements Type
             return self::closure;
         }
 
-        return new Internal\NamedObjectType($class, $arguments);
+        return new NamedObjectType($class, $arguments);
     }
 
     /**
@@ -493,10 +499,10 @@ enum types implements Type
         return match ($this) {
             self::array => $visitor->array($this, self::arrayKey, self::mixed, []),
             self::arrayKey => $visitor->union($this, [self::int, self::string]),
-            self::bool => $visitor->bool($this),
+            self::bool => $visitor->union($this, [self::true, self::false]),
             self::callable => $visitor->callable($this, [], self::mixed),
             self::classString => $visitor->classString($this, types::object),
-            self::closure => $visitor->closure($this, [], types::mixed),
+            self::closure => $visitor->namedObject($this, DeclarationId::class(\Closure::class), []),
             self::false => $visitor->false($this),
             self::float => $visitor->float($this),
             self::int => $visitor->int($this, null, null),
@@ -510,15 +516,16 @@ enum types implements Type
             self::nonNegativeInt => $visitor->int($this, 0, null),
             self::nonPositiveInt => $visitor->int($this, null, 0),
             self::null => $visitor->null($this),
-            self::numeric => $visitor->union($this, [self::int, self::float, self::numericString]),
-            self::numericString => $visitor->numericString($this),
+            self::numeric => $visitor->numeric($this),
+            self::numericString => $visitor->intersection($this, [self::numeric, self::string]),
             self::object => $visitor->object($this, []),
             self::positiveInt => $visitor->int($this, 1, null),
             self::resource => $visitor->resource($this),
             self::scalar => $visitor->union($this, [self::bool, self::int, self::float, self::string]),
             self::string => $visitor->string($this),
             self::true => $visitor->true($this),
-            self::truthyString => $visitor->truthyString($this),
+            self::truthy => $visitor->truthy($this),
+            self::truthyString => $visitor->intersection($this, [self::truthy, self::string]),
             self::void => $visitor->void($this),
         };
     }
