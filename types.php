@@ -249,7 +249,7 @@ enum types implements Type
     }
 
     /**
-     * @param array<int, Type|ArrayElement> $elements
+     * @param array<non-negative-int, Type|ArrayElement> $elements
      * @return Type<list<mixed>>
      */
     public static function listShape(array $elements = [], Type $value = self::never): Type

@@ -92,7 +92,7 @@ interface TypeVisitor
 
     /**
      * @param Type<list<mixed>> $self
-     * @param array<int, ArrayElement> $elements
+     * @param array<non-negative-int, ArrayElement> $elements
      * @return TReturn
      */
     public function list(Type $self, Type $value, array $elements): mixed;
