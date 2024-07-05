@@ -499,6 +499,9 @@ enum types implements Type
         return new Internal\VarianceAwareType($type, $variance);
     }
 
+    /**
+     * @todo split to different enums?
+     */
     public function accept(TypeVisitor $visitor): mixed
     {
         return match ($this) {

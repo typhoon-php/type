@@ -13,6 +13,7 @@ use Typhoon\DeclarationId\TemplateId;
 /**
  * @api
  * @template-covariant TReturn
+ * @todo rename $self, $type
  */
 interface TypeVisitor
 {

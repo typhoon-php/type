@@ -15,6 +15,7 @@ interface Type
      * @template TReturn
      * @param TypeVisitor<TReturn> $visitor
      * @return TReturn
+     * @todo pass original type for decoration?
      */
     public function accept(TypeVisitor $visitor): mixed;
 }
