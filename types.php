@@ -380,6 +380,11 @@ enum types implements Type
         ));
     }
 
+    public static function generator(Type $key = self::mixed, Type $value = self::mixed, Type $send = self::mixed, Type $return = self::mixed): Type
+    {
+        return new NamedObjectType(DeclarationId::namedClass(\Generator::class), [$key, $value, $send, $return]);
+    }
+
     public static function offset(Type $type, Type $offset): Type
     {
         return new Internal\OffsetType($type, $offset);
