@@ -135,18 +135,21 @@ interface TypeVisitor
     public function namedObject(Type $self, ClassId $class, array $arguments): mixed;
 
     /**
+     * @param Type<object> $self
      * @param list<Type> $arguments
      * @return TReturn
      */
     public function self(Type $self, ?ClassId $resolvedClass, array $arguments): mixed;
 
     /**
+     * @param Type<object> $self
      * @param list<Type> $arguments
      * @return TReturn
      */
     public function parent(Type $self, ?NamedClassId $resolvedClass, array $arguments): mixed;
 
     /**
+     * @param Type<object> $self
      * @param list<Type> $arguments
      * @return TReturn
      */
