@@ -215,7 +215,7 @@ enum types implements Type
     /**
      * @return Type<int>
      */
-    public static function int(?int $min = null, ?int $max = null): Type
+    public static function intRange(?int $min = null, ?int $max = null): Type
     {
         return match (true) {
             $min === null && $max === null => self::int,
@@ -283,7 +283,7 @@ enum types implements Type
      * @param TValue $value
      * @return Type<TValue>
      */
-    public static function intValue(int $value): Type
+    public static function int(int $value): Type
     {
         /** @var Internal\IntType<TValue> */
         return new Internal\IntType($value, $value);
@@ -294,7 +294,7 @@ enum types implements Type
      * @param TValue $value
      * @return Type<TValue>
      */
-    public static function floatValue(float $value): Type
+    public static function float(float $value): Type
     {
         return new Internal\FloatValueType($value);
     }
@@ -304,7 +304,7 @@ enum types implements Type
      * @param TValue $value
      * @return Type<TValue>
      */
-    public static function stringValue(string $value): Type
+    public static function string(string $value): Type
     {
         return new Internal\StringValueType($value);
     }
