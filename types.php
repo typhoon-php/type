@@ -19,40 +19,41 @@ use function Typhoon\DeclarationId\namedClassId;
  * @api
  * @psalm-immutable
  * @implements Type<mixed>
+ * @todo reorder methods according to visitor
  */
 enum types implements Type
 {
-    case array;
-    case arrayKey;
-    case bool;
-    case callable;
-    case classString;
-    case closure;
-    case false;
-    case float;
-    case int;
-    case iterable;
-    case literalInt;
-    case literalFloat;
-    case literalString;
-    case lowercaseString;
-    case mixed;
-    case negativeInt;
     case never;
-    case nonEmptyString;
-    case nonNegativeInt;
-    case nonPositiveInt;
-    case null;
-    case numeric;
-    case numericString;
-    case object;
-    case positiveInt;
-    case resource;
-    case scalar;
-    case string;
-    case true;
-    case truthyString;
     case void;
+    case null;
+    case true;
+    case false;
+    case bool;
+    case int;
+    case negativeInt;
+    case nonPositiveInt;
+    case nonNegativeInt;
+    case positiveInt;
+    case literalInt;
+    case float;
+    case literalFloat;
+    case string;
+    case nonEmptyString;
+    case lowercaseString;
+    case numericString;
+    case truthyString;
+    case literalString;
+    case classString;
+    case arrayKey;
+    case numeric;
+    case resource;
+    case array;
+    case iterable;
+    case object;
+    case callable;
+    case closure;
+    case scalar;
+    case mixed;
 
     /**
      * @no-named-arguments
@@ -487,50 +488,48 @@ enum types implements Type
         return new Internal\NotType($type);
     }
 
-    /**
-     * @todo split to different enums?
-     */
     public function accept(TypeVisitor $visitor): mixed
     {
+        // most common types should come first
         return match ($this) {
-            self::array => $visitor->array($this, self::arrayKey, self::mixed, []),
-            self::arrayKey => $visitor->union($this, [self::int, self::string]),
-            self::bool => $visitor->union($this, [self::true, self::false]),
-            self::callable => $visitor->callable($this, [], self::mixed),
-            self::classString => $visitor->classString($this, types::object),
-            self::closure => $visitor->namedObject($this, DeclarationId::class(\Closure::class), []),
+            self::null => $visitor->null($this),
+            self::true => $visitor->true($this),
             self::false => $visitor->false($this),
-            self::float => $visitor->float($this),
+            self::bool => $visitor->union($this, [self::true, self::false]),
             self::int => $visitor->int($this, null, null),
+            self::float => $visitor->float($this),
+            self::string => $visitor->string($this),
+            self::array => $visitor->array($this, self::arrayKey, self::mixed, []),
             self::iterable => $visitor->iterable($this, self::mixed, self::mixed),
-            self::literalInt => $visitor->literal($this, self::int),
-            self::literalFloat => $visitor->literal($this, self::float),
-            self::literalString => $visitor->literal($this, self::string),
+            self::object => $visitor->object($this, []),
             self::mixed => $visitor->mixed($this),
-            self::negativeInt => $visitor->int($this, null, -1),
+            self::void => $visitor->void($this),
             self::never => $visitor->never($this),
+            self::callable => $visitor->callable($this, [], self::mixed),
+            self::closure => $visitor->namedObject($this, DeclarationId::class(\Closure::class), []),
             self::nonEmptyString => $visitor->intersection($this, [
                 self::string,
                 new Internal\NotType(new Internal\StringValueType('')),
             ]),
-            self::nonNegativeInt => $visitor->int($this, 0, null),
+            self::resource => $visitor->resource($this),
+            self::negativeInt => $visitor->int($this, null, -1),
             self::nonPositiveInt => $visitor->int($this, null, 0),
-            self::null => $visitor->null($this),
+            self::nonNegativeInt => $visitor->int($this, 0, null),
+            self::positiveInt => $visitor->int($this, 1, null),
+            self::classString => $visitor->classString($this, types::object),
+            self::arrayKey => $visitor->union($this, [self::int, self::string]),
             self::numeric => $visitor->numeric($this),
             self::numericString => $visitor->intersection($this, [self::string, self::numeric]),
-            self::object => $visitor->object($this, []),
-            self::positiveInt => $visitor->int($this, 1, null),
-            self::resource => $visitor->resource($this),
             self::scalar => $visitor->union($this, [self::bool, self::int, self::float, self::string]),
-            self::string => $visitor->string($this),
             self::lowercaseString => $visitor->lowercaseString($this),
-            self::true => $visitor->true($this),
             self::truthyString => $visitor->intersection($this, [
                 self::string,
                 new Internal\NotType(new Internal\StringValueType('')),
                 new Internal\NotType(new Internal\StringValueType('0')),
             ]),
-            self::void => $visitor->void($this),
+            self::literalInt => $visitor->literal($this, self::int),
+            self::literalFloat => $visitor->literal($this, self::float),
+            self::literalString => $visitor->literal($this, self::string),
         };
     }
 }
