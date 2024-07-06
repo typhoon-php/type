@@ -113,7 +113,7 @@ enum types implements Type
      * @param array<Type|ArrayElement> $elements
      * @return Type<array<mixed>>
      */
-    public static function arrayShape(array $elements = [], Type $key = self::arrayKey, Type $value = self::never): Type
+    public static function arrayShape(array $elements = [], Type $key = self::never, Type $value = self::never): Type
     {
         return new Internal\ArrayType($key, $value, array_map(
             static fn(Type|ArrayElement $element): ArrayElement => $element instanceof Type ? new ArrayElement($element) : $element,
@@ -438,6 +438,15 @@ enum types implements Type
         }
 
         return new Internal\TemplateType(DeclarationId::template($function, $name));
+    }
+
+    public static function scalar(int|float|string $value): Type
+    {
+        return match (true) {
+            \is_int($value) => new Internal\IntType($value, $value),
+            \is_float($value) => new Internal\FloatValueType($value),
+            default => new Internal\StringValueType($value),
+        };
     }
 
     public static function classTemplate(string|ClassId $class, string $name): Type
