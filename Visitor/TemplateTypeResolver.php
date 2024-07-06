@@ -32,8 +32,8 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
         $this->arguments = $resolved;
     }
 
-    public function template(Type $self, TemplateId $template): mixed
+    public function template(Type $type, TemplateId $template): mixed
     {
-        return $this->arguments[$template->toString()] ?? $self;
+        return $this->arguments[$template->toString()] ?? $type;
     }
 }

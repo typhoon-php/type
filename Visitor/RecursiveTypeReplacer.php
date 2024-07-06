@@ -22,12 +22,12 @@ use Typhoon\Type\Variance;
  */
 abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 {
-    public function alias(Type $self, AliasId $alias, array $arguments): mixed
+    public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
     {
-        return types::alias($alias, ...$this->processTypes($arguments));
+        return types::alias($alias, ...$this->processTypes($typeArguments));
     }
 
-    public function array(Type $self, Type $key, Type $value, array $elements): mixed
+    public function array(Type $type, Type $keyType, Type $valueType, array $elements): mixed
     {
         return types::arrayShape(
             elements: array_map(
@@ -37,12 +37,12 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
                 ),
                 $elements,
             ),
-            key: $key->accept($this),
-            value: $value->accept($this),
+            key: $keyType->accept($this),
+            value: $valueType->accept($this),
         );
     }
 
-    public function callable(Type $self, array $parameters, Type $return): mixed
+    public function callable(Type $type, array $parameters, Type $returnType): mixed
     {
         return types::callable(
             parameters: array_map(
@@ -55,41 +55,41 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
                 ),
                 $parameters,
             ),
-            return: $return->accept($this),
+            return: $returnType->accept($this),
         );
     }
 
-    public function classConstant(Type $self, Type $class, string $name): mixed
+    public function classConstant(Type $type, Type $classType, string $name): mixed
     {
-        return types::classConstant($class->accept($this), $name);
+        return types::classConstant($classType->accept($this), $name);
     }
 
-    public function conditional(Type $self, Argument|Type $subject, Type $if, Type $then, Type $else): mixed
+    public function conditional(Type $type, Argument|Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
     {
-        return types::conditional($subject, $if->accept($this), $then->accept($this), $else->accept($this));
+        return types::conditional($subject, $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
     }
 
-    public function intersection(Type $self, array $types): mixed
+    public function intersection(Type $type, array $ofTypes): mixed
     {
-        return types::intersection(...$this->processTypes($types));
+        return types::intersection(...$this->processTypes($ofTypes));
     }
 
-    public function intMask(Type $self, Type $type): mixed
+    public function intMask(Type $type, Type $ofType): mixed
     {
-        return types::intMask($type->accept($this));
+        return types::intMask($ofType->accept($this));
     }
 
-    public function iterable(Type $self, Type $key, Type $value): mixed
+    public function iterable(Type $type, Type $keyType, Type $valueType): mixed
     {
-        return types::iterable($key->accept($this), $value->accept($this));
+        return types::iterable($keyType->accept($this), $valueType->accept($this));
     }
 
-    public function key(Type $self, Type $type): mixed
+    public function key(Type $type, Type $arrayType): mixed
     {
-        return types::key($type->accept($this));
+        return types::key($arrayType->accept($this));
     }
 
-    public function list(Type $self, Type $value, array $elements): mixed
+    public function list(Type $type, Type $valueType, array $elements): mixed
     {
         return types::listShape(
             elements: array_map(
@@ -99,21 +99,21 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
                 ),
                 $elements,
             ),
-            value: $value->accept($this),
+            value: $valueType->accept($this),
         );
     }
 
-    public function literal(Type $self, Type $type): mixed
+    public function literal(Type $type, Type $ofType): mixed
     {
-        return types::literal($type->accept($this));
+        return types::literal($ofType->accept($this));
     }
 
-    public function namedObject(Type $self, ClassId $class, array $arguments): mixed
+    public function namedObject(Type $type, ClassId $class, array $typeArguments): mixed
     {
-        return types::object($class, ...$this->processTypes($arguments));
+        return types::object($class, ...$this->processTypes($typeArguments));
     }
 
-    public function object(Type $self, array $properties): mixed
+    public function object(Type $type, array $properties): mixed
     {
         return types::objectShape(
             array_map(
@@ -126,39 +126,39 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         );
     }
 
-    public function offset(Type $self, Type $type, Type $offset): mixed
+    public function offset(Type $type, Type $arrayType, Type $keyType): mixed
     {
-        return types::offset($type->accept($this), $offset->accept($this));
+        return types::offset($arrayType->accept($this), $keyType->accept($this));
     }
 
-    public function self(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
+    public function self(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::self($resolvedClass, ...$this->processTypes($arguments));
+        return types::self($resolvedClass, ...$this->processTypes($typeArguments));
     }
 
-    public function parent(Type $self, ?NamedClassId $resolvedClass, array $arguments): mixed
+    public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::parent($resolvedClass, ...$this->processTypes($arguments));
+        return types::parent($resolvedClass, ...$this->processTypes($typeArguments));
     }
 
-    public function static(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
+    public function static(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::static($resolvedClass, ...$this->processTypes($arguments));
+        return types::static($resolvedClass, ...$this->processTypes($typeArguments));
     }
 
-    public function union(Type $self, array $types): mixed
+    public function union(Type $type, array $ofTypes): mixed
     {
-        return types::union(...$this->processTypes($types));
+        return types::union(...$this->processTypes($ofTypes));
     }
 
-    public function not(Type $self, Type $type): mixed
+    public function not(Type $type, Type $ofType): mixed
     {
-        return types::not($type->accept($this));
+        return types::not($ofType->accept($this));
     }
 
-    public function varianceAware(Type $self, Type $type, Variance $variance): mixed
+    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
     {
-        return types::varianceAware($type->accept($this), $variance);
+        return types::varianceAware($ofType->accept($this), $variance);
     }
 
     /**
@@ -170,8 +170,8 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return array_map(fn(Type $type): Type => $type->accept($this), $types);
     }
 
-    protected function default(Type $self): mixed
+    protected function default(Type $type): mixed
     {
-        return $self;
+        return $type;
     }
 }

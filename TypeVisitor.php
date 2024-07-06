@@ -13,225 +13,227 @@ use Typhoon\DeclarationId\TemplateId;
 /**
  * @api
  * @template-covariant TReturn
- * @todo rename $self, $type
  */
 interface TypeVisitor
 {
     /**
-     * @param Type<never> $self
+     * @param Type<never> $type
      * @return TReturn
      */
-    public function never(Type $self): mixed;
+    public function never(Type $type): mixed;
 
     /**
-     * @param Type<void> $self
+     * @param Type<void> $type
      * @return TReturn
      */
-    public function void(Type $self): mixed;
+    public function void(Type $type): mixed;
 
     /**
-     * @param Type<null> $self
+     * @param Type<null> $type
      * @return TReturn
      */
-    public function null(Type $self): mixed;
+    public function null(Type $type): mixed;
 
     /**
+     * @param Type<true> $type
      * @return TReturn
      */
-    public function true(Type $self): mixed;
+    public function true(Type $type): mixed;
 
     /**
+     * @param Type<false> $type
      * @return TReturn
      */
-    public function false(Type $self): mixed;
+    public function false(Type $type): mixed;
 
     /**
-     * @param Type<int> $self
+     * @param Type<int> $type
      * @return TReturn
      */
-    public function int(Type $self, ?int $min, ?int $max): mixed;
+    public function int(Type $type, ?int $min, ?int $max): mixed;
 
     /**
-     * @param Type<int> $self
+     * @param Type<positive-int> $type
      * @return TReturn
      */
-    public function intMask(Type $self, Type $type): mixed;
+    public function intMask(Type $type, Type $ofType): mixed;
 
     /**
-     * @param Type<float> $self
+     * @param Type<float> $type
      * @return TReturn
      */
-    public function float(Type $self): mixed;
+    public function float(Type $type): mixed;
 
     /**
+     * @param Type<float> $type
      * @return TReturn
      */
-    public function floatValue(Type $self, float $value): mixed;
+    public function floatValue(Type $type, float $value): mixed;
 
     /**
-     * @param Type<string> $self
+     * @param Type<string> $type
      * @return TReturn
      */
-    public function string(Type $self): mixed;
+    public function string(Type $type): mixed;
 
     /**
-     * @param Type<string> $self
+     * @param Type<string> $type
      * @return TReturn
      */
-    public function stringValue(Type $self, string $value): mixed;
+    public function stringValue(Type $type, string $value): mixed;
 
     /**
-     * @param Type<lowercase-string> $self
+     * @param Type<lowercase-string> $type
      * @return TReturn
      */
-    public function lowercaseString(Type $self): mixed;
+    public function lowercaseString(Type $type): mixed;
 
     /**
-     * @param Type<non-empty-string> $self
+     * @param Type<non-empty-string> $type
      * @return TReturn
      */
-    public function classString(Type $self, Type $class): mixed;
+    public function classString(Type $type, Type $classType): mixed;
 
     /**
-     * @param Type<numeric> $self
+     * @param Type<numeric> $type
      * @return TReturn
      */
-    public function numeric(Type $self): mixed;
+    public function numeric(Type $type): mixed;
 
     /**
-     * @param Type<resource> $self
+     * @param Type<resource> $type
      * @return TReturn
      */
-    public function resource(Type $self): mixed;
+    public function resource(Type $type): mixed;
 
     /**
-     * @param Type<list<mixed>> $self
+     * @param Type<list<mixed>> $type
      * @param array<non-negative-int, ArrayElement> $elements
      * @return TReturn
      */
-    public function list(Type $self, Type $value, array $elements): mixed;
+    public function list(Type $type, Type $valueType, array $elements): mixed;
 
     /**
-     * @param Type<array<mixed>> $self
+     * @param Type<array<mixed>> $type
      * @param array<ArrayElement> $elements
      * @return TReturn
      */
-    public function array(Type $self, Type $key, Type $value, array $elements): mixed;
+    public function array(Type $type, Type $keyType, Type $valueType, array $elements): mixed;
 
     /**
      * @return TReturn
      */
-    public function key(Type $self, Type $type): mixed;
+    public function key(Type $type, Type $arrayType): mixed;
 
     /**
      * @return TReturn
      */
-    public function offset(Type $self, Type $type, Type $offset): mixed;
+    public function offset(Type $type, Type $arrayType, Type $keyType): mixed;
 
     /**
-     * @param Type<iterable<mixed>> $self
+     * @param Type<iterable<mixed>> $type
      * @return TReturn
      */
-    public function iterable(Type $self, Type $key, Type $value): mixed;
+    public function iterable(Type $type, Type $keyType, Type $valueType): mixed;
 
     /**
-     * @param Type<object> $self
+     * @param Type<object> $type
      * @param array<string, Property> $properties
      * @return TReturn
      */
-    public function object(Type $self, array $properties): mixed;
+    public function object(Type $type, array $properties): mixed;
 
     /**
-     * @param Type<object> $self
-     * @param list<Type> $arguments
+     * @param Type<object> $type
+     * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function namedObject(Type $self, ClassId $class, array $arguments): mixed;
+    public function namedObject(Type $type, ClassId $class, array $typeArguments): mixed;
 
     /**
-     * @param Type<object> $self
-     * @param list<Type> $arguments
+     * @param Type<object> $type
+     * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function self(Type $self, ?ClassId $resolvedClass, array $arguments): mixed;
+    public function self(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed;
 
     /**
-     * @param Type<object> $self
-     * @param list<Type> $arguments
+     * @param Type<object> $type
+     * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function parent(Type $self, ?NamedClassId $resolvedClass, array $arguments): mixed;
+    public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed;
 
     /**
-     * @param Type<object> $self
-     * @param list<Type> $arguments
+     * @param Type<object> $type
+     * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function static(Type $self, ?ClassId $resolvedClass, array $arguments): mixed;
+    public function static(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed;
 
     /**
-     * @param Type<callable> $self
+     * @param Type<callable> $type
      * @param list<Parameter> $parameters
      * @return TReturn
      */
-    public function callable(Type $self, array $parameters, Type $return): mixed;
+    public function callable(Type $type, array $parameters, Type $returnType): mixed;
 
     /**
-     * @param non-empty-list<Type> $types
+     * @param non-empty-list<Type> $ofTypes
      * @return TReturn
      */
-    public function union(Type $self, array $types): mixed;
+    public function union(Type $type, array $ofTypes): mixed;
 
     /**
-     * @param non-empty-list<Type> $types
+     * @param non-empty-list<Type> $ofTypes
      * @return TReturn
      */
-    public function intersection(Type $self, array $types): mixed;
-
-    /**
-     * @return TReturn
-     */
-    public function mixed(Type $self): mixed;
+    public function intersection(Type $type, array $ofTypes): mixed;
 
     /**
      * @return TReturn
      */
-    public function not(Type $self, Type $type): mixed;
+    public function mixed(Type $type): mixed;
 
     /**
      * @return TReturn
      */
-    public function literal(Type $self, Type $type): mixed;
+    public function not(Type $type, Type $ofType): mixed;
 
     /**
      * @return TReturn
      */
-    public function template(Type $self, TemplateId $template): mixed;
+    public function literal(Type $type, Type $ofType): mixed;
 
     /**
      * @return TReturn
      */
-    public function varianceAware(Type $self, Type $type, Variance $variance): mixed;
+    public function template(Type $type, TemplateId $template): mixed;
 
     /**
      * @return TReturn
      */
-    public function constant(Type $self, ConstantId $constant): mixed;
+    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function constant(Type $type, ConstantId $constant): mixed;
 
     /**
      * @param non-empty-string $name
      * @return TReturn
      */
-    public function classConstant(Type $self, Type $class, string $name): mixed;
+    public function classConstant(Type $type, Type $classType, string $name): mixed;
 
     /**
-     * @param list<Type> $arguments
+     * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function alias(Type $self, AliasId $alias, array $arguments): mixed;
+    public function alias(Type $type, AliasId $alias, array $typeArguments): mixed;
 
     /**
      * @return TReturn
      */
-    public function conditional(Type $self, Argument|Type $subject, Type $if, Type $then, Type $else): mixed;
+    public function conditional(Type $type, Argument|Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed;
 }

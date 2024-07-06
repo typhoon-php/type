@@ -19,26 +19,26 @@ final class SelfParentStaticTypeResolver extends RecursiveTypeReplacer
         private readonly ?NamedClassId $parent,
     ) {}
 
-    public function self(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
+    public function self(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
     {
         if ($resolvedClass !== null) {
-            return $self;
+            return $type;
         }
 
-        return types::self($this->self, ...$this->processTypes($arguments));
+        return types::self($this->self, ...$this->processTypes($typeArguments));
     }
 
-    public function parent(Type $self, ?NamedClassId $resolvedClass, array $arguments): mixed
+    public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed
     {
         if ($resolvedClass !== null) {
-            return $self;
+            return $type;
         }
 
-        return types::parent($this->parent, ...$this->processTypes($arguments));
+        return types::parent($this->parent, ...$this->processTypes($typeArguments));
     }
 
-    public function static(Type $self, ?ClassId $resolvedClass, array $arguments): mixed
+    public function static(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::static($this->self, ...$this->processTypes($arguments));
+        return types::static($this->self, ...$this->processTypes($typeArguments));
     }
 }
