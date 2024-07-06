@@ -12,8 +12,6 @@ use Typhoon\DeclarationId\DeclarationId;
 use Typhoon\DeclarationId\FunctionId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
-use Typhoon\Type\Internal\IntersectionType;
-use Typhoon\Type\Internal\NamedObjectType;
 use function Typhoon\DeclarationId\classId;
 use function Typhoon\DeclarationId\namedClassId;
 
@@ -161,7 +159,7 @@ enum types implements Type
             return self::closure;
         }
 
-        return new IntersectionType([
+        return new Internal\IntersectionType([
             self::closure,
             new Internal\CallableType(
                 array_map(
@@ -192,7 +190,7 @@ enum types implements Type
         return match (\count($types)) {
             0 => self::never,
             1 => $types[array_key_first($types)],
-            default => new IntersectionType(array_values($types)),
+            default => new Internal\IntersectionType(array_values($types)),
         };
     }
 
@@ -361,7 +359,7 @@ enum types implements Type
             return self::closure;
         }
 
-        return new NamedObjectType($class, $arguments);
+        return new Internal\NamedObjectType($class, $arguments);
     }
 
     /**
@@ -382,7 +380,7 @@ enum types implements Type
 
     public static function generator(Type $key = self::mixed, Type $value = self::mixed, Type $send = self::mixed, Type $return = self::mixed): Type
     {
-        return new NamedObjectType(DeclarationId::namedClass(\Generator::class), [$key, $value, $send, $return]);
+        return new Internal\NamedObjectType(DeclarationId::namedClass(\Generator::class), [$key, $value, $send, $return]);
     }
 
     public static function offset(Type $type, Type $offset): Type
