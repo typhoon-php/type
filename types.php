@@ -12,6 +12,7 @@ use Typhoon\DeclarationId\DeclarationId;
 use Typhoon\DeclarationId\FunctionId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
+use Typhoon\Type\Internal\UnionType;
 use function Typhoon\DeclarationId\classId;
 use function Typhoon\DeclarationId\namedClassId;
 
@@ -205,9 +206,27 @@ enum types implements Type
     }
 
     /**
+     * @no-named-arguments
+     * @param positive-int $value
+     * @param positive-int ...$values
+     * @return Type<positive-int>
+     */
+    public static function intMask(int $value, int ...$values): Type
+    {
+        if ($values === []) {
+            return new Internal\IntMaskType(new Internal\IntType($value, $value));
+        }
+
+        return new Internal\IntMaskType(new UnionType(array_map(
+            static fn(int $value): Internal\IntType => new Internal\IntType($value, $value),
+            [$value, ...$values],
+        )));
+    }
+
+    /**
      * @return Type<int>
      */
-    public static function intMask(Type $type): Type
+    public static function intMaskOf(Type $type): Type
     {
         return new Internal\IntMaskType($type);
     }
@@ -326,7 +345,7 @@ enum types implements Type
      */
     public static function nullable(Type $type): Type
     {
-        return new Internal\UnionType([self::null, $type]);
+        return new UnionType([self::null, $type]);
     }
 
     /**
@@ -473,7 +492,7 @@ enum types implements Type
         return match (\count($types)) {
             0 => self::never,
             1 => $types[array_key_first($types)],
-            default => new Internal\UnionType(array_values($types)),
+            default => new UnionType(array_values($types)),
         };
     }
 

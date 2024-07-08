@@ -76,7 +76,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 
     public function intMask(Type $type, Type $ofType): mixed
     {
-        return types::intMask($ofType->accept($this));
+        return types::intMaskOf($ofType->accept($this));
     }
 
     public function iterable(Type $type, Type $keyType, Type $valueType): mixed
