@@ -227,6 +227,11 @@ interface TypeVisitor
     public function classConstant(Type $type, Type $classType, string $name): mixed;
 
     /**
+     * @return TReturn
+     */
+    public function classConstantMask(Type $type, Type $classType, string $namePrefix): mixed;
+
+    /**
      * @param list<Type> $typeArguments
      * @return TReturn
      */

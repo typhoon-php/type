@@ -196,6 +196,11 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
+    public function classConstantMask(Type $type, Type $classType, string $namePrefix): mixed
+    {
+        return $this->default($type);
+    }
+
     public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
     {
         return $this->default($type);

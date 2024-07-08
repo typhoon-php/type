@@ -152,7 +152,20 @@ enum types implements Type
             $class = self::object($class);
         }
 
+        if (str_ends_with($name, '*')) {
+            return new Internal\ClassConstantMaskType($class, substr($name, 0, -1));
+        }
+
         return new Internal\ClassConstantType($class, $name);
+    }
+
+    public static function classConstantMask(string|ClassId|Type $class, string $namePrefix): Type
+    {
+        if (!$class instanceof Type) {
+            $class = self::object($class);
+        }
+
+        return new Internal\ClassConstantMaskType($class, $namePrefix);
     }
 
     public static function classString(Type $object): Type
