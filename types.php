@@ -8,13 +8,11 @@ use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
 use Typhoon\DeclarationId\ConstantId;
-use Typhoon\DeclarationId\DeclarationId;
 use Typhoon\DeclarationId\FunctionId;
+use Typhoon\DeclarationId\Id;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Internal\UnionType;
-use function Typhoon\DeclarationId\classId;
-use function Typhoon\DeclarationId\namedClassId;
 
 /**
  * @api
@@ -69,7 +67,7 @@ enum types implements Type
      */
     public static function classAlias(string|NamedClassId $class, string $name, Type ...$arguments): Type
     {
-        return new Internal\AliasType(DeclarationId::alias($class, $name), $arguments);
+        return new Internal\AliasType(Id::alias($class, $name), $arguments);
     }
 
     /**
@@ -202,7 +200,7 @@ enum types implements Type
     public static function constant(string|ConstantId $name): Type
     {
         if (!$name instanceof ConstantId) {
-            $name = DeclarationId::constant($name);
+            $name = Id::constant($name);
         }
 
         return new Internal\ConstantType($name);
@@ -376,7 +374,7 @@ enum types implements Type
     public static function object(string|ClassId $class, Type ...$arguments): Type
     {
         if (\is_string($class)) {
-            $class = classId($class);
+            $class = Id::class($class);
         }
 
         if (!$class instanceof AnonymousClassId && $class->name === \Closure::class) {
@@ -406,7 +404,7 @@ enum types implements Type
 
     public static function generator(Type $key = self::mixed, Type $value = self::mixed, Type $send = self::mixed, Type $return = self::mixed): Type
     {
-        return new Internal\NamedObjectType(DeclarationId::namedClass(\Generator::class), [$key, $value, $send, $return]);
+        return new Internal\NamedObjectType(Id::namedClass(\Generator::class), [$key, $value, $send, $return]);
     }
 
     public static function offset(Type $type, Type $offset): Type
@@ -441,7 +439,7 @@ enum types implements Type
     public static function self(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = classId($resolvedClass);
+            $resolvedClass = Id::class($resolvedClass);
         }
 
         return new Internal\SelfType($resolvedClass, $arguments);
@@ -453,7 +451,7 @@ enum types implements Type
     public static function parent(null|string|NamedClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = namedClassId($resolvedClass);
+            $resolvedClass = Id::namedClass($resolvedClass);
         }
 
         return new Internal\ParentType($resolvedClass, $arguments);
@@ -465,7 +463,7 @@ enum types implements Type
     public static function static(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
-            $resolvedClass = classId($resolvedClass);
+            $resolvedClass = Id::class($resolvedClass);
         }
 
         return new Internal\StaticType($resolvedClass, $arguments);
@@ -479,10 +477,10 @@ enum types implements Type
     public static function functionTemplate(string|FunctionId $function, string $name): Type
     {
         if (!$function instanceof FunctionId) {
-            $function = DeclarationId::namedFunction($function);
+            $function = Id::namedFunction($function);
         }
 
-        return new Internal\TemplateType(DeclarationId::template($function, $name));
+        return new Internal\TemplateType(Id::template($function, $name));
     }
 
     public static function scalar(int|float|string $value): Type
@@ -497,15 +495,15 @@ enum types implements Type
     public static function classTemplate(string|ClassId $class, string $name): Type
     {
         if (!$class instanceof ClassId) {
-            $class = DeclarationId::class($class);
+            $class = Id::class($class);
         }
 
-        return new Internal\TemplateType(DeclarationId::template($class, $name));
+        return new Internal\TemplateType(Id::template($class, $name));
     }
 
     public static function methodTemplate(string|ClassId $class, string $method, string $name): Type
     {
-        return new Internal\TemplateType(DeclarationId::template(DeclarationId::method($class, $method), $name));
+        return new Internal\TemplateType(Id::template(Id::method($class, $method), $name));
     }
 
     /**
@@ -560,7 +558,7 @@ enum types implements Type
             self::void => $visitor->void($this),
             self::never => $visitor->never($this),
             self::callable => $visitor->callable($this, [], self::mixed),
-            self::closure => $visitor->namedObject($this, DeclarationId::class(\Closure::class), []),
+            self::closure => $visitor->namedObject($this, Id::class(\Closure::class), []),
             self::nonEmptyString => $visitor->intersection($this, [
                 self::string,
                 new Internal\NotType(new Internal\StringValueType('')),
