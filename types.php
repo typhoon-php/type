@@ -114,12 +114,21 @@ enum types implements Type
      * @param array<Type|ArrayElement> $elements
      * @return Type<array<mixed>>
      */
-    public static function arrayShape(array $elements = [], Type $key = self::never, Type $value = self::never): Type
+    public static function arrayShape(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
     {
         return new Internal\ArrayType($key, $value, array_map(
             static fn(Type|ArrayElement $element): ArrayElement => $element instanceof Type ? new ArrayElement($element) : $element,
             $elements,
         ));
+    }
+
+    /**
+     * @param array<Type|ArrayElement> $elements
+     * @return Type<array<mixed>>
+     */
+    public static function arrayShapeSealed(array $elements = []): Type
+    {
+        return self::arrayShape($elements, self::never, self::never);
     }
 
     /**
@@ -292,12 +301,21 @@ enum types implements Type
      * @param array<non-negative-int, Type|ArrayElement> $elements
      * @return Type<list<mixed>>
      */
-    public static function listShape(array $elements = [], Type $value = self::never): Type
+    public static function listShape(array $elements = [], Type $value = self::mixed): Type
     {
         return new Internal\ListType($value, array_map(
             static fn(Type|ArrayElement $element): ArrayElement => $element instanceof Type ? new ArrayElement($element) : $element,
             $elements,
         ));
+    }
+
+    /**
+     * @param array<non-negative-int, Type|ArrayElement> $elements
+     * @return Type<list<mixed>>
+     */
+    public static function listShapeSealed(array $elements = []): Type
+    {
+        return self::listShape($elements, self::never);
     }
 
     /**
