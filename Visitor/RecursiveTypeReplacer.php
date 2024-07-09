@@ -8,9 +8,8 @@ use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\ClassId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\Type\Argument;
-use Typhoon\Type\ArrayElement;
 use Typhoon\Type\Parameter;
-use Typhoon\Type\Property;
+use Typhoon\Type\ShapeElement;
 use Typhoon\Type\Type;
 use Typhoon\Type\types;
 use Typhoon\Type\Variance;
@@ -31,7 +30,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
     {
         return types::arrayShape(
             elements: array_map(
-                fn(ArrayElement $element): ArrayElement => types::arrayElement(
+                fn(ShapeElement $element): ShapeElement => new ShapeElement(
                     $element->type->accept($this),
                     $element->optional,
                 ),
@@ -98,7 +97,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
     {
         return types::listShape(
             elements: array_map(
-                fn(ArrayElement $element): ArrayElement => types::arrayElement(
+                fn(ShapeElement $element): ShapeElement => new ShapeElement(
                     $element->type->accept($this),
                     $element->optional,
                 ),
@@ -122,7 +121,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
     {
         return types::objectShape(
             array_map(
-                fn(Property $property): Property => types::prop(
+                fn(ShapeElement $property): ShapeElement => new ShapeElement(
                     $property->type->accept($this),
                     $property->optional,
                 ),

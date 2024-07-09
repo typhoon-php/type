@@ -9,7 +9,7 @@ namespace Typhoon\Type;
  * @psalm-immutable
  * @template-covariant TType
  */
-final class Property
+final class ShapeElement
 {
     /**
      * @param Type<TType> $type

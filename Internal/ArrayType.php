@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
-use Typhoon\Type\ArrayElement;
+use Typhoon\Type\ShapeElement;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 
@@ -17,7 +17,7 @@ use Typhoon\Type\TypeVisitor;
 final class ArrayType implements Type
 {
     /**
-     * @param array<ArrayElement> $elements
+     * @param array<ShapeElement> $elements
      */
     public function __construct(
         private readonly Type $key,

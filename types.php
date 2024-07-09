@@ -101,29 +101,19 @@ enum types implements Type
     }
 
     /**
-     * @template TType
-     * @param Type<TType> $type
-     * @return ArrayElement<TType>
-     */
-    public static function arrayElement(Type $type, bool $optional = false): ArrayElement
-    {
-        return new ArrayElement($type, $optional);
-    }
-
-    /**
-     * @param array<Type|ArrayElement> $elements
+     * @param array<Type|ShapeElement> $elements
      * @return Type<array<mixed>>
      */
     public static function arrayShape(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
     {
         return new Internal\ArrayType($key, $value, array_map(
-            static fn(Type|ArrayElement $element): ArrayElement => $element instanceof Type ? new ArrayElement($element) : $element,
+            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
             $elements,
         ));
     }
 
     /**
-     * @param array<Type|ArrayElement> $elements
+     * @param array<Type|ShapeElement> $elements
      * @return Type<array<mixed>>
      */
     public static function arrayShapeSealed(array $elements = []): Type
@@ -298,19 +288,19 @@ enum types implements Type
     }
 
     /**
-     * @param array<non-negative-int, Type|ArrayElement> $elements
+     * @param array<non-negative-int, Type|ShapeElement> $elements
      * @return Type<list<mixed>>
      */
     public static function listShape(array $elements = [], Type $value = self::mixed): Type
     {
         return new Internal\ListType($value, array_map(
-            static fn(Type|ArrayElement $element): ArrayElement => $element instanceof Type ? new ArrayElement($element) : $element,
+            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
             $elements,
         ));
     }
 
     /**
-     * @param array<non-negative-int, Type|ArrayElement> $elements
+     * @param array<non-negative-int, Type|ShapeElement> $elements
      * @return Type<list<mixed>>
      */
     public static function listShapeSealed(array $elements = []): Type
@@ -366,7 +356,7 @@ enum types implements Type
     public static function nonEmptyList(Type $value = self::mixed): Type
     {
         /** @phpstan-ignore return.type */
-        return new Internal\ListType($value, [new ArrayElement($value)]);
+        return new Internal\ListType($value, [new ShapeElement($value)]);
     }
 
     /**
@@ -399,7 +389,7 @@ enum types implements Type
     }
 
     /**
-     * @param array<string, Type|Property> $properties
+     * @param array<string, Type|ShapeElement> $properties
      * @return Type<object>
      */
     public static function objectShape(array $properties = []): Type
@@ -409,7 +399,7 @@ enum types implements Type
         }
 
         return new Internal\ObjectType(array_map(
-            static fn(Type|Property $property): Property => $property instanceof Type ? new Property($property) : $property,
+            static fn(Type|ShapeElement $property): ShapeElement => $property instanceof Type ? new ShapeElement($property) : $property,
             $properties,
         ));
     }
@@ -435,9 +425,14 @@ enum types implements Type
         return new Parameter($type, $hasDefault, $variadic, $byReference, $name);
     }
 
-    public static function prop(Type $type, bool $optional = false): Property
+    /**
+     * @template TType
+     * @param Type<TType> $type
+     * @return ShapeElement<TType>
+     */
+    public static function optional(Type $type): ShapeElement
     {
-        return new Property($type, $optional);
+        return new ShapeElement($type, true);
     }
 
     /**

@@ -108,14 +108,14 @@ interface TypeVisitor
 
     /**
      * @param Type<list<mixed>> $type
-     * @param array<non-negative-int, ArrayElement> $elements
+     * @param array<non-negative-int, ShapeElement> $elements
      * @return TReturn
      */
     public function list(Type $type, Type $valueType, array $elements): mixed;
 
     /**
      * @param Type<array<mixed>> $type
-     * @param array<ArrayElement> $elements
+     * @param array<ShapeElement> $elements
      * @return TReturn
      */
     public function array(Type $type, Type $keyType, Type $valueType, array $elements): mixed;
@@ -138,7 +138,7 @@ interface TypeVisitor
 
     /**
      * @param Type<object> $type
-     * @param array<string, Property> $properties
+     * @param array<string, ShapeElement> $properties
      * @return TReturn
      */
     public function object(Type $type, array $properties): mixed;
