@@ -112,7 +112,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::literal($ofType->accept($this));
     }
 
-    public function namedObject(Type $type, ClassId $class, array $typeArguments): mixed
+    public function namedObject(Type $type, NamedClassId $class, array $typeArguments): mixed
     {
         return types::object($class, ...$this->processTypes($typeArguments));
     }

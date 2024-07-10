@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\DeclarationId\AliasId;
-use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ClassId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\FunctionId;
@@ -143,7 +142,7 @@ enum types implements Type
     /**
      * @param non-empty-string $name
      */
-    public static function classConstant(string|ClassId|Type $class, string $name): Type
+    public static function classConstant(string|NamedClassId|Type $class, string $name): Type
     {
         if (!$class instanceof Type) {
             $class = self::object($class);
@@ -156,7 +155,7 @@ enum types implements Type
         return new Internal\ClassConstantType($class, $name);
     }
 
-    public static function classConstantMask(string|ClassId|Type $class, string $namePrefix): Type
+    public static function classConstantMask(string|NamedClassId|Type $class, string $namePrefix): Type
     {
         if (!$class instanceof Type) {
             $class = self::object($class);
@@ -371,13 +370,13 @@ enum types implements Type
      * @no-named-arguments
      * @return Type<object>
      */
-    public static function object(string|ClassId $class, Type ...$arguments): Type
+    public static function object(string|NamedClassId $class, Type ...$arguments): Type
     {
         if (\is_string($class)) {
-            $class = Id::class($class);
+            $class = Id::namedClass($class);
         }
 
-        if (!$class instanceof AnonymousClassId && $class->name === \Closure::class) {
+        if ($class->name === \Closure::class) {
             \assert($arguments === [], 'Closure type arguments are not supported');
 
             return self::closure;
@@ -558,7 +557,7 @@ enum types implements Type
             self::void => $visitor->void($this),
             self::never => $visitor->never($this),
             self::callable => $visitor->callable($this, [], self::mixed),
-            self::closure => $visitor->namedObject($this, Id::class(\Closure::class), []),
+            self::closure => $visitor->namedObject($this, Id::namedClass(\Closure::class), []),
             self::nonEmptyString => $visitor->intersection($this, [
                 self::string,
                 new Internal\NotType(new Internal\StringValueType('')),
