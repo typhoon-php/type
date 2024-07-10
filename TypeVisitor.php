@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\DeclarationId\AliasId;
-use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
@@ -155,7 +155,7 @@ interface TypeVisitor
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function self(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed;
+    public function self(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed;
 
     /**
      * @param Type<object> $type
@@ -169,7 +169,7 @@ interface TypeVisitor
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function static(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed;
+    public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed;
 
     /**
      * @param Type<callable> $type

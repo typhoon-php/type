@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\DeclarationId\AliasId;
-use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
@@ -131,7 +131,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function self(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
+    public function self(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
     {
         return $this->default($type);
     }
@@ -141,7 +141,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function static(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
+    public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
     {
         return $this->default($type);
     }

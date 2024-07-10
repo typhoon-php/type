@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\DeclarationId\AliasId;
-use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\Type\Argument;
 use Typhoon\Type\Parameter;
@@ -135,7 +135,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::offset($arrayType->accept($this), $keyType->accept($this));
     }
 
-    public function self(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
+    public function self(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
     {
         return types::self($resolvedClass, ...$this->processTypes($typeArguments));
     }
@@ -145,7 +145,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::parent($resolvedClass, ...$this->processTypes($typeArguments));
     }
 
-    public function static(Type $type, ?ClassId $resolvedClass, array $typeArguments): mixed
+    public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
     {
         return types::static($resolvedClass, ...$this->processTypes($typeArguments));
     }

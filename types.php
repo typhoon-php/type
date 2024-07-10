@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\DeclarationId\AliasId;
-use Typhoon\DeclarationId\ClassId;
+use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\FunctionId;
 use Typhoon\DeclarationId\Id;
@@ -435,7 +435,7 @@ enum types implements Type
     /**
      * @no-named-arguments
      */
-    public static function self(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function self(null|string|NamedClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
             $resolvedClass = Id::class($resolvedClass);
@@ -459,7 +459,7 @@ enum types implements Type
     /**
      * @no-named-arguments
      */
-    public static function static(null|string|ClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function static(null|string|NamedClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
     {
         if (\is_string($resolvedClass)) {
             $resolvedClass = Id::class($resolvedClass);
@@ -491,16 +491,16 @@ enum types implements Type
         };
     }
 
-    public static function classTemplate(string|ClassId $class, string $name): Type
+    public static function classTemplate(string|NamedClassId|AnonymousClassId $class, string $name): Type
     {
-        if (!$class instanceof ClassId) {
+        if (\is_string($class)) {
             $class = Id::class($class);
         }
 
         return new Internal\TemplateType(Id::template($class, $name));
     }
 
-    public static function methodTemplate(string|ClassId $class, string $method, string $name): Type
+    public static function methodTemplate(string|NamedClassId|AnonymousClassId $class, string $method, string $name): Type
     {
         return new Internal\TemplateType(Id::template(Id::method($class, $method), $name));
     }
