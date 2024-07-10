@@ -64,7 +64,7 @@ enum types implements Type
     /**
      * @no-named-arguments
      */
-    public static function classAlias(string|NamedClassId $class, string $name, Type ...$arguments): Type
+    public static function classAlias(string|NamedClassId|AnonymousClassId $class, string $name, Type ...$arguments): Type
     {
         return new Internal\AliasType(Id::alias($class, $name), $arguments);
     }
