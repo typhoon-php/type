@@ -63,6 +63,8 @@ enum types implements Type
 
     /**
      * @no-named-arguments
+     * @param non-empty-string|NamedClassId|AnonymousClassId $class
+     * @param non-empty-string $name
      */
     public static function classAlias(string|NamedClassId|AnonymousClassId $class, string $name, Type ...$arguments): Type
     {
@@ -140,6 +142,7 @@ enum types implements Type
     }
 
     /**
+     * @param non-empty-string|NamedClassId|Type $class
      * @param non-empty-string $name
      */
     public static function classConstant(string|NamedClassId|Type $class, string $name): Type
@@ -155,6 +158,9 @@ enum types implements Type
         return new Internal\ClassConstantType($class, $name);
     }
 
+    /**
+     * @param non-empty-string|NamedClassId|Type $class
+     */
     public static function classConstantMask(string|NamedClassId|Type $class, string $namePrefix): Type
     {
         if (!$class instanceof Type) {
@@ -196,6 +202,9 @@ enum types implements Type
         return new Internal\ConditionalType($subject, $if, $then, $else);
     }
 
+    /**
+     * @param non-empty-string|ConstantId $name
+     */
     public static function constant(string|ConstantId $name): Type
     {
         if (!$name instanceof ConstantId) {
@@ -368,6 +377,7 @@ enum types implements Type
 
     /**
      * @no-named-arguments
+     * @param non-empty-string|NamedClassId $class
      * @return Type<object>
      */
     public static function object(string|NamedClassId $class, Type ...$arguments): Type
@@ -434,6 +444,7 @@ enum types implements Type
 
     /**
      * @no-named-arguments
+     * @param null|non-empty-string|NamedClassId|AnonymousClassId $resolvedClass
      */
     public static function self(null|string|NamedClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
     {
@@ -446,6 +457,7 @@ enum types implements Type
 
     /**
      * @no-named-arguments
+     * @param null|non-empty-string|NamedClassId $resolvedClass
      */
     public static function parent(null|string|NamedClassId $resolvedClass = null, Type ...$arguments): Type
     {
@@ -458,6 +470,7 @@ enum types implements Type
 
     /**
      * @no-named-arguments
+     * @param null|non-empty-string|NamedClassId|AnonymousClassId $resolvedClass
      */
     public static function static(null|string|NamedClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
     {
@@ -473,6 +486,10 @@ enum types implements Type
         return new Internal\TemplateType($id);
     }
 
+    /**
+     * @param non-empty-string|FunctionId $function
+     * @param non-empty-string $name
+     */
     public static function functionTemplate(string|FunctionId $function, string $name): Type
     {
         if (!$function instanceof FunctionId) {
@@ -491,6 +508,10 @@ enum types implements Type
         };
     }
 
+    /**
+     * @param non-empty-string|NamedClassId|AnonymousClassId $class
+     * @param non-empty-string $name
+     */
     public static function classTemplate(string|NamedClassId|AnonymousClassId $class, string $name): Type
     {
         if (\is_string($class)) {
@@ -500,6 +521,11 @@ enum types implements Type
         return new Internal\TemplateType(Id::template($class, $name));
     }
 
+    /**
+     * @param non-empty-string|NamedClassId|AnonymousClassId $class
+     * @param non-empty-string $method
+     * @param non-empty-string $name
+     */
     public static function methodTemplate(string|NamedClassId|AnonymousClassId $class, string $method, string $name): Type
     {
         return new Internal\TemplateType(Id::template(Id::method($class, $method), $name));
