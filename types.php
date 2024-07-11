@@ -6,10 +6,11 @@ namespace Typhoon\Type;
 
 use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\AnonymousFunctionId;
 use Typhoon\DeclarationId\ConstantId;
-use Typhoon\DeclarationId\FunctionId;
 use Typhoon\DeclarationId\Id;
 use Typhoon\DeclarationId\NamedClassId;
+use Typhoon\DeclarationId\NamedFunctionId;
 use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Internal\UnionType;
 
@@ -487,12 +488,12 @@ enum types implements Type
     }
 
     /**
-     * @param non-empty-string|FunctionId $function
+     * @param non-empty-string|NamedFunctionId|AnonymousFunctionId $function
      * @param non-empty-string $name
      */
-    public static function functionTemplate(string|FunctionId $function, string $name): Type
+    public static function functionTemplate(string|NamedFunctionId|AnonymousFunctionId $function, string $name): Type
     {
-        if (!$function instanceof FunctionId) {
+        if (\is_string($function)) {
             $function = Id::namedFunction($function);
         }
 
