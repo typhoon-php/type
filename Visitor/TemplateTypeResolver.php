@@ -26,7 +26,7 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
         $map = [];
 
         foreach ($typeArguments as [$templateId, $type]) {
-            $map[$templateId->toString()] = $type;
+            $map[$templateId->encode()] = $type;
         }
 
         $this->typeArguments = $map;
@@ -34,6 +34,6 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
 
     public function template(Type $type, TemplateId $template): mixed
     {
-        return $this->typeArguments[$template->toString()] ?? $type;
+        return $this->typeArguments[$template->encode()] ?? $type;
     }
 }
