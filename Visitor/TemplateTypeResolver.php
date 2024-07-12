@@ -16,24 +16,24 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
     /**
      * @var array<non-empty-string, Type>
      */
-    private array $arguments = [];
+    private readonly array $typeArguments;
 
     /**
-     * @param iterable<array{TemplateId, Type}> $arguments
+     * @param iterable<array{TemplateId, Type}> $typeArguments
      */
-    public function __construct(iterable $arguments)
+    public function __construct(iterable $typeArguments)
     {
-        $resolved = [];
+        $map = [];
 
-        foreach ($arguments as [$templateId, $type]) {
-            $resolved[$templateId->toString()] = $type;
+        foreach ($typeArguments as [$templateId, $type]) {
+            $map[$templateId->toString()] = $type;
         }
 
-        $this->arguments = $resolved;
+        $this->typeArguments = $map;
     }
 
     public function template(Type $type, TemplateId $template): mixed
     {
-        return $this->arguments[$template->toString()] ?? $type;
+        return $this->typeArguments[$template->toString()] ?? $type;
     }
 }

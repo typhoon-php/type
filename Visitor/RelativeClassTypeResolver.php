@@ -12,7 +12,7 @@ use Typhoon\Type\types;
 /**
  * @api
  */
-final class SelfParentStaticTypeResolver extends RecursiveTypeReplacer
+final class RelativeClassTypeResolver extends RecursiveTypeReplacer
 {
     public function __construct(
         private readonly NamedClassId|AnonymousClassId $self,
