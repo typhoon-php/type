@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "typhoon/declaration-id": "^0.4@dev"
     },
     "autoload": {
         "psr-4": {
