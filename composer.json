@@ -15,7 +15,10 @@
     "autoload": {
         "psr-4": {
             "Typhoon\\Type\\": ""
-        }
+        },
+        "files": [
+            "functions.php"
+        ]
     },
     "config": {
         "lock": false,
