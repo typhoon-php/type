@@ -104,21 +104,21 @@ enum types implements Type
      * @param array<Type|ShapeElement> $elements
      * @return Type<array<mixed>>
      */
-    public static function arrayShape(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
+    public static function arrayShape(array $elements = []): Type
     {
-        return new Internal\ArrayType($key, $value, array_map(
-            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
-            $elements,
-        ));
+        return self::arrayShapeUnsealed($elements, self::never, self::never);
     }
 
     /**
      * @param array<Type|ShapeElement> $elements
      * @return Type<array<mixed>>
      */
-    public static function arrayShapeSealed(array $elements = []): Type
+    public static function arrayShapeUnsealed(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
     {
-        return self::arrayShape($elements, self::never, self::never);
+        return new Internal\ArrayType($key, $value, array_map(
+            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
+            $elements,
+        ));
     }
 
     /**
