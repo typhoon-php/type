@@ -17,7 +17,6 @@ use Typhoon\Type\Variance;
 /**
  * @api
  * @extends DefaultTypeVisitor<Type>
- * @todo optimize by using type classes directly
  */
 abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 {
