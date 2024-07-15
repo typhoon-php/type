@@ -500,9 +500,12 @@ enum types implements Type
         return new Internal\TemplateType(Id::template($function, $name));
     }
 
-    public static function scalar(int|float|string $value): Type
+    public static function scalar(bool|int|float|string $value): Type
     {
+        /** @psalm-suppress PossiblyInvalidArgument */
         return match (true) {
+            $value === true => self::true,
+            $value === false => self::false,
             \is_int($value) => new Internal\IntType($value, $value),
             \is_float($value) => new Internal\FloatValueType($value),
             default => new Internal\StringValueType($value),
