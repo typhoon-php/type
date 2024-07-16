@@ -218,12 +218,15 @@ enum types implements Type
         return new Internal\ConstantType($name);
     }
 
+    /**
+     * @no-named-arguments
+     */
     public static function intersection(Type ...$types): Type
     {
         return match (\count($types)) {
             0 => self::never,
-            1 => $types[array_key_first($types)],
-            default => new Internal\IntersectionType(array_values($types)),
+            1 => $types[0],
+            default => new Internal\IntersectionType($types),
         };
     }
 
@@ -539,6 +542,7 @@ enum types implements Type
     }
 
     /**
+     * @no-named-arguments
      * @template TType
      * @param Type<TType> ...$types
      * @return Type<TType>
@@ -547,8 +551,8 @@ enum types implements Type
     {
         return match (\count($types)) {
             0 => self::never,
-            1 => $types[array_key_first($types)],
-            default => new UnionType(array_values($types)),
+            1 => $types[0],
+            default => new UnionType($types),
         };
     }
 
