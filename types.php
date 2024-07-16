@@ -12,7 +12,6 @@ use Typhoon\DeclarationId\Id;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\NamedFunctionId;
 use Typhoon\DeclarationId\TemplateId;
-use Typhoon\Type\Internal\UnionType;
 
 /**
  * @api
@@ -242,7 +241,7 @@ enum types implements Type
             return new Internal\IntMaskType(new Internal\IntType($value, $value));
         }
 
-        return new Internal\IntMaskType(new UnionType(array_map(
+        return new Internal\IntMaskType(new Internal\UnionType(array_map(
             static fn(int $value): Internal\IntType => new Internal\IntType($value, $value),
             [$value, ...$values],
         )));
@@ -379,7 +378,7 @@ enum types implements Type
      */
     public static function nullable(Type $type): Type
     {
-        return new UnionType([self::null, $type]);
+        return new Internal\UnionType([self::null, $type]);
     }
 
     /**
@@ -400,6 +399,14 @@ enum types implements Type
         }
 
         return new Internal\NamedObjectType($class, $arguments);
+    }
+
+    /**
+     * @param non-empty-string|NamedClassId|Type $class
+     */
+    public static function class(string|NamedClassId|Type $class): Type
+    {
+        return self::classConstant($class, 'class');
     }
 
     /**
@@ -552,7 +559,7 @@ enum types implements Type
         return match (\count($types)) {
             0 => self::never,
             1 => $types[0],
-            default => new UnionType($types),
+            default => new Internal\UnionType($types),
         };
     }
 
