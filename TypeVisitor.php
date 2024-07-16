@@ -83,12 +83,6 @@ interface TypeVisitor
     public function stringValue(Type $type, string $value): mixed;
 
     /**
-     * @param Type<lowercase-string> $type
-     * @return TReturn
-     */
-    public function lowercaseString(Type $type): mixed;
-
-    /**
      * @param Type<non-empty-string> $type
      * @return TReturn
      */

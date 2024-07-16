@@ -272,11 +272,6 @@ enum TypeStringifier implements TypeVisitor
         return $this->escapeStringLiteral($value);
     }
 
-    public function lowercaseString(Type $type): mixed
-    {
-        return 'lowercase-string';
-    }
-
     public function mixed(Type $type): mixed
     {
         return 'mixed';

@@ -39,7 +39,6 @@ enum types implements Type
     case string;
     case callableString;
     case nonEmptyString;
-    case lowercaseString;
     case numericString;
     case truthyString;
     public const nonFalsyString = self::truthyString;
@@ -616,7 +615,6 @@ enum types implements Type
             self::numeric => $visitor->numeric($this),
             self::numericString => $visitor->intersection($this, [self::string, self::numeric]),
             self::scalar => $visitor->union($this, [self::bool, self::int, self::float, self::string]),
-            self::lowercaseString => $visitor->lowercaseString($this),
             self::truthyString => $visitor->intersection($this, [
                 self::string,
                 new Internal\NotType(new Internal\StringValueType('')),

@@ -76,11 +76,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function lowercaseString(Type $type): mixed
-    {
-        return $this->default($type);
-    }
-
     public function classString(Type $type, Type $classType): mixed
     {
         return $this->default($type);
