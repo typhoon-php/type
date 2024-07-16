@@ -361,12 +361,10 @@ enum types implements Type
     }
 
     /**
-     * @return Type<non-empty-list<mixed>>
-     * @psalm-suppress InvalidReturnType, InvalidReturnStatement
+     * @return Type<list<mixed>>
      */
     public static function nonEmptyList(Type $value = self::mixed): Type
     {
-        /** @phpstan-ignore return.type */
         return new Internal\ListType($value, [new ShapeElement($value)]);
     }
 
