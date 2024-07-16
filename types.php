@@ -298,24 +298,24 @@ enum types implements Type
     }
 
     /**
-     * @param array<non-negative-int, Type|ShapeElement> $elements
+     * @param list<Type|ShapeElement> $elements
      * @return Type<list<mixed>>
      */
-    public static function listShape(array $elements = [], Type $value = self::mixed): Type
+    public static function listShape(array $elements = []): Type
     {
-        return new Internal\ListType($value, array_map(
-            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
-            $elements,
-        ));
+        return self::listShapeUnsealed($elements, self::never);
     }
 
     /**
      * @param array<non-negative-int, Type|ShapeElement> $elements
      * @return Type<list<mixed>>
      */
-    public static function listShapeSealed(array $elements = []): Type
+    public static function listShapeUnsealed(array $elements = [], Type $value = self::mixed): Type
     {
-        return self::listShape($elements, self::never);
+        return new Internal\ListType($value, array_map(
+            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
+            $elements,
+        ));
     }
 
     /**
