@@ -25,7 +25,7 @@ final class RelativeClassTypeResolver extends RecursiveTypeReplacer
             return $type;
         }
 
-        return types::self($this->self, ...$this->processTypes($typeArguments));
+        return types::self($this->processTypes($typeArguments), $this->self);
     }
 
     public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed
@@ -34,11 +34,11 @@ final class RelativeClassTypeResolver extends RecursiveTypeReplacer
             return $type;
         }
 
-        return types::parent($this->parent, ...$this->processTypes($typeArguments));
+        return types::parent($this->processTypes($typeArguments), $this->parent);
     }
 
     public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::static($this->self, ...$this->processTypes($typeArguments));
+        return types::static($this->processTypes($typeArguments), $this->self);
     }
 }

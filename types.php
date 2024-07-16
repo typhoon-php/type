@@ -58,19 +58,19 @@ enum types implements Type
     case mixed;
 
     /**
-     * @no-named-arguments
+     * @param list<Type> $arguments
      */
-    public static function alias(AliasId $alias, Type ...$arguments): Type
+    public static function alias(AliasId $alias, array $arguments = []): Type
     {
         return new Internal\AliasType($alias, $arguments);
     }
 
     /**
-     * @no-named-arguments
      * @param non-empty-string|NamedClassId|AnonymousClassId $class
      * @param non-empty-string $name
+     * @param list<Type> $arguments
      */
-    public static function classAlias(string|NamedClassId|AnonymousClassId $class, string $name, Type ...$arguments): Type
+    public static function classAlias(string|NamedClassId|AnonymousClassId $class, string $name, array $arguments = []): Type
     {
         return new Internal\AliasType(Id::alias($class, $name), $arguments);
     }
@@ -383,11 +383,11 @@ enum types implements Type
     }
 
     /**
-     * @no-named-arguments
      * @param non-empty-string|NamedClassId $class
+     * @param list<Type> $arguments
      * @return Type<object>
      */
-    public static function object(string|NamedClassId $class, Type ...$arguments): Type
+    public static function object(string|NamedClassId $class, array $arguments = []): Type
     {
         if (\is_string($class)) {
             $class = Id::namedClass($class);
@@ -450,10 +450,10 @@ enum types implements Type
     }
 
     /**
-     * @no-named-arguments
+     * @param list<Type> $arguments
      * @param null|non-empty-string|NamedClassId|AnonymousClassId $resolvedClass
      */
-    public static function self(null|string|NamedClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function self(array $arguments = [], null|string|NamedClassId|AnonymousClassId $resolvedClass = null): Type
     {
         if (\is_string($resolvedClass)) {
             $resolvedClass = Id::class($resolvedClass);
@@ -463,10 +463,10 @@ enum types implements Type
     }
 
     /**
-     * @no-named-arguments
+     * @param list<Type> $arguments
      * @param null|non-empty-string|NamedClassId $resolvedClass
      */
-    public static function parent(null|string|NamedClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function parent(array $arguments = [], null|string|NamedClassId $resolvedClass = null): Type
     {
         if (\is_string($resolvedClass)) {
             $resolvedClass = Id::namedClass($resolvedClass);
@@ -476,10 +476,10 @@ enum types implements Type
     }
 
     /**
-     * @no-named-arguments
+     * @param list<Type> $arguments
      * @param null|non-empty-string|NamedClassId|AnonymousClassId $resolvedClass
      */
-    public static function static(null|string|NamedClassId|AnonymousClassId $resolvedClass = null, Type ...$arguments): Type
+    public static function static(array $arguments = [], null|string|NamedClassId|AnonymousClassId $resolvedClass = null): Type
     {
         if (\is_string($resolvedClass)) {
             $resolvedClass = Id::class($resolvedClass);

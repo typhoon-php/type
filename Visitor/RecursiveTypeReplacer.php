@@ -22,7 +22,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 {
     public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
     {
-        return types::alias($alias, ...$this->processTypes($typeArguments));
+        return types::alias($alias, $this->processTypes($typeArguments));
     }
 
     public function array(Type $type, Type $keyType, Type $valueType, array $elements): mixed
@@ -113,7 +113,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 
     public function namedObject(Type $type, NamedClassId $class, array $typeArguments): mixed
     {
-        return types::object($class, ...$this->processTypes($typeArguments));
+        return types::object($class, $this->processTypes($typeArguments));
     }
 
     public function object(Type $type, array $properties): mixed
@@ -136,17 +136,17 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 
     public function self(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::self($resolvedClass, ...$this->processTypes($typeArguments));
+        return types::self($this->processTypes($typeArguments), $resolvedClass);
     }
 
     public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::parent($resolvedClass, ...$this->processTypes($typeArguments));
+        return types::parent($this->processTypes($typeArguments), $resolvedClass);
     }
 
     public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
     {
-        return types::static($resolvedClass, ...$this->processTypes($typeArguments));
+        return types::static($this->processTypes($typeArguments), $resolvedClass);
     }
 
     public function union(Type $type, array $ofTypes): mixed
