@@ -89,7 +89,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 
     public function key(Type $type, Type $arrayType): mixed
     {
-        return types::key($arrayType->accept($this));
+        return types::keyOf($arrayType->accept($this));
     }
 
     public function list(Type $type, Type $valueType, array $elements): mixed

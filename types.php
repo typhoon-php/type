@@ -284,7 +284,7 @@ enum types implements Type
         return new Internal\IterableType($key, $value);
     }
 
-    public static function key(Type $type): Type
+    public static function keyOf(Type $type): Type
     {
         return new Internal\KeyType($type);
     }
@@ -552,9 +552,9 @@ enum types implements Type
         };
     }
 
-    public static function value(Type $type): Type
+    public static function valueOf(Type $type): Type
     {
-        return self::offset($type, self::key($type));
+        return self::offset($type, self::keyOf($type));
     }
 
     /**
