@@ -27,7 +27,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 
     public function array(Type $type, Type $keyType, Type $valueType, array $elements): mixed
     {
-        return types::arrayShapeUnsealed(
+        return types::unsealedArrayShape(
             elements: array_map(
                 fn(ShapeElement $element): ShapeElement => new ShapeElement(
                     $element->type->accept($this),
@@ -94,7 +94,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 
     public function list(Type $type, Type $valueType, array $elements): mixed
     {
-        return types::listShapeUnsealed(
+        return types::unsealedListShape(
             elements: array_map(
                 fn(ShapeElement $element): ShapeElement => new ShapeElement(
                     $element->type->accept($this),

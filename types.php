@@ -109,14 +109,14 @@ enum types implements Type
      */
     public static function arrayShape(array $elements = []): Type
     {
-        return self::arrayShapeUnsealed($elements, self::never, self::never);
+        return self::unsealedArrayShape($elements, self::never, self::never);
     }
 
     /**
      * @param array<Type|ShapeElement> $elements
      * @return Type<array<mixed>>
      */
-    public static function arrayShapeUnsealed(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
+    public static function unsealedArrayShape(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
     {
         return new Internal\ArrayType($key, $value, array_map(
             static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
@@ -303,14 +303,14 @@ enum types implements Type
      */
     public static function listShape(array $elements = []): Type
     {
-        return self::listShapeUnsealed($elements, self::never);
+        return self::unsealedListShape($elements, self::never);
     }
 
     /**
      * @param array<non-negative-int, Type|ShapeElement> $elements
      * @return Type<list<mixed>>
      */
-    public static function listShapeUnsealed(array $elements = [], Type $value = self::mixed): Type
+    public static function unsealedListShape(array $elements = [], Type $value = self::mixed): Type
     {
         return new Internal\ListType($value, array_map(
             static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
