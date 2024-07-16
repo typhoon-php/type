@@ -21,12 +21,12 @@ final class StaticType implements Type
      * @param list<Type> $arguments
      */
     public function __construct(
-        private readonly null|NamedClassId|AnonymousClassId $resolvedClass,
         private readonly array $arguments,
+        private readonly null|NamedClassId|AnonymousClassId $resolvedClass,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->static($this, $this->resolvedClass, $this->arguments);
+        return $visitor->static($this, $this->arguments, $this->resolvedClass);
     }
 }

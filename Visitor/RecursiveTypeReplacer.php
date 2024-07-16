@@ -92,17 +92,17 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::object($class, $this->processTypes($typeArguments));
     }
 
-    public function self(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
+    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
     {
         return types::self($this->processTypes($typeArguments), $resolvedClass);
     }
 
-    public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed
+    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClass): mixed
     {
         return types::parent($this->processTypes($typeArguments), $resolvedClass);
     }
 
-    public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
+    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
     {
         return types::static($this->processTypes($typeArguments), $resolvedClass);
     }

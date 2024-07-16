@@ -243,7 +243,7 @@ enum TypeStringifier implements TypeVisitor
         return $this->stringifyGenericType($class->toString(), $typeArguments);
     }
 
-    public function self(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
+    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
     {
         $name = 'self';
 
@@ -254,7 +254,7 @@ enum TypeStringifier implements TypeVisitor
         return $this->stringifyGenericType($name, $typeArguments);
     }
 
-    public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed
+    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClass): mixed
     {
         $name = 'parent';
 
@@ -265,7 +265,7 @@ enum TypeStringifier implements TypeVisitor
         return $this->stringifyGenericType($name, $typeArguments);
     }
 
-    public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed
+    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
     {
         $name = 'static';
 

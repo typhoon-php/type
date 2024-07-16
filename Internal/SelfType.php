@@ -21,12 +21,12 @@ final class SelfType implements Type
      * @param list<Type> $arguments
      */
     public function __construct(
-        private readonly null|NamedClassId|AnonymousClassId $resolvedClass,
         private readonly array $arguments,
+        private readonly null|NamedClassId|AnonymousClassId $resolvedClass,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->self($this, $this->resolvedClass, $this->arguments);
+        return $visitor->self($this, $this->arguments, $this->resolvedClass);
     }
 }

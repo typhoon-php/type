@@ -149,21 +149,21 @@ interface TypeVisitor
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function self(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed;
+    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed;
 
     /**
      * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function parent(Type $type, ?NamedClassId $resolvedClass, array $typeArguments): mixed;
+    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClass): mixed;
 
     /**
      * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function static(Type $type, null|NamedClassId|AnonymousClassId $resolvedClass, array $typeArguments): mixed;
+    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed;
 
     /**
      * @param Type<callable> $type

@@ -20,12 +20,12 @@ final class ParentType implements Type
      * @param list<Type> $arguments
      */
     public function __construct(
-        private readonly ?NamedClassId $resolvedClass,
         private readonly array $arguments,
+        private readonly ?NamedClassId $resolvedClass,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->parent($this, $this->resolvedClass, $this->arguments);
+        return $visitor->parent($this, $this->arguments, $this->resolvedClass);
     }
 }

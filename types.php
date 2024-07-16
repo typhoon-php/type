@@ -462,7 +462,7 @@ enum types implements Type
             $resolvedClass = Id::class($resolvedClass);
         }
 
-        return new Internal\SelfType($resolvedClass, $arguments);
+        return new Internal\SelfType($arguments, $resolvedClass);
     }
 
     /**
@@ -475,7 +475,7 @@ enum types implements Type
             $resolvedClass = Id::namedClass($resolvedClass);
         }
 
-        return new Internal\ParentType($resolvedClass, $arguments);
+        return new Internal\ParentType($arguments, $resolvedClass);
     }
 
     /**
@@ -488,7 +488,7 @@ enum types implements Type
             $resolvedClass = Id::class($resolvedClass);
         }
 
-        return new Internal\StaticType($resolvedClass, $arguments);
+        return new Internal\StaticType($arguments, $resolvedClass);
     }
 
     public static function template(TemplateId $id): Type
