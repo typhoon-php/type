@@ -44,12 +44,11 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
     {
         return types::callable(
             parameters: array_map(
-                fn(Parameter $parameter): Parameter => types::param(
+                fn(Parameter $parameter): Parameter => new Parameter(
                     type: $parameter->type->accept($this),
                     hasDefault: $parameter->hasDefault,
                     variadic: $parameter->variadic,
                     byReference: $parameter->byReference,
-                    name: $parameter->name,
                 ),
                 $parameters,
             ),

@@ -438,12 +438,11 @@ enum types implements Type
     /**
      * @template TType
      * @param Type<TType> $type
-     * @param ?non-empty-string $name
      * @return Parameter<TType>
      */
-    public static function param(Type $type = self::mixed, bool $hasDefault = false, bool $variadic = false, bool $byReference = false, ?string $name = null): Parameter
+    public static function param(Type $type = self::mixed, bool $hasDefault = false, bool $variadic = false, bool $byReference = false): Parameter
     {
-        return new Parameter($type, $hasDefault, $variadic, $byReference, $name);
+        return new Parameter($type, $hasDefault, $variadic, $byReference);
     }
 
     /**
