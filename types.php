@@ -33,6 +33,7 @@ enum types implements Type
     case nonPositiveInt;
     case nonNegativeInt;
     case positiveInt;
+    case nonZeroInt;
     case literalInt;
     case float;
     case literalFloat;
@@ -611,6 +612,7 @@ enum types implements Type
             self::literalInt => $visitor->literal($this, self::int),
             self::literalFloat => $visitor->literal($this, self::float),
             self::literalString => $visitor->literal($this, self::string),
+            self::nonZeroInt => $visitor->union($this, [self::positiveInt, self::negativeInt]),
         };
     }
 }
