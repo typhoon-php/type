@@ -389,9 +389,7 @@ enum types implements Type
             $class = Id::namedClass($class);
         }
 
-        if ($class->name === \Closure::class) {
-            \assert($arguments === [], 'Closure type arguments are not supported');
-
+        if ($class->name === \Closure::class && $arguments === []) {
             return self::closure;
         }
 
