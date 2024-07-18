@@ -8,6 +8,7 @@ use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
+use Typhoon\DeclarationId\ParameterId;
 use Typhoon\DeclarationId\TemplateId;
 
 /**
@@ -232,10 +233,9 @@ interface TypeVisitor
     public function alias(Type $type, AliasId $alias, array $typeArguments): mixed;
 
     /**
-     * @param non-empty-string $name
      * @return TReturn
      */
-    public function argument(Type $type, string $name): mixed;
+    public function argument(Type $type, ParameterId $parameter): mixed;
 
     /**
      * @return TReturn

@@ -9,8 +9,10 @@ use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\AnonymousFunctionId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\Id;
+use Typhoon\DeclarationId\MethodId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\NamedFunctionId;
+use Typhoon\DeclarationId\ParameterId;
 use Typhoon\DeclarationId\TemplateId;
 
 /**
@@ -92,12 +94,32 @@ enum types implements Type
         return new Internal\AliasType(Id::alias($class, $name), $arguments);
     }
 
+    public static function arg(ParameterId $parameter): Type
+    {
+        return new Internal\ArgumentType($parameter);
+    }
+
     /**
+     * @param non-empty-string|NamedFunctionId|AnonymousFunctionId|MethodId $function
      * @param non-empty-string $name
      */
-    public static function arg(string $name): Type
+    public static function functionArg(string|NamedFunctionId|AnonymousFunctionId|MethodId $function, string $name): Type
     {
-        return new Internal\ArgumentType($name);
+        if (\is_string($function)) {
+            $function = Id::namedFunction($function);
+        }
+
+        return new Internal\ArgumentType(Id::parameter($function, $name));
+    }
+
+    /**
+     * @param non-empty-string|NamedClassId|AnonymousClassId $class
+     * @param non-empty-string $method
+     * @param non-empty-string $name
+     */
+    public static function methodArg(string|NamedClassId|AnonymousClassId $class, string $method, string $name): Type
+    {
+        return new Internal\ArgumentType(Id::parameter(Id::method($class, $method), $name));
     }
 
     /**

@@ -8,6 +8,7 @@ use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
+use Typhoon\DeclarationId\ParameterId;
 use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
@@ -200,7 +201,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function argument(Type $type, string $name): mixed
+    public function argument(Type $type, ParameterId $parameter): mixed
     {
         return $this->default($type);
     }

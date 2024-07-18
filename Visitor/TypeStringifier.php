@@ -11,6 +11,7 @@ use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\MethodId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\NamedFunctionId;
+use Typhoon\DeclarationId\ParameterId;
 use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Parameter;
 use Typhoon\Type\ShapeElement;
@@ -409,9 +410,9 @@ enum TypeStringifier implements TypeVisitor
         return sprintf('%s@%s', $alias->name, $this->stringifyId($alias->class));
     }
 
-    public function argument(Type $type, string $name): mixed
+    public function argument(Type $type, ParameterId $parameter): mixed
     {
-        return '$' . $name;
+        return '$' . $parameter->name;
     }
 
     public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
