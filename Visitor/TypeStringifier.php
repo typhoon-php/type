@@ -6,8 +6,11 @@ namespace Typhoon\Type\Visitor;
 
 use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
+use Typhoon\DeclarationId\AnonymousFunctionId;
 use Typhoon\DeclarationId\ConstantId;
+use Typhoon\DeclarationId\MethodId;
 use Typhoon\DeclarationId\NamedClassId;
+use Typhoon\DeclarationId\NamedFunctionId;
 use Typhoon\DeclarationId\TemplateId;
 use Typhoon\Type\Argument;
 use Typhoon\Type\Parameter;
@@ -240,7 +243,7 @@ enum TypeStringifier implements TypeVisitor
 
     public function namedObject(Type $type, NamedClassId $class, array $typeArguments): mixed
     {
-        return $this->stringifyGenericType($class->toString(), $typeArguments);
+        return $this->stringifyGenericType($class->name, $typeArguments);
     }
 
     public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
@@ -248,7 +251,7 @@ enum TypeStringifier implements TypeVisitor
         $name = 'self';
 
         if ($resolvedClass !== null) {
-            $name .= '@' . $resolvedClass->toString();
+            $name .= '@' . $this->stringifyId($resolvedClass);
         }
 
         return $this->stringifyGenericType($name, $typeArguments);
@@ -259,7 +262,7 @@ enum TypeStringifier implements TypeVisitor
         $name = 'parent';
 
         if ($resolvedClass !== null) {
-            $name .= '@' . $resolvedClass->toString();
+            $name .= '@' . $resolvedClass->name;
         }
 
         return $this->stringifyGenericType($name, $typeArguments);
@@ -270,7 +273,7 @@ enum TypeStringifier implements TypeVisitor
         $name = 'static';
 
         if ($resolvedClass !== null) {
-            $name .= '@' . $resolvedClass->toString();
+            $name .= '@' . $this->stringifyId($resolvedClass);
         }
 
         return $this->stringifyGenericType($name, $typeArguments);
@@ -370,7 +373,7 @@ enum TypeStringifier implements TypeVisitor
 
     public function template(Type $type, TemplateId $template): mixed
     {
-        return $template->toString();
+        return sprintf('%s#%s', $template->name, $this->stringifyId($template->site));
     }
 
     public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
@@ -404,7 +407,7 @@ enum TypeStringifier implements TypeVisitor
 
     public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
     {
-        return $this->stringifyGenericType($alias->toString(), $typeArguments);
+        return sprintf('%s@%s', $alias->name, $this->stringifyId($alias->class));
     }
 
     public function conditional(Type $type, Argument|Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
@@ -416,6 +419,20 @@ enum TypeStringifier implements TypeVisitor
             $thenType->accept($this),
             $elseType->accept($this),
         );
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function stringifyId(NamedFunctionId|AnonymousFunctionId|NamedClassId|AnonymousClassId|MethodId $id): string
+    {
+        return match (true) {
+            $id instanceof NamedFunctionId => $id->name . '()',
+            $id instanceof AnonymousFunctionId => sprintf('anonymous:%s:%d%s()', $id->file, $id->line, $id->column === null ? '' : ':' . $id->column),
+            $id instanceof NamedClassId => $id->name,
+            $id instanceof AnonymousClassId => sprintf('anonymous:%s:%d%s', $id->file, $id->line, $id->column === null ? '' : ':' . $id->column),
+            $id instanceof MethodId => sprintf('%s::%s()', $this->stringifyId($id->class), $id->name),
+        };
     }
 
     /**
