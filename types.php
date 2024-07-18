@@ -147,7 +147,7 @@ enum types implements Type
      * @param non-empty-string|NamedClassId|Type $class
      * @param non-empty-string $name
      */
-    public static function classConst(string|NamedClassId|Type $class, string $name): Type
+    public static function classConstant(string|NamedClassId|Type $class, string $name): Type
     {
         if (!$class instanceof Type) {
             $class = self::object($class);
@@ -163,7 +163,7 @@ enum types implements Type
     /**
      * @param non-empty-string|NamedClassId|Type $class
      */
-    public static function classConstMask(string|NamedClassId|Type $class, string $namePrefix = ''): Type
+    public static function classConstantMask(string|NamedClassId|Type $class, string $namePrefix = ''): Type
     {
         if (!$class instanceof Type) {
             $class = self::object($class);
@@ -207,7 +207,7 @@ enum types implements Type
     /**
      * @param non-empty-string|ConstantId $name
      */
-    public static function const(string|ConstantId $name): Type
+    public static function constant(string|ConstantId $name): Type
     {
         if (!$name instanceof ConstantId) {
             $name = Id::constant($name);
@@ -401,7 +401,7 @@ enum types implements Type
      */
     public static function class(string|NamedClassId|Type $class): Type
     {
-        return self::classConst($class, 'class');
+        return self::classConstant($class, 'class');
     }
 
     /**

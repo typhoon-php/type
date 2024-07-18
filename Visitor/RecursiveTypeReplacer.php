@@ -150,12 +150,12 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 
     public function classConstant(Type $type, Type $classType, string $name): mixed
     {
-        return types::classConst($classType->accept($this), $name);
+        return types::classConstant($classType->accept($this), $name);
     }
 
     public function classConstantMask(Type $type, Type $classType, string $namePrefix): mixed
     {
-        return types::classConstMask($classType->accept($this), $namePrefix);
+        return types::classConstantMask($classType->accept($this), $namePrefix);
     }
 
     public function alias(Type $type, AliasId $alias, array $typeArguments): mixed

@@ -392,7 +392,7 @@ enum TypeStringifier implements TypeVisitor
 
     public function constant(Type $type, ConstantId $constant): mixed
     {
-        return sprintf('const<%s>', $constant->name);
+        return sprintf('constant<%s>', $constant->name);
     }
 
     public function classConstant(Type $type, Type $classType, string $name): mixed
