@@ -7,7 +7,6 @@ namespace Typhoon\Type\Visitor;
 use Typhoon\DeclarationId\AliasId;
 use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\NamedClassId;
-use Typhoon\Type\Argument;
 use Typhoon\Type\Parameter;
 use Typhoon\Type\ShapeElement;
 use Typhoon\Type\Type;
@@ -163,13 +162,9 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::alias($alias, $this->processTypes($typeArguments));
     }
 
-    public function conditional(Type $type, Argument|Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
     {
-        if ($subject instanceof Type) {
-            $subject = $subject->accept($this);
-        }
-
-        return types::conditional($subject, $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
+        return types::conditional($subject->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
     }
 
     /**

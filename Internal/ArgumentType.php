@@ -13,17 +13,17 @@ use Typhoon\Type\TypeVisitor;
  * @psalm-immutable
  * @implements Type<mixed>
  */
-final class ConditionalType implements Type
+final class ArgumentType implements Type
 {
+    /**
+     * @param non-empty-string $name
+     */
     public function __construct(
-        private readonly Type $subject,
-        private readonly Type $if,
-        private readonly Type $then,
-        private readonly Type $else,
+        public readonly string $name,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->conditional($this, $this->subject, $this->if, $this->then, $this->else);
+        return $visitor->argument($this, $this->name);
     }
 }

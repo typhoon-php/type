@@ -9,7 +9,6 @@ use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\TemplateId;
-use Typhoon\Type\Argument;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 use Typhoon\Type\Variance;
@@ -201,7 +200,12 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function conditional(Type $type, Argument|Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    public function argument(Type $type, string $name): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
     {
         return $this->default($type);
     }

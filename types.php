@@ -95,9 +95,9 @@ enum types implements Type
     /**
      * @param non-empty-string $name
      */
-    public static function arg(string $name): Argument
+    public static function arg(string $name): Type
     {
-        return new Argument($name);
+        return new Internal\ArgumentType($name);
     }
 
     /**
@@ -218,7 +218,7 @@ enum types implements Type
         ]);
     }
 
-    public static function conditional(Argument|Type $subject, Type $if, Type $then, Type $else): Type
+    public static function conditional(Type $subject, Type $if, Type $then, Type $else): Type
     {
         return new Internal\ConditionalType($subject, $if, $then, $else);
     }

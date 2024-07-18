@@ -232,7 +232,13 @@ interface TypeVisitor
     public function alias(Type $type, AliasId $alias, array $typeArguments): mixed;
 
     /**
+     * @param non-empty-string $name
      * @return TReturn
      */
-    public function conditional(Type $type, Argument|Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed;
+    public function argument(Type $type, string $name): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed;
 }

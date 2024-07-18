@@ -12,7 +12,6 @@ use Typhoon\DeclarationId\MethodId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\NamedFunctionId;
 use Typhoon\DeclarationId\TemplateId;
-use Typhoon\Type\Argument;
 use Typhoon\Type\Parameter;
 use Typhoon\Type\ShapeElement;
 use Typhoon\Type\Type;
@@ -410,15 +409,14 @@ enum TypeStringifier implements TypeVisitor
         return sprintf('%s@%s', $alias->name, $this->stringifyId($alias->class));
     }
 
-    public function conditional(Type $type, Argument|Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    public function argument(Type $type, string $name): mixed
     {
-        return sprintf(
-            '(%s is %s ? %s : %s)',
-            $subject instanceof Argument ? '$' . $subject->name : $subject->accept($this),
-            $ifType->accept($this),
-            $thenType->accept($this),
-            $elseType->accept($this),
-        );
+        return '$' . $name;
+    }
+
+    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    {
+        return sprintf('(%s is %s ? %s : %s)', $subject->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
     }
 
     /**
