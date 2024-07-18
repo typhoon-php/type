@@ -96,6 +96,11 @@ interface TypeVisitor
     public function numeric(Type $type): mixed;
 
     /**
+     * @return TReturn
+     */
+    public function literal(Type $type, Type $ofType): mixed;
+
+    /**
      * @param Type<resource> $type
      * @return TReturn
      */
@@ -174,43 +179,6 @@ interface TypeVisitor
     public function callable(Type $type, array $parameters, Type $returnType): mixed;
 
     /**
-     * @param non-empty-list<Type> $ofTypes
-     * @return TReturn
-     */
-    public function union(Type $type, array $ofTypes): mixed;
-
-    /**
-     * @param non-empty-list<Type> $ofTypes
-     * @return TReturn
-     */
-    public function intersection(Type $type, array $ofTypes): mixed;
-
-    /**
-     * @return TReturn
-     */
-    public function mixed(Type $type): mixed;
-
-    /**
-     * @return TReturn
-     */
-    public function not(Type $type, Type $ofType): mixed;
-
-    /**
-     * @return TReturn
-     */
-    public function literal(Type $type, Type $ofType): mixed;
-
-    /**
-     * @return TReturn
-     */
-    public function template(Type $type, TemplateId $template): mixed;
-
-    /**
-     * @return TReturn
-     */
-    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed;
-
-    /**
      * @return TReturn
      */
     public function constant(Type $type, ConstantId $constant): mixed;
@@ -235,10 +203,42 @@ interface TypeVisitor
     /**
      * @return TReturn
      */
-    public function argument(Type $type, ParameterId $parameter): mixed;
+    public function template(Type $type, TemplateId $template): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed;
+
+    /**
+     * @param non-empty-list<Type> $ofTypes
+     * @return TReturn
+     */
+    public function union(Type $type, array $ofTypes): mixed;
 
     /**
      * @return TReturn
      */
     public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function argument(Type $type, ParameterId $parameter): mixed;
+
+    /**
+     * @param non-empty-list<Type> $ofTypes
+     * @return TReturn
+     */
+    public function intersection(Type $type, array $ofTypes): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function not(Type $type, Type $ofType): mixed;
+
+    /**
+     * @return TReturn
+     */
+    public function mixed(Type $type): mixed;
 }

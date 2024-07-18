@@ -86,6 +86,11 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
+    public function literal(Type $type, Type $ofType): mixed
+    {
+        return $this->default($type);
+    }
+
     public function resource(Type $type): mixed
     {
         return $this->default($type);
@@ -146,41 +151,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function union(Type $type, array $ofTypes): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function intersection(Type $type, array $ofTypes): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function mixed(Type $type): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function not(Type $type, Type $ofType): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function literal(Type $type, Type $ofType): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function template(Type $type, TemplateId $template): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
-    {
-        return $this->default($type);
-    }
-
     public function constant(Type $type, ConstantId $constant): mixed
     {
         return $this->default($type);
@@ -201,12 +171,42 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function argument(Type $type, ParameterId $parameter): mixed
+    public function template(Type $type, TemplateId $template): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function union(Type $type, array $ofTypes): mixed
     {
         return $this->default($type);
     }
 
     public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function argument(Type $type, ParameterId $parameter): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function intersection(Type $type, array $ofTypes): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function not(Type $type, Type $ofType): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function mixed(Type $type): mixed
     {
         return $this->default($type);
     }

@@ -119,6 +119,11 @@ enum TypeStringifier implements TypeVisitor
         return 'numeric';
     }
 
+    public function literal(Type $type, Type $ofType): mixed
+    {
+        return 'literal-' . $ofType->accept($this);
+    }
+
     public function resource(Type $type): mixed
     {
         return 'resource';
@@ -301,6 +306,45 @@ enum TypeStringifier implements TypeVisitor
         );
     }
 
+    public function constant(Type $type, ConstantId $constant): mixed
+    {
+        return sprintf('constant<%s>', $constant->name);
+    }
+
+    public function classConstant(Type $type, Type $classType, string $name): mixed
+    {
+        return sprintf('%s::%s', $classType->accept($this), $name);
+    }
+
+    public function classConstantMask(Type $type, Type $classType, string $namePrefix): mixed
+    {
+        return sprintf('%s::%s*', $classType->accept($this), $namePrefix);
+    }
+
+    public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
+    {
+        return sprintf('%s@%s', $alias->name, $this->stringifyId($alias->class));
+    }
+
+    public function template(Type $type, TemplateId $template): mixed
+    {
+        return sprintf('%s#%s', $template->name, $this->stringifyId($template->site));
+    }
+
+    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
+    {
+        return sprintf(
+            '%s %s',
+            match ($variance) {
+                Variance::Bivariant => 'bivariant',
+                Variance::Contravariant => 'contravariant',
+                Variance::Covariant => 'covariant',
+                Variance::Invariant => 'invariant',
+            },
+            $ofType->accept($this),
+        );
+    }
+
     public function union(Type $type, array $ofTypes): mixed
     {
         $isIntersection = new /** @extends DefaultTypeVisitor<bool> */ class () extends DefaultTypeVisitor {
@@ -325,6 +369,16 @@ enum TypeStringifier implements TypeVisitor
             'true|false' => 'bool',
             'bool|int|float|string' => 'scalar',
         ]);
+    }
+
+    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    {
+        return sprintf('(%s is %s ? %s : %s)', $subject->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
+    }
+
+    public function argument(Type $type, ParameterId $parameter): mixed
+    {
+        return '$' . $parameter->name;
     }
 
     public function intersection(Type $type, array $ofTypes): mixed
@@ -356,68 +410,14 @@ enum TypeStringifier implements TypeVisitor
         ]);
     }
 
-    public function mixed(Type $type): mixed
-    {
-        return 'mixed';
-    }
-
     public function not(Type $type, Type $ofType): mixed
     {
         return '!' . $ofType->accept($this);
     }
 
-    public function literal(Type $type, Type $ofType): mixed
+    public function mixed(Type $type): mixed
     {
-        return 'literal-' . $ofType->accept($this);
-    }
-
-    public function template(Type $type, TemplateId $template): mixed
-    {
-        return sprintf('%s#%s', $template->name, $this->stringifyId($template->site));
-    }
-
-    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
-    {
-        return sprintf(
-            '%s %s',
-            match ($variance) {
-                Variance::Bivariant => 'bivariant',
-                Variance::Contravariant => 'contravariant',
-                Variance::Covariant => 'covariant',
-                Variance::Invariant => 'invariant',
-            },
-            $ofType->accept($this),
-        );
-    }
-
-    public function constant(Type $type, ConstantId $constant): mixed
-    {
-        return sprintf('constant<%s>', $constant->name);
-    }
-
-    public function classConstant(Type $type, Type $classType, string $name): mixed
-    {
-        return sprintf('%s::%s', $classType->accept($this), $name);
-    }
-
-    public function classConstantMask(Type $type, Type $classType, string $namePrefix): mixed
-    {
-        return sprintf('%s::%s*', $classType->accept($this), $namePrefix);
-    }
-
-    public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
-    {
-        return sprintf('%s@%s', $alias->name, $this->stringifyId($alias->class));
-    }
-
-    public function argument(Type $type, ParameterId $parameter): mixed
-    {
-        return '$' . $parameter->name;
-    }
-
-    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
-    {
-        return sprintf('(%s is %s ? %s : %s)', $subject->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
+        return 'mixed';
     }
 
     /**

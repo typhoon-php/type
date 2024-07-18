@@ -29,6 +29,11 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::classString($classType->accept($this));
     }
 
+    public function literal(Type $type, Type $ofType): mixed
+    {
+        return types::literal($ofType->accept($this));
+    }
+
     public function list(Type $type, Type $valueType, array $elements): mixed
     {
         return types::unsealedListShape(
@@ -122,31 +127,6 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         );
     }
 
-    public function union(Type $type, array $ofTypes): mixed
-    {
-        return types::union(...$this->processTypes($ofTypes));
-    }
-
-    public function intersection(Type $type, array $ofTypes): mixed
-    {
-        return types::intersection(...$this->processTypes($ofTypes));
-    }
-
-    public function not(Type $type, Type $ofType): mixed
-    {
-        return types::not($ofType->accept($this));
-    }
-
-    public function literal(Type $type, Type $ofType): mixed
-    {
-        return types::literal($ofType->accept($this));
-    }
-
-    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
-    {
-        return types::varianceAware($ofType->accept($this), $variance);
-    }
-
     public function classConstant(Type $type, Type $classType, string $name): mixed
     {
         return types::classConstant($classType->accept($this), $name);
@@ -162,9 +142,29 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return types::alias($alias, $this->processTypes($typeArguments));
     }
 
+    public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
+    {
+        return types::varianceAware($ofType->accept($this), $variance);
+    }
+
+    public function union(Type $type, array $ofTypes): mixed
+    {
+        return types::union(...$this->processTypes($ofTypes));
+    }
+
     public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
     {
         return types::conditional($subject->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
+    }
+
+    public function intersection(Type $type, array $ofTypes): mixed
+    {
+        return types::intersection(...$this->processTypes($ofTypes));
+    }
+
+    public function not(Type $type, Type $ofType): mixed
+    {
+        return types::not($ofType->accept($this));
     }
 
     /**

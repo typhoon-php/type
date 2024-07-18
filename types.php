@@ -19,16 +19,15 @@ use Typhoon\DeclarationId\TemplateId;
  * @api
  * @psalm-immutable
  * @implements Type<mixed>
- * @todo reorder methods according to visitor
  */
 enum types implements Type
 {
     case never;
     case void;
     case null;
+    case bool;
     case true;
     case false;
-    case bool;
     case int;
     case negativeInt;
     case nonPositiveInt;
@@ -43,11 +42,11 @@ enum types implements Type
     case numericString;
     case truthyString;
     public const nonFalsyString = self::truthyString;
-    case literalString;
     case classString;
-    case arrayKey;
+    case literalString;
     case numeric;
     case resource;
+    case arrayKey;
     case array;
     case iterable;
     case object;
@@ -57,215 +56,28 @@ enum types implements Type
     case mixed;
 
     /**
-     * @template TReturn
-     * @param list<Type|Parameter> $parameters
-     * @param Type<TReturn> $return
+     * @template TValue of int
+     * @param TValue $value
+     * @return Type<TValue>
      */
-    public static function callableString(array $parameters = [], Type $return = self::mixed): Type
+    public static function int(int $value): Type
     {
-        return self::intersection(self::string, self::callable($parameters, $return));
+        /** @var Internal\IntType<TValue> */
+        return new Internal\IntType($value, $value);
     }
 
     /**
-     * @template TReturn
-     * @param list<Type|Parameter> $parameters
-     * @param Type<TReturn> $return
+     * @return Type<int>
      */
-    public static function callableArray(array $parameters = [], Type $return = self::mixed): Type
+    public static function intRange(?int $min = null, ?int $max = null): Type
     {
-        return self::intersection(self::list(), self::callable($parameters, $return));
-    }
-
-    /**
-     * @param list<Type> $arguments
-     */
-    public static function alias(AliasId $alias, array $arguments = []): Type
-    {
-        return new Internal\AliasType($alias, $arguments);
-    }
-
-    /**
-     * @param non-empty-string|NamedClassId|AnonymousClassId $class
-     * @param non-empty-string $name
-     * @param list<Type> $arguments
-     */
-    public static function classAlias(string|NamedClassId|AnonymousClassId $class, string $name, array $arguments = []): Type
-    {
-        return new Internal\AliasType(Id::alias($class, $name), $arguments);
-    }
-
-    public static function arg(ParameterId $parameter): Type
-    {
-        return new Internal\ArgumentType($parameter);
-    }
-
-    /**
-     * @param non-empty-string|NamedFunctionId|AnonymousFunctionId|MethodId $function
-     * @param non-empty-string $name
-     */
-    public static function functionArg(string|NamedFunctionId|AnonymousFunctionId|MethodId $function, string $name): Type
-    {
-        if (\is_string($function)) {
-            $function = Id::namedFunction($function);
-        }
-
-        return new Internal\ArgumentType(Id::parameter($function, $name));
-    }
-
-    /**
-     * @param non-empty-string|NamedClassId|AnonymousClassId $class
-     * @param non-empty-string $method
-     * @param non-empty-string $name
-     */
-    public static function methodArg(string|NamedClassId|AnonymousClassId $class, string $method, string $name): Type
-    {
-        return new Internal\ArgumentType(Id::parameter(Id::method($class, $method), $name));
-    }
-
-    /**
-     * @return Type<non-empty-array<mixed>>
-     */
-    public static function nonEmptyArray(Type $key = self::arrayKey, Type $value = self::mixed): Type
-    {
-        return new Internal\NonEmptyArrayType($key, $value);
-    }
-
-    /**
-     * @return Type<array<mixed>>
-     */
-    public static function array(Type $key = self::arrayKey, Type $value = self::mixed): Type
-    {
-        if ($key === self::arrayKey && $value === self::mixed) {
-            return self::array;
-        }
-
-        return new Internal\ArrayType($key, $value, []);
-    }
-
-    /**
-     * @param array<Type|ShapeElement> $elements
-     * @return Type<array<mixed>>
-     */
-    public static function arrayShape(array $elements = []): Type
-    {
-        return self::unsealedArrayShape($elements, self::never, self::never);
-    }
-
-    /**
-     * @param array<Type|ShapeElement> $elements
-     * @return Type<array<mixed>>
-     */
-    public static function unsealedArrayShape(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
-    {
-        return new Internal\ArrayType($key, $value, array_map(
-            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
-            $elements,
-        ));
-    }
-
-    /**
-     * @template TReturn
-     * @param list<Type|Parameter> $parameters
-     * @param Type<TReturn> $return
-     * @return Type<callable>
-     */
-    public static function callable(array $parameters = [], Type $return = self::mixed): Type
-    {
-        if ($parameters === [] && $return === self::mixed) {
-            return self::callable;
-        }
-
-        return new Internal\CallableType(
-            array_map(
-                static fn(Type|Parameter $parameter): Parameter => $parameter instanceof Type ? new Parameter($parameter) : $parameter,
-                $parameters,
-            ),
-            $return,
-        );
-    }
-
-    /**
-     * @param non-empty-string|NamedClassId|Type $class
-     * @param non-empty-string $name
-     */
-    public static function classConstant(string|NamedClassId|Type $class, string $name): Type
-    {
-        if (!$class instanceof Type) {
-            $class = self::object($class);
-        }
-
-        if (str_ends_with($name, '*')) {
-            return new Internal\ClassConstantMaskType($class, substr($name, 0, -1));
-        }
-
-        return new Internal\ClassConstantType($class, $name);
-    }
-
-    /**
-     * @param non-empty-string|NamedClassId|Type $class
-     */
-    public static function classConstantMask(string|NamedClassId|Type $class, string $namePrefix = ''): Type
-    {
-        if (!$class instanceof Type) {
-            $class = self::object($class);
-        }
-
-        return new Internal\ClassConstantMaskType($class, $namePrefix);
-    }
-
-    public static function classString(Type $object): Type
-    {
-        return new Internal\ClassStringType($object);
-    }
-
-    /**
-     * @param list<Type|Parameter> $parameters
-     * @return Type<\Closure>
-     */
-    public static function closure(array $parameters = [], Type $return = self::mixed): Type
-    {
-        if ($parameters === [] && $return === self::mixed) {
-            return self::closure;
-        }
-
-        return new Internal\IntersectionType([
-            self::closure,
-            new Internal\CallableType(
-                array_map(
-                    static fn(Type|Parameter $parameter): Parameter => $parameter instanceof Type ? new Parameter($parameter) : $parameter,
-                    $parameters,
-                ),
-                $return,
-            ),
-        ]);
-    }
-
-    public static function conditional(Type $subject, Type $if, Type $then, Type $else): Type
-    {
-        return new Internal\ConditionalType($subject, $if, $then, $else);
-    }
-
-    /**
-     * @param non-empty-string|ConstantId $name
-     */
-    public static function constant(string|ConstantId $name): Type
-    {
-        if (!$name instanceof ConstantId) {
-            $name = Id::constant($name);
-        }
-
-        return new Internal\ConstantType($name);
-    }
-
-    /**
-     * @no-named-arguments
-     */
-    public static function intersection(Type ...$types): Type
-    {
-        return match (\count($types)) {
-            0 => self::never,
-            1 => $types[0],
-            default => new Internal\IntersectionType($types),
+        return match (true) {
+            $min === null && $max === null => self::int,
+            $min === null && $max === -1 => self::negativeInt,
+            $min === null && $max === 0 => self::nonPositiveInt,
+            $min === 0 && $max === null => self::nonNegativeInt,
+            $min === 1 && $max === null => self::positiveInt,
+            default => new Internal\IntType($min, $max),
         };
     }
 
@@ -296,39 +108,46 @@ enum types implements Type
     }
 
     /**
-     * @return Type<int>
+     * @template TValue of float
+     * @param TValue $value
+     * @return Type<TValue>
      */
-    public static function intRange(?int $min = null, ?int $max = null): Type
+    public static function float(float $value): Type
     {
-        return match (true) {
-            $min === null && $max === null => self::int,
-            $min === null && $max === -1 => self::negativeInt,
-            $min === null && $max === 0 => self::nonPositiveInt,
-            $min === 0 && $max === null => self::nonNegativeInt,
-            $min === 1 && $max === null => self::positiveInt,
-            default => new Internal\IntType($min, $max),
-        };
+        return new Internal\FloatValueType($value);
     }
 
     /**
-     * @template TKey
-     * @template TValue
-     * @param Type<TKey> $key
-     * @param Type<TValue> $value
-     * @return Type<iterable<TKey, TValue>>
+     * @template TType
+     * @param Type<TType> $type
+     * @return Type<TType>
      */
-    public static function iterable(Type $key = self::mixed, Type $value = self::mixed): Type
+    public static function literal(Type $type): Type
     {
-        if ($key === self::mixed && $value === self::mixed) {
-            return self::iterable;
-        }
-
-        return new Internal\IterableType($key, $value);
+        return new Internal\LiteralType($type);
     }
 
-    public static function keyOf(Type $type): Type
+    /**
+     * @template TValue of string
+     * @param TValue $value
+     * @return Type<TValue>
+     */
+    public static function string(string $value): Type
     {
-        return new Internal\KeyType($type);
+        return new Internal\StringValueType($value);
+    }
+
+    /**
+     * @param non-empty-string|NamedClassId|Type $class
+     */
+    public static function class(string|NamedClassId|Type $class): Type
+    {
+        return self::classConstant($class, 'class');
+    }
+
+    public static function classString(Type $object): Type
+    {
+        return new Internal\ClassStringType($object);
     }
 
     /**
@@ -337,6 +156,14 @@ enum types implements Type
     public static function list(Type $value = self::mixed): Type
     {
         return new Internal\ListType($value, []);
+    }
+
+    /**
+     * @return Type<list<mixed>>
+     */
+    public static function nonEmptyList(Type $value = self::mixed): Type
+    {
+        return new Internal\ListType($value, [new ShapeElement($value)]);
     }
 
     /**
@@ -361,62 +188,85 @@ enum types implements Type
     }
 
     /**
+     * @return Type<array<mixed>>
+     */
+    public static function array(Type $key = self::arrayKey, Type $value = self::mixed): Type
+    {
+        if ($key === self::arrayKey && $value === self::mixed) {
+            return self::array;
+        }
+
+        return new Internal\ArrayType($key, $value, []);
+    }
+
+    /**
+     * @return Type<non-empty-array<mixed>>
+     */
+    public static function nonEmptyArray(Type $key = self::arrayKey, Type $value = self::mixed): Type
+    {
+        return new Internal\NonEmptyArrayType($key, $value);
+    }
+
+    /**
+     * @param array<Type|ShapeElement> $elements
+     * @return Type<array<mixed>>
+     */
+    public static function arrayShape(array $elements = []): Type
+    {
+        return self::unsealedArrayShape($elements, self::never, self::never);
+    }
+
+    /**
+     * @param array<Type|ShapeElement> $elements
+     * @return Type<array<mixed>>
+     */
+    public static function unsealedArrayShape(array $elements = [], Type $key = self::arrayKey, Type $value = self::mixed): Type
+    {
+        return new Internal\ArrayType($key, $value, array_map(
+            static fn(Type|ShapeElement $element): ShapeElement => $element instanceof Type ? new ShapeElement($element) : $element,
+            $elements,
+        ));
+    }
+
+    /**
+     * @template TKey
+     * @template TValue
+     * @param Type<TKey> $key
+     * @param Type<TValue> $value
+     * @return Type<iterable<TKey, TValue>>
+     */
+    public static function iterable(Type $key = self::mixed, Type $value = self::mixed): Type
+    {
+        if ($key === self::mixed && $value === self::mixed) {
+            return self::iterable;
+        }
+
+        return new Internal\IterableType($key, $value);
+    }
+
+    public static function keyOf(Type $type): Type
+    {
+        return new Internal\KeyType($type);
+    }
+
+    public static function valueOf(Type $type): Type
+    {
+        return self::offset($type, self::keyOf($type));
+    }
+
+    public static function offset(Type $type, Type $offset): Type
+    {
+        return new Internal\OffsetType($type, $offset);
+    }
+
+    /**
      * @template TType
      * @param Type<TType> $type
-     * @return Type<TType>
+     * @return ShapeElement<TType>
      */
-    public static function literal(Type $type): Type
+    public static function optional(Type $type): ShapeElement
     {
-        return new Internal\LiteralType($type);
-    }
-
-    /**
-     * @template TValue of int
-     * @param TValue $value
-     * @return Type<TValue>
-     */
-    public static function int(int $value): Type
-    {
-        /** @var Internal\IntType<TValue> */
-        return new Internal\IntType($value, $value);
-    }
-
-    /**
-     * @template TValue of float
-     * @param TValue $value
-     * @return Type<TValue>
-     */
-    public static function float(float $value): Type
-    {
-        return new Internal\FloatValueType($value);
-    }
-
-    /**
-     * @template TValue of string
-     * @param TValue $value
-     * @return Type<TValue>
-     */
-    public static function string(string $value): Type
-    {
-        return new Internal\StringValueType($value);
-    }
-
-    /**
-     * @return Type<list<mixed>>
-     */
-    public static function nonEmptyList(Type $value = self::mixed): Type
-    {
-        return new Internal\ListType($value, [new ShapeElement($value)]);
-    }
-
-    /**
-     * @template TType
-     * @param Type<TType> $type
-     * @return Type<?TType>
-     */
-    public static function nullable(Type $type): Type
-    {
-        return new Internal\UnionType([self::null, $type]);
+        return new ShapeElement($type, true);
     }
 
     /**
@@ -437,12 +287,9 @@ enum types implements Type
         return new Internal\NamedObjectType($class, $arguments);
     }
 
-    /**
-     * @param non-empty-string|NamedClassId|Type $class
-     */
-    public static function class(string|NamedClassId|Type $class): Type
+    public static function generator(Type $key = self::mixed, Type $value = self::mixed, Type $send = self::mixed, Type $return = self::mixed): Type
     {
-        return self::classConstant($class, 'class');
+        return new Internal\NamedObjectType(Id::namedClass(\Generator::class), [$key, $value, $send, $return]);
     }
 
     /**
@@ -459,36 +306,6 @@ enum types implements Type
             static fn(Type|ShapeElement $property): ShapeElement => $property instanceof Type ? new ShapeElement($property) : $property,
             $properties,
         ));
-    }
-
-    public static function generator(Type $key = self::mixed, Type $value = self::mixed, Type $send = self::mixed, Type $return = self::mixed): Type
-    {
-        return new Internal\NamedObjectType(Id::namedClass(\Generator::class), [$key, $value, $send, $return]);
-    }
-
-    public static function offset(Type $type, Type $offset): Type
-    {
-        return new Internal\OffsetType($type, $offset);
-    }
-
-    /**
-     * @template TType
-     * @param Type<TType> $type
-     * @return Parameter<TType>
-     */
-    public static function param(Type $type = self::mixed, bool $hasDefault = false, bool $variadic = false, bool $byReference = false): Parameter
-    {
-        return new Parameter($type, $hasDefault, $variadic, $byReference);
-    }
-
-    /**
-     * @template TType
-     * @param Type<TType> $type
-     * @return ShapeElement<TType>
-     */
-    public static function optional(Type $type): ShapeElement
-    {
-        return new ShapeElement($type, true);
     }
 
     /**
@@ -530,6 +347,138 @@ enum types implements Type
         return new Internal\StaticType($arguments, $resolvedClass);
     }
 
+    /**
+     * @template TReturn
+     * @param list<Type|Parameter> $parameters
+     * @param Type<TReturn> $return
+     * @return Type<callable>
+     */
+    public static function callable(array $parameters = [], Type $return = self::mixed): Type
+    {
+        if ($parameters === [] && $return === self::mixed) {
+            return self::callable;
+        }
+
+        return new Internal\CallableType(
+            array_map(
+                static fn(Type|Parameter $parameter): Parameter => $parameter instanceof Type ? new Parameter($parameter) : $parameter,
+                $parameters,
+            ),
+            $return,
+        );
+    }
+
+    /**
+     * @template TReturn
+     * @param list<Type|Parameter> $parameters
+     * @param Type<TReturn> $return
+     */
+    public static function callableString(array $parameters = [], Type $return = self::mixed): Type
+    {
+        return self::intersection(self::string, self::callable($parameters, $return));
+    }
+
+    /**
+     * @template TReturn
+     * @param list<Type|Parameter> $parameters
+     * @param Type<TReturn> $return
+     */
+    public static function callableArray(array $parameters = [], Type $return = self::mixed): Type
+    {
+        return self::intersection(self::list(), self::callable($parameters, $return));
+    }
+
+    /**
+     * @param list<Type|Parameter> $parameters
+     * @return Type<\Closure>
+     */
+    public static function closure(array $parameters = [], Type $return = self::mixed): Type
+    {
+        if ($parameters === [] && $return === self::mixed) {
+            return self::closure;
+        }
+
+        return new Internal\IntersectionType([
+            self::closure,
+            new Internal\CallableType(
+                array_map(
+                    static fn(Type|Parameter $parameter): Parameter => $parameter instanceof Type ? new Parameter($parameter) : $parameter,
+                    $parameters,
+                ),
+                $return,
+            ),
+        ]);
+    }
+
+    /**
+     * @template TType
+     * @param Type<TType> $type
+     * @return Parameter<TType>
+     */
+    public static function param(Type $type = self::mixed, bool $hasDefault = false, bool $variadic = false, bool $byReference = false): Parameter
+    {
+        return new Parameter($type, $hasDefault, $variadic, $byReference);
+    }
+
+    /**
+     * @param non-empty-string|ConstantId $name
+     */
+    public static function constant(string|ConstantId $name): Type
+    {
+        if (!$name instanceof ConstantId) {
+            $name = Id::constant($name);
+        }
+
+        return new Internal\ConstantType($name);
+    }
+
+    /**
+     * @param non-empty-string|NamedClassId|Type $class
+     * @param non-empty-string $name
+     */
+    public static function classConstant(string|NamedClassId|Type $class, string $name): Type
+    {
+        if (!$class instanceof Type) {
+            $class = self::object($class);
+        }
+
+        if (str_ends_with($name, '*')) {
+            return new Internal\ClassConstantMaskType($class, substr($name, 0, -1));
+        }
+
+        return new Internal\ClassConstantType($class, $name);
+    }
+
+    /**
+     * @param non-empty-string|NamedClassId|Type $class
+     */
+    public static function classConstantMask(string|NamedClassId|Type $class, string $namePrefix = ''): Type
+    {
+        if (!$class instanceof Type) {
+            $class = self::object($class);
+        }
+
+        return new Internal\ClassConstantMaskType($class, $namePrefix);
+    }
+
+    /**
+     * @param list<Type> $arguments
+     */
+    public static function alias(AliasId $alias, array $arguments = []): Type
+    {
+        return new Internal\AliasType($alias, $arguments);
+    }
+
+    /**
+     * @param non-empty-string|NamedClassId|AnonymousClassId $class
+     * @param non-empty-string $name
+     * @param list<Type> $arguments
+     */
+    public static function classAlias(string|NamedClassId|AnonymousClassId $class, string $name, array $arguments = []): Type
+    {
+        return new Internal\AliasType(Id::alias($class, $name), $arguments);
+    }
+
     public static function template(TemplateId $id): Type
     {
         return new Internal\TemplateType($id);
@@ -546,18 +495,6 @@ enum types implements Type
         }
 
         return new Internal\TemplateType(Id::template($function, $name));
-    }
-
-    public static function scalar(bool|int|float|string $value): Type
-    {
-        /** @psalm-suppress PossiblyInvalidArgument */
-        return match (true) {
-            $value === true => self::true,
-            $value === false => self::false,
-            \is_int($value) => new Internal\IntType($value, $value),
-            \is_float($value) => new Internal\FloatValueType($value),
-            default => new Internal\StringValueType($value),
-        };
     }
 
     /**
@@ -584,6 +521,16 @@ enum types implements Type
     }
 
     /**
+     * @template TType
+     * @param Type<TType> $type
+     * @return Type<TType>
+     */
+    public static function varianceAware(Type $type, Variance $variance): Type
+    {
+        return new Internal\VarianceAwareType($type, $variance);
+    }
+
+    /**
      * @no-named-arguments
      * @template TType
      * @param Type<TType> ...$types
@@ -598,19 +545,71 @@ enum types implements Type
         };
     }
 
-    public static function valueOf(Type $type): Type
-    {
-        return self::offset($type, self::keyOf($type));
-    }
-
     /**
      * @template TType
      * @param Type<TType> $type
-     * @return Type<TType>
+     * @return Type<?TType>
      */
-    public static function varianceAware(Type $type, Variance $variance): Type
+    public static function nullable(Type $type): Type
     {
-        return new Internal\VarianceAwareType($type, $variance);
+        return new Internal\UnionType([self::null, $type]);
+    }
+
+    public static function scalar(bool|int|float|string $value): Type
+    {
+        /** @psalm-suppress PossiblyInvalidArgument */
+        return match (true) {
+            $value === true => self::true,
+            $value === false => self::false,
+            \is_int($value) => new Internal\IntType($value, $value),
+            \is_float($value) => new Internal\FloatValueType($value),
+            default => new Internal\StringValueType($value),
+        };
+    }
+
+    public static function conditional(Type $subject, Type $if, Type $then, Type $else): Type
+    {
+        return new Internal\ConditionalType($subject, $if, $then, $else);
+    }
+
+    public static function arg(ParameterId $parameter): Type
+    {
+        return new Internal\ArgumentType($parameter);
+    }
+
+    /**
+     * @param non-empty-string|NamedFunctionId|AnonymousFunctionId|MethodId $function
+     * @param non-empty-string $name
+     */
+    public static function functionArg(string|NamedFunctionId|AnonymousFunctionId|MethodId $function, string $name): Type
+    {
+        if (\is_string($function)) {
+            $function = Id::namedFunction($function);
+        }
+
+        return new Internal\ArgumentType(Id::parameter($function, $name));
+    }
+
+    /**
+     * @param non-empty-string|NamedClassId|AnonymousClassId $class
+     * @param non-empty-string $method
+     * @param non-empty-string $name
+     */
+    public static function methodArg(string|NamedClassId|AnonymousClassId $class, string $method, string $name): Type
+    {
+        return new Internal\ArgumentType(Id::parameter(Id::method($class, $method), $name));
+    }
+
+    /**
+     * @no-named-arguments
+     */
+    public static function intersection(Type ...$types): Type
+    {
+        return match (\count($types)) {
+            0 => self::never,
+            1 => $types[0],
+            default => new Internal\IntersectionType($types),
+        };
     }
 
     public static function not(Type $type): Type
@@ -620,7 +619,7 @@ enum types implements Type
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        // most common types should come first
+        // most frequently used types should go first
         return match ($this) {
             self::null => $visitor->null($this),
             self::true => $visitor->true($this),
