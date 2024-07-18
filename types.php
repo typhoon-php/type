@@ -37,7 +37,6 @@ enum types implements Type
     case float;
     case literalFloat;
     case string;
-    case callableString;
     case nonEmptyString;
     case numericString;
     case truthyString;
@@ -54,6 +53,26 @@ enum types implements Type
     case closure;
     case scalar;
     case mixed;
+
+    /**
+     * @template TReturn
+     * @param list<Type|Parameter> $parameters
+     * @param Type<TReturn> $return
+     */
+    public static function callableString(array $parameters = [], Type $return = self::mixed): Type
+    {
+        return self::intersection(self::string, self::callable($parameters, $return));
+    }
+
+    /**
+     * @template TReturn
+     * @param list<Type|Parameter> $parameters
+     * @param Type<TReturn> $return
+     */
+    public static function callableArray(array $parameters = [], Type $return = self::mixed): Type
+    {
+        return self::intersection(self::list(), self::callable($parameters, $return));
+    }
 
     /**
      * @param list<Type> $arguments
@@ -600,7 +619,6 @@ enum types implements Type
                 self::string,
                 new Internal\NotType(new Internal\StringValueType('')),
             ]),
-            self::callableString => $visitor->intersection($this, [self::string, self::callable]),
             self::resource => $visitor->resource($this),
             self::negativeInt => $visitor->int($this, null, -1),
             self::nonPositiveInt => $visitor->int($this, null, 0),
