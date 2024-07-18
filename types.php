@@ -9,7 +9,6 @@ use Typhoon\DeclarationId\AnonymousClassId;
 use Typhoon\DeclarationId\AnonymousFunctionId;
 use Typhoon\DeclarationId\ConstantId;
 use Typhoon\DeclarationId\Id;
-use Typhoon\DeclarationId\MethodId;
 use Typhoon\DeclarationId\NamedClassId;
 use Typhoon\DeclarationId\NamedFunctionId;
 use Typhoon\DeclarationId\ParameterId;
@@ -578,10 +577,10 @@ enum types implements Type
     }
 
     /**
-     * @param non-empty-string|NamedFunctionId|AnonymousFunctionId|MethodId $function
+     * @param non-empty-string|NamedFunctionId|AnonymousFunctionId $function
      * @param non-empty-string $name
      */
-    public static function functionArg(string|NamedFunctionId|AnonymousFunctionId|MethodId $function, string $name): Type
+    public static function functionArg(string|NamedFunctionId|AnonymousFunctionId $function, string $name): Type
     {
         if (\is_string($function)) {
             $function = Id::namedFunction($function);
