@@ -148,28 +148,28 @@ interface TypeVisitor
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function namedObject(Type $type, NamedClassId $class, array $typeArguments): mixed;
+    public function namedObject(Type $type, NamedClassId $classId, array $typeArguments): mixed;
 
     /**
      * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed;
+    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed;
 
     /**
      * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClass): mixed;
+    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClassId): mixed;
 
     /**
      * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed;
+    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed;
 
     /**
      * @param Type<callable> $type
@@ -181,7 +181,7 @@ interface TypeVisitor
     /**
      * @return TReturn
      */
-    public function constant(Type $type, ConstantId $constant): mixed;
+    public function constant(Type $type, ConstantId $constantId): mixed;
 
     /**
      * @param non-empty-string $name
@@ -198,12 +198,12 @@ interface TypeVisitor
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function alias(Type $type, AliasId $alias, array $typeArguments): mixed;
+    public function alias(Type $type, AliasId $aliasId, array $typeArguments): mixed;
 
     /**
      * @return TReturn
      */
-    public function template(Type $type, TemplateId $template): mixed;
+    public function template(Type $type, TemplateId $templateId): mixed;
 
     /**
      * @return TReturn
@@ -219,12 +219,12 @@ interface TypeVisitor
     /**
      * @return TReturn
      */
-    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed;
+    public function conditional(Type $type, Type $subjectType, Type $ifType, Type $thenType, Type $elseType): mixed;
 
     /**
      * @return TReturn
      */
-    public function argument(Type $type, ParameterId $parameter): mixed;
+    public function argument(Type $type, ParameterId $parameterId): mixed;
 
     /**
      * @param non-empty-list<Type> $ofTypes

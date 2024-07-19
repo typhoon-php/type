@@ -16,12 +16,12 @@ use Typhoon\Type\TypeVisitor;
 final class OffsetType implements Type
 {
     public function __construct(
-        private readonly Type $type,
-        private readonly Type $offset,
+        private readonly Type $array,
+        private readonly Type $key,
     ) {}
 
     public function accept(TypeVisitor $visitor): mixed
     {
-        return $visitor->offset($this, $this->type, $this->offset);
+        return $visitor->offset($this, $this->array, $this->key);
     }
 }

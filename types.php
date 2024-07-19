@@ -243,19 +243,19 @@ enum types implements Type
         return new Internal\IterableType($key, $value);
     }
 
-    public static function keyOf(Type $type): Type
+    public static function keyOf(Type $array): Type
     {
-        return new Internal\KeyType($type);
+        return new Internal\KeyType($array);
     }
 
-    public static function valueOf(Type $type): Type
+    public static function valueOf(Type $array): Type
     {
-        return self::offset($type, self::keyOf($type));
+        return self::offset($array, self::keyOf($array));
     }
 
-    public static function offset(Type $type, Type $offset): Type
+    public static function offset(Type $array, Type $key): Type
     {
-        return new Internal\OffsetType($type, $offset);
+        return new Internal\OffsetType($array, $key);
     }
 
     /**

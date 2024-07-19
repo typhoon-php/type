@@ -126,22 +126,22 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function namedObject(Type $type, NamedClassId $class, array $typeArguments): mixed
+    public function namedObject(Type $type, NamedClassId $classId, array $typeArguments): mixed
     {
         return $this->default($type);
     }
 
-    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
+    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed
     {
         return $this->default($type);
     }
 
-    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClass): mixed
+    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClassId): mixed
     {
         return $this->default($type);
     }
 
-    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
+    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed
     {
         return $this->default($type);
     }
@@ -151,7 +151,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function constant(Type $type, ConstantId $constant): mixed
+    public function constant(Type $type, ConstantId $constantId): mixed
     {
         return $this->default($type);
     }
@@ -166,12 +166,12 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
+    public function alias(Type $type, AliasId $aliasId, array $typeArguments): mixed
     {
         return $this->default($type);
     }
 
-    public function template(Type $type, TemplateId $template): mixed
+    public function template(Type $type, TemplateId $templateId): mixed
     {
         return $this->default($type);
     }
@@ -186,12 +186,12 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    public function conditional(Type $type, Type $subjectType, Type $ifType, Type $thenType, Type $elseType): mixed
     {
         return $this->default($type);
     }
 
-    public function argument(Type $type, ParameterId $parameter): mixed
+    public function argument(Type $type, ParameterId $parameterId): mixed
     {
         return $this->default($type);
     }

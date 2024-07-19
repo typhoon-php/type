@@ -246,39 +246,39 @@ enum TypeStringifier implements TypeVisitor
         )));
     }
 
-    public function namedObject(Type $type, NamedClassId $class, array $typeArguments): mixed
+    public function namedObject(Type $type, NamedClassId $classId, array $typeArguments): mixed
     {
-        return $this->stringifyGenericType($class->name, $typeArguments);
+        return $this->stringifyGenericType($classId->name, $typeArguments);
     }
 
-    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
+    public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed
     {
         $name = 'self';
 
-        if ($resolvedClass !== null) {
-            $name .= '@' . $this->stringifyId($resolvedClass);
+        if ($resolvedClassId !== null) {
+            $name .= '@' . $this->stringifyId($resolvedClassId);
         }
 
         return $this->stringifyGenericType($name, $typeArguments);
     }
 
-    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClass): mixed
+    public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClassId): mixed
     {
         $name = 'parent';
 
-        if ($resolvedClass !== null) {
-            $name .= '@' . $resolvedClass->name;
+        if ($resolvedClassId !== null) {
+            $name .= '@' . $resolvedClassId->name;
         }
 
         return $this->stringifyGenericType($name, $typeArguments);
     }
 
-    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClass): mixed
+    public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed
     {
         $name = 'static';
 
-        if ($resolvedClass !== null) {
-            $name .= '@' . $this->stringifyId($resolvedClass);
+        if ($resolvedClassId !== null) {
+            $name .= '@' . $this->stringifyId($resolvedClassId);
         }
 
         return $this->stringifyGenericType($name, $typeArguments);
@@ -306,9 +306,9 @@ enum TypeStringifier implements TypeVisitor
         );
     }
 
-    public function constant(Type $type, ConstantId $constant): mixed
+    public function constant(Type $type, ConstantId $constantId): mixed
     {
-        return sprintf('constant<%s>', $constant->name);
+        return sprintf('constant<%s>', $constantId->name);
     }
 
     public function classConstant(Type $type, Type $classType, string $name): mixed
@@ -321,14 +321,14 @@ enum TypeStringifier implements TypeVisitor
         return sprintf('%s::%s*', $classType->accept($this), $namePrefix);
     }
 
-    public function alias(Type $type, AliasId $alias, array $typeArguments): mixed
+    public function alias(Type $type, AliasId $aliasId, array $typeArguments): mixed
     {
-        return sprintf('%s@%s', $alias->name, $this->stringifyId($alias->class));
+        return sprintf('%s@%s', $aliasId->name, $this->stringifyId($aliasId->class));
     }
 
-    public function template(Type $type, TemplateId $template): mixed
+    public function template(Type $type, TemplateId $templateId): mixed
     {
-        return sprintf('%s#%s', $template->name, $this->stringifyId($template->site));
+        return sprintf('%s#%s', $templateId->name, $this->stringifyId($templateId->site));
     }
 
     public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
@@ -371,14 +371,14 @@ enum TypeStringifier implements TypeVisitor
         ]);
     }
 
-    public function conditional(Type $type, Type $subject, Type $ifType, Type $thenType, Type $elseType): mixed
+    public function conditional(Type $type, Type $subjectType, Type $ifType, Type $thenType, Type $elseType): mixed
     {
-        return sprintf('(%s is %s ? %s : %s)', $subject->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
+        return sprintf('(%s is %s ? %s : %s)', $subjectType->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
     }
 
-    public function argument(Type $type, ParameterId $parameter): mixed
+    public function argument(Type $type, ParameterId $parameterId): mixed
     {
-        return '$' . $parameter->name;
+        return '$' . $parameterId->name;
     }
 
     public function intersection(Type $type, array $ofTypes): mixed

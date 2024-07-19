@@ -32,8 +32,8 @@ final class TemplateTypeResolver extends RecursiveTypeReplacer
         $this->typeArguments = $map;
     }
 
-    public function template(Type $type, TemplateId $template): mixed
+    public function template(Type $type, TemplateId $templateId): mixed
     {
-        return $this->typeArguments[$template->encode()] ?? $type;
+        return $this->typeArguments[$templateId->encode()] ?? $type;
     }
 }
