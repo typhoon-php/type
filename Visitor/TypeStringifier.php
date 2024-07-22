@@ -328,7 +328,7 @@ enum TypeStringifier implements TypeVisitor
 
     public function template(Type $type, TemplateId $templateId): mixed
     {
-        return sprintf('%s#%s', $templateId->name, $this->stringifyId($templateId->site));
+        return sprintf('%s#%s', $templateId->name, $this->stringifyId($templateId->declaration));
     }
 
     public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
