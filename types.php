@@ -268,6 +268,13 @@ enum types implements Type
         return new ShapeElement($type, true);
     }
 
+    private const CLASSES_SUPPORTING_SINGLE_VALUE_TYPE_ARGUMENT = [
+        \Traversable::class => true,
+        \Iterator::class => true,
+        \IteratorAggregate::class => true,
+        \Generator::class => true,
+    ];
+
     /**
      * @param non-empty-string|NamedClassId $class
      * @param list<Type> $arguments
@@ -283,12 +290,27 @@ enum types implements Type
             return self::closure;
         }
 
+        if (\count($arguments) === 1 && isset(self::CLASSES_SUPPORTING_SINGLE_VALUE_TYPE_ARGUMENT[$class->name])) {
+            $arguments = [self::mixed, $arguments[0]];
+        }
+
         return new Internal\NamedObjectType($class, $arguments);
     }
 
     public static function generator(Type $key = self::mixed, Type $value = self::mixed, Type $send = self::mixed, Type $return = self::mixed): Type
     {
-        return new Internal\NamedObjectType(Id::namedClass(\Generator::class), [$key, $value, $send, $return]);
+        $typeArguments = [$key, $value, $send, $return];
+
+        for ($i = 3; $i >= 0; --$i) {
+            if ($typeArguments[$i] === self::mixed) {
+                array_pop($typeArguments);
+            } else {
+                break;
+            }
+        }
+
+        /** @phpstan-ignore argument.type */
+        return new Internal\NamedObjectType(Id::namedClass(\Generator::class), $typeArguments);
     }
 
     /**
