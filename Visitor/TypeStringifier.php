@@ -63,12 +63,12 @@ enum TypeStringifier implements TypeVisitor
             return (string) $min;
         }
 
-        return sprintf('int<%s, %s>', $min ?? 'min', $max ?? 'max');
+        return \sprintf('int<%s, %s>', $min ?? 'min', $max ?? 'max');
     }
 
     public function intMask(Type $type, Type $ofType): mixed
     {
-        return sprintf('int-mask-of<%s>', $ofType->accept($this));
+        return \sprintf('int-mask-of<%s>', $ofType->accept($this));
     }
 
     public function float(Type $type, ?float $min, ?float $max): mixed
@@ -81,7 +81,7 @@ enum TypeStringifier implements TypeVisitor
             return (string) $min;
         }
 
-        return sprintf('float<%s, %s>', $min ?? 'min', $max ?? 'max');
+        return \sprintf('float<%s, %s>', $min ?? 'min', $max ?? 'max');
     }
 
     public function string(Type $type): mixed
@@ -114,7 +114,7 @@ enum TypeStringifier implements TypeVisitor
             return 'class-string';
         }
 
-        return sprintf('class-string<%s>', $classType->accept($this));
+        return \sprintf('class-string<%s>', $classType->accept($this));
     }
 
     public function numeric(Type $type): mixed
@@ -144,7 +144,7 @@ enum TypeStringifier implements TypeVisitor
             };
         }
 
-        return sprintf(
+        return \sprintf(
             'list{%s%s}',
             implode(', ', array_map(
                 function (int $key, ShapeElement $element) use ($elements): string {
@@ -155,7 +155,7 @@ enum TypeStringifier implements TypeVisitor
                         return $element->type->accept($this);
                     }
 
-                    return sprintf('%d%s: %s', $key, $element->optional ? '?' : '', $element->type->accept($this));
+                    return \sprintf('%d%s: %s', $key, $element->optional ? '?' : '', $element->type->accept($this));
                 },
                 array_keys($elements),
                 $elements,
@@ -181,7 +181,7 @@ enum TypeStringifier implements TypeVisitor
             };
         }
 
-        return sprintf(
+        return \sprintf(
             'array{%s%s}',
             implode(', ', array_map(
                 function (int|string $key, ShapeElement $element) use ($elements): string {
@@ -192,7 +192,7 @@ enum TypeStringifier implements TypeVisitor
                         return $element->type->accept($this);
                     }
 
-                    return sprintf('%s%s: %s', $this->stringifyKey($key), $element->optional ? '?' : '', $element->type->accept($this));
+                    return \sprintf('%s%s: %s', $this->stringifyKey($key), $element->optional ? '?' : '', $element->type->accept($this));
                 },
                 array_keys($elements),
                 $elements,
@@ -212,7 +212,7 @@ enum TypeStringifier implements TypeVisitor
 
     public function offset(Type $type, Type $arrayType, Type $keyType): mixed
     {
-        return sprintf('%s[%s]', $arrayType->accept($this), $keyType->accept($this));
+        return \sprintf('%s[%s]', $arrayType->accept($this), $keyType->accept($this));
     }
 
     public function iterable(Type $type, Type $keyType, Type $valueType): mixed
@@ -237,8 +237,8 @@ enum TypeStringifier implements TypeVisitor
             return 'object';
         }
 
-        return sprintf('object{%s}', implode(', ', array_map(
-            fn(string $name, ShapeElement $property): string => sprintf(
+        return \sprintf('object{%s}', implode(', ', array_map(
+            fn(string $name, ShapeElement $property): string => \sprintf(
                 '%s%s: %s',
                 $this->stringifyKey($name),
                 $property->optional ? '?' : '',
@@ -295,7 +295,7 @@ enum TypeStringifier implements TypeVisitor
             return 'callable';
         }
 
-        return sprintf(
+        return \sprintf(
             'callable(%s): %s',
             implode(', ', array_map(
                 fn(Parameter $parameter): string => $parameter->type->accept($this) . match (true) {
@@ -311,32 +311,32 @@ enum TypeStringifier implements TypeVisitor
 
     public function constant(Type $type, ConstantId $constantId): mixed
     {
-        return sprintf('constant<%s>', $constantId->name);
+        return \sprintf('constant<%s>', $constantId->name);
     }
 
     public function classConstant(Type $type, Type $classType, string $name): mixed
     {
-        return sprintf('%s::%s', $classType->accept($this), $name);
+        return \sprintf('%s::%s', $classType->accept($this), $name);
     }
 
     public function classConstantMask(Type $type, Type $classType, string $namePrefix): mixed
     {
-        return sprintf('%s::%s*', $classType->accept($this), $namePrefix);
+        return \sprintf('%s::%s*', $classType->accept($this), $namePrefix);
     }
 
     public function alias(Type $type, AliasId $aliasId, array $typeArguments): mixed
     {
-        return sprintf('%s@%s', $aliasId->name, $this->stringifyId($aliasId->class));
+        return \sprintf('%s@%s', $aliasId->name, $this->stringifyId($aliasId->class));
     }
 
     public function template(Type $type, TemplateId $templateId): mixed
     {
-        return sprintf('%s#%s', $templateId->name, $this->stringifyId($templateId->declaration));
+        return \sprintf('%s#%s', $templateId->name, $this->stringifyId($templateId->declaration));
     }
 
     public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
     {
-        return sprintf(
+        return \sprintf(
             '%s %s',
             match ($variance) {
                 Variance::Bivariant => 'bivariant',
@@ -363,7 +363,7 @@ enum TypeStringifier implements TypeVisitor
         };
 
         $string = implode('|', array_map(
-            fn(Type $type): string => $type->accept($isIntersection) ? sprintf('(%s)', $type->accept($this)) : $type->accept($this),
+            fn(Type $type): string => $type->accept($isIntersection) ? \sprintf('(%s)', $type->accept($this)) : $type->accept($this),
             $ofTypes,
         ));
 
@@ -376,7 +376,7 @@ enum TypeStringifier implements TypeVisitor
 
     public function conditional(Type $type, Type $subjectType, Type $ifType, Type $thenType, Type $elseType): mixed
     {
-        return sprintf('(%s is %s ? %s : %s)', $subjectType->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
+        return \sprintf('(%s is %s ? %s : %s)', $subjectType->accept($this), $ifType->accept($this), $thenType->accept($this), $elseType->accept($this));
     }
 
     public function argument(Type $type, ParameterId $parameterId): mixed
@@ -399,7 +399,7 @@ enum TypeStringifier implements TypeVisitor
         };
 
         $string = implode('&', array_map(
-            fn(Type $type): string => $type->accept($isUnion) ? sprintf('(%s)', $type->accept($this)) : $type->accept($this),
+            fn(Type $type): string => $type->accept($isUnion) ? \sprintf('(%s)', $type->accept($this)) : $type->accept($this),
             $ofTypes,
         ));
 
@@ -430,10 +430,10 @@ enum TypeStringifier implements TypeVisitor
     {
         return match (true) {
             $id instanceof NamedFunctionId => $id->name . '()',
-            $id instanceof AnonymousFunctionId => sprintf('anonymous:%s:%d%s()', $id->file, $id->line, $id->column === null ? '' : ':' . $id->column),
+            $id instanceof AnonymousFunctionId => \sprintf('anonymous:%s:%d%s()', $id->file, $id->line, $id->column === null ? '' : ':' . $id->column),
             $id instanceof NamedClassId => $id->name,
-            $id instanceof AnonymousClassId => sprintf('anonymous:%s:%d%s', $id->file, $id->line, $id->column === null ? '' : ':' . $id->column),
-            $id instanceof MethodId => sprintf('%s::%s()', $this->stringifyId($id->class), $id->name),
+            $id instanceof AnonymousClassId => \sprintf('anonymous:%s:%d%s', $id->file, $id->line, $id->column === null ? '' : ':' . $id->column),
+            $id instanceof MethodId => \sprintf('%s::%s()', $this->stringifyId($id->class), $id->name),
         };
     }
 
@@ -457,7 +457,7 @@ enum TypeStringifier implements TypeVisitor
             return $name;
         }
 
-        return sprintf('%s<%s>', $name, implode(', ', array_map(
+        return \sprintf('%s<%s>', $name, implode(', ', array_map(
             fn(Type $self): string => $self->accept($this),
             $arguments,
         )));
