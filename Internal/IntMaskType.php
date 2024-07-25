@@ -10,7 +10,6 @@ use Typhoon\Type\TypeVisitor;
 /**
  * @internal
  * @psalm-internal Typhoon\Type
- * @psalm-immutable
  * @implements Type<positive-int>
  */
 final class IntMaskType implements Type

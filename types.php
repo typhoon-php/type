@@ -16,7 +16,6 @@ use Typhoon\DeclarationId\TemplateId;
 
 /**
  * @api
- * @psalm-immutable
  * @implements Type<mixed>
  */
 enum types implements Type

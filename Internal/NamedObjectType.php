@@ -11,7 +11,6 @@ use Typhoon\Type\TypeVisitor;
 /**
  * @internal
  * @psalm-internal Typhoon\Type
- * @psalm-immutable
  * @implements Type<object>
  */
 final class NamedObjectType implements Type
