@@ -71,14 +71,17 @@ enum TypeStringifier implements TypeVisitor
         return sprintf('int-mask-of<%s>', $ofType->accept($this));
     }
 
-    public function float(Type $type): mixed
+    public function float(Type $type, ?float $min, ?float $max): mixed
     {
-        return 'float';
-    }
+        if ($min === null && $max === null) {
+            return 'float';
+        }
 
-    public function floatValue(Type $type, float $value): mixed
-    {
-        return (string) $value;
+        if ($min !== null && $max === $min) {
+            return (string) $min;
+        }
+
+        return sprintf('float<%s, %s>', $min ?? 'min', $max ?? 'max');
     }
 
     public function string(Type $type): mixed

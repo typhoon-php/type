@@ -63,13 +63,7 @@ interface TypeVisitor
      * @param Type<float> $type
      * @return TReturn
      */
-    public function float(Type $type): mixed;
-
-    /**
-     * @param Type<float> $type
-     * @return TReturn
-     */
-    public function floatValue(Type $type, float $value): mixed;
+    public function float(Type $type, ?float $min, ?float $max): mixed;
 
     /**
      * @param Type<string> $type

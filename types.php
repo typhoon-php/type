@@ -113,7 +113,20 @@ enum types implements Type
      */
     public static function float(float $value): Type
     {
-        return new Internal\FloatValueType($value);
+        /** @var Internal\FloatType<TValue> */
+        return new Internal\FloatType($value, $value);
+    }
+
+    /**
+     * @return Type<float>
+     */
+    public static function floatRange(?float $min = null, ?float $max = null): Type
+    {
+        if ($min === null && $max === null) {
+            return self::float;
+        }
+
+        return new Internal\FloatType($min, $max);
     }
 
     /**
@@ -561,7 +574,7 @@ enum types implements Type
             $value === true => self::true,
             $value === false => self::false,
             \is_int($value) => new Internal\IntType($value, $value),
-            \is_float($value) => new Internal\FloatValueType($value),
+            \is_float($value) => new Internal\FloatType($value, $value),
             default => new Internal\StringValueType($value),
         };
     }
@@ -625,7 +638,7 @@ enum types implements Type
             self::false => $visitor->false($this),
             self::bool => $visitor->union($this, [self::true, self::false]),
             self::int => $visitor->int($this, null, null),
-            self::float => $visitor->float($this),
+            self::float => $visitor->float($this, null, null),
             self::string => $visitor->string($this),
             self::array => $visitor->array($this, self::arrayKey, self::mixed, []),
             self::iterable => $visitor->iterable($this, self::mixed, self::mixed),
