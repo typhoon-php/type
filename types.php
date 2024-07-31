@@ -156,9 +156,9 @@ enum types implements Type
         return self::classConstant($class, 'class');
     }
 
-    public static function classString(Type $object): Type
+    public static function classString(Type $class): Type
     {
-        return new Internal\ClassStringType($object);
+        return new Internal\ClassStringType($class);
     }
 
     /**
