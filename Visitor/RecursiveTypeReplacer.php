@@ -19,6 +19,18 @@ use Typhoon\Type\Variance;
  */
 abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
 {
+    public function int(Type $type, Type $minType, Type $maxType): mixed
+    {
+        $newMinType = $minType->accept($this);
+        $newMaxType = $maxType->accept($this);
+
+        if ($newMinType === $minType && $newMaxType === $maxType) {
+            return $type;
+        }
+
+        return types::intRange($newMinType, $newMaxType);
+    }
+
     public function intMask(Type $type, Type $ofType): mixed
     {
         $newOfType = $ofType->accept($this);
@@ -28,6 +40,18 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         }
 
         return types::intMaskOf($newOfType);
+    }
+
+    public function float(Type $type, Type $minType, Type $maxType): mixed
+    {
+        $newMinType = $minType->accept($this);
+        $newMaxType = $maxType->accept($this);
+
+        if ($newMinType === $minType && $newMaxType === $maxType) {
+            return $type;
+        }
+
+        return types::floatRange($newMinType, $newMaxType);
     }
 
     public function classString(Type $type, Type $classType): mixed
