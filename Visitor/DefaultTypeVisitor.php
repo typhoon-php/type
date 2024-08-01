@@ -131,7 +131,7 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function namedObject(Type $type, NamedClassId $classId, array $typeArguments): mixed
+    public function namedObject(Type $type, NamedClassId|AnonymousClassId $classId, array $typeArguments): mixed
     {
         return $this->default($type);
     }

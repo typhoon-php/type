@@ -165,7 +165,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
         return $type;
     }
 
-    public function namedObject(Type $type, NamedClassId $classId, array $typeArguments): mixed
+    public function namedObject(Type $type, NamedClassId|AnonymousClassId $classId, array $typeArguments): mixed
     {
         $newTypeArguments = $this->replaceTypes($typeArguments);
 

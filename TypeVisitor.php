@@ -154,7 +154,7 @@ interface TypeVisitor
      * @param list<Type> $typeArguments
      * @return TReturn
      */
-    public function namedObject(Type $type, NamedClassId $classId, array $typeArguments): mixed;
+    public function namedObject(Type $type, NamedClassId|AnonymousClassId $classId, array $typeArguments): mixed;
 
     /**
      * @param Type<object> $type

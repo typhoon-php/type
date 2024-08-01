@@ -293,14 +293,14 @@ enum types implements Type
     }
 
     /**
-     * @param non-empty-string|NamedClassId $class
+     * @param non-empty-string|NamedClassId|AnonymousClassId $class
      * @param list<Type> $arguments
      * @return Type<object>
      */
-    public static function object(string|NamedClassId $class, array $arguments = []): Type
+    public static function object(string|NamedClassId|AnonymousClassId $class, array $arguments = []): Type
     {
         if (\is_string($class)) {
-            $class = Id::namedClass($class);
+            $class = Id::class($class);
         }
 
         if ($class->name === \Closure::class && $arguments === []) {
