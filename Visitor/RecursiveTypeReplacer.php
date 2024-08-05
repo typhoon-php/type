@@ -208,7 +208,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
             return $type;
         }
 
-        return types::self($typeArguments, $resolvedClassId);
+        return types::self($newTypeArguments, $resolvedClassId);
     }
 
     public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClassId): mixed
@@ -219,7 +219,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
             return $type;
         }
 
-        return types::parent($typeArguments, $resolvedClassId);
+        return types::parent($newTypeArguments, $resolvedClassId);
     }
 
     public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed
@@ -230,7 +230,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
             return $type;
         }
 
-        return types::static($typeArguments, $resolvedClassId);
+        return types::static($newTypeArguments, $resolvedClassId);
     }
 
     public function callable(Type $type, array $parameters, Type $returnType): mixed
@@ -294,7 +294,7 @@ abstract class RecursiveTypeReplacer extends DefaultTypeVisitor
             return $type;
         }
 
-        return types::alias($aliasId, $typeArguments);
+        return types::alias($aliasId, $newTypeArguments);
     }
 
     public function varianceAware(Type $type, Type $ofType, Variance $variance): mixed
