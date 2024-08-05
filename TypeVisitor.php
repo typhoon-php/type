@@ -18,85 +18,71 @@ use Typhoon\DeclarationId\TemplateId;
 interface TypeVisitor
 {
     /**
-     * @param Type<never> $type
      * @return TReturn
      */
     public function never(Type $type): mixed;
 
     /**
-     * @param Type<void> $type
      * @return TReturn
      */
     public function void(Type $type): mixed;
 
     /**
-     * @param Type<null> $type
      * @return TReturn
      */
     public function null(Type $type): mixed;
 
     /**
-     * @param Type<true> $type
      * @return TReturn
      */
     public function true(Type $type): mixed;
 
     /**
-     * @param Type<false> $type
      * @return TReturn
      */
     public function false(Type $type): mixed;
 
     /**
-     * @param Type<int> $type
      * @return TReturn
      */
     public function int(Type $type, Type $minType, Type $maxType): mixed;
 
     /**
-     * @param Type<int> $type
      * @return TReturn
      */
     public function intValue(Type $type, int $value): mixed;
 
     /**
-     * @param Type<positive-int> $type
      * @return TReturn
      */
     public function intMask(Type $type, Type $ofType): mixed;
 
     /**
-     * @param Type<float> $type
      * @return TReturn
      */
     public function float(Type $type, Type $minType, Type $maxType): mixed;
 
     /**
-     * @param Type<float> $type
      * @return TReturn
      */
     public function floatValue(Type $type, float $value): mixed;
 
     /**
-     * @param Type<string> $type
      * @return TReturn
      */
     public function string(Type $type): mixed;
 
     /**
-     * @param Type<string> $type
      * @return TReturn
      */
     public function stringValue(Type $type, string $value): mixed;
 
     /**
-     * @param Type<non-empty-string> $type
      * @return TReturn
      */
     public function classString(Type $type, Type $classType): mixed;
 
     /**
-     * @param Type<numeric> $type
      * @return TReturn
      */
     public function numeric(Type $type): mixed;
@@ -107,20 +93,17 @@ interface TypeVisitor
     public function literal(Type $type, Type $ofType): mixed;
 
     /**
-     * @param Type<resource> $type
      * @return TReturn
      */
     public function resource(Type $type): mixed;
 
     /**
-     * @param Type<list<mixed>> $type
      * @param array<non-negative-int, ShapeElement> $elements
      * @return TReturn
      */
     public function list(Type $type, Type $valueType, array $elements): mixed;
 
     /**
-     * @param Type<array<mixed>> $type
      * @param array<ShapeElement> $elements
      * @return TReturn
      */
@@ -137,48 +120,41 @@ interface TypeVisitor
     public function offset(Type $type, Type $arrayType, Type $keyType): mixed;
 
     /**
-     * @param Type<iterable<mixed>> $type
      * @return TReturn
      */
     public function iterable(Type $type, Type $keyType, Type $valueType): mixed;
 
     /**
-     * @param Type<object> $type
      * @param array<string, ShapeElement> $properties
      * @return TReturn
      */
     public function object(Type $type, array $properties): mixed;
 
     /**
-     * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
     public function namedObject(Type $type, NamedClassId|AnonymousClassId $classId, array $typeArguments): mixed;
 
     /**
-     * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
     public function self(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed;
 
     /**
-     * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
     public function parent(Type $type, array $typeArguments, ?NamedClassId $resolvedClassId): mixed;
 
     /**
-     * @param Type<object> $type
      * @param list<Type> $typeArguments
      * @return TReturn
      */
     public function static(Type $type, array $typeArguments, null|NamedClassId|AnonymousClassId $resolvedClassId): mixed;
 
     /**
-     * @param Type<callable> $type
      * @param list<Parameter> $parameters
      * @return TReturn
      */
