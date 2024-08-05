@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Drop needless `$type` parameter PHPDoc types in `TypeVisitor`.
+- Return `Type<int>` in `types::intMask()` due to possibly overflowing bitmasks.
 
 ## [0.4.1] 2024-08-05
 
