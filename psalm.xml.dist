@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<psalm
+    checkForThrowsDocblock="true"
+    checkForThrowsInGlobalScope="true"
+    disableSuppressAll="true"
+    ensureArrayStringOffsetsExist="true"
+    errorLevel="1"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="true"
+    findUnusedPsalmSuppress="true"
+    findUnusedVariablesAndParams="true"
+    memoizeMethodCallResults="true"
+    reportMixedIssues="true"
+    sealAllMethods="true"
+    sealAllProperties="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://getpsalm.org/schema/config"
+    xsi:schemaLocation="https://getpsalm.org/schema/config tools/psalm/vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="src"/>
+        <directory name="tests"/>
+        <ignoreFiles>
+            <directory name="vendor"/>
+        </ignoreFiles>
+        <ignoreFiles allowMissingFiles="true">
+            <directory name="var"/>
+        </ignoreFiles>
+    </projectFiles>
+
+    <plugins>
+        <pluginClass class="Psalm\PhpUnitPlugin\Plugin"/>
+        <pluginClass class="Typhoon\CheckVisibilityPsalmPlugin\CheckVisibilityPlugin"/>
+    </plugins>
+
+    <ignoreExceptions>
+        <classAndDescendants name="ReflectionException"/>
+        <classAndDescendants name="LogicException"/>
+        <classAndDescendants name="RuntimeException"/>
+    </ignoreExceptions>
+
+    <issueHandlers>
+        <PluginIssue name="UnspecifiedVisibility">
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </PluginIssue>
+        <MissingThrowsDocblock>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </MissingThrowsDocblock>
+        <MixedAssignment errorLevel="suppress"/>
+        <PossiblyUnusedMethod>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </PossiblyUnusedMethod>
+        <RedundantCondition>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </RedundantCondition>
+        <RedundantConditionGivenDocblockType>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </RedundantConditionGivenDocblockType>
+        <UnusedConstructor errorLevel="suppress"/>
+    </issueHandlers>
+
+    <forbiddenFunctions>
+        <function name="dd"/>
+        <function name="die"/>
+        <function name="dump"/>
+        <function name="echo"/>
+        <function name="empty"/>
+        <function name="eval"/>
+        <function name="exit"/>
+        <function name="print"/>
+        <function name="sleep"/>
+        <function name="usleep"/>
+    </forbiddenFunctions>
+</psalm>
