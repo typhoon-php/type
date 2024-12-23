@@ -20,13 +20,12 @@
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
         "dragon-code/benchmark": "^2.6",
-        "ergebnis/composer-normalize": "^2.43.0",
-        "friendsofphp/php-cs-fixer": "^3.64.0",
-        "infection/infection": "^0.29.6",
-        "phpstan/phpstan": "^1.12.2",
-        "phpunit/phpunit": "^10.5.32",
+        "ergebnis/composer-normalize": "^2.45.0",
+        "friendsofphp/php-cs-fixer": "^3.65.0",
+        "phpstan/phpstan": "^1.12.13",
+        "phpunit/phpunit": "^10.5.40",
         "phpyh/coding-standard": "^2.6.2",
-        "symfony/var-dumper": "^6.4.11 || ^7.1.3"
+        "symfony/var-dumper": "^6.4.15 || ^7.1.3"
     },
     "autoload": {
         "psr-4": {
@@ -44,9 +43,9 @@
     "config": {
         "allow-plugins": {
             "bamarni/composer-bin-plugin": true,
-            "ergebnis/composer-normalize": true,
-            "infection/extension-installer": true
+            "ergebnis/composer-normalize": true
         },
+        "bump-after-update": "dev",
         "platform": {
             "php": "8.1"
         },
@@ -60,14 +59,10 @@
         }
     },
     "scripts": {
-        "bump-dev": [
-            "@composer bump --dev-only",
-            "@composer bin all bump --dev-only"
-        ],
         "check-require": "tools/composer-require-checker/vendor/bin/composer-require-checker",
         "check-unused": "tools/composer-unused/vendor/bin/composer-unused",
-        "fixcs": "php-cs-fixer fix --diff",
-        "infection": "infection --show-mutations",
+        "fixcs": "php-cs-fixer fix --diff --verbose",
+        "infection": "tools/infection/vendor/bin/infection --show-mutations",
         "pre-command-run": "mkdir -p var",
         "psalm": "tools/psalm/vendor/bin/psalm --show-info --no-diff --no-cache",
         "test": "phpunit"
