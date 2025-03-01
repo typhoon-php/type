@@ -30,10 +30,7 @@
     "autoload": {
         "psr-4": {
             "Typhoon\\Type\\": "src/"
-        },
-        "files": [
-            "src/functions.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
