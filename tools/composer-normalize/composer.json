@@ -1,0 +1,15 @@
+{
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.45"
+    },
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true
+        },
+        "bump-after-update": "dev",
+        "platform": {
+            "php": "8.1"
+        },
+        "sort-packages": true
+    }
+}

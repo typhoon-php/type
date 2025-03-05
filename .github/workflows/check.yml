@@ -7,3 +7,7 @@ jobs:
   check:
     uses: typhoon-php/.github/.github/workflows/check.yml@main
     secrets: inherit
+    with:
+      infection: false
+      phpstan: false
+      psalm: true

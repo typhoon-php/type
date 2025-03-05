@@ -1,12 +1,12 @@
 {
     "require-dev": {
-        "vimeo/psalm": "^6.5",
-        "typhoon/check-visibility-psalm-plugin": "^0.1.1"
+        "friendsofphp/php-cs-fixer": "^3.70.2",
+        "phpyh/coding-standard": "^2.6.2"
     },
     "config": {
         "bump-after-update": "dev",
         "platform": {
-            "php": "8.1.17"
+            "php": "8.3"
         },
         "sort-packages": true
     }
