@@ -1,4 +1,5 @@
 /.github/                export-ignore
+/generator/              export-ignore
 /stubs/                  export-ignore
 /tests/                  export-ignore
 /tools/                  export-ignore

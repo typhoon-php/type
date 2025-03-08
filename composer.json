@@ -18,17 +18,22 @@
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
+        "nette/php-generator": "^4.1.7",
         "phpunit/phpunit": "^10.5.45",
+        "symfony/finder": "^6.4.17",
         "symfony/var-dumper": "^6.4.18 || ^7.2.3"
     },
     "autoload": {
         "psr-4": {
-            "Typhoon\\Type\\": "src/",
-            "Typhoon\\TypeSpec\\": "spec/"
-        }
+            "Typhoon\\Type\\": "src/"
+        },
+        "files": [
+            "src/types.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
+            "Typhoon\\TypeGenerator\\": "generator/",
             "Typhoon\\Type\\": "tests/"
         }
     },
@@ -53,6 +58,11 @@
         "check-require": "tools/composer-require-checker/vendor/bin/composer-require-checker",
         "check-unused": "tools/composer-unused/vendor/bin/composer-unused",
         "fixcs": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --verbose",
+        "generate": [
+            "Typhoon\\TypeGenerator\\Generator::generate",
+            "@fixcs -- src",
+            "git add ."
+        ],
         "infection": "tools/infection/vendor/bin/infection --show-mutations",
         "normalize": "@composer bin composer-normalize normalize --diff ../../composer.json",
         "phpstan": "tools/phpstan/vendor/bin/phpstan analyze",

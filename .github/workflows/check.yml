@@ -9,5 +9,4 @@ jobs:
     secrets: inherit
     with:
       infection: false
-      phpstan: false
       psalm: true
