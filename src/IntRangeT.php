@@ -12,15 +12,19 @@ namespace Typhoon\Type;
  */
 final class IntRangeT implements Type
 {
-    public readonly ?int $min;
+    /** @var ?numeric-string */
+    public readonly ?string $min;
 
-    public readonly ?int $max;
+    /** @var ?numeric-string */
+    public readonly ?string $max;
 
     /**
      * @internal
      * @psalm-internal Typhoon\Type
+     * @param ?numeric-string $min
+     * @param ?numeric-string $max
      */
-    public function __construct(?int $min, ?int $max)
+    public function __construct(?string $min, ?string $max)
     {
         $this->min = $min;
         $this->max = $max;

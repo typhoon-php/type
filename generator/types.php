@@ -13,7 +13,7 @@ return [
     type('null', 'null'),
     type('false', 'false'),
     type('true', 'true'),
-    type('intRange', 'int')->prop('min', '?int')->prop('max', '?int'),
+    type('intRange', 'int')->prop('min', '?numeric-string')->prop('max', '?numeric-string'),
     type('floatRange', 'float')->prop('min', '?float')->prop('max', '?float'),
     type('stringValue', 'string')->prop('value', 'string'),
     type('string', 'string'),

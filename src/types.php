@@ -34,20 +34,28 @@ const intT = IntT::T;
 
 /**
  * @api
+ * @param int|numeric-string $value
  * @return Type<int>
  */
-function intT(int $value): Type
+function intT(int|string $value): Type
 {
+    $value = (string) $value;
+
     return new IntRangeT($value, $value);
 }
 
 /**
  * @api
+ * @param null|int|numeric-string $min
+ * @param null|int|numeric-string $max
  * @return Type<int>
  */
-function intRangeT(?int $min = null, ?int $max = null): Type
+function intRangeT(null|int|string $min = null, null|int|string $max = null): Type
 {
-    return new IntRangeT($min, $max);
+    return new IntRangeT(
+        $min === null ? null : (string) $min,
+        $max === null ? null : (string) $max,
+    );
 }
 
 const negativeIntT = NegativeIntT::T;

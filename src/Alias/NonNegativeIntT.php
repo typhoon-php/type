@@ -20,7 +20,7 @@ enum NonNegativeIntT implements Type
     public function accept(TypeVisitor $visitor): mixed
     {
         /** @var IntRangeT */
-        static $type = new IntRangeT(0, null);
+        static $type = new IntRangeT('0', null);
 
         return $visitor->intRange($type);
     }
