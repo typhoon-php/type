@@ -124,6 +124,16 @@ function unionT(Type|array $types, Type ...$moreTypes): Type
  * @no-named-arguments
  * @param Type|list<Type> $types
  */
+function orT(Type|array $types, Type ...$moreTypes): Type
+{
+    return unionT($types, ...$moreTypes);
+}
+
+/**
+ * @api
+ * @no-named-arguments
+ * @param Type|list<Type> $types
+ */
 function intersectionT(Type|array $types, Type ...$moreTypes): Type
 {
     $types = [...(\is_array($types) ? $types : [$types]), ...$moreTypes];
@@ -133,6 +143,16 @@ function intersectionT(Type|array $types, Type ...$moreTypes): Type
         1 => $types[0],
         default => new IntersectionT($types),
     };
+}
+
+/**
+ * @api
+ * @no-named-arguments
+ * @param Type|list<Type> $types
+ */
+function andT(Type|array $types, Type ...$moreTypes): Type
+{
+    return intersectionT($types, ...$moreTypes);
 }
 
 /**
