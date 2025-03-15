@@ -2,17 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Typhoon\Type\Visitor;
+namespace Typhoon\Type\Visitor\Internal;
 
 use Typhoon\Type\ClassStringT;
+use Typhoon\Type\DiffT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
+use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\StringValueT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\Type;
+use Typhoon\Type\UnionT;
+use Typhoon\Type\Visitor\DefaultTypeVisitor;
 use Typhoon\Type\VoidT;
 
 /**
@@ -75,6 +79,27 @@ final class TypeStringifier extends DefaultTypeVisitor
     public function resource(Type $type): mixed
     {
         return 'resource';
+    }
+
+    public function union(UnionT $type): mixed
+    {
+        return implode('|', array_map(
+            fn(Type $type): string => $type->accept($this),
+            $type->types,
+        ));
+    }
+
+    public function intersection(IntersectionT $type): mixed
+    {
+        return implode('&', array_map(
+            fn(Type $type): string => $type->accept($this),
+            $type->types,
+        ));
+    }
+
+    public function diff(DiffT $type): mixed
+    {
+        return \sprintf('%s\%s', $type->minuend->accept($this), $type->subtrahend->accept($this));
     }
 
     public function default(Type $type): mixed

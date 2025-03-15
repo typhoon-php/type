@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Typhoon\Type\Visitor\TypeStringifier;
+use Typhoon\Type\Visitor\Internal\TypeStringifier;
 
 /**
  * @api
