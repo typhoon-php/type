@@ -54,6 +54,10 @@ function intT(int|string $value): Type
  */
 function intRangeT(null|int|string $min = null, null|int|string $max = null): Type
 {
+    if ($min === null && $max === null) {
+        return IntT::T;
+    }
+
     return new IntRangeT(
         $min === null ? null : (string) $min,
         $max === null ? null : (string) $max,
@@ -93,6 +97,10 @@ function floatT(float|string $value): Type
  */
 function floatRangeT(null|float|string $min = null, null|float|string $max = null): Type
 {
+    if ($min === null && $max === null) {
+        return FloatT::T;
+    }
+
     if (\is_float($min)) {
         /** @var numeric-string */
         $min = \sprintf('%01.10F', $min);
