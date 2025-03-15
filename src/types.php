@@ -14,6 +14,7 @@ use Typhoon\Type\Alias\NonEmptyStringT;
 use Typhoon\Type\Alias\NonNegativeIntT;
 use Typhoon\Type\Alias\NonPositiveIntT;
 use Typhoon\Type\Alias\PositiveIntT;
+use Typhoon\Type\Alias\ScalarT;
 
 if (\defined('Typhoon\TypeGenerator\GENERATING')) {
     return;
@@ -103,6 +104,8 @@ const nonEmptyStringT = NonEmptyStringT::T;
 const resourceT = ResourceT::T;
 
 const arrayKeyT = ArrayKeyT::T;
+
+const scalarT = ScalarT::T;
 
 const mixedT = MixedT::T;
 

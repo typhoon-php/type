@@ -13,7 +13,7 @@ use Typhoon\Type\TypeVisitor;
 /**
  * @internal
  * @psalm-internal Typhoon\Type
- * @implements Type<int>
+ * @implements Type<non-empty-string>
  */
 enum NonEmptyStringT implements Type
 {
