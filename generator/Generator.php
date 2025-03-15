@@ -30,7 +30,6 @@ final class Generator
         self::generateTypes();
         self::generateVisitor();
         self::generateDefaultVisitor();
-        self::generateDereferenceVisitor();
     }
 
     private static function cleanUp(): void
@@ -96,26 +95,6 @@ final class Generator
             ->setReturnType('mixed')
             ->setComment('@return TResult')
             ->addParameter('type')->setType(Type::class);
-
-        self::writeClass($visitor, 'Visitor');
-    }
-
-    private static function generateDereferenceVisitor(): void
-    {
-        $visitor = (new EnumType('DereferenceTypeVisitor'))
-            ->addImplement(TypeVisitor::class)
-            ->setComment(self::GENERATED_NOTICE . "\n@api\n@implements TypeVisitor<Type>");
-
-        $visitor->addCase('Visitor');
-
-        foreach (self::types() as $type) {
-            $visitor
-                ->addMethod($type->name)
-                ->setPublic()
-                ->setReturnType('mixed')
-                ->setBody('return $type;')
-                ->addParameter('type')->setType($type->className());
-        }
 
         self::writeClass($visitor, 'Visitor');
     }
