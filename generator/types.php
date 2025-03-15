@@ -14,7 +14,7 @@ return [
     type('false', 'false'),
     type('true', 'true'),
     type('intRange', 'int')->prop('min', '?numeric-string')->prop('max', '?numeric-string'),
-    type('floatRange', 'float')->prop('min', '?float')->prop('max', '?float'),
+    type('floatRange', 'float')->prop('min', '?numeric-string')->prop('max', '?numeric-string'),
     type('stringValue', 'string')->prop('value', 'string'),
     type('string', 'string'),
     type('resource', 'resource'),

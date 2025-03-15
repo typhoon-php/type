@@ -12,15 +12,19 @@ namespace Typhoon\Type;
  */
 final class FloatRangeT implements Type
 {
-    public readonly ?float $min;
+    /** @var ?numeric-string */
+    public readonly ?string $min;
 
-    public readonly ?float $max;
+    /** @var ?numeric-string */
+    public readonly ?string $max;
 
     /**
      * @internal
      * @psalm-internal Typhoon\Type
+     * @param ?numeric-string $min
+     * @param ?numeric-string $max
      */
-    public function __construct(?float $min, ?float $max)
+    public function __construct(?string $min, ?string $max)
     {
         $this->min = $min;
         $this->max = $max;

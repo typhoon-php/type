@@ -72,19 +72,37 @@ const floatT = FloatT::T;
 
 /**
  * @api
+ * @param float|numeric-string $value
  * @return Type<float>
  */
-function floatT(float $value): Type
+function floatT(float|string $value): Type
 {
+    if (\is_float($value)) {
+        /** @var numeric-string */
+        $value = \sprintf('%01.10F', $value);
+    }
+
     return new FloatRangeT($value, $value);
 }
 
 /**
  * @api
+ * @param null|float|numeric-string $min
+ * @param null|float|numeric-string $max
  * @return Type<float>
  */
-function floatRangeT(?float $min = null, ?float $max = null): Type
+function floatRangeT(null|float|string $min = null, null|float|string $max = null): Type
 {
+    if (\is_float($min)) {
+        /** @var numeric-string */
+        $min = \sprintf('%01.10F', $min);
+    }
+
+    if (\is_float($max)) {
+        /** @var numeric-string */
+        $max = \sprintf('%01.10F', $max);
+    }
+
     return new FloatRangeT($min, $max);
 }
 
