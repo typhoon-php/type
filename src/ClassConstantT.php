@@ -12,7 +12,6 @@ namespace Typhoon\Type;
  */
 final class ClassConstantT implements Type
 {
-    /** @var Type<object> */
     public readonly Type $objectType;
 
     /** @var non-empty-string */
@@ -21,7 +20,6 @@ final class ClassConstantT implements Type
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param Type<object> $objectType
      * @param non-empty-string $name
      */
     public function __construct(Type $objectType, string $name)

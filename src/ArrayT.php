@@ -12,7 +12,6 @@ namespace Typhoon\Type;
  */
 final class ArrayT implements Type
 {
-    /** @var Type<array-key> */
     public readonly Type $keyType;
 
     public readonly Type $valueType;
@@ -23,7 +22,6 @@ final class ArrayT implements Type
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param Type<array-key> $keyType
      * @param array<ArrayElement> $elements
      */
     public function __construct(Type $keyType, Type $valueType, array $elements)

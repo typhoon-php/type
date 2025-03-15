@@ -18,7 +18,6 @@ final class CallableT implements Type
     /** @var list<Parameter> */
     public readonly array $parameters;
 
-    /** @var Type<mixed> */
     public readonly Type $returnType;
 
     /**
@@ -26,7 +25,6 @@ final class CallableT implements Type
      * @psalm-internal Typhoon\Type
      * @param list<TemplateT> $templates
      * @param list<Parameter> $parameters
-     * @param Type<mixed> $returnType
      */
     public function __construct(array $templates, array $parameters, Type $returnType)
     {

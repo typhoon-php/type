@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Typhoon\Type\Alias\MixedT;
-
 /**
  * @api
  */
@@ -19,10 +17,8 @@ final class Property
      * @internal
      * @psalm-internal Typhoon\Type
      */
-    public function __construct(
-        Type $type = MixedT::T,
-        bool $optional = false,
-    ) {
+    public function __construct(Type $type, bool $optional)
+    {
         $this->optional = $optional;
         $this->type = $type;
     }

@@ -12,7 +12,6 @@ namespace Typhoon\Type;
  */
 final class ClassConstantMaskT implements Type
 {
-    /** @var Type<object> */
     public readonly Type $objectType;
 
     public readonly string $namePrefix;
@@ -20,7 +19,6 @@ final class ClassConstantMaskT implements Type
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param Type<object> $objectType
      */
     public function __construct(Type $objectType, string $namePrefix)
     {

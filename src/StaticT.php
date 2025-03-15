@@ -8,12 +8,10 @@ namespace Typhoon\Type;
  * This code is generated, do not edit it.
  *
  * @api
- * @template TObject of object = object
- * @implements Type<TObject>
+ * @implements Type<object>
  */
 final class StaticT implements Type
 {
-    /** @var ?Type<TObject> */
     public readonly ?Type $resolvedObjectType;
 
     /** @var list<Type> */
@@ -22,7 +20,6 @@ final class StaticT implements Type
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param ?Type<TObject> $resolvedObjectType
      * @param list<Type> $templateArguments
      */
     public function __construct(?Type $resolvedObjectType, array $templateArguments)

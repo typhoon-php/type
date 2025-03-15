@@ -12,7 +12,6 @@ namespace Typhoon\Type;
  */
 final class AliasT implements Type
 {
-    /** @var Type<object> */
     public readonly Type $classType;
 
     /** @var non-empty-string */
@@ -24,7 +23,6 @@ final class AliasT implements Type
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param Type<object> $classType
      * @param non-empty-string $name
      * @param list<Type> $templateArguments
      */

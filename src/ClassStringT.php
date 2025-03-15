@@ -8,18 +8,15 @@ namespace Typhoon\Type;
  * This code is generated, do not edit it.
  *
  * @api
- * @template TObject of object = object
- * @implements Type<class-string<TObject>>
+ * @implements Type<class-string>
  */
 final class ClassStringT implements Type
 {
-    /** @var Type<TObject> */
     public readonly Type $objectType;
 
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param Type<TObject> $objectType
      */
     public function __construct(Type $objectType)
     {

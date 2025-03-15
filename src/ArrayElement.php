@@ -4,17 +4,11 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Typhoon\Type\Alias\MixedT;
-
 /**
  * @api
- * @template TType = mixed
  */
 final class ArrayElement
 {
-    /**
-     * @var Type<TType>
-     */
     public readonly Type $type;
 
     public readonly bool $optional;
@@ -22,14 +16,15 @@ final class ArrayElement
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param Type<TType> $type
      */
-    public function __construct(
-        Type $type = MixedT::T,
-        bool $optional = false,
-    ) {
-        /** @phpstan-ignore assign.propertyType */
+    public function __construct(Type $type, bool $optional)
+    {
         $this->type = $type;
         $this->optional = $optional;
+    }
+
+    public function withType(Type $type): self
+    {
+        return new self($type, $this->optional);
     }
 }
