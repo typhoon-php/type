@@ -10,6 +10,7 @@ use Typhoon\Type\Alias\FloatT;
 use Typhoon\Type\Alias\IntT;
 use Typhoon\Type\Alias\MixedT;
 use Typhoon\Type\Alias\NegativeIntT;
+use Typhoon\Type\Alias\NonEmptyStringT;
 use Typhoon\Type\Alias\NonNegativeIntT;
 use Typhoon\Type\Alias\NonPositiveIntT;
 use Typhoon\Type\Alias\PositiveIntT;
@@ -96,6 +97,8 @@ function stringT(string $value): Type
 {
     return new StringValueT($value);
 }
+
+const nonEmptyStringT = NonEmptyStringT::T;
 
 const resourceT = ResourceT::T;
 
