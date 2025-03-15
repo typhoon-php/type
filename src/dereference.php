@@ -9,7 +9,7 @@ use Typhoon\Type\Visitor\RecursiveTypeReplacer;
 /**
  * @api
  */
-function dereferenceType(Type $type): Type
+function dereference(Type $type): Type
 {
     /** @var ?RecursiveTypeReplacer */
     static $dereferencer = null;

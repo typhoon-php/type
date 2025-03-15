@@ -28,7 +28,8 @@
             "Typhoon\\Type\\": "src/"
         },
         "files": [
-            "src/dereferenceType.php",
+            "src/dereference.php",
+            "src/stringify.php",
             "src/types.php"
         ]
     },
