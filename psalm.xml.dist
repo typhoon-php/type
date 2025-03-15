@@ -39,6 +39,19 @@
         <classAndDescendants name="RuntimeException"/>
     </ignoreExceptions>
 
+    <issueHandlers>
+        <PluginIssue name="UnspecifiedVisibility">
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </PluginIssue>
+        <UnusedClass>
+            <errorLevel type="suppress">
+                <directory name="tests"/>
+            </errorLevel>
+        </UnusedClass>
+    </issueHandlers>
+
     <forbiddenFunctions>
         <function name="dd"/>
         <function name="die"/>

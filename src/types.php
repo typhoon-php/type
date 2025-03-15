@@ -15,6 +15,7 @@ use Typhoon\Type\Alias\NonNegativeIntT;
 use Typhoon\Type\Alias\NonPositiveIntT;
 use Typhoon\Type\Alias\PositiveIntT;
 use Typhoon\Type\Alias\ScalarT;
+use function Typhoon\Type\Internal\floatToString;
 
 if (\defined('Typhoon\TypeGenerator\GENERATING')) {
     return;
@@ -82,8 +83,7 @@ const floatT = FloatT::T;
 function floatT(float|string $value): Type
 {
     if (\is_float($value)) {
-        /** @var numeric-string */
-        $value = \sprintf('%01.10F', $value);
+        $value = floatToString($value);
     }
 
     return new FloatRangeT($value, $value);
@@ -102,13 +102,11 @@ function floatRangeT(null|float|string $min = null, null|float|string $max = nul
     }
 
     if (\is_float($min)) {
-        /** @var numeric-string */
-        $min = \sprintf('%01.10F', $min);
+        $min = floatToString($min);
     }
 
     if (\is_float($max)) {
-        /** @var numeric-string */
-        $max = \sprintf('%01.10F', $max);
+        $max = floatToString($max);
     }
 
     return new FloatRangeT($min, $max);

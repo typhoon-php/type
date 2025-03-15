@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Typhoon\Type\Visitor\Internal;
+namespace Typhoon\Type\Internal;
 
 use Typhoon\Type\ClassStringT;
 use Typhoon\Type\DiffT;

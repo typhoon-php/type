@@ -28,6 +28,7 @@
             "Typhoon\\Type\\": "src/"
         },
         "files": [
+            "src/Internal/floatToString.php",
             "src/dereference.php",
             "src/stringify.php",
             "src/types.php"
