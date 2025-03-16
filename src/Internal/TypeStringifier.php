@@ -53,11 +53,27 @@ final class TypeStringifier extends DefaultTypeVisitor
 
     public function intRange(IntRangeT $type): mixed
     {
+        if ($type->min === $type->max) {
+            if ($type->min === null) {
+                return 'int';
+            }
+
+            return $type->min;
+        }
+
         return \sprintf('int<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
     }
 
     public function floatRange(FloatRangeT $type): mixed
     {
+        if ($type->min === $type->max) {
+            if ($type->min === null) {
+                return 'float';
+            }
+
+            return $type->min;
+        }
+
         return \sprintf('float<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
     }
 
