@@ -65,21 +65,6 @@ interface TypeVisitor
     /**
      * @return TResult
      */
-    public function union(UnionT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function intersection(IntersectionT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function diff(DiffT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function list(ListT $type): mixed;
 
     /**
@@ -101,6 +86,26 @@ interface TypeVisitor
      * @return TResult
      */
     public function callable(CallableT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function template(TemplateT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function diff(DiffT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function intersection(IntersectionT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function union(UnionT $type): mixed;
 
     /**
      * @return TResult
@@ -141,9 +146,4 @@ interface TypeVisitor
      * @return TResult
      */
     public function static(StaticT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function template(TemplateT $type): mixed;
 }

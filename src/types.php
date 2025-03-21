@@ -127,6 +127,16 @@ const nonEmptyStringT = NonEmptyStringT::T;
 
 const resourceT = ResourceT::T;
 
+/**
+ * @api
+ * @param class-string $class
+ * @param list<Type> $templateArguments
+ */
+function objectT(string $class, array $templateArguments = []): Type
+{
+    return new NamedObjectT($class, $templateArguments);
+}
+
 const arrayKeyT = ArrayKeyT::T;
 
 const scalarT = ScalarT::T;

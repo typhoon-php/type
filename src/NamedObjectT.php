@@ -13,7 +13,7 @@ namespace Typhoon\Type;
 final class NamedObjectT implements Type
 {
     /** @var class-string */
-    public readonly string $name;
+    public readonly string $class;
 
     /** @var list<Type> */
     public readonly array $templateArguments;
@@ -21,12 +21,12 @@ final class NamedObjectT implements Type
     /**
      * @internal
      * @psalm-internal Typhoon\Type
-     * @param class-string $name
+     * @param class-string $class
      * @param list<Type> $templateArguments
      */
-    public function __construct(string $name, array $templateArguments)
+    public function __construct(string $class, array $templateArguments)
     {
-        $this->name = $name;
+        $this->class = $class;
         $this->templateArguments = $templateArguments;
     }
 

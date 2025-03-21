@@ -93,21 +93,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
         return $this->default($type);
     }
 
-    public function union(UnionT $type): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function intersection(IntersectionT $type): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function diff(DiffT $type): mixed
-    {
-        return $this->default($type);
-    }
-
     public function list(ListT $type): mixed
     {
         return $this->default($type);
@@ -129,6 +114,26 @@ abstract class DefaultTypeVisitor implements TypeVisitor
     }
 
     public function callable(CallableT $type): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function template(TemplateT $type): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function diff(DiffT $type): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function intersection(IntersectionT $type): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function union(UnionT $type): mixed
     {
         return $this->default($type);
     }
@@ -169,11 +174,6 @@ abstract class DefaultTypeVisitor implements TypeVisitor
     }
 
     public function static(StaticT $type): mixed
-    {
-        return $this->default($type);
-    }
-
-    public function template(TemplateT $type): mixed
     {
         return $this->default($type);
     }

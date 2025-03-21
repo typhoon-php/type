@@ -212,7 +212,7 @@ abstract class RecursiveTypeReplacer implements TypeVisitor
     public function namedObject(NamedObjectT $type): mixed
     {
         return new NamedObjectT(
-            name: $type->name,
+            class: $type->class,
             templateArguments: array_map(
                 fn(Type $type): Type => $type->accept($this),
                 $type->templateArguments,
