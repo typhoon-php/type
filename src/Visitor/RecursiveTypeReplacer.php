@@ -21,6 +21,7 @@ use Typhoon\Type\ListT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NullT;
+use Typhoon\Type\NumericStringT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\Parameter;
 use Typhoon\Type\ParentT;
@@ -79,6 +80,11 @@ abstract class RecursiveTypeReplacer implements TypeVisitor
     }
 
     public function stringValue(StringValueT $type): mixed
+    {
+        return $type;
+    }
+
+    public function numericString(NumericStringT $type): mixed
     {
         return $type;
     }

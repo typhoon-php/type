@@ -20,6 +20,7 @@ use Typhoon\Type\ListT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NullT;
+use Typhoon\Type\NumericStringT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\ParentT;
 use Typhoon\Type\ResourceT;
@@ -79,6 +80,11 @@ abstract class DefaultTypeVisitor implements TypeVisitor
     }
 
     public function stringValue(StringValueT $type): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function numericString(NumericStringT $type): mixed
     {
         return $this->default($type);
     }

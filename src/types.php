@@ -13,6 +13,7 @@ use Typhoon\Type\Alias\NegativeIntT;
 use Typhoon\Type\Alias\NonEmptyStringT;
 use Typhoon\Type\Alias\NonNegativeIntT;
 use Typhoon\Type\Alias\NonPositiveIntT;
+use Typhoon\Type\Alias\NumericT;
 use Typhoon\Type\Alias\PositiveIntT;
 use Typhoon\Type\Alias\ScalarT;
 use function Typhoon\Type\Internal\floatToString;
@@ -112,8 +113,6 @@ function floatRangeT(null|float|string $min = null, null|float|string $max = nul
     return new FloatRangeT($min, $max);
 }
 
-const stringT = StringT::T;
-
 /**
  * @api
  * @return Type<string>
@@ -124,6 +123,10 @@ function stringT(string $value): Type
 }
 
 const nonEmptyStringT = NonEmptyStringT::T;
+
+const numericStringT = NumericStringT::T;
+
+const stringT = StringT::T;
 
 const resourceT = ResourceT::T;
 
@@ -136,6 +139,8 @@ function objectT(string $class, array $templateArguments = []): Type
 {
     return new NamedObjectT($class, $templateArguments);
 }
+
+const numericT = NumericT::T;
 
 const arrayKeyT = ArrayKeyT::T;
 

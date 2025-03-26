@@ -55,6 +55,11 @@ interface TypeVisitor
     /**
      * @return TResult
      */
+    public function numericString(NumericStringT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function string(StringT $type): mixed;
 
     /**
