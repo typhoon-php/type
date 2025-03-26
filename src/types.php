@@ -13,6 +13,7 @@ use Typhoon\Type\Alias\NegativeIntT;
 use Typhoon\Type\Alias\NonEmptyStringT;
 use Typhoon\Type\Alias\NonNegativeIntT;
 use Typhoon\Type\Alias\NonPositiveIntT;
+use Typhoon\Type\Alias\NonZeroIntT;
 use Typhoon\Type\Alias\NumericT;
 use Typhoon\Type\Alias\PositiveIntT;
 use Typhoon\Type\Alias\ScalarT;
@@ -69,6 +70,8 @@ function intRangeT(null|int|string $min = null, null|int|string $max = null): Ty
 const negativeIntT = NegativeIntT::T;
 
 const nonPositiveIntT = NonPositiveIntT::T;
+
+const nonZeroIntT = NonZeroIntT::T;
 
 const nonNegativeIntT = NonNegativeIntT::T;
 
