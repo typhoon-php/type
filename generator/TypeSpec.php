@@ -109,7 +109,7 @@ final class PropertySpec
         }
 
         return ($nullable ? '?' : '') . match ($container) {
-            'numeric-string', 'non-empty-string', 'class-string' => 'string',
+            'numeric-string', 'non-empty-string', 'class-string', 'lowercase-string' => 'string',
             'list', 'non-empty-list' => 'array',
             'Variance' => Variance::class,
             'Type' => Type::class,

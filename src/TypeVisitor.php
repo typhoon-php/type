@@ -60,6 +60,11 @@ interface TypeVisitor
     /**
      * @return TResult
      */
+    public function lowercaseString(LowercaseStringT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function string(StringT $type): mixed;
 
     /**

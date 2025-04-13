@@ -17,6 +17,7 @@ return [
     type('floatRange', 'float')->prop('min', '?numeric-string')->prop('max', '?numeric-string'),
     type('stringValue', 'string')->prop('value', 'string'),
     type('numericString', 'numeric-string'),
+    type('lowercaseString', 'lowercase-string'),
     type('string', 'string'),
     type('resource', 'resource'),
     // compound

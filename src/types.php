@@ -129,6 +129,8 @@ const nonEmptyStringT = NonEmptyStringT::T;
 
 const numericStringT = NumericStringT::T;
 
+const lowercaseStringT = LowercaseStringT::T;
+
 const stringT = StringT::T;
 
 const resourceT = ResourceT::T;

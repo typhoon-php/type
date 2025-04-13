@@ -17,6 +17,7 @@ use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\ListT;
+use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NullT;
@@ -85,6 +86,11 @@ abstract class DefaultTypeVisitor implements TypeVisitor
     }
 
     public function numericString(NumericStringT $type): mixed
+    {
+        return $this->default($type);
+    }
+
+    public function lowercaseString(LowercaseStringT $type): mixed
     {
         return $this->default($type);
     }
