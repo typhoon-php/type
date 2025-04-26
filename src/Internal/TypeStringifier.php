@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Typhoon\Type\Internal;
 
 use Typhoon\Type\ClassStringT;
-use Typhoon\Type\DiffT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
+use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NonEmptyStringT;
 use Typhoon\Type\NullT;
+use Typhoon\Type\NumericStringT;
 use Typhoon\Type\StringValueT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\Type;
@@ -86,6 +87,16 @@ final class TypeStringifier extends DefaultTypeVisitor
     public function stringValue(StringValueT $type): mixed
     {
         return $this->escapeStringLiteral($type->value);
+    }
+
+    public function numericString(NumericStringT $type): mixed
+    {
+        return 'numeric-string';
+    }
+
+    public function lowercaseString(LowercaseStringT $type): mixed
+    {
+        return 'lowercase-string';
     }
 
     public function nonEmptyString(NonEmptyStringT $type): mixed
