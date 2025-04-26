@@ -10,7 +10,6 @@ use Typhoon\Type\Alias\FloatT;
 use Typhoon\Type\Alias\IntT;
 use Typhoon\Type\Alias\MixedT;
 use Typhoon\Type\Alias\NegativeIntT;
-use Typhoon\Type\Alias\NonEmptyStringT;
 use Typhoon\Type\Alias\NonNegativeIntT;
 use Typhoon\Type\Alias\NonPositiveIntT;
 use Typhoon\Type\Alias\NonZeroIntT;
@@ -214,22 +213,6 @@ function andT(Type|array $types, Type ...$moreTypes): Type
 function nullOrT(Type $type): Type
 {
     return new UnionT([NullT::T, $type]);
-}
-
-/**
- * @api
- */
-function diffT(Type $minuend, Type $subtrahend): Type
-{
-    return new DiffT($minuend, $subtrahend);
-}
-
-/**
- * @api
- */
-function notT(Type $type): Type
-{
-    return new DiffT(MixedT::T, $type);
 }
 
 /**

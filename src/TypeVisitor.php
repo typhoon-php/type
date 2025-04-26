@@ -65,6 +65,11 @@ interface TypeVisitor
     /**
      * @return TResult
      */
+    public function nonEmptyString(NonEmptyStringT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function string(StringT $type): mixed;
 
     /**
@@ -101,11 +106,6 @@ interface TypeVisitor
      * @return TResult
      */
     public function template(TemplateT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function diff(DiffT $type): mixed;
 
     /**
      * @return TResult

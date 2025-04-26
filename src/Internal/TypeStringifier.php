@@ -11,6 +11,7 @@ use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\NeverT;
+use Typhoon\Type\NonEmptyStringT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\StringValueT;
 use Typhoon\Type\TrueT;
@@ -87,6 +88,11 @@ final class TypeStringifier extends DefaultTypeVisitor
         return $this->escapeStringLiteral($type->value);
     }
 
+    public function nonEmptyString(NonEmptyStringT $type): mixed
+    {
+        return 'non-empty-string';
+    }
+
     public function classString(ClassStringT $type): mixed
     {
         return \sprintf('class-string<%s>', $type->objectType->accept($this));
@@ -111,11 +117,6 @@ final class TypeStringifier extends DefaultTypeVisitor
             fn(Type $type): string => $type->accept($this),
             $type->types,
         ));
-    }
-
-    public function diff(DiffT $type): mixed
-    {
-        return \sprintf('%s\%s', $type->minuend->accept($this), $type->subtrahend->accept($this));
     }
 
     public function default(Type $type): mixed

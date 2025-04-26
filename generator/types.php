@@ -18,6 +18,7 @@ return [
     type('stringValue', 'string')->prop('value', 'string'),
     type('numericString', 'numeric-string'),
     type('lowercaseString', 'lowercase-string'),
+    type('nonEmptyString', 'non-empty-string'),
     type('string', 'string'),
     type('resource', 'resource'),
     // compound
@@ -30,7 +31,6 @@ return [
     type('template', 'mixed')->prop('name', 'non-empty-string')->prop('variance', 'Variance')->prop('upperBound', 'Type'),
     // todo varianceAware
     // operation
-    type('diff', 'mixed')->prop('minuend', 'Type')->prop('subtrahend', 'Type'),
     type('intersection', 'mixed')->prop('types', 'non-empty-list<Type>'),
     type('union', 'mixed')->prop('types', 'non-empty-list<Type>'),
     // todo intMask, key, offset, is, conditional

@@ -12,14 +12,15 @@ use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClassStringT;
 use Typhoon\Type\ConstantT;
-use Typhoon\Type\DiffT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\ListT;
+use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NeverT;
+use Typhoon\Type\NonEmptyStringT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\ObjectT;
@@ -89,6 +90,16 @@ abstract class RecursiveTypeReplacer implements TypeVisitor
         return $type;
     }
 
+    public function lowercaseString(LowercaseStringT $type): mixed
+    {
+        return $type;
+    }
+
+    public function nonEmptyString(NonEmptyStringT $type): mixed
+    {
+        return $type;
+    }
+
     public function string(StringT $type): mixed
     {
         return $type;
@@ -113,14 +124,6 @@ abstract class RecursiveTypeReplacer implements TypeVisitor
             fn(Type $type): Type => $type->accept($this),
             $type->types,
         ));
-    }
-
-    public function diff(DiffT $type): mixed
-    {
-        return new DiffT(
-            minuend: $type->minuend->accept($this),
-            subtrahend: $type->subtrahend->accept($this),
-        );
     }
 
     public function list(ListT $type): mixed
