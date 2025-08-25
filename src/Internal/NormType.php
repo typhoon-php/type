@@ -12,4 +12,4 @@ use Typhoon\Type\Type;
  * @template TType = mixed
  * @extends Type<TType>
  */
-interface AtomicType extends Type {}
+interface NormType extends Type {}

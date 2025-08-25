@@ -12,7 +12,7 @@ use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
 use Symfony\Component\Finder\Finder;
-use Typhoon\Type\Internal\AtomicType;
+use Typhoon\Type\Internal\TermType;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 
@@ -49,9 +49,9 @@ final class Generator
     {
         foreach (self::types() as $type) {
             if ($type->properties === []) {
-                self::writeClass(self::generateAtomicType($type));
+                self::writeClass(self::generateEnumType($type));
             } else {
-                self::writeClass(self::generateComplexType($type));
+                self::writeClass(self::generateClassType($type));
             }
         }
     }
@@ -100,11 +100,11 @@ final class Generator
         self::writeClass($visitor, 'Visitor');
     }
 
-    private static function generateAtomicType(TypeSpec $type): EnumType
+    private static function generateEnumType(TypeSpec $type): EnumType
     {
         $enum = (new EnumType($type->shortClassName()))
-            ->setComment(self::GENERATED_NOTICE . "\n@api\n@implements AtomicType<{$type->type}>")
-            ->addImplement(AtomicType::class);
+            ->setComment(self::GENERATED_NOTICE . "\n@api\n@implements {$type->shortInterfaceName()}<{$type->type}>")
+            ->addImplement($type->interface);
         $enum->addCase('T');
         $enum->addMethod('accept')
             ->setReturnType('mixed')
@@ -114,11 +114,11 @@ final class Generator
         return $enum;
     }
 
-    private static function generateComplexType(TypeSpec $typeSpec): ClassType
+    private static function generateClassType(TypeSpec $type): ClassType
     {
         $typeComment = self::GENERATED_NOTICE . "\n@api";
 
-        foreach ($typeSpec->templates as $templateSpec) {
+        foreach ($type->templates as $templateSpec) {
             $typeComment .= \sprintf(
                 "\n@template %s%s%s",
                 $templateSpec->name,
@@ -127,18 +127,18 @@ final class Generator
             );
         }
 
-        $typeComment .= "\n@implements Type<{$typeSpec->type}>";
+        $typeComment .= "\n@implements {$type->shortInterfaceName()}<{$type->type}>";
 
-        $class = (new ClassType($typeSpec->shortClassName()))
+        $class = (new ClassType($type->shortClassName()))
             ->setFinal()
             ->setComment($typeComment)
-            ->addImplement(Type::class);
+            ->addImplement($type->interface);
 
         $constructorComment = "@internal\n@psalm-internal Typhoon\\Type";
         $constructorParams = [];
         $constructorBody = '';
 
-        foreach ($typeSpec->properties as $propertySpec) {
+        foreach ($type->properties as $propertySpec) {
             $nativeType = $propertySpec->nativeType();
             $class->addProperty($propertySpec->name)
                 ->setReadOnly()
@@ -158,7 +158,7 @@ final class Generator
         $class
             ->addMethod('accept')
             ->setReturnType('mixed')
-            ->addBody(\sprintf('return $visitor->%s($this);', $typeSpec->name))
+            ->addBody(\sprintf('return $visitor->%s($this);', $type->name))
             ->addParameter('visitor')->setType(TypeVisitor::class);
 
         return $class;
@@ -186,7 +186,7 @@ final class Generator
         $namespace = $file->addNamespace(new PhpNamespace(self::NAMESPACE . ($namespace === null ? '' : '\\' . $namespace)));
         $namespace->add($class);
         $namespace->addUse(Type::class);
-        $namespace->addUse(AtomicType::class);
+        $namespace->addUse(TermType::class);
 
         file_put_contents($fileName, (new PsrPrinter())->printFile($file));
     }
