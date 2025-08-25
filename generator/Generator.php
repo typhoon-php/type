@@ -12,6 +12,7 @@ use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
 use Symfony\Component\Finder\Finder;
+use Typhoon\Type\Internal\AtomicType;
 use Typhoon\Type\Type;
 use Typhoon\Type\TypeVisitor;
 
@@ -102,8 +103,8 @@ final class Generator
     private static function generateAtomicType(TypeSpec $type): EnumType
     {
         $enum = (new EnumType($type->shortClassName()))
-            ->setComment(self::GENERATED_NOTICE . "\n@api\n@implements Type<{$type->type}>")
-            ->addImplement(Type::class);
+            ->setComment(self::GENERATED_NOTICE . "\n@api\n@implements AtomicType<{$type->type}>")
+            ->addImplement(AtomicType::class);
         $enum->addCase('T');
         $enum->addMethod('accept')
             ->setReturnType('mixed')
@@ -185,6 +186,7 @@ final class Generator
         $namespace = $file->addNamespace(new PhpNamespace(self::NAMESPACE . ($namespace === null ? '' : '\\' . $namespace)));
         $namespace->add($class);
         $namespace->addUse(Type::class);
+        $namespace->addUse(AtomicType::class);
 
         file_put_contents($fileName, (new PsrPrinter())->printFile($file));
     }

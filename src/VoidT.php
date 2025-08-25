@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use Typhoon\Type\Internal\AtomicType;
+
 /**
  * This code is generated, do not edit it.
  *
  * @api
- * @implements Type<void>
+ * @implements AtomicType<void>
  */
-enum VoidT implements Type
+enum VoidT implements AtomicType
 {
     case T;
 

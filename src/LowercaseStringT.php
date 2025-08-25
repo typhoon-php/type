@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use Typhoon\Type\Internal\AtomicType;
+
 /**
  * This code is generated, do not edit it.
  *
  * @api
- * @implements Type<lowercase-string>
+ * @implements AtomicType<lowercase-string>
  */
-enum LowercaseStringT implements Type
+enum LowercaseStringT implements AtomicType
 {
     case T;
 
