@@ -4,25 +4,23 @@ declare(strict_types=1);
 
 namespace Typhoon\TypeGenerator;
 
-use Typhoon\Type\Internal\TermType;
-
 require_once __DIR__ . '/TypeSpec.php';
 
 return [
     // trivial
-    type('never', 'never', TermType::class),
-    type('void', 'void', TermType::class),
-    type('null', 'null', TermType::class),
-    type('false', 'false', TermType::class),
-    type('true', 'true', TermType::class),
+    type('never', 'never'),
+    type('void', 'void'),
+    type('null', 'null'),
+    type('false', 'false'),
+    type('true', 'true'),
     type('intRange', 'int')->prop('min', '?numeric-string')->prop('max', '?numeric-string'),
     type('floatRange', 'float')->prop('min', '?numeric-string')->prop('max', '?numeric-string'),
-    type('stringValue', 'string', TermType::class)->prop('value', 'string'),
-    type('numericString', 'numeric-string', TermType::class),
-    type('lowercaseString', 'lowercase-string', TermType::class),
-    type('nonEmptyString', 'non-empty-string', TermType::class),
-    type('string', 'string', TermType::class),
-    type('resource', 'resource', TermType::class),
+    type('stringValue', 'string')->prop('value', 'string'),
+    type('numericString', 'numeric-string'),
+    type('lowercaseString', 'lowercase-string'),
+    type('nonEmptyString', 'non-empty-string'),
+    type('string', 'string'),
+    type('resource', 'resource'),
     // compound
     type('list', 'list<mixed>')->prop('valueType', 'Type')->prop('elements', 'array<non-negative-int, ArrayElement>'),
     type('array', 'array<mixed>')->prop('keyType', 'Type')->prop('valueType', 'Type')->prop('elements', 'array<ArrayElement>'),

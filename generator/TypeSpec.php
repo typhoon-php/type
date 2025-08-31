@@ -12,14 +12,12 @@ final class TypeSpec
     /**
      * @param non-empty-string $name
      * @param non-empty-string $type
-     * @param class-string<Type> $interface
      * @param list<TemplateSpec> $templates
      * @param list<PropertySpec> $properties
      */
     public function __construct(
         public readonly string $name,
         public readonly string $type,
-        public readonly string $interface,
         public readonly array $templates = [],
         public readonly array $properties = [],
     ) {}
@@ -40,13 +38,6 @@ final class TypeSpec
         return 'Typhoon\Type\\' . $this->shortClassName();
     }
 
-    public function shortInterfaceName(): string
-    {
-        $interfaceParts = explode('\\', $this->interface);
-
-        return end($interfaceParts);
-    }
-
     /**
      * @param non-empty-string $name
      * @param ?non-empty-string $of
@@ -57,7 +48,6 @@ final class TypeSpec
         return new self(
             name: $this->name,
             type: $this->type,
-            interface: $this->interface,
             templates: [
                 ...$this->templates,
                 new TemplateSpec($name, $of, $default),
@@ -75,7 +65,6 @@ final class TypeSpec
         return new self(
             name: $this->name,
             type: $this->type,
-            interface: $this->interface,
             templates: $this->templates,
             properties: [
                 ...$this->properties,
@@ -132,9 +121,8 @@ final class PropertySpec
 /**
  * @param non-empty-string $name
  * @param non-empty-string $type
- * @param class-string<Type> $interface
  */
-function type(string $name, string $type, string $interface = Type::class): TypeSpec
+function type(string $name, string $type): TypeSpec
 {
-    return new TypeSpec($name, $type, $interface);
+    return new TypeSpec($name, $type);
 }

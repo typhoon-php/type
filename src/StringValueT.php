@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Typhoon\Type\Internal\TermType;
-
 /**
  * This code is generated, do not edit it.
  *
  * @api
- * @implements TermType<string>
+ * @implements Type<string>
  */
-final class StringValueT implements TermType
+final class StringValueT implements Type
 {
     public readonly string $value;
 

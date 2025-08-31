@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Typhoon\Type\Internal\TermType;
-
 /**
  * This code is generated, do not edit it.
  *
  * @api
- * @implements TermType<false>
+ * @implements Type<false>
  */
-enum FalseT implements TermType
+enum FalseT implements Type
 {
     case T;
 
