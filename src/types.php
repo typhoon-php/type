@@ -132,6 +132,8 @@ const lowercaseStringT = LowercaseStringT::T;
 
 const stringT = StringT::T;
 
+const arrayT = Alias\ArrayT::T;
+
 const resourceT = ResourceT::T;
 
 /**
@@ -151,6 +153,18 @@ const arrayKeyT = ArrayKeyT::T;
 const scalarT = ScalarT::T;
 
 const mixedT = MixedT::T;
+
+/**
+ * @api
+ */
+function arrayT(Type $keyType = arrayKeyT, Type $valueType = mixedT): Type
+{
+    return new ArrayT(
+        keyType: $keyType,
+        valueType: $valueType,
+        elements: [],
+    );
+}
 
 /**
  * @api
