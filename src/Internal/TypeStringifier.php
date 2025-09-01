@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Internal;
 
+use Typhoon\Type\ArrayT;
 use Typhoon\Type\ClassStringT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
@@ -107,6 +108,16 @@ final class TypeStringifier extends DefaultTypeVisitor
     public function classString(ClassStringT $type): mixed
     {
         return \sprintf('class-string<%s>', $type->objectType->accept($this));
+    }
+
+    public function array(ArrayT $type): mixed
+    {
+        return \sprintf(
+            '%sarray<%s, %s>',
+            $type->nonEmpty ? 'non-empty-' : '',
+            $type->keyType->accept($this),
+            $type->valueType->accept($this),
+        );
     }
 
     public function resource(Type $type): mixed
