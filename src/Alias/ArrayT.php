@@ -22,6 +22,7 @@ enum ArrayT implements Type
     {
         /** @var \Typhoon\Type\ArrayT */
         static $type = new \Typhoon\Type\ArrayT(
+            nonEmpty: false,
             keyType: arrayKeyT,
             valueType: mixedT,
             elements: [],

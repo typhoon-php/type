@@ -23,7 +23,7 @@ return [
     type('resource', 'resource'),
     // compound
     type('list', 'list<mixed>')->prop('valueType', 'Type')->prop('elements', 'array<non-negative-int, ArrayElement>'),
-    type('array', 'array<mixed>')->prop('keyType', 'Type')->prop('valueType', 'Type')->prop('elements', 'array<ArrayElement>'),
+    type('array', 'array<mixed>')->prop('nonEmpty', 'bool')->prop('keyType', 'Type')->prop('valueType', 'Type')->prop('elements', 'array<ArrayElement>'),
     type('classString', 'class-string')->prop('objectType', 'Type'),
     type('object', 'object')->prop('properties', 'array<non-empty-string, Property>'),
     type('callable', 'callable')->prop('templates', 'list<TemplateT>')->prop('parameters', 'list<Parameter>')->prop('returnType', 'Type'),

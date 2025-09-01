@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Alias;
 
-use Typhoon\Type\ArrayT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\ObjectT;
@@ -34,7 +33,7 @@ enum MixedT implements Type
             IntT::T,
             FloatT::T,
             StringT::T,
-            new ArrayT(ArrayKeyT::T, self::T, []),
+            ArrayT::T,
             new ObjectT([]),
             ResourceT::T,
         ]);

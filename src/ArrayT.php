@@ -12,6 +12,8 @@ namespace Typhoon\Type;
  */
 final class ArrayT implements Type
 {
+    public readonly bool $nonEmpty;
+
     public readonly Type $keyType;
 
     public readonly Type $valueType;
@@ -24,8 +26,9 @@ final class ArrayT implements Type
      * @psalm-internal Typhoon\Type
      * @param array<ArrayElement> $elements
      */
-    public function __construct(Type $keyType, Type $valueType, array $elements)
+    public function __construct(bool $nonEmpty, Type $keyType, Type $valueType, array $elements)
     {
+        $this->nonEmpty = $nonEmpty;
         $this->keyType = $keyType;
         $this->valueType = $valueType;
         $this->elements = $elements;

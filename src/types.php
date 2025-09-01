@@ -160,6 +160,20 @@ const mixedT = MixedT::T;
 function arrayT(Type $keyType = arrayKeyT, Type $valueType = mixedT): Type
 {
     return new ArrayT(
+        nonEmpty: false,
+        keyType: $keyType,
+        valueType: $valueType,
+        elements: [],
+    );
+}
+
+/**
+ * @api
+ */
+function nonEmptyArrayT(Type $keyType = arrayKeyT, Type $valueType = mixedT): Type
+{
+    return new ArrayT(
+        nonEmpty: true,
         keyType: $keyType,
         valueType: $valueType,
         elements: [],

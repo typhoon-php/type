@@ -143,6 +143,7 @@ abstract class RecursiveTypeReplacer implements TypeVisitor
     public function array(ArrayT $type): mixed
     {
         return new ArrayT(
+            nonEmpty: $type->nonEmpty,
             keyType: $type->keyType->accept($this),
             valueType: $type->valueType->accept($this),
             elements: array_map(
