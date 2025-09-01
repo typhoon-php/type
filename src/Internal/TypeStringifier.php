@@ -21,6 +21,7 @@ use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
 use Typhoon\Type\Visitor\DefaultTypeVisitor;
 use Typhoon\Type\VoidT;
+use function Typhoon\Type\stringify;
 
 /**
  * @internal
@@ -107,7 +108,7 @@ final class TypeStringifier extends DefaultTypeVisitor
 
     public function classString(ClassStringT $type): mixed
     {
-        return \sprintf('class-string<%s>', $type->objectType->accept($this));
+        return \sprintf('class-string<%s>', stringify($type->objectType));
     }
 
     public function array(ArrayT $type): mixed
@@ -115,8 +116,8 @@ final class TypeStringifier extends DefaultTypeVisitor
         return \sprintf(
             '%sarray<%s, %s>',
             $type->nonEmpty ? 'non-empty-' : '',
-            $type->keyType->accept($this),
-            $type->valueType->accept($this),
+            stringify($type->keyType),
+            stringify($type->valueType),
         );
     }
 
@@ -127,18 +128,12 @@ final class TypeStringifier extends DefaultTypeVisitor
 
     public function union(UnionT $type): mixed
     {
-        return implode('|', array_map(
-            fn(Type $type): string => $type->accept($this),
-            $type->types,
-        ));
+        return implode('|', array_map(stringify(...), $type->types));
     }
 
     public function intersection(IntersectionT $type): mixed
     {
-        return implode('&', array_map(
-            fn(Type $type): string => $type->accept($this),
-            $type->types,
-        ));
+        return implode('&', array_map(stringify(...), $type->types));
     }
 
     public function default(Type $type): mixed
