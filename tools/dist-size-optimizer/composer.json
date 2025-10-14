@@ -1,0 +1,5 @@
+{
+    "require-dev": {
+        "savinmikhail/dist-size-optimizer": "^0.2.6"
+    }
+}
