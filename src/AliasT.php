@@ -5,35 +5,25 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<mixed>
  */
-final class AliasT implements Type
+final readonly class AliasT implements Type
 {
-    public readonly Type $classType;
-
-    /** @var non-empty-string */
-    public readonly string $name;
-
-    /** @var list<Type> */
-    public readonly array $templateArguments;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
+     * @param class-string $class
      * @param non-empty-string $name
      * @param list<Type> $templateArguments
      */
-    public function __construct(Type $classType, string $name, array $templateArguments)
-    {
-        $this->classType = $classType;
-        $this->name = $name;
-        $this->templateArguments = $templateArguments;
-    }
+    public function __construct(
+        public string $class,
+        public string $name,
+        public array $templateArguments = [],
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->alias($this);
     }

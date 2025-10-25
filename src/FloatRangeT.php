@@ -5,32 +5,23 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<float>
  */
-final class FloatRangeT implements Type
+final readonly class FloatRangeT implements Type
 {
-    /** @var ?numeric-string */
-    public readonly ?string $min;
-
-    /** @var ?numeric-string */
-    public readonly ?string $max;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
-     * @param ?numeric-string $min
-     * @param ?numeric-string $max
+     * @param null|int|float|numeric-string $min
+     * @param null|int|float|numeric-string $max
      */
-    public function __construct(?string $min, ?string $max)
-    {
-        $this->min = $min;
-        $this->max = $max;
-    }
+    public function __construct(
+        public null|int|float|string $min = null,
+        public null|int|float|string $max = null,
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->floatRange($this);
     }

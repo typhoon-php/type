@@ -5,27 +5,21 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<mixed>
  */
-final class UnionT implements Type
+final readonly class UnionT implements Type
 {
-    /** @var non-empty-list<Type> */
-    public readonly array $types;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
-     * @param non-empty-list<Type> $types
+     * @param non-empty-list<Type> $of
      */
-    public function __construct(array $types)
-    {
-        $this->types = $types;
-    }
+    public function __construct(
+        public array $of,
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->union($this);
     }

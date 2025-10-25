@@ -5,25 +5,18 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<class-string>
  */
-final class ClassStringT implements Type
+final readonly class ClassStringT implements Type
 {
-    public readonly Type $objectType;
+    public function __construct(
+        public Type $of,
+    ) {}
 
-    /**
-     * @internal
-     * @psalm-internal Typhoon\Type
-     */
-    public function __construct(Type $objectType)
-    {
-        $this->objectType = $objectType;
-    }
-
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->classString($this);
     }

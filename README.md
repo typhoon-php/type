@@ -150,12 +150,12 @@ use [DefaultTypeVisitor](../src/Type/DefaultTypeVisitor.php) for simple checks:
 ```php
 use Typhoon\Type\Type;
 use Typhoon\Type\types;
-use Typhoon\Type\Visitor\DefaultTypeVisitor;
+use Typhoon\Type\Visitor\Fallback;
 
 /**
- * @extends DefaultTypeVisitor<bool>
+ * @extends Fallback<bool>
  */
-final class BasicIntChecker extends DefaultTypeVisitor
+final class BasicIntChecker extends Fallback
 {
     public function int(Type $type, Type $minType, Type $maxType): mixed
     {

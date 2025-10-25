@@ -5,30 +5,23 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
- * @implements Type<list<mixed>>
+ * @implements Type<list>
  */
-final class ListT implements Type
+final readonly class ListT implements Type
 {
-    public readonly Type $valueType;
-
-    /** @var array<non-negative-int, ArrayElement> */
-    public readonly array $elements;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
      * @param array<non-negative-int, ArrayElement> $elements
      */
-    public function __construct(Type $valueType, array $elements)
-    {
-        $this->valueType = $valueType;
-        $this->elements = $elements;
-    }
+    public function __construct(
+        public Type $value,
+        public array $elements = [],
+        public bool $isNonEmpty = false,
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->list($this);
     }

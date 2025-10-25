@@ -12,8 +12,8 @@ interface Type
 {
     /**
      * @template TResult
-     * @param TypeVisitor<TResult> $visitor
+     * @param Visitor<TResult> $visitor
      * @return TResult
      */
-    public function accept(TypeVisitor $visitor): mixed;
+    public function accept(Visitor $visitor): mixed;
 }

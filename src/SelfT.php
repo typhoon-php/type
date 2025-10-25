@@ -5,30 +5,21 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<object>
  */
-final class SelfT implements Type
+final readonly class SelfT implements Type
 {
-    public readonly ?Type $resolvedObjectType;
-
-    /** @var list<Type> */
-    public readonly array $templateArguments;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
      * @param list<Type> $templateArguments
      */
-    public function __construct(?Type $resolvedObjectType, array $templateArguments)
-    {
-        $this->resolvedObjectType = $resolvedObjectType;
-        $this->templateArguments = $templateArguments;
-    }
+    public function __construct(
+        public array $templateArguments = [],
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->self($this);
     }

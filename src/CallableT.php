@@ -5,35 +5,24 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<callable>
  */
-final class CallableT implements Type
+final readonly class CallableT implements Type
 {
-    /** @var list<TemplateT> */
-    public readonly array $templates;
-
-    /** @var list<Parameter> */
-    public readonly array $parameters;
-
-    public readonly Type $returnType;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
-     * @param list<TemplateT> $templates
+     * @param list<Template<Variance::Invariant>> $templates
      * @param list<Parameter> $parameters
      */
-    public function __construct(array $templates, array $parameters, Type $returnType)
-    {
-        $this->templates = $templates;
-        $this->parameters = $parameters;
-        $this->returnType = $returnType;
-    }
+    public function __construct(
+        public array $templates = [],
+        public array $parameters = [],
+        public Type $returns = MixedT::T,
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->callable($this);
     }

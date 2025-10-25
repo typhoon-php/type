@@ -5,27 +5,21 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<mixed>
  */
-final class ConstantT implements Type
+final readonly class ConstantT implements Type
 {
-    /** @var non-empty-string */
-    public readonly string $name;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
      * @param non-empty-string $name
      */
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
+    public function __construct(
+        public string $name,
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->constant($this);
     }

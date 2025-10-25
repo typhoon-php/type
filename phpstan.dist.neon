@@ -1,6 +1,7 @@
 parameters:
     level: max
     paths:
+        - generator
         - src
         - tests
     checkBenevolentUnionTypes: true

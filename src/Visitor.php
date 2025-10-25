@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @template-covariant TResult
  */
-interface TypeVisitor
+interface Visitor
 {
     /**
      * @return TResult
@@ -45,12 +45,22 @@ interface TypeVisitor
     /**
      * @return TResult
      */
+    public function intMaskOf(IntMaskOfT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function floatRange(FloatRangeT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function stringValue(StringValueT $type): mixed;
+    public function string(StringT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function nonEmptyString(NonEmptyStringT $type): mixed;
 
     /**
      * @return TResult
@@ -65,17 +75,12 @@ interface TypeVisitor
     /**
      * @return TResult
      */
-    public function nonEmptyString(NonEmptyStringT $type): mixed;
+    public function stringValue(StringValueT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function string(StringT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function resource(ResourceT $type): mixed;
+    public function classString(ClassStringT $type): mixed;
 
     /**
      * @return TResult
@@ -90,7 +95,12 @@ interface TypeVisitor
     /**
      * @return TResult
      */
-    public function classString(ClassStringT $type): mixed;
+    public function keyOf(KeyOfT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function offset(OffsetT $type): mixed;
 
     /**
      * @return TResult
@@ -100,22 +110,27 @@ interface TypeVisitor
     /**
      * @return TResult
      */
+    public function self(SelfT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function parent(ParentT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function static(StaticT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function callable(CallableT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function template(TemplateT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function intersection(IntersectionT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function union(UnionT $type): mixed;
+    public function resource(ResourceT $type): mixed;
 
     /**
      * @return TResult
@@ -135,7 +150,7 @@ interface TypeVisitor
     /**
      * @return TResult
      */
-    public function namedObject(NamedObjectT $type): mixed;
+    public function template(TemplateT $type): mixed;
 
     /**
      * @return TResult
@@ -145,15 +160,25 @@ interface TypeVisitor
     /**
      * @return TResult
      */
-    public function self(SelfT $type): mixed;
+    public function intersection(IntersectionT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function parent(ParentT $type): mixed;
+    public function union(UnionT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function static(StaticT $type): mixed;
+    public function isSubtype(IsSubtypeT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function ternary(TernaryT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function shortcut(Shortcut $type): mixed;
 }

@@ -5,36 +5,24 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<array<mixed>>
  */
-final class ArrayT implements Type
+final readonly class ArrayT implements Type
 {
-    public readonly bool $nonEmpty;
-
-    public readonly Type $keyType;
-
-    public readonly Type $valueType;
-
-    /** @var array<ArrayElement> */
-    public readonly array $elements;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
      * @param array<ArrayElement> $elements
      */
-    public function __construct(bool $nonEmpty, Type $keyType, Type $valueType, array $elements)
-    {
-        $this->nonEmpty = $nonEmpty;
-        $this->keyType = $keyType;
-        $this->valueType = $valueType;
-        $this->elements = $elements;
-    }
+    public function __construct(
+        public Type $key = ArrayKeyT::T,
+        public Type $value = MixedT::T,
+        public array $elements = [],
+        public bool $isNonEmpty = false,
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->array($this);
     }

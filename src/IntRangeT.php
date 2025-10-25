@@ -5,32 +5,23 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * This code is generated, do not edit it.
+ * This class is generated, do not edit it.
  *
  * @api
  * @implements Type<int>
  */
-final class IntRangeT implements Type
+final readonly class IntRangeT implements Type
 {
-    /** @var ?numeric-string */
-    public readonly ?string $min;
-
-    /** @var ?numeric-string */
-    public readonly ?string $max;
-
     /**
-     * @internal
-     * @psalm-internal Typhoon\Type
-     * @param ?numeric-string $min
-     * @param ?numeric-string $max
+     * @param null|int|numeric-string $min
+     * @param null|int|numeric-string $max
      */
-    public function __construct(?string $min, ?string $max)
-    {
-        $this->min = $min;
-        $this->max = $max;
-    }
+    public function __construct(
+        public null|int|string $min = null,
+        public null|int|string $max = null,
+    ) {}
 
-    public function accept(TypeVisitor $visitor): mixed
+    public function accept(Visitor $visitor): mixed
     {
         return $visitor->intRange($this);
     }

@@ -12,5 +12,4 @@ enum Variance
     case Invariant;
     case Covariant;
     case Contravariant;
-    case Bivariant;
 }
