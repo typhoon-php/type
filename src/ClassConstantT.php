@@ -1,14 +1,17 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
- * This class is generated, do not edit it.
- *
  * @api
- * @implements Type<mixed>
+ * @template-covariant T = mixed
+ * @implements Type<T>
  */
 final readonly class ClassConstantT implements Type
 {
@@ -16,7 +19,7 @@ final readonly class ClassConstantT implements Type
      * @param non-empty-string $name
      */
     public function __construct(
-        public Type $on,
+        public Type $class,
         public string $name,
     ) {}
 

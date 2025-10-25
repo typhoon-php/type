@@ -9,4 +9,3 @@ jobs:
     secrets: inherit
     with:
       infection: false
-      psalm: true

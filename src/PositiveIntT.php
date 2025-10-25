@@ -1,27 +1,23 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
  * @api
- * @implements Shortcut<positive-int>
+ * @implements Type<positive-int>
  */
-enum PositiveIntT implements Shortcut
+enum PositiveIntT implements Type
 {
     case T;
 
-    public function dereference(): Type
-    {
-        static $type = new IntRangeT('1', null);
-
-        /** @var Type<positive-int> */
-        return $type;
-    }
-
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->shortcut($this);
+        return $visitor->positiveInt($this);
     }
 }

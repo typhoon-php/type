@@ -1,22 +1,25 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
- * This class is generated, do not edit it.
- *
  * @api
- * @implements Type<mixed>
+ * @template-covariant T = mixed
+ * @implements Type<T>
  */
 final readonly class IntersectionT implements Type
 {
     /**
-     * @param non-empty-list<Type> $of
+     * @param non-empty-list<Type> $types
      */
     public function __construct(
-        public array $of,
+        public array $types,
     ) {}
 
     public function accept(Visitor $visitor): mixed

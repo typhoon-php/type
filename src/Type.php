@@ -6,7 +6,7 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @template TType = mixed
+ * @template-covariant T = mixed
  */
 interface Type
 {

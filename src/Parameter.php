@@ -12,7 +12,7 @@ final readonly class Parameter
     public function __construct(
         public Type $type,
         public bool $hasDefault = false,
-        public bool $variadic = false,
-        public bool $byReference = false,
+        public bool $isVariadic = false,
+        public bool $isPassedByReference = false,
     ) {}
 }

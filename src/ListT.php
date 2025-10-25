@@ -1,22 +1,26 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
- * This class is generated, do not edit it.
- *
  * @api
- * @implements Type<list>
+ * @template-covariant V = mixed
+ * @implements Type<list<V>>
  */
 final readonly class ListT implements Type
 {
     /**
+     * @param Type<V> $value
      * @param array<non-negative-int, ArrayElement> $elements
      */
     public function __construct(
-        public Type $value,
+        public Type $value = MixedT::T,
         public array $elements = [],
         public bool $isNonEmpty = false,
     ) {}

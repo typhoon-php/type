@@ -2,54 +2,36 @@
 
 declare(strict_types=1);
 
-namespace Typhoon\TypeGenerator;
+namespace Typhoon\Type\Generator;
 
+use Nette\PhpGenerator\ClassLike;
 use Nette\PhpGenerator\ClassType;
-use Nette\PhpGenerator\EnumType;
 use Nette\PhpGenerator\InterfaceType;
+use Nette\PhpGenerator\Method;
+use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
-use Nette\PhpGenerator\PromotedParameter;
 use Nette\PhpGenerator\PsrPrinter;
 use Symfony\Component\Finder\Finder;
-use Typhoon\Type\Shortcut;
-use Typhoon\Type\TemplateT;
-use Typhoon\Type\Type;
+use Typhoon\Type\Generator\Spec\Type;
+use Typhoon\Type\Type as TypeI;
 use Typhoon\Type\Visitor;
 
 final readonly class Generator
 {
-    private const GENERATED_NOTICE = 'This class is generated, do not edit it.';
+    private const GENERATED_NOTICE = '@generated This file was generated, do not edit manually.';
     private const NAMESPACE = 'Typhoon\Type';
 
-    public static function generate(): void
-    {
-        require_once __DIR__ . '/../vendor/autoload.php';
-
-        /** @var non-empty-list<TypeSpec> */
-        $types = require __DIR__ . '/types.php';
-
-        $generator = new self(
-            types: $types,
-            srcDir: __DIR__ . '/../src',
-        );
-        $generator->cleanUp();
-        $generator->generateTypes();
-        $generator->generateVisitor();
-        $generator->generateFallbackVisitor();
-        $generator->updateStringifyVisitor();
-    }
-
     /**
-     * @param non-empty-list<TypeSpec> $types
      * @param non-empty-string $srcDir
+     * @param non-empty-list<Type> $types
      */
-    private function __construct(
-        private array $types,
+    public function __construct(
         private string $srcDir,
+        private array $types,
     ) {}
 
-    private function cleanUp(): void
+    public function cleanUp(): void
     {
         $files = Finder::create()
             ->in($this->srcDir)
@@ -61,226 +43,151 @@ final readonly class Generator
         }
     }
 
-    private function generateTypes(): void
+    public function generateTypes(): void
     {
         foreach ($this->types as $type) {
-            if ($type->properties === [] && !$type->class) {
-                $this->writeClass($this->generateAtomicType($type));
-            } else {
-                $this->writeClass($this->generateComplexType($type));
-            }
+            $this->write($this->createNamespace()->add($type->class()));
         }
     }
 
-    private function generateAtomicType(TypeSpec $type): EnumType
-    {
-        $enum = (new EnumType($type->shortClassName()))
-            ->setComment(self::GENERATED_NOTICE . "\n\n@api\n@implements Type<{$type->type}>")
-            ->addImplement(Type::class);
-        $enum->addCase('T');
-        $enum->addMethod('accept')
-            ->setReturnType('mixed')
-            ->addBody("return \$visitor->{$type->name}(\$this);")
-            ->addParameter('visitor')->setType(Visitor::class);
-
-        return $enum;
-    }
-
-    private function generateComplexType(TypeSpec $typeSpec): ClassType
-    {
-        $typeComment = self::GENERATED_NOTICE . "\n\n@api";
-
-        foreach ($typeSpec->templates as $templateSpec) {
-            $typeComment .= \sprintf(
-                "\n@template %s%s%s",
-                $templateSpec->name,
-                $templateSpec->of === null ? '' : ' of ' . $templateSpec->of,
-                $templateSpec->default === null ? '' : ' = ' . $templateSpec->default,
-            );
-        }
-
-        $typeComment .= "\n@implements Type<{$typeSpec->phpstanType()}>";
-
-        $class = (new ClassType($typeSpec->shortClassName()))
-            ->setFinal()
-            ->setReadOnly()
-            ->setComment($typeComment)
-            ->addImplement(Type::class);
-
-        if ($typeSpec->properties !== []) {
-            $constructorComment = '';
-            $constructorParams = [];
-
-            foreach ($typeSpec->properties as $propertySpec) {
-                $constructorComment .= \sprintf("\n@param %s $%s", $propertySpec->type, $propertySpec->name);
-                $parameter = (new PromotedParameter($propertySpec->name))
-                    ->setReadOnly()
-                    ->setType($propertySpec->nativeType());
-
-                [$hasDefault, $defaultValue] = $propertySpec->default();
-
-                if ($hasDefault) {
-                    $parameter->setDefaultValue($defaultValue);
-                }
-
-                $constructorParams[] = $parameter;
-            }
-
-            $class
-                ->addMethod('__construct')
-                ->setComment($constructorComment)
-                ->setParameters($constructorParams);
-        }
-
-        $class
-            ->addMethod('accept')
-            ->setReturnType('mixed')
-            ->addBody(\sprintf('return $visitor->%s($this);', $typeSpec->name))
-            ->addParameter('visitor')->setType(Visitor::class);
-
-        return $class;
-    }
-
-    private function generateVisitor(): void
+    public function generateVisitor(): void
     {
         $visitor = (new InterfaceType('Visitor'))
-            ->setComment(self::GENERATED_NOTICE . "\n\n@api\n@template-covariant TResult");
+            ->setComment(
+                <<<'PHPDOC'
+                    @api
+                    @template-covariant TResult
+                    PHPDOC,
+            );
 
         foreach ($this->types as $type) {
-            $visitor
-                ->addMethod($type->name)
-                ->setPublic()
-                ->setReturnType('mixed')
-                ->setComment('@return TResult')
-                ->addParameter('type')->setType($type->className());
+            $visitor->addMember($type->visitorMethod());
         }
 
-        $visitor
-            ->addMethod('shortcut')
-            ->setPublic()
-            ->setReturnType('mixed')
-            ->setComment('@return TResult')
-            ->addParameter('type')->setType(Shortcut::class);
-
-        $this->writeClass($visitor);
+        $this->write($this->createNamespace()->add($visitor));
     }
 
-    private function generateFallbackVisitor(): void
+    public function generateReduced(): void
+    {
+        $visitor = (new ClassType('Reduced'))
+            ->addImplement(Visitor::class)
+            ->setAbstract()
+            ->setComment(
+                <<<'PHPDOC'
+                    @api
+                    @template-covariant TResult
+                    @implements Visitor<TResult>
+                    PHPDOC,
+            );
+
+        foreach ($this->types as $type) {
+            if ($type->isReducible()) {
+                $visitor->addMember($type->reducedMethod($this->types));
+            }
+        }
+
+        $this->write($this->createNamespace('Visitor')->add($visitor));
+    }
+
+    public function generateFallback(): void
     {
         $visitor = (new ClassType('Fallback'))
+            ->setExtends(Visitor::class . '\Reduced')
             ->setAbstract()
-            ->addImplement(Visitor::class)
-            ->setComment(self::GENERATED_NOTICE . "\n\n@api\n@template-covariant TResult\n@implements Visitor<TResult>");
+            ->setComment(
+                <<<'PHPDOC'
+                    @api
+                    @template-covariant TResult
+                    @extends Reduced<TResult>
+                    PHPDOC,
+            );
 
         foreach ($this->types as $type) {
-            $visitor
-                ->addMethod($type->name)
-                ->setPublic()
-                ->setReturnType('mixed')
-                ->setBody('return $this->fallback($type);')
-                ->addParameter('type')->setType($type->className());
+            if (!$type->isReducible()) {
+                $visitor->addMember($type->fallbackMethod());
+            }
         }
 
-        $visitor
-            ->addMethod('shortcut')
-            ->setPublic()
-            ->setReturnType('mixed')
-            ->setBody('return $this->fallback($type);')
-            ->addParameter('type')->setType(Shortcut::class);
-
-        $visitor
-            ->addMethod('fallback')
-            ->setPublic()
+        $visitor->addMethod('fallback')
             ->setAbstract()
+            ->setProtected()
             ->setReturnType('mixed')
             ->setComment('@return TResult')
-            ->addParameter('type')->setType(Type::class);
+            ->setParameters([
+                (new Parameter('type'))->setType(TypeI::class),
+            ]);
 
-        $this->writeClass($visitor, 'Visitor');
+        $this->write($this->createNamespace('Visitor')->add($visitor));
     }
 
-    private function updateStringifyVisitor(): void
+    public function generateStringify(): void
     {
-        $code = file_get_contents($this->srcDir . '/Visitor/Stringify.php');
+        $code = file_get_contents(__DIR__ . '/Visitor/Stringify.php');
         \assert($code !== false);
 
-        $existing = ClassType::fromCode($code);
+        $file = PhpFile::fromCode($code);
 
-        $new = (new ClassType('Stringify'))
-            ->setAbstract()
-            ->addImplement(Visitor::class)
-            ->setComment("This class is partially generated, be careful when editing it.\n\n@api\n@implements Visitor<non-empty-string>")
-            ->setConstants($existing->getConstants())
-            ->setProperties($existing->getProperties());
+        $namespace = array_first($file->getNamespaces());
+        \assert($namespace instanceof PhpNamespace);
 
-        if ($existing->hasMethod('__construct')) {
-            $new->addMember($existing->getMethod('__construct'));
-        }
+        (new \ReflectionClass($namespace))->getProperty('name')->setValue($namespace, self::NAMESPACE . '\Visitor');
+
+        $visitor = array_first($namespace->getClasses());
+        \assert($visitor instanceof ClassType);
 
         foreach ($this->types as $type) {
-            $method = $new
-                ->addMethod($type->name)
-                ->setPublic()
-                ->setReturnType('string');
-
-            $method->addParameter('type')->setType($type->className());
-
-            if ($type->properties === [] && !$type->class) {
-                $method->setBody("return '{$type->type}';");
-
-                continue;
-            }
-
-            if ($existing->hasMethod($type->name)) {
-                $method->setBody($existing->getMethod($type->name)->getBody());
-
-                continue;
-            }
-
-            $method->setBody("// todo\nreturn '{$type->name}';");
-        }
-
-        $new
-            ->addMethod('shortcut')
-            ->setPublic()
-            ->setReturnType('string')
-            ->setBody($existing->hasMethod('shortcut') ? $existing->getMethod('shortcut')->getBody() : '// todo')
-            ->addParameter('type')->setType(Shortcut::class);
-
-        foreach ($existing->getMethods() as $method) {
-            if ($method->isPrivate()) {
-                $new->addMember($method);
+            if (!$visitor->hasMethod($type->name)) {
+                $visitor->addMember($type->stringifyMethod());
             }
         }
 
-        $this->writeClass($new, 'Visitor', static function (PhpNamespace $namespace): void {
-            $namespace
-                ->addUse(Type::class)
-                ->addUse(TemplateT::class);
-        });
+        $orderMap = array_combine(array_column($this->types, 'name'), array_keys($this->types));
+        $methods = $visitor->getMethods();
+
+        usort($methods, static fn(Method $a, Method $b): int => ($orderMap[$a->getName()] ?? -1) <=> ($orderMap[$b->getName()] ?? -1));
+
+        $visitor->setMethods($methods);
+
+        $this->write($namespace);
+    }
+
+    private function write(PhpNamespace $namespace): void
+    {
+        $file = (new PhpFile())
+            ->setStrictTypes()
+            ->setComment(self::GENERATED_NOTICE);
+
+        $file->addNamespace($namespace);
+
+        file_put_contents($this->resolveFileName($namespace), (new PsrPrinter())->printFile($file));
     }
 
     /**
-     * @param ?callable(PhpNamespace): void $processNamespace
+     * @param ?non-empty-string $sub
      */
-    private function writeClass(ClassType|InterfaceType|EnumType $class, ?string $namespace = null, ?callable $processNamespace = null): void
+    private function createNamespace(?string $sub = null): PhpNamespace
     {
+        return new PhpNamespace(self::NAMESPACE . ($sub === null ? '' : '\\' . $sub));
+    }
+
+    private function resolveFileName(PhpNamespace $namespace): string
+    {
+        $class = array_first($namespace->getClasses());
+        \assert($class instanceof ClassLike);
+
         $className = $class->getName();
         \assert($className !== null);
 
-        $fileName = \sprintf('%s%s/%s.php', $this->srcDir, $namespace === null ? '' : '/' . $namespace, $className);
+        $subDir = str_replace('\\', '/', substr($namespace->getName(), \strlen(self::NAMESPACE)));
 
-        $file = (new PhpFile())
-            ->setStrictTypes();
+        $fileName = \sprintf('%s%s/%s.php', $this->srcDir, $subDir, $className);
 
-        $namespace = $file
-            ->addNamespace(new PhpNamespace(self::NAMESPACE . ($namespace === null ? '' : '\\' . $namespace)))
-            ->add($class);
+        $dir = \dirname($fileName);
 
-        if ($processNamespace !== null) {
-            $processNamespace($namespace);
+        if (!is_dir($dir)) {
+            mkdir($dir, recursive: true);
         }
 
-        file_put_contents($fileName, (new PsrPrinter())->printFile($file));
+        return $fileName;
     }
 }

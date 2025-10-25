@@ -1,36 +1,32 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
  * @api
- * @implements Shortcut<iterable<mixed>>
+ * @template-covariant K = mixed
+ * @template-covariant V = mixed
+ * @implements Type<iterable<K, V>>
  */
-final class IterableT implements Shortcut
+final readonly class IterableT implements Type
 {
-    /** @var ?Type<iterable<mixed>> */
-    private ?Type $type = null;
-
+    /**
+     * @param Type<K> $key
+     * @param Type<V> $value
+     */
     public function __construct(
-        public readonly Type $key = MixedT::T,
-        public readonly Type $value = MixedT::T,
+        public Type $key = MixedT::T,
+        public Type $value = MixedT::T,
     ) {}
-
-    public function dereference(): Type
-    {
-        return $this->type ??= new UnionT([
-            new ArrayT(
-                key: new IntersectionT([$this->key, ArrayKeyT::T]),
-                value: $this->value,
-            ),
-            new ObjectT(superClasses: [new SuperClass(\Traversable::class, [$this->key, $this->value])]),
-        ]);
-    }
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->shortcut($this);
+        return $visitor->iterable($this);
     }
 }

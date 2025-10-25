@@ -1,30 +1,23 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
  * @api
- * @implements Shortcut<bool>
+ * @implements Type<bool>
  */
-enum BoolT implements Shortcut
+enum BoolT implements Type
 {
     case T;
 
-    public function dereference(): Type
-    {
-        static $type = new UnionT([
-            FalseT::T,
-            TrueT::T,
-        ]);
-
-        /** @var Type<bool> */
-        return $type;
-    }
-
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->shortcut($this);
+        return $visitor->bool($this);
     }
 }

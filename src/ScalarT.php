@@ -1,32 +1,23 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
  * @api
- * @implements Shortcut<scalar>
+ * @implements Type<scalar>
  */
-enum ScalarT implements Shortcut
+enum ScalarT implements Type
 {
     case T;
 
-    public function dereference(): Type
-    {
-        static $type = new UnionT([
-            BoolT::T,
-            IntT::T,
-            FloatT::T,
-            StringT::T,
-        ]);
-
-        /** @var Type<scalar> */
-        return $type;
-    }
-
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->shortcut($this);
+        return $visitor->scalar($this);
     }
 }

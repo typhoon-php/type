@@ -5,9 +5,12 @@ parameters:
         - src
         - tests
     checkBenevolentUnionTypes: true
-    #ignoreErrors:
-    #    - { identifier: missingType.generics }
-    #    - { identifier: return.unusedType }
     editorUrl: ''
     editorUrlTitle: '%%file%%:%%line%%'
     tmpDir: ./var/phpstan
+    ignoreErrors:
+        -
+            message: '#^Class Typhoon\\Type\\IntMaskT @implements tag contains unresolvable type\.$#'
+            identifier: generics.unresolvable
+            count: 1
+            path: src/IntMaskT.php

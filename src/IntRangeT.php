@@ -1,24 +1,23 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
- * This class is generated, do not edit it.
- *
  * @api
- * @implements Type<int>
+ * @template-covariant T of int = int
+ * @implements Type<T>
  */
 final readonly class IntRangeT implements Type
 {
-    /**
-     * @param null|int|numeric-string $min
-     * @param null|int|numeric-string $max
-     */
     public function __construct(
-        public null|int|string $min = null,
-        public null|int|string $max = null,
+        public ?int $min = null,
+        public ?int $max = null,
     ) {}
 
     public function accept(Visitor $visitor): mixed

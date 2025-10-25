@@ -1,14 +1,17 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
 
 /**
- * This class is generated, do not edit it.
- *
  * @api
- * @implements Type<object>
+ * @template-covariant T of object = object
+ * @implements Type<T>
  */
 final readonly class ObjectT implements Type
 {

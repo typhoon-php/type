@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
@@ -9,17 +13,20 @@ use Typhoon\Type\ArrayT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
-use Typhoon\Type\ClassStringT;
+use Typhoon\Type\ClassT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\IntersectionT;
-use Typhoon\Type\IntMaskOfT;
+use Typhoon\Type\IntMaskT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IsSubtypeT;
-use Typhoon\Type\KeyOfT;
+use Typhoon\Type\IterableT;
+use Typhoon\Type\KeyT;
 use Typhoon\Type\ListT;
+use Typhoon\Type\LiteralT;
 use Typhoon\Type\LowercaseStringT;
+use Typhoon\Type\MixedT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NonEmptyStringT;
 use Typhoon\Type\NullT;
@@ -29,26 +36,23 @@ use Typhoon\Type\OffsetT;
 use Typhoon\Type\ParentT;
 use Typhoon\Type\ResourceT;
 use Typhoon\Type\SelfT;
-use Typhoon\Type\Shortcut;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
 use Typhoon\Type\TemplateT;
 use Typhoon\Type\TernaryT;
 use Typhoon\Type\TrueT;
+use Typhoon\Type\TruthyStringT;
 use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
-use Typhoon\Type\Visitor;
 use Typhoon\Type\VoidT;
 
 /**
- * This class is generated, do not edit it.
- *
  * @api
  * @template-covariant TResult
- * @implements Visitor<TResult>
+ * @extends Reduced<TResult>
  */
-abstract class Fallback implements Visitor
+abstract class Fallback extends Reduced
 {
     public function never(NeverT $type): mixed
     {
@@ -80,7 +84,7 @@ abstract class Fallback implements Visitor
         return $this->fallback($type);
     }
 
-    public function intMaskOf(IntMaskOfT $type): mixed
+    public function intMask(IntMaskT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -100,6 +104,11 @@ abstract class Fallback implements Visitor
         return $this->fallback($type);
     }
 
+    public function truthyString(TruthyStringT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
     public function numericString(NumericStringT $type): mixed
     {
         return $this->fallback($type);
@@ -115,7 +124,7 @@ abstract class Fallback implements Visitor
         return $this->fallback($type);
     }
 
-    public function classString(ClassStringT $type): mixed
+    public function class(ClassT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -130,12 +139,7 @@ abstract class Fallback implements Visitor
         return $this->fallback($type);
     }
 
-    public function keyOf(KeyOfT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    public function offset(OffsetT $type): mixed
+    public function iterable(IterableT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -170,6 +174,21 @@ abstract class Fallback implements Visitor
         return $this->fallback($type);
     }
 
+    public function literal(LiteralT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    public function intersection(IntersectionT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    public function union(UnionT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
     public function constant(ConstantT $type): mixed
     {
         return $this->fallback($type);
@@ -185,22 +204,12 @@ abstract class Fallback implements Visitor
         return $this->fallback($type);
     }
 
-    public function template(TemplateT $type): mixed
+    public function key(KeyT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function alias(AliasT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    public function intersection(IntersectionT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    public function union(UnionT $type): mixed
+    public function offset(OffsetT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -215,7 +224,17 @@ abstract class Fallback implements Visitor
         return $this->fallback($type);
     }
 
-    public function shortcut(Shortcut $type): mixed
+    public function alias(AliasT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    public function mixed(MixedT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    public function template(TemplateT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -223,5 +242,5 @@ abstract class Fallback implements Visitor
     /**
      * @return TResult
      */
-    abstract public function fallback(Type $type): mixed;
+    abstract protected function fallback(Type $type): mixed;
 }
