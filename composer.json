@@ -59,6 +59,7 @@
         }
     },
     "scripts": {
+        "analyse-deps": "tools/composer-dependency-analyser/vendor/bin/composer-dependency-analyser",
         "fixcs": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --verbose",
         "generate": [
             "@php generator/generate.php",
@@ -70,6 +71,7 @@
         "phpstan": "tools/phpstan/vendor/bin/phpstan analyze",
         "pre-command-run": "mkdir -p var",
         "psalm": "tools/psalm/vendor/bin/psalm --show-info --no-diff --no-cache",
+        "rector": "tools/rector/vendor/bin/rector process",
         "test": "phpunit"
     }
 }
