@@ -17,300 +17,300 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function never(NeverT $type): mixed;
+    public function neverT(NeverT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function void(VoidT $type): mixed;
+    public function voidT(VoidT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function null(NullT $type): mixed;
+    public function nullT(NullT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function false(FalseT $type): mixed;
+    public function falseT(FalseT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function true(TrueT $type): mixed;
+    public function trueT(TrueT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function bool(BoolT $type): mixed;
+    public function boolT(BoolT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function int(IntT $type): mixed;
+    public function intT(IntT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function intValue(IntValueT $type): mixed;
+    public function intValueT(IntValueT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function intRange(IntRangeT $type): mixed;
+    public function intRangeT(IntRangeT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function negativeInt(NegativeIntT $type): mixed;
+    public function negativeIntT(NegativeIntT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function nonPositiveInt(NonPositiveIntT $type): mixed;
+    public function nonPositiveIntT(NonPositiveIntT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function nonZeroInt(NonZeroIntT $type): mixed;
+    public function nonZeroIntT(NonZeroIntT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function nonNegativeInt(NonNegativeIntT $type): mixed;
+    public function nonNegativeIntT(NonNegativeIntT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function positiveInt(PositiveIntT $type): mixed;
+    public function positiveIntT(PositiveIntT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function intMask(IntMaskT $type): mixed;
+    public function intMaskT(IntMaskT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function float(FloatT $type): mixed;
+    public function floatT(FloatT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function floatValue(FloatValueT $type): mixed;
+    public function floatValueT(FloatValueT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function floatRange(FloatRangeT $type): mixed;
+    public function floatRangeT(FloatRangeT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function string(StringT $type): mixed;
+    public function stringT(StringT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function nonEmptyString(NonEmptyStringT $type): mixed;
+    public function nonEmptyStringT(NonEmptyStringT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function truthyString(TruthyStringT $type): mixed;
+    public function truthyStringT(TruthyStringT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function numericString(NumericStringT $type): mixed;
+    public function numericStringT(NumericStringT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function lowercaseString(LowercaseStringT $type): mixed;
+    public function lowercaseStringT(LowercaseStringT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function stringValue(StringValueT $type): mixed;
+    public function stringValueT(StringValueT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function class(ClassT $type): mixed;
+    public function classT(ClassT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function arrayKey(ArrayKeyT $type): mixed;
+    public function arrayKeyT(ArrayKeyT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function numeric(NumericT $type): mixed;
+    public function numericT(NumericT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function scalar(ScalarT $type): mixed;
+    public function scalarT(ScalarT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function list(ListT $type): mixed;
+    public function listT(ListT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function arrayDefault(ArrayDefaultT $type): mixed;
+    public function arrayDefaultT(ArrayDefaultT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function array(ArrayT $type): mixed;
+    public function arrayT(ArrayT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function iterableDefault(IterableDefaultT $type): mixed;
+    public function iterableDefaultT(IterableDefaultT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function iterable(IterableT $type): mixed;
+    public function iterableT(IterableT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function objectDefault(ObjectDefaultT $type): mixed;
+    public function objectDefaultT(ObjectDefaultT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function object(ObjectT $type): mixed;
+    public function objectT(ObjectT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function selfDefault(SelfDefaultT $type): mixed;
+    public function selfDefaultT(SelfDefaultT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function self(SelfT $type): mixed;
+    public function selfT(SelfT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function parentDefault(ParentDefaultT $type): mixed;
+    public function parentDefaultT(ParentDefaultT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function parent(ParentT $type): mixed;
+    public function parentT(ParentT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function staticDefault(StaticDefaultT $type): mixed;
+    public function staticDefaultT(StaticDefaultT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function static(StaticT $type): mixed;
+    public function staticT(StaticT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function callableDefault(CallableDefaultT $type): mixed;
+    public function callableDefaultT(CallableDefaultT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function callable(CallableT $type): mixed;
+    public function callableT(CallableT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function closure(ClosureT $type): mixed;
+    public function closureT(ClosureT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function resource(ResourceT $type): mixed;
+    public function resourceT(ResourceT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function literal(LiteralT $type): mixed;
+    public function literalT(LiteralT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function intersection(IntersectionT $type): mixed;
+    public function intersectionT(IntersectionT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function union(UnionT $type): mixed;
+    public function unionT(UnionT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function constant(ConstantT $type): mixed;
+    public function constantT(ConstantT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function classConstant(ClassConstantT $type): mixed;
+    public function classConstantT(ClassConstantT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function classConstantMask(ClassConstantMaskT $type): mixed;
+    public function classConstantMaskT(ClassConstantMaskT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function key(KeyT $type): mixed;
+    public function keyT(KeyT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function value(ValueT $type): mixed;
+    public function valueT(ValueT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function offset(OffsetT $type): mixed;
+    public function offsetT(OffsetT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function isSubtype(IsSubtypeT $type): mixed;
+    public function isSubtypeT(IsSubtypeT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function isSupertype(IsSupertypeT $type): mixed;
+    public function isSupertypeT(IsSupertypeT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function ternary(TernaryT $type): mixed;
+    public function ternaryT(TernaryT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function alias(AliasT $type): mixed;
+    public function aliasT(AliasT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function mixed(MixedT $type): mixed;
+    public function mixedT(MixedT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function template(TemplateT $type): mixed;
+    public function templateT(TemplateT $type): mixed;
 }

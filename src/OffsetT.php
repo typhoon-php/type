@@ -27,6 +27,6 @@ final readonly class OffsetT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->offset($this);
+        return $visitor->offsetT($this);
     }
 }

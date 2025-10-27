@@ -54,187 +54,187 @@ use Typhoon\Type\VoidT;
  */
 abstract class Fallback extends Reduced
 {
-    public function never(NeverT $type): mixed
+    public function neverT(NeverT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function void(VoidT $type): mixed
+    public function voidT(VoidT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function null(NullT $type): mixed
+    public function nullT(NullT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function false(FalseT $type): mixed
+    public function falseT(FalseT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function true(TrueT $type): mixed
+    public function trueT(TrueT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function intRange(IntRangeT $type): mixed
+    public function intRangeT(IntRangeT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function intMask(IntMaskT $type): mixed
+    public function intMaskT(IntMaskT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function floatRange(FloatRangeT $type): mixed
+    public function floatRangeT(FloatRangeT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function string(StringT $type): mixed
+    public function stringT(StringT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function nonEmptyString(NonEmptyStringT $type): mixed
+    public function nonEmptyStringT(NonEmptyStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function truthyString(TruthyStringT $type): mixed
+    public function truthyStringT(TruthyStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function numericString(NumericStringT $type): mixed
+    public function numericStringT(NumericStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function lowercaseString(LowercaseStringT $type): mixed
+    public function lowercaseStringT(LowercaseStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function stringValue(StringValueT $type): mixed
+    public function stringValueT(StringValueT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function class(ClassT $type): mixed
+    public function classT(ClassT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function list(ListT $type): mixed
+    public function listT(ListT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function array(ArrayT $type): mixed
+    public function arrayT(ArrayT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function iterable(IterableT $type): mixed
+    public function iterableT(IterableT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function object(ObjectT $type): mixed
+    public function objectT(ObjectT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function self(SelfT $type): mixed
+    public function selfT(SelfT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function parent(ParentT $type): mixed
+    public function parentT(ParentT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function static(StaticT $type): mixed
+    public function staticT(StaticT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function callable(CallableT $type): mixed
+    public function callableT(CallableT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function resource(ResourceT $type): mixed
+    public function resourceT(ResourceT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function literal(LiteralT $type): mixed
+    public function literalT(LiteralT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function intersection(IntersectionT $type): mixed
+    public function intersectionT(IntersectionT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function union(UnionT $type): mixed
+    public function unionT(UnionT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function constant(ConstantT $type): mixed
+    public function constantT(ConstantT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function classConstant(ClassConstantT $type): mixed
+    public function classConstantT(ClassConstantT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function classConstantMask(ClassConstantMaskT $type): mixed
+    public function classConstantMaskT(ClassConstantMaskT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function key(KeyT $type): mixed
+    public function keyT(KeyT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function offset(OffsetT $type): mixed
+    public function offsetT(OffsetT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function isSubtype(IsSubtypeT $type): mixed
+    public function isSubtypeT(IsSubtypeT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function ternary(TernaryT $type): mixed
+    public function ternaryT(TernaryT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function alias(AliasT $type): mixed
+    public function aliasT(AliasT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function mixed(MixedT $type): mixed
+    public function mixedT(MixedT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function template(TemplateT $type): mixed
+    public function templateT(TemplateT $type): mixed
     {
         return $this->fallback($type);
     }

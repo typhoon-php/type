@@ -18,6 +18,6 @@ enum IntT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->int($this);
+        return $visitor->intT($this);
     }
 }

@@ -30,6 +30,6 @@ final readonly class ArrayT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->array($this);
+        return $visitor->arrayT($this);
     }
 }

@@ -26,6 +26,6 @@ final readonly class FloatRangeT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->floatRange($this);
+        return $visitor->floatRangeT($this);
     }
 }

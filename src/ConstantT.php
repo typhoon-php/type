@@ -24,6 +24,6 @@ final readonly class ConstantT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->constant($this);
+        return $visitor->constantT($this);
     }
 }

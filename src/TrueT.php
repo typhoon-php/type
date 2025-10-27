@@ -18,6 +18,6 @@ enum TrueT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->true($this);
+        return $visitor->trueT($this);
     }
 }

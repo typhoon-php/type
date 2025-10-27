@@ -18,6 +18,6 @@ enum NonEmptyStringT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->nonEmptyString($this);
+        return $visitor->nonEmptyStringT($this);
     }
 }

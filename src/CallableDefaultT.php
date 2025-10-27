@@ -18,6 +18,6 @@ enum CallableDefaultT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->callableDefault($this);
+        return $visitor->callableDefaultT($this);
     }
 }

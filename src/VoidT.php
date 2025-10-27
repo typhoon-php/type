@@ -18,6 +18,6 @@ enum VoidT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->void($this);
+        return $visitor->voidT($this);
     }
 }

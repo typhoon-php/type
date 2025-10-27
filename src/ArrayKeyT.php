@@ -18,6 +18,6 @@ enum ArrayKeyT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->arrayKey($this);
+        return $visitor->arrayKeyT($this);
     }
 }

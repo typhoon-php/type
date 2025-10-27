@@ -24,6 +24,6 @@ final readonly class IntValueT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->intValue($this);
+        return $visitor->intValueT($this);
     }
 }

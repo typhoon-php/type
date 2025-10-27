@@ -18,6 +18,6 @@ enum IterableDefaultT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->iterableDefault($this);
+        return $visitor->iterableDefaultT($this);
     }
 }

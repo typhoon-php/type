@@ -28,6 +28,6 @@ final readonly class AliasT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->alias($this);
+        return $visitor->aliasT($this);
     }
 }

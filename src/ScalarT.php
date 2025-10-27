@@ -18,6 +18,6 @@ enum ScalarT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->scalar($this);
+        return $visitor->scalarT($this);
     }
 }

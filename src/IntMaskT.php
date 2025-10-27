@@ -24,6 +24,6 @@ final readonly class IntMaskT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->intMask($this);
+        return $visitor->intMaskT($this);
     }
 }

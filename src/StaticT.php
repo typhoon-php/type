@@ -24,6 +24,6 @@ final readonly class StaticT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->static($this);
+        return $visitor->staticT($this);
     }
 }

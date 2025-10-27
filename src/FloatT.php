@@ -18,6 +18,6 @@ enum FloatT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->float($this);
+        return $visitor->floatT($this);
     }
 }

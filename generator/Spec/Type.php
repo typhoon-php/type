@@ -15,6 +15,11 @@ use Typhoon\Type\Visitor;
 final readonly class Type
 {
     /**
+     * @var non-empty-string
+     */
+    public string $name;
+
+    /**
      * @param non-empty-string $name
      * @param non-empty-string $type
      * @param list<Template> $templates
@@ -23,19 +28,21 @@ final readonly class Type
      */
     public function __construct(
         private bool $singleton,
-        public string $name,
+        string $name,
         private string $type,
         private array $templates,
         private array $properties,
         private ?string $reduced,
-    ) {}
+    ) {
+        $this->name = $name . 'T';
+    }
 
     /**
      * @return non-empty-string
      */
     private function shortClassName(): string
     {
-        return ucfirst($this->name) . 'T';
+        return ucfirst($this->name);
     }
 
     /**
@@ -150,7 +157,7 @@ final readonly class Type
                     return 'new \\' . SuperClass::class;
                 }
 
-                $type = $typesByName[$match] ?? null;
+                $type = $typesByName[$match . 'T'] ?? null;
 
                 if ($type === null) {
                     return $match;

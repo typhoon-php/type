@@ -24,6 +24,6 @@ final readonly class ValueT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->value($this);
+        return $visitor->valueT($this);
     }
 }

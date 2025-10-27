@@ -18,6 +18,6 @@ enum NumericStringT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->numericString($this);
+        return $visitor->numericStringT($this);
     }
 }

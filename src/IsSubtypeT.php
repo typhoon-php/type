@@ -22,6 +22,6 @@ final readonly class IsSubtypeT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->isSubtype($this);
+        return $visitor->isSubtypeT($this);
     }
 }

@@ -24,6 +24,6 @@ final readonly class StringValueT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->stringValue($this);
+        return $visitor->stringValueT($this);
     }
 }

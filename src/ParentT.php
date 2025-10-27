@@ -24,6 +24,6 @@ final readonly class ParentT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->parent($this);
+        return $visitor->parentT($this);
     }
 }

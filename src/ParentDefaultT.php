@@ -18,6 +18,6 @@ enum ParentDefaultT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->parentDefault($this);
+        return $visitor->parentDefaultT($this);
     }
 }

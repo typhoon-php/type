@@ -18,6 +18,6 @@ enum ArrayDefaultT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->arrayDefault($this);
+        return $visitor->arrayDefaultT($this);
     }
 }

@@ -22,6 +22,6 @@ final readonly class IsSupertypeT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->isSupertype($this);
+        return $visitor->isSupertypeT($this);
     }
 }

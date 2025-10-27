@@ -27,6 +27,6 @@ final readonly class ClosureT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->closure($this);
+        return $visitor->closureT($this);
     }
 }

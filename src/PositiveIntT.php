@@ -18,6 +18,6 @@ enum PositiveIntT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->positiveInt($this);
+        return $visitor->positiveIntT($this);
     }
 }

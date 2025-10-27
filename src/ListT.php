@@ -27,6 +27,6 @@ final readonly class ListT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->list($this);
+        return $visitor->listT($this);
     }
 }

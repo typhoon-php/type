@@ -18,6 +18,6 @@ enum StaticDefaultT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->staticDefault($this);
+        return $visitor->staticDefaultT($this);
     }
 }

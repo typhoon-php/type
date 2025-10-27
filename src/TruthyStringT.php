@@ -18,6 +18,6 @@ enum TruthyStringT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->truthyString($this);
+        return $visitor->truthyStringT($this);
     }
 }

@@ -18,6 +18,6 @@ enum BoolT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->bool($this);
+        return $visitor->boolT($this);
     }
 }

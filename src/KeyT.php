@@ -24,6 +24,6 @@ final readonly class KeyT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->key($this);
+        return $visitor->keyT($this);
     }
 }

@@ -24,6 +24,6 @@ final readonly class SelfT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->self($this);
+        return $visitor->selfT($this);
     }
 }

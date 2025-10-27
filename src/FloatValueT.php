@@ -24,6 +24,6 @@ final readonly class FloatValueT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->floatValue($this);
+        return $visitor->floatValueT($this);
     }
 }

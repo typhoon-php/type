@@ -17,6 +17,6 @@ final readonly class TemplateT implements Type
 {
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->template($this);
+        return $visitor->templateT($this);
     }
 }

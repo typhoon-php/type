@@ -18,6 +18,6 @@ enum NonNegativeIntT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->nonNegativeInt($this);
+        return $visitor->nonNegativeIntT($this);
     }
 }

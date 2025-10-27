@@ -24,6 +24,6 @@ final readonly class LiteralT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->literal($this);
+        return $visitor->literalT($this);
     }
 }

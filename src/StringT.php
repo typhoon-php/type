@@ -18,6 +18,6 @@ enum StringT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->string($this);
+        return $visitor->stringT($this);
     }
 }

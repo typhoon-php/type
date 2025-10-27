@@ -29,6 +29,6 @@ final readonly class TernaryT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->ternary($this);
+        return $visitor->ternaryT($this);
     }
 }

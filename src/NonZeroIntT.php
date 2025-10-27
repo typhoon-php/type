@@ -18,6 +18,6 @@ enum NonZeroIntT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->nonZeroInt($this);
+        return $visitor->nonZeroIntT($this);
     }
 }

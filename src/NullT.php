@@ -18,6 +18,6 @@ enum NullT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->null($this);
+        return $visitor->nullT($this);
     }
 }

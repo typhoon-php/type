@@ -27,6 +27,6 @@ final readonly class CallableT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->callable($this);
+        return $visitor->callableT($this);
     }
 }

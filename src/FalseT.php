@@ -18,6 +18,6 @@ enum FalseT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->false($this);
+        return $visitor->falseT($this);
     }
 }

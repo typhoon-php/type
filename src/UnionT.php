@@ -24,6 +24,6 @@ final readonly class UnionT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->union($this);
+        return $visitor->unionT($this);
     }
 }

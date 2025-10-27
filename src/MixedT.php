@@ -18,6 +18,6 @@ enum MixedT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->mixed($this);
+        return $visitor->mixedT($this);
     }
 }

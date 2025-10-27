@@ -18,6 +18,6 @@ enum SelfDefaultT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->selfDefault($this);
+        return $visitor->selfDefaultT($this);
     }
 }

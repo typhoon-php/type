@@ -18,6 +18,6 @@ enum ResourceT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->resource($this);
+        return $visitor->resourceT($this);
     }
 }

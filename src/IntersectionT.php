@@ -24,6 +24,6 @@ final readonly class IntersectionT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->intersection($this);
+        return $visitor->intersectionT($this);
     }
 }

@@ -18,6 +18,6 @@ enum NeverT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->never($this);
+        return $visitor->neverT($this);
     }
 }

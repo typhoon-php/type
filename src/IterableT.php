@@ -27,6 +27,6 @@ final readonly class IterableT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->iterable($this);
+        return $visitor->iterableT($this);
     }
 }

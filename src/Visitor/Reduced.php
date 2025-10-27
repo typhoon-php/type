@@ -59,7 +59,7 @@ use Typhoon\Type\Visitor;
  */
 abstract class Reduced implements Visitor
 {
-    public function bool(BoolT $type): mixed
+    public function boolT(BoolT $type): mixed
     {
         /** @var UnionT */
         static $reduced = new UnionT([FalseT::T, TrueT::T]);
@@ -67,7 +67,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function int(IntT $type): mixed
+    public function intT(IntT $type): mixed
     {
         /** @var IntRangeT */
         static $reduced = new IntRangeT();
@@ -75,12 +75,12 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function intValue(IntValueT $type): mixed
+    public function intValueT(IntValueT $type): mixed
     {
         return (new IntRangeT($type->value, $type->value))->accept($this);
     }
 
-    public function negativeInt(NegativeIntT $type): mixed
+    public function negativeIntT(NegativeIntT $type): mixed
     {
         /** @var IntRangeT */
         static $reduced = new IntRangeT(max: -1);
@@ -88,7 +88,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function nonPositiveInt(NonPositiveIntT $type): mixed
+    public function nonPositiveIntT(NonPositiveIntT $type): mixed
     {
         /** @var IntRangeT */
         static $reduced = new IntRangeT(max: 0);
@@ -96,7 +96,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function nonZeroInt(NonZeroIntT $type): mixed
+    public function nonZeroIntT(NonZeroIntT $type): mixed
     {
         /** @var UnionT */
         static $reduced = new UnionT([NegativeIntT::T, PositiveIntT::T]);
@@ -104,7 +104,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function nonNegativeInt(NonNegativeIntT $type): mixed
+    public function nonNegativeIntT(NonNegativeIntT $type): mixed
     {
         /** @var IntRangeT */
         static $reduced = new IntRangeT(min: 0);
@@ -112,7 +112,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function positiveInt(PositiveIntT $type): mixed
+    public function positiveIntT(PositiveIntT $type): mixed
     {
         /** @var IntRangeT */
         static $reduced = new IntRangeT(min: 1);
@@ -120,7 +120,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function float(FloatT $type): mixed
+    public function floatT(FloatT $type): mixed
     {
         /** @var FloatRangeT */
         static $reduced = new FloatRangeT();
@@ -128,12 +128,12 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function floatValue(FloatValueT $type): mixed
+    public function floatValueT(FloatValueT $type): mixed
     {
         return (new FloatRangeT($type->value, $type->value))->accept($this);
     }
 
-    public function arrayKey(ArrayKeyT $type): mixed
+    public function arrayKeyT(ArrayKeyT $type): mixed
     {
         /** @var UnionT */
         static $reduced = new UnionT([IntT::T, StringT::T]);
@@ -141,7 +141,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function numeric(NumericT $type): mixed
+    public function numericT(NumericT $type): mixed
     {
         /** @var UnionT */
         static $reduced = new UnionT([IntT::T, FloatT::T, NumericStringT::T]);
@@ -149,7 +149,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function scalar(ScalarT $type): mixed
+    public function scalarT(ScalarT $type): mixed
     {
         /** @var UnionT */
         static $reduced = new UnionT([BoolT::T, IntT::T, FloatT::T, StringT::T]);
@@ -157,7 +157,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function arrayDefault(ArrayDefaultT $type): mixed
+    public function arrayDefaultT(ArrayDefaultT $type): mixed
     {
         /** @var ArrayT */
         static $reduced = new ArrayT();
@@ -165,7 +165,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function iterableDefault(IterableDefaultT $type): mixed
+    public function iterableDefaultT(IterableDefaultT $type): mixed
     {
         /** @var IterableT */
         static $reduced = new IterableT();
@@ -173,7 +173,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function objectDefault(ObjectDefaultT $type): mixed
+    public function objectDefaultT(ObjectDefaultT $type): mixed
     {
         /** @var ObjectT */
         static $reduced = new ObjectT();
@@ -181,7 +181,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function selfDefault(SelfDefaultT $type): mixed
+    public function selfDefaultT(SelfDefaultT $type): mixed
     {
         /** @var SelfT */
         static $reduced = new SelfT();
@@ -189,7 +189,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function parentDefault(ParentDefaultT $type): mixed
+    public function parentDefaultT(ParentDefaultT $type): mixed
     {
         /** @var ParentT */
         static $reduced = new ParentT();
@@ -197,7 +197,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function staticDefault(StaticDefaultT $type): mixed
+    public function staticDefaultT(StaticDefaultT $type): mixed
     {
         /** @var StaticT */
         static $reduced = new StaticT();
@@ -205,7 +205,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function callableDefault(CallableDefaultT $type): mixed
+    public function callableDefaultT(CallableDefaultT $type): mixed
     {
         /** @var CallableT */
         static $reduced = new CallableT();
@@ -213,7 +213,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function closure(ClosureT $type): mixed
+    public function closureT(ClosureT $type): mixed
     {
         return (new IntersectionT([
             new ObjectT(superClasses: [new SuperClass(\Closure::class)]),
@@ -221,12 +221,12 @@ abstract class Reduced implements Visitor
         ]))->accept($this);
     }
 
-    public function value(ValueT $type): mixed
+    public function valueT(ValueT $type): mixed
     {
         return (new OffsetT($type->array, new KeyT($type->array)))->accept($this);
     }
 
-    public function isSupertype(IsSupertypeT $type): mixed
+    public function isSupertypeT(IsSupertypeT $type): mixed
     {
         return (new IsSubtypeT($type->right, $type->left))->accept($this);
     }

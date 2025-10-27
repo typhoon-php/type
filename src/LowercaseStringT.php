@@ -18,6 +18,6 @@ enum LowercaseStringT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->lowercaseString($this);
+        return $visitor->lowercaseStringT($this);
     }
 }

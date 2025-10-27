@@ -22,6 +22,6 @@ final readonly class IntRangeT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->intRange($this);
+        return $visitor->intRangeT($this);
     }
 }

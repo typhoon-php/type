@@ -28,6 +28,6 @@ final readonly class ObjectT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->object($this);
+        return $visitor->objectT($this);
     }
 }
