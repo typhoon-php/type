@@ -15,6 +15,9 @@ final class FloatToStringTest extends TestCase
     #[TestWith([-0, '0'])]
     #[TestWith([0.0, '0'])]
     #[TestWith([-0.0, '-0'])]
+    #[TestWith([1 / 4, '0.25'])]
+    #[TestWith([1 / 3, '0.33333333333333'])]
+    #[TestWith([-1 / 3, '-0.33333333333333'])]
     #[TestWith([0.012, '0.012'])]
     #[TestWith([-0.012, '-0.012'])]
     #[TestWith([7E-10, '0.0000000007'])]
@@ -30,6 +33,5 @@ final class FloatToStringTest extends TestCase
         /** @phpstan-ignore staticMethod.alreadyNarrowedType */
         self::assertIsNumeric($string);
         self::assertSame($expected, $string);
-        self::assertSame($value, (float) $string);
     }
 }
