@@ -381,9 +381,9 @@ function template(string $name, Type $upperBound = mixedT, Type $lowerBound = ne
  * @param non-empty-string $name
  * @return Template<Variance::Covariant>
  */
-function covariantTemplate(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
+function templateCovariant(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
 {
-    return new Template($name, lowerBound: $lowerBound, upperBound: $upperBound, variance: Variance::Covariant);
+    return new Template($name, Variance::Covariant, $lowerBound, $upperBound);
 }
 
 /**
@@ -391,9 +391,9 @@ function covariantTemplate(string $name, Type $upperBound = mixedT, Type $lowerB
  * @param non-empty-string $name
  * @return Template<Variance::Contravariant>
  */
-function contravariantTemplate(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
+function templateContravariant(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
 {
-    return new Template($name, lowerBound: $lowerBound, upperBound: $upperBound, variance: Variance::Contravariant);
+    return new Template($name, Variance::Contravariant, $lowerBound, $upperBound);
 }
 
 /**

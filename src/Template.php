@@ -17,9 +17,9 @@ final readonly class Template
      */
     public function __construct(
         public string $name,
+        public Variance $variance = Variance::Invariant,
         public Type $lowerBound = NeverT::T,
         public Type $upperBound = MixedT::T,
-        public Variance $variance = Variance::Invariant,
     ) {
         $this->type = new TemplateT();
     }
