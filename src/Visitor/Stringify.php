@@ -161,10 +161,10 @@ abstract class Stringify implements Visitor
             return '';
         }
 
-        return \sprintf('<%s>', implode(', ', array_map($this->templateX(...), $templates)));
+        return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
     }
 
-    private function templateX(Template $template): string
+    private function template(Template $template): string
     {
         $lowerBound = $template->lowerBound->accept($this);
         $upperBound = $template->upperBound->accept($this);
@@ -390,27 +390,6 @@ abstract class Stringify implements Visitor
         return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
     }
 
-    public function iterableDefaultT(IterableDefaultT $type): string
-    {
-        return 'iterable';
-    }
-
-    public function iterableT(IterableT $type): string
-    {
-        $key = $type->key->accept($this);
-        $value = $type->value->accept($this);
-
-        if ($key === 'mixed') {
-            if ($value === 'mixed') {
-                return 'iterable';
-            }
-
-            return \sprintf('iterable<%s>', $value);
-        }
-
-        return \sprintf('iterable<%s, %s>', $key, $value);
-    }
-
     public function objectDefaultT(ObjectDefaultT $type): string
     {
         return 'object';
@@ -470,6 +449,27 @@ abstract class Stringify implements Visitor
         return $this->constructor('static', $type->templateArguments);
     }
 
+    public function iterableDefaultT(IterableDefaultT $type): string
+    {
+        return 'iterable';
+    }
+
+    public function iterableT(IterableT $type): string
+    {
+        $key = $type->key->accept($this);
+        $value = $type->value->accept($this);
+
+        if ($key === 'mixed') {
+            if ($value === 'mixed') {
+                return 'iterable';
+            }
+
+            return \sprintf('iterable<%s>', $value);
+        }
+
+        return \sprintf('iterable<%s, %s>', $key, $value);
+    }
+
     public function callableDefaultT(CallableDefaultT $type): string
     {
         return 'callable';
@@ -500,11 +500,6 @@ abstract class Stringify implements Visitor
         return 'resource';
     }
 
-    public function literalT(LiteralT $type): string
-    {
-        return \sprintf('literal<%s>', $type->type->accept($this));
-    }
-
     public function intersectionT(IntersectionT $type): string
     {
         return implode('&', array_map(fn(Type $type): string => $type->accept($this), $type->types));
@@ -513,6 +508,11 @@ abstract class Stringify implements Visitor
     public function unionT(UnionT $type): string
     {
         return \sprintf('(%s)', implode('|', array_map(fn(Type $type): string => $type->accept($this), $type->types)));
+    }
+
+    public function literalT(LiteralT $type): string
+    {
+        return \sprintf('literal<%s>', $type->type->accept($this));
     }
 
     public function constantT(ConstantT $type): string
@@ -565,13 +565,13 @@ abstract class Stringify implements Visitor
         return \sprintf('%s@%s', $type->class, $type->name);
     }
 
-    public function mixedT(MixedT $type): string
-    {
-        return 'mixed';
-    }
-
     public function templateT(TemplateT $type): string
     {
         return $this->templateNames()[$type] ??= '$' . ($this->unknownTemplateIndex++);
+    }
+
+    public function mixedT(MixedT $type): string
+    {
+        return 'mixed';
     }
 }

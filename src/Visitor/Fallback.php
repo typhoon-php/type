@@ -139,11 +139,6 @@ abstract class Fallback extends Reduced
         return $this->fallback($type);
     }
 
-    public function iterableT(IterableT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
     public function objectT(ObjectT $type): mixed
     {
         return $this->fallback($type);
@@ -164,6 +159,11 @@ abstract class Fallback extends Reduced
         return $this->fallback($type);
     }
 
+    public function iterableT(IterableT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
     public function callableT(CallableT $type): mixed
     {
         return $this->fallback($type);
@@ -174,17 +174,17 @@ abstract class Fallback extends Reduced
         return $this->fallback($type);
     }
 
-    public function literalT(LiteralT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
     public function intersectionT(IntersectionT $type): mixed
     {
         return $this->fallback($type);
     }
 
     public function unionT(UnionT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    public function literalT(LiteralT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -229,12 +229,12 @@ abstract class Fallback extends Reduced
         return $this->fallback($type);
     }
 
-    public function mixedT(MixedT $type): mixed
+    public function templateT(TemplateT $type): mixed
     {
         return $this->fallback($type);
     }
 
-    public function templateT(TemplateT $type): mixed
+    public function mixedT(MixedT $type): mixed
     {
         return $this->fallback($type);
     }

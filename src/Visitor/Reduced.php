@@ -165,14 +165,6 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function iterableDefaultT(IterableDefaultT $type): mixed
-    {
-        /** @var IterableT */
-        static $reduced = new IterableT();
-
-        return $reduced->accept($this);
-    }
-
     public function objectDefaultT(ObjectDefaultT $type): mixed
     {
         /** @var ObjectT */
@@ -201,6 +193,14 @@ abstract class Reduced implements Visitor
     {
         /** @var StaticT */
         static $reduced = new StaticT();
+
+        return $reduced->accept($this);
+    }
+
+    public function iterableDefaultT(IterableDefaultT $type): mixed
+    {
+        /** @var IterableT */
+        static $reduced = new IterableT();
 
         return $reduced->accept($this);
     }

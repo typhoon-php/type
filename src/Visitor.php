@@ -172,16 +172,6 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function iterableDefaultT(IterableDefaultT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function iterableT(IterableT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function objectDefaultT(ObjectDefaultT $type): mixed;
 
     /**
@@ -222,6 +212,16 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function iterableDefaultT(IterableDefaultT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function iterableT(IterableT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function callableDefaultT(CallableDefaultT $type): mixed;
 
     /**
@@ -242,17 +242,17 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function literalT(LiteralT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function intersectionT(IntersectionT $type): mixed;
 
     /**
      * @return TResult
      */
     public function unionT(UnionT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function literalT(LiteralT $type): mixed;
 
     /**
      * @return TResult
@@ -307,10 +307,10 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function mixedT(MixedT $type): mixed;
+    public function templateT(TemplateT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function templateT(TemplateT $type): mixed;
+    public function mixedT(MixedT $type): mixed;
 }

@@ -45,9 +45,6 @@ return [
     constr('list', 'list<V>', [tpl('V')], [prop('value', 'Type<V>', MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     single('arrayDefault', 'array', 'array()'),
     constr('array', 'array<K, V>', [tpl('K', 'array-key'), tpl('V')], [prop('key', 'Type<K>', ArrayKeyT::T), prop('value', 'Type<V>', MixedT::T), prop('elements', 'array<ArrayElement>'), prop('isNonEmpty', 'bool')]),
-    // iterable
-    single('iterableDefault', 'iterable', 'iterable()'),
-    constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('key', 'Type<K>', MixedT::T), prop('value', 'Type<V>', MixedT::T)]),
     // object
     single('objectDefault', 'object', 'object()'),
     constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('superClasses', 'list<SuperClass>'), prop('properties', 'list<Property>')]),
@@ -57,18 +54,21 @@ return [
     constr('parent', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
     single('staticDefault', 'object', 'static()'),
     constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
+    // iterable
+    single('iterableDefault', 'iterable', 'iterable()'),
+    constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('key', 'Type<K>', MixedT::T), prop('value', 'Type<V>', MixedT::T)]),
     // callable
     single('callableDefault', 'callable', 'callable()'),
     constr('callable', 'T', [tpl('T')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)]),
     constr('closure', 'T', [tpl('T', '\Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nobject(superClasses: [superClass(\\Closure::class)]),\ncallable(\$templates, \$parameters, \$returns),\n])"),
     // resource
     single('resource', 'resource'),
-    // literal
-    constr('literal', 'T', [tpl('T')], [prop('type', 'Type<T>')]),
     // intersection
     constr('intersection', 'T', [tpl('T')], [prop('types', 'non-empty-list<Type>')]),
     // union
     constr('union', 'T', [tpl('T')], [prop('types', 'non-empty-list<Type<T>>')]),
+    // literal
+    constr('literal', 'T', [tpl('T')], [prop('type', 'Type<T>')]),
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
     constr('classConstant', 'T', [tpl('T')], [prop('class', 'Type'), prop('name', 'non-empty-string')]),
@@ -84,8 +84,8 @@ return [
     constr('ternary', 'Then|Else', [tpl('Then'), tpl('Else')], [prop('condition', 'Type<bool>'), prop('then', 'Type<Then>'), prop('else', 'Type<Else>')]),
     // alias
     constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), prop('templateArguments', 'list<Type>')]),
-    // mixed
-    single('mixed', 'mixed'),
     // template
     constr('template', 'T', [tpl('T')]),
+    // mixed
+    single('mixed', 'mixed'),
 ];
