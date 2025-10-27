@@ -18,7 +18,7 @@ use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
-use Typhoon\Type\ClassT;
+use Typhoon\Type\ClassStringT;
 use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\ConstantT;
@@ -320,7 +320,7 @@ abstract class Stringify implements Visitor
         return str_replace("\n", '\n', var_export($type->value, return: true));
     }
 
-    public function classT(ClassT $type): string
+    public function classStringT(ClassStringT $type): string
     {
         return \sprintf('class-string<%s>', $type->object->accept($this));
     }
@@ -413,7 +413,7 @@ abstract class Stringify implements Visitor
             'object%s%s{%s}',
             $this->templates($type->templates),
             implode('', array_map(
-                fn(NamedObjectT $superType): string => '@' . $this->namedObjectT($superType),
+                fn(NamedObjectT $inherited): string => '@' . $this->namedObjectT($inherited),
                 $type->superTypes,
             )),
             implode(', ', array_map($this->property(...), $type->properties)),

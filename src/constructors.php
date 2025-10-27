@@ -27,6 +27,9 @@ const intT = IntT::T;
 
 /**
  * @api
+ * @template T of int
+ * @param T $value
+ * @return IntValueT<T>
  */
 function intT(int $value): IntValueT
 {
@@ -35,6 +38,7 @@ function intT(int $value): IntValueT
 
 /**
  * @api
+ * @return IntRangeT<int>
  */
 function intRangeT(?int $min = null, ?int $max = null): IntRangeT
 {
@@ -54,10 +58,10 @@ const positiveIntT = PositiveIntT::T;
 /**
  * @api
  * @no-named-arguments
- * @param positive-int|Type|list<positive-int|Type> $ints
- * @param positive-int|Type ...$moreInts
+ * @param int|Type|list<int|Type> $ints
+ * @return IntMaskT<int>
  */
-function intMaskT(int|Type|array $ints, int|Type ...$moreInts): Type
+function intMaskT(int|Type|array $ints, int|Type ...$moreInts): IntMaskT
 {
     return new IntMaskT(orT(array_map(
         static fn(int|Type $int): Type => \is_int($int) ? intT($int) : $int,
@@ -69,7 +73,9 @@ const floatT = FloatT::T;
 
 /**
  * @api
- * @param float|numeric-string $value
+ * @template T of float = never
+ * @param numeric-string|T $value
+ * @return ($value is T ? FloatValueT<T> : FloatValueT<float>)
  */
 function floatT(float|string $value): FloatValueT
 {
@@ -80,6 +86,7 @@ function floatT(float|string $value): FloatValueT
  * @api
  * @param null|float|numeric-string $min
  * @param null|float|numeric-string $max
+ * @return FloatRangeT<float>
  */
 function floatRangeT(null|float|string $min = null, null|float|string $max = null): FloatRangeT
 {
@@ -111,6 +118,9 @@ const lowercaseStringT = LowercaseStringT::T;
 
 /**
  * @api
+ * @template T of string
+ * @param T $value
+ * @return StringValueT<T>
  */
 function stringT(string $value): StringValueT
 {
@@ -119,10 +129,17 @@ function stringT(string $value): StringValueT
 
 /**
  * @api
+ * @template T of object
+ * @param class-string<T>|Type<T> $object
+ * @return ClassStringT<T>
  */
-function classStringT(Type $of): ClassT
+function classStringT(string|Type $object): ClassStringT
 {
-    return new ClassT($of);
+    if (\is_string($object)) {
+        return new ClassStringT(namedObjectT($object));
+    }
+
+    return new ClassStringT($object);
 }
 
 const literalStringT = LiteralStringT::T;
@@ -145,6 +162,9 @@ function optional(Type $type): ArrayElement
 
 /**
  * @api
+ * @template V
+ * @param Type<V> $value
+ * @return ListT<V>
  */
 function listT(Type $value = mixedT): ListT
 {
@@ -153,6 +173,10 @@ function listT(Type $value = mixedT): ListT
 
 /**
  * @api
+ * @template V
+ * @param Type<V> $value
+ * @return ListT<V>
+ * @todo non-empty
  */
 function nonEmptyListT(Type $value = mixedT): ListT
 {
@@ -162,6 +186,7 @@ function nonEmptyListT(Type $value = mixedT): ListT
 /**
  * @api
  * @param list<ArrayElement|Type> $elements
+ * @return ListT<mixed>
  */
 function listShapeT(array $elements = []): ListT
 {
@@ -171,6 +196,7 @@ function listShapeT(array $elements = []): ListT
 /**
  * @api
  * @param list<ArrayElement|Type> $elements
+ * @return ListT<mixed>
  */
 function unsealedListShapeT(array $elements = [], Type $value = mixedT): ListT
 {
@@ -185,6 +211,11 @@ function unsealedListShapeT(array $elements = [], Type $value = mixedT): ListT
 
 /**
  * @api
+ * @template K of array-key
+ * @template V
+ * @param Type<K> $key
+ * @param Type<V> $value
+ * @return ArrayT<K, V>
  */
 function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
@@ -193,6 +224,12 @@ function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 
 /**
  * @api
+ * @template K of array-key
+ * @template V
+ * @param Type<K> $key
+ * @param Type<V> $value
+ * @return ArrayT<K, V>
+ * @todo non-empty
  */
 function nonEmptyArrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
@@ -202,6 +239,7 @@ function nonEmptyArrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 /**
  * @api
  * @param array<ArrayElement|Type> $elements
+ * @return ArrayT<array-key, mixed>
  */
 function arrayShapeT(array $elements = []): ArrayT
 {
@@ -211,6 +249,7 @@ function arrayShapeT(array $elements = []): ArrayT
 /**
  * @api
  * @param array<ArrayElement|Type> $elements
+ * @return ArrayT<array-key, mixed>
  */
 function unsealedArrayShapeT(array $elements = [], Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
@@ -226,6 +265,9 @@ function unsealedArrayShapeT(array $elements = [], Type $key = arrayKeyT, Type $
 
 /**
  * @api
+ * @template T
+ * @param Type<T> $array
+ * @return KeyT<T>
  */
 function keyT(Type $array): KeyT
 {
@@ -234,6 +276,9 @@ function keyT(Type $array): KeyT
 
 /**
  * @api
+ * @template T
+ * @param Type<T> $array
+ * @return ValueT<T>
  */
 function valueT(Type $array): ValueT
 {
@@ -242,6 +287,11 @@ function valueT(Type $array): ValueT
 
 /**
  * @api
+ * @template T
+ * @template K
+ * @param Type<T> $value
+ * @param Type<K> $key
+ * @return OffsetT<T, K>
  */
 function offsetT(Type $value, Type $key): OffsetT
 {
@@ -252,6 +302,11 @@ const iterableT = IterableDefaultT::T;
 
 /**
  * @api
+ * @template K
+ * @template V
+ * @param Type<K> $key
+ * @param Type<V> $value
+ * @return IterableT<K, V>
  */
 function iterableT(Type $key = mixedT, Type $value = mixedT): IterableT
 {
@@ -265,6 +320,7 @@ const objectT = ObjectDefaultT::T;
  * @param list<Template> $templates
  * @param list<class-string|NamedObjectT> $superTypes
  * @param list<Property> $properties
+ * @return ObjectT<object>
  */
 function objectT(array $templates = [], array $superTypes = [], array $properties = []): ObjectT
 {
@@ -304,6 +360,7 @@ const selfT = SelfDefaultT::T;
 /**
  * @api
  * @param list<Type> $templateArguments
+ * @return SelfT<object>
  */
 function selfT(array $templateArguments = []): SelfT
 {
@@ -315,6 +372,7 @@ const parentT = ParentDefaultT::T;
 /**
  * @api
  * @param list<Type> $templateArguments
+ * @return ParentT<object>
  */
 function parentT(array $templateArguments = []): ParentT
 {
@@ -326,6 +384,7 @@ const staticT = StaticDefaultT::T;
 /**
  * @api
  * @param list<Type> $templateArguments
+ * @return StaticT<object>
  */
 function staticT(array $templateArguments = []): StaticT
 {
@@ -337,6 +396,7 @@ const callableT = CallableDefaultT::T;
 /**
  * @param list<Template<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $parameters
+ * @return CallableT<callable>
  */
 function callableT(array $templates = [], array $parameters = [], Type $returns = mixedT): CallableT
 {
@@ -355,6 +415,7 @@ const closureT = ClosureDefaultT::T;
 /**
  * @param list<Template<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $parameters
+ * @return ClosureT<\Closure>
  */
 function closureT(array $templates = [], array $parameters = [], Type $returns = mixedT): ClosureT
 {
@@ -485,7 +546,10 @@ function andT(Type|array $types, Type ...$moreTypes): Type
 /**
  * @api
  * @no-named-arguments
- * @param Type|list<Type> $types
+ * @template T
+ * @param Type<T>|list<Type<T>> $types
+ * @param Type<T> ...$moreTypes
+ * @return Type<T>
  */
 function unionT(Type|array $types, Type ...$moreTypes): Type
 {
@@ -501,7 +565,10 @@ function unionT(Type|array $types, Type ...$moreTypes): Type
 /**
  * @api
  * @no-named-arguments
- * @param Type|list<Type> $types
+ * @template T
+ * @param Type<T>|list<Type<T>> $types
+ * @param Type<T> ...$moreTypes
+ * @return Type<T>
  */
 function orT(Type|array $types, Type ...$moreTypes): Type
 {
@@ -521,6 +588,7 @@ function nullOrT(Type $type): Type
 
 /**
  * @api
+ * @return IsSubtypeT<bool>
  */
 function isSubtypeT(Type $left, Type $right): IsSubtypeT
 {
@@ -529,6 +597,7 @@ function isSubtypeT(Type $left, Type $right): IsSubtypeT
 
 /**
  * @api
+ * @return IsSupertypeT<bool>
  */
 function isSupertypeT(Type $left, Type $right): IsSupertypeT
 {
@@ -537,6 +606,11 @@ function isSupertypeT(Type $left, Type $right): IsSupertypeT
 
 /**
  * @api
+ * @template Then
+ * @template Else
+ * @param Type<Then> $then
+ * @param Type<Else> $else
+ * @return TernaryT<Then|Else>
  */
 function ternaryT(Type $condition, Type $then, Type $else): TernaryT
 {
@@ -553,9 +627,15 @@ function literalT(Type $type): LiteralT
 
 const mixedT = MixedT::T;
 
+/**
+ * @api
+ * @template T
+ * @param T $value
+ * @return Type<T>
+ */
 function of(mixed $value): Type
 {
-    /** @phpstan-ignore match.unhandled */
+    /** @phpstan-ignore match.unhandled, return.type */
     return match (true) {
         $value === null => nullT,
         $value === false => falseT,
@@ -564,6 +644,7 @@ function of(mixed $value): Type
         \is_float($value) => floatT($value),
         \is_string($value) => stringT($value),
         \is_array($value) => arrayShapeT(array_map(of(...), $value)),
+        /** @phpstan-ignore argument.type, argument.templateType */
         \is_object($value) => namedObjectT($value::class),
         \is_resource($value) => resourceT,
     };

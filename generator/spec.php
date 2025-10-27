@@ -24,7 +24,7 @@ return [
     single('nonZeroInt', 'non-zero-int', 'union([negativeInt, positiveInt])'),
     single('nonNegativeInt', 'non-negative-int', 'intRange(min: 0)'),
     single('positiveInt', 'positive-int', 'intRange(min: 1)'),
-    constr('intMask', 'int-mask-of<T>', [tpl('T', 'int')], [prop('ints', 'Type<T>')]),
+    constr('intMask', 'T', [tpl('T', 'int')], [prop('ints', 'Type')]),
     // float
     single('float', 'float', 'floatRange()'),
     constr('floatValue', 'T', [tpl('T', 'float')], [prop('value', 'numeric-string')], 'floatRange($value, $value)'),
@@ -36,7 +36,7 @@ return [
     single('numericString', 'numeric-string'),
     single('lowercaseString', 'lowercase-string'),
     constr('stringValue', 'T', [tpl('T', 'string')], [prop('value', 'T', nativeType: 'string')]),
-    constr('class', 'class-string<T>', [tpl('T', 'object')], [prop('object', 'Type<T>')]),
+    constr('classString', 'class-string<T>', [tpl('T', 'object')], [prop('object', 'Type<T>')]),
     single('literalString', 'literal-string', 'literal(string)'),
     // scalar aliases
     single('arrayKey', 'array-key', 'union([int, string])'),
@@ -61,7 +61,7 @@ return [
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('key', 'Type<K>', MixedT::T), prop('value', 'Type<V>', MixedT::T)]),
     // callable
     single('callableDefault', 'callable', 'callable()'),
-    constr('callable', 'T', [tpl('T')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)]),
+    constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)]),
     single('closureDefault', 'Closure', 'namedObject(Closure::class)'),
     constr('closure', 'T', [tpl('T', 'Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nclosureDefault,\ncallable(\$templates, \$parameters, \$returns),\n])"),
     // resource

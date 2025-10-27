@@ -13,7 +13,7 @@ use Typhoon\Type\ArrayT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
-use Typhoon\Type\ClassT;
+use Typhoon\Type\ClassStringT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
@@ -124,7 +124,7 @@ abstract class Fallback extends Reduced
         return $this->fallback($type);
     }
 
-    public function classT(ClassT $type): mixed
+    public function classStringT(ClassStringT $type): mixed
     {
         return $this->fallback($type);
     }

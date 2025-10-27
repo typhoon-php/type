@@ -10,7 +10,7 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T = mixed
+ * @template-covariant T of callable = callable
  * @implements Type<T>
  */
 final readonly class CallableT implements Type

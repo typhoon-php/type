@@ -13,7 +13,7 @@ namespace Typhoon\Type;
  * @template-covariant T of object = object
  * @implements Type<class-string<T>>
  */
-final readonly class ClassT implements Type
+final readonly class ClassStringT implements Type
 {
     /**
      * @param Type<T> $object
@@ -24,6 +24,6 @@ final readonly class ClassT implements Type
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->classT($this);
+        return $visitor->classStringT($this);
     }
 }

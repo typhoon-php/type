@@ -137,7 +137,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function classT(ClassT $type): mixed;
+    public function classStringT(ClassStringT $type): mixed;
 
     /**
      * @return TResult

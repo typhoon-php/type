@@ -10,7 +10,7 @@ parameters:
     tmpDir: ./var/phpstan
     ignoreErrors:
         -
-            message: '#^Class Typhoon\\Type\\IntMaskT @implements tag contains unresolvable type\.$#'
-            identifier: generics.unresolvable
+            message: '#^PHPDoc tag @template T for class Typhoon\\Type\\CallableT with bound type callable is not supported\.$#'
+            identifier: generics.notSupportedBound
             count: 1
-            path: src/IntMaskT.php
+            path: src/CallableT.php

@@ -10,7 +10,7 @@ use Typhoon\Type\ArrayT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
-use Typhoon\Type\ClassT;
+use Typhoon\Type\ClassStringT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FloatRangeT;
@@ -83,7 +83,7 @@ abstract class Stringify implements Visitor
         return str_replace("\n", '\n', var_export($type->value, return: true));
     }
 
-    public function classT(ClassT $type): string
+    public function classStringT(ClassStringT $type): string
     {
         return \sprintf('class-string<%s>', $type->object->accept($this));
     }

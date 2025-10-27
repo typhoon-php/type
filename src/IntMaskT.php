@@ -11,13 +11,10 @@ namespace Typhoon\Type;
 /**
  * @api
  * @template-covariant T of int = int
- * @implements Type<int-mask-of<T>>
+ * @implements Type<T>
  */
 final readonly class IntMaskT implements Type
 {
-    /**
-     * @param Type<T> $ints
-     */
     public function __construct(
         public Type $ints,
     ) {}
