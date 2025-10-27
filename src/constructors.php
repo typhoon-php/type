@@ -125,6 +125,8 @@ function classStringT(Type $of): ClassT
     return new ClassT($of);
 }
 
+const literalStringT = LiteralStringT::T;
+
 const numericT = NumericT::T;
 
 const scalarT = ScalarT::T;

@@ -37,6 +37,7 @@ use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyT;
 use Typhoon\Type\ListT;
+use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LiteralT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
@@ -322,6 +323,11 @@ abstract class Stringify implements Visitor
     public function classT(ClassT $type): string
     {
         return \sprintf('class-string<%s>', $type->object->accept($this));
+    }
+
+    public function literalStringT(LiteralStringT $type): string
+    {
+        return 'literal-string';
     }
 
     public function arrayKeyT(ArrayKeyT $type): string

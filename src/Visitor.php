@@ -142,6 +142,11 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function literalStringT(LiteralStringT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function arrayKeyT(ArrayKeyT $type): mixed;
 
     /**

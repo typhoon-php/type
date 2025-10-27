@@ -29,6 +29,8 @@ use Typhoon\Type\IsSupertypeT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyT;
+use Typhoon\Type\LiteralStringT;
+use Typhoon\Type\LiteralT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NegativeIntT;
 use Typhoon\Type\NonNegativeIntT;
@@ -132,6 +134,14 @@ abstract class Reduced implements Visitor
     public function floatValueT(FloatValueT $type): mixed
     {
         return (new FloatRangeT($type->value, $type->value))->accept($this);
+    }
+
+    public function literalStringT(LiteralStringT $type): mixed
+    {
+        /** @var LiteralT */
+        static $reduced = new LiteralT(StringT::T);
+
+        return $reduced->accept($this);
     }
 
     public function arrayKeyT(ArrayKeyT $type): mixed

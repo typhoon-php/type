@@ -37,6 +37,7 @@ return [
     single('lowercaseString', 'lowercase-string'),
     constr('stringValue', 'T', [tpl('T', 'string')], [prop('value', 'T', nativeType: 'string')]),
     constr('class', 'class-string<T>', [tpl('T', 'object')], [prop('object', 'Type<T>')]),
+    single('literalString', 'literal-string', 'literal(string)'),
     // scalar aliases
     single('arrayKey', 'array-key', 'union([int, string])'),
     single('numeric', 'numeric', 'union([int, float, numericString])'),

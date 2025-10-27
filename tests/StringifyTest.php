@@ -58,6 +58,7 @@ final class StringifyTest extends TestCase
         yield [stringT("a'bcd"), "'a\\'bcd'"];
         yield [stringT("a\\\\'bcd"), "'a\\\\\\\\\\'bcd'"];
         yield [stringT("\n"), "'\\n'"];
+        yield [literalStringT, 'literal-string'];
         yield [scalarT, 'scalar'];
         yield [resourceT, 'resource'];
         yield [nonEmptyListT(), 'non-empty-list'];
