@@ -1,10 +1,7 @@
 <?php
 
 use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
-use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
+use Typhoon\Type\Generator\Generator;
 
-$config = new Configuration();
-
-return $config
-    ->ignoreErrorsOnPackage('symfony/polyfill-php84', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreUnknownClasses(['Typhoon\Type\Generator\Generator']);
+return (new Configuration())
+    ->ignoreUnknownClasses([Generator::class]);
