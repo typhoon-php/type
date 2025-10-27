@@ -465,9 +465,8 @@ function classConstantT(string|Type $on, string $name): ClassConstantT
 /**
  * @api
  * @param class-string|Type $on
- * @param non-empty-string $namePrefix
  */
-function classConstantMaskT(string|Type $on, string $namePrefix): ClassConstantMaskT
+function classConstantMaskT(string|Type $on, string $namePrefix = ''): ClassConstantMaskT
 {
     if (\is_string($on)) {
         $on = namedObjectT($on);

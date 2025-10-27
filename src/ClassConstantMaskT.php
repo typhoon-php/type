@@ -18,7 +18,7 @@ final readonly class ClassConstantMaskT implements Type
 {
     public function __construct(
         public Type $class,
-        public string $namePrefix,
+        public string $namePrefix = '',
     ) {}
 
     public function accept(Visitor $visitor): mixed
