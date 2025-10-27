@@ -120,12 +120,12 @@ final class StringifyTest extends TestCase
         yield [callableT(parameters: [param(stringT, hasDefault: true)]), 'callable(string=): mixed'];
         // todo yield [callableT([param(stringT, isVariadic: true)]), 'callable(string...): mixed'];
         // todo yield [callableT([param(stringT, isVariadic: true)], neverT), 'callable(string...): never'];
-        // todo yield [ClosureT(), 'Closure'];
-        // todo yield [ClosureT(returns: voidT), 'Closure(): void'];
-        // todo yield [ClosureT([stringT]), 'Closure(string): mixed'];
-        // todo yield [ClosureT([param(stringT, hasDefault: true)]), 'Closure(string=): mixed'];
-        // todo yield [ClosureT([param(stringT, isVariadic: true)]), 'Closure(string...): mixed'];
-        // todo yield [ClosureT([param(stringT, isVariadic: true)], neverT), 'Closure(string...): never'];
+        yield [closureT(), 'Closure(): mixed'];
+        yield [closureT(returns: voidT), 'Closure(): void'];
+        // todo yield [closureT([stringT]), 'Closure(string): mixed'];
+        // todo yield [closureT([param(stringT, hasDefault: true)]), 'Closure(string=): mixed'];
+        // todo yield [closureT([param(stringT, isVariadic: true)]), 'Closure(string...): mixed'];
+        // todo yield [closureT([param(stringT, isVariadic: true)], neverT), 'Closure(string...): never'];
         // todo yield [literalStringT, 'literal-string'];
         // todo yield [literalIntT, 'literal-int'];
         // todo yield [classStringT(classTemplateT(\stdClass::class, 'T')), 'class-string<T#stdClass>'];

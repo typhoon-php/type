@@ -8,9 +8,11 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use Closure;
+
 /**
  * @api
- * @template-covariant T of \Closure = \Closure
+ * @template-covariant T of Closure = Closure
  * @implements Type<T>
  */
 final readonly class ClosureT implements Type

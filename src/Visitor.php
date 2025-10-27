@@ -237,6 +237,11 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function closureDefaultT(ClosureDefaultT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function closureT(ClosureT $type): mixed;
 
     /**

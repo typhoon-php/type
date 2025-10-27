@@ -348,6 +348,24 @@ function callableT(array $templates = [], array $parameters = [], Type $returns 
     );
 }
 
+const closureT = ClosureDefaultT::T;
+
+/**
+ * @param list<Template<Variance::Invariant>> $templates
+ * @param list<Parameter|Type> $parameters
+ */
+function closureT(array $templates = [], array $parameters = [], Type $returns = mixedT): ClosureT
+{
+    return new ClosureT(
+        templates: $templates,
+        parameters: array_map(
+            static fn(Parameter|Type $p): Parameter => $p instanceof Parameter ? $p : new Parameter($p),
+            $parameters,
+        ),
+        returns: $returns,
+    );
+}
+
 /**
  * @api
  */

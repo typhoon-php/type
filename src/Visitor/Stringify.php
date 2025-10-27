@@ -19,6 +19,7 @@ use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClassT;
+use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
@@ -477,6 +478,11 @@ abstract class Stringify implements Visitor
             implode(', ', array_map($this->parameter(...), $type->parameters)),
             $type->returns->accept($this),
         );
+    }
+
+    public function closureDefaultT(ClosureDefaultT $type): string
+    {
+        return 'Closure';
     }
 
     public function closureT(ClosureT $type): string

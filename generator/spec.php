@@ -61,7 +61,8 @@ return [
     // callable
     single('callableDefault', 'callable', 'callable()'),
     constr('callable', 'T', [tpl('T')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)]),
-    constr('closure', 'T', [tpl('T', 'Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nnamedObject(Closure::class),\ncallable(\$templates, \$parameters, \$returns),\n])"),
+    single('closureDefault', 'Closure', 'namedObject(Closure::class)'),
+    constr('closure', 'T', [tpl('T', 'Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nclosureDefault,\ncallable(\$templates, \$parameters, \$returns),\n])"),
     // resource
     single('resource', 'resource'),
     // intersection

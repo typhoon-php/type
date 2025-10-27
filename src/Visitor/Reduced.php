@@ -14,6 +14,7 @@ use Typhoon\Type\ArrayT;
 use Typhoon\Type\BoolT;
 use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\CallableT;
+use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
@@ -218,10 +219,18 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    public function closureDefaultT(ClosureDefaultT $type): mixed
+    {
+        /** @var NamedObjectT */
+        static $reduced = new NamedObjectT(\Closure::class);
+
+        return $reduced->accept($this);
+    }
+
     public function closureT(ClosureT $type): mixed
     {
         return (new IntersectionT([
-            new NamedObjectT(\Closure::class),
+            ClosureDefaultT::T,
             new CallableT($type->templates, $type->parameters, $type->returns),
         ]))->accept($this);
     }

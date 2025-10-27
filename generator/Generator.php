@@ -172,6 +172,8 @@ final readonly class Generator
 
     private function resolveFileName(PhpNamespace $namespace): string
     {
+        $namespace->addUse(\Closure::class);
+
         $class = array_first($namespace->getClasses());
         \assert($class instanceof ClassLike);
 
