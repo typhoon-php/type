@@ -14,6 +14,7 @@ use Closure;
  * @api
  * @template-covariant T of Closure = Closure
  * @implements Type<T>
+ * @codeCoverageIgnore
  */
 final readonly class ClosureT implements Type
 {

@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<bool>
+ * @codeCoverageIgnore
  */
 enum BoolT implements Type
 {

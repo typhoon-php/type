@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T of float = float
  * @implements Type<T>
+ * @codeCoverageIgnore
  */
 final readonly class FloatValueT implements Type
 {

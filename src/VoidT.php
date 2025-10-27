@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<void>
+ * @codeCoverageIgnore
  */
 enum VoidT implements Type
 {

@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<object>
+ * @codeCoverageIgnore
  */
 enum ObjectDefaultT implements Type
 {

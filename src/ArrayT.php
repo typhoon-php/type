@@ -13,6 +13,7 @@ namespace Typhoon\Type;
  * @template-covariant K of array-key = array-key
  * @template-covariant V = mixed
  * @implements Type<array<K, V>>
+ * @codeCoverageIgnore
  */
 final readonly class ArrayT implements Type
 {

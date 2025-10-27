@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<lowercase-string>
+ * @codeCoverageIgnore
  */
 enum LowercaseStringT implements Type
 {

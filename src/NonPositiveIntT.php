@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<non-positive-int>
+ * @codeCoverageIgnore
  */
 enum NonPositiveIntT implements Type
 {

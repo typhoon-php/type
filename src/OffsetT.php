@@ -13,6 +13,7 @@ namespace Typhoon\Type;
  * @template-covariant T = mixed
  * @template-covariant K = mixed
  * @implements Type<T[K]>
+ * @codeCoverageIgnore
  */
 final readonly class OffsetT implements Type
 {

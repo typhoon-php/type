@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<never>
+ * @codeCoverageIgnore
  */
 enum NeverT implements Type
 {

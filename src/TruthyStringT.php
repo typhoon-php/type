@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<truthy-string>
+ * @codeCoverageIgnore
  */
 enum TruthyStringT implements Type
 {

@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<non-zero-int>
+ * @codeCoverageIgnore
  */
 enum NonZeroIntT implements Type
 {

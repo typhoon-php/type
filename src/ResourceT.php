@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<resource>
+ * @codeCoverageIgnore
  */
 enum ResourceT implements Type
 {

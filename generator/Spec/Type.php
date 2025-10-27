@@ -56,7 +56,13 @@ final readonly class Type
     {
         if ($this->singleton) {
             $enum = (new EnumType($this->shortClassName()))
-                ->setComment("@api\n@implements Type<{$this->type}>")
+                ->setComment(
+                    <<<PHPDOC
+                        @api
+                        @implements Type<{$this->type}>
+                        @codeCoverageIgnore
+                        PHPDOC,
+                )
                 ->addImplement(TypeI::class);
             $enum->addCase('T');
             $enum->addMethod('accept')
@@ -72,6 +78,7 @@ final readonly class Type
                 '@api',
                 ...array_map(static fn(Template $t) => $t->declaration(), $this->templates),
                 "@implements Type<{$this->type}>",
+                '@codeCoverageIgnore',
             ]))
             ->setFinal()
             ->setReadOnly()

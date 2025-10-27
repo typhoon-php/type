@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T of bool = bool
  * @implements Type<T>
+ * @codeCoverageIgnore
  */
 final readonly class IsSubtypeT implements Type
 {

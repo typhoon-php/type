@@ -35,6 +35,7 @@ final class StringifyTest extends TestCase
         yield [falseT, 'false'];
         yield [boolT, 'bool'];
         yield [intT, 'int'];
+        yield [nonNegativeIntT, 'non-negative-int'];
         yield [intT(123), '123'];
         yield [intT(-123), '-123'];
         yield [intRangeT(), 'int<min, max>'];
@@ -121,6 +122,7 @@ final class StringifyTest extends TestCase
         yield [callableT(parameters: [param(stringT, hasDefault: true)]), 'callable(string=): mixed'];
         // todo yield [callableT([param(stringT, isVariadic: true)]), 'callable(string...): mixed'];
         // todo yield [callableT([param(stringT, isVariadic: true)], neverT), 'callable(string...): never'];
+        yield [closureT, 'Closure'];
         yield [closureT(), 'Closure(): mixed'];
         yield [closureT(returns: voidT), 'Closure(): void'];
         // todo yield [closureT([stringT]), 'Closure(string): mixed'];

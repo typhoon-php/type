@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T = mixed
  * @implements Type<value-of<T>>
+ * @codeCoverageIgnore
  */
 final readonly class ValueT implements Type
 {

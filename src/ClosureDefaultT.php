@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<\Closure>
+ * @codeCoverageIgnore
  */
 enum ClosureDefaultT implements Type
 {

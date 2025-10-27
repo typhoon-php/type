@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T of int = int
  * @implements Type<T>
+ * @codeCoverageIgnore
  */
 final readonly class IntMaskT implements Type
 {

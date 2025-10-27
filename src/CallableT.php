@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T of callable = callable
  * @implements Type<T>
+ * @codeCoverageIgnore
  */
 final readonly class CallableT implements Type
 {

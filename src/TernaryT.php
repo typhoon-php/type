@@ -13,6 +13,7 @@ namespace Typhoon\Type;
  * @template-covariant Then = mixed
  * @template-covariant Else = mixed
  * @implements Type<Then|Else>
+ * @codeCoverageIgnore
  */
 final readonly class TernaryT implements Type
 {

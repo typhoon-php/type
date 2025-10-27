@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<array>
+ * @codeCoverageIgnore
  */
 enum ArrayDefaultT implements Type
 {

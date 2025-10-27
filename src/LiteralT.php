@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T = mixed
  * @implements Type<T>
+ * @codeCoverageIgnore
  */
 final readonly class LiteralT implements Type
 {

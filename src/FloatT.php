@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<float>
+ * @codeCoverageIgnore
  */
 enum FloatT implements Type
 {

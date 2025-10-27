@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<non-empty-string>
+ * @codeCoverageIgnore
  */
 enum NonEmptyStringT implements Type
 {

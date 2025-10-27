@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T of object = object
  * @implements Type<T>
+ * @codeCoverageIgnore
  */
 final readonly class SelfT implements Type
 {

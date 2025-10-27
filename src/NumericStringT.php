@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<numeric-string>
+ * @codeCoverageIgnore
  */
 enum NumericStringT implements Type
 {

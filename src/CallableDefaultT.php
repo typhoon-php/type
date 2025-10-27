@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<callable>
+ * @codeCoverageIgnore
  */
 enum CallableDefaultT implements Type
 {

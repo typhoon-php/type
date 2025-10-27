@@ -59,6 +59,7 @@ use Typhoon\Type\Visitor;
  * @api
  * @template-covariant TResult
  * @implements Visitor<TResult>
+ * @codeCoverageIgnore
  */
 abstract class Reduced implements Visitor
 {

@@ -13,6 +13,7 @@ namespace Typhoon\Type;
  * @template-covariant K = mixed
  * @template-covariant V = mixed
  * @implements Type<iterable<K, V>>
+ * @codeCoverageIgnore
  */
 final readonly class IterableT implements Type
 {

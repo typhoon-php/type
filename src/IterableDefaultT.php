@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<iterable>
+ * @codeCoverageIgnore
  */
 enum IterableDefaultT implements Type
 {

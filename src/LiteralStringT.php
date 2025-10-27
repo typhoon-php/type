@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<literal-string>
+ * @codeCoverageIgnore
  */
 enum LiteralStringT implements Type
 {

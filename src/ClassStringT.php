@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T of object = object
  * @implements Type<class-string<T>>
+ * @codeCoverageIgnore
  */
 final readonly class ClassStringT implements Type
 {

@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant V = mixed
  * @implements Type<list<V>>
+ * @codeCoverageIgnore
  */
 final readonly class ListT implements Type
 {

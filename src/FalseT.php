@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<false>
+ * @codeCoverageIgnore
  */
 enum FalseT implements Type
 {

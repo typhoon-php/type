@@ -51,6 +51,7 @@ use Typhoon\Type\VoidT;
  * @api
  * @template-covariant TResult
  * @extends Reduced<TResult>
+ * @codeCoverageIgnore
  */
 abstract class Fallback extends Reduced
 {

@@ -77,6 +77,7 @@ final readonly class Generator
                     @api
                     @template-covariant TResult
                     @implements Visitor<TResult>
+                    @codeCoverageIgnore
                     PHPDOC,
             );
 
@@ -99,6 +100,7 @@ final readonly class Generator
                     @api
                     @template-covariant TResult
                     @extends Reduced<TResult>
+                    @codeCoverageIgnore
                     PHPDOC,
             );
 

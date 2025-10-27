@@ -11,6 +11,7 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<mixed>
+ * @codeCoverageIgnore
  */
 enum MixedT implements Type
 {

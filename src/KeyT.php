@@ -12,6 +12,7 @@ namespace Typhoon\Type;
  * @api
  * @template-covariant T = mixed
  * @implements Type<key-of<T>>
+ * @codeCoverageIgnore
  */
 final readonly class KeyT implements Type
 {
