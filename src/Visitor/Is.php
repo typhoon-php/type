@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
-use Typhoon\Type\ArrayOpenT;
+use Typhoon\Type\ArrayDefaultT;
 use Typhoon\Type\BoolT;
-use Typhoon\Type\CallableOpenT;
+use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatT;
 use Typhoon\Type\FloatValueT;
@@ -14,7 +14,7 @@ use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
-use Typhoon\Type\IterableOpenT;
+use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NeverT;
@@ -23,7 +23,7 @@ use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectOpenT;
+use Typhoon\Type\ObjectDefaultT;
 use Typhoon\Type\ResourceT;
 use Typhoon\Type\ScalarT;
 use Typhoon\Type\StringT;
@@ -153,22 +153,22 @@ abstract class Is extends Fallback
         return \is_resource($this->value);
     }
 
-    public function arrayOpen(ArrayOpenT $type): mixed
+    public function arrayOpen(ArrayDefaultT $type): mixed
     {
         return \is_array($this->value);
     }
 
-    public function callableOpen(CallableOpenT $type): mixed
+    public function callableOpen(CallableDefaultT $type): mixed
     {
         return \is_callable($this->value);
     }
 
-    public function iterableOpen(IterableOpenT $type): mixed
+    public function iterableOpen(IterableDefaultT $type): mixed
     {
         return is_iterable($this->value);
     }
 
-    public function objectOpen(ObjectOpenT $type): mixed
+    public function objectOpen(ObjectDefaultT $type): mixed
     {
         return \is_object($this->value);
     }

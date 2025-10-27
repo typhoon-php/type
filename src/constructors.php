@@ -131,7 +131,7 @@ const scalarT = ScalarT::T;
 
 const arrayKeyT = ArrayKeyT::T;
 
-const arrayT = ArrayOpenT::T;
+const arrayT = ArrayDefaultT::T;
 
 /**
  * @api
@@ -246,7 +246,7 @@ function offsetT(Type $value, Type $key): OffsetT
     return new OffsetT($value, $key);
 }
 
-const iterableT = IterableOpenT::T;
+const iterableT = IterableDefaultT::T;
 
 /**
  * @api
@@ -256,7 +256,7 @@ function iterableT(Type $key = mixedT, Type $value = mixedT): IterableT
     return new IterableT($key, $value);
 }
 
-const objectT = ObjectOpenT::T;
+const objectT = ObjectDefaultT::T;
 
 /**
  * @api
@@ -268,7 +268,7 @@ function objectT(string $class, array $templateArguments = []): ObjectT
     return new ObjectT(superClasses: [new SuperClass($class, $templateArguments)]);
 }
 
-const selfT = SelfOpenT::T;
+const selfT = SelfDefaultT::T;
 
 /**
  * @api
@@ -279,7 +279,7 @@ function selfT(array $templateArguments = []): SelfT
     return new SelfT($templateArguments);
 }
 
-const parentT = ParentOpenT::T;
+const parentT = ParentDefaultT::T;
 
 /**
  * @api
@@ -290,7 +290,7 @@ function parentT(array $templateArguments = []): ParentT
     return new ParentT($templateArguments);
 }
 
-const staticT = StaticOpenT::T;
+const staticT = StaticDefaultT::T;
 
 /**
  * @api
@@ -301,7 +301,7 @@ function staticT(array $templateArguments = []): StaticT
     return new StaticT($templateArguments);
 }
 
-const callableT = CallableOpenT::T;
+const callableT = CallableDefaultT::T;
 
 /**
  * @param list<Template<Variance::Invariant>> $templates

@@ -10,14 +10,14 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @implements Type<iterable>
+ * @implements Type<array>
  */
-enum IterableOpenT implements Type
+enum ArrayDefaultT implements Type
 {
     case T;
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->iterableOpen($this);
+        return $visitor->arrayDefault($this);
     }
 }

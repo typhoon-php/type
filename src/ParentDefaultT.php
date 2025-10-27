@@ -10,14 +10,14 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @implements Type<callable>
+ * @implements Type<object>
  */
-enum CallableOpenT implements Type
+enum ParentDefaultT implements Type
 {
     case T;
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->callableOpen($this);
+        return $visitor->parentDefault($this);
     }
 }

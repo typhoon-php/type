@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
+use Typhoon\Type\ArrayDefaultT;
 use Typhoon\Type\ArrayKeyT;
-use Typhoon\Type\ArrayOpenT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BoolT;
-use Typhoon\Type\CallableOpenT;
+use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\FalseT;
@@ -25,7 +25,7 @@ use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
 use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IsSupertypeT;
-use Typhoon\Type\IterableOpenT;
+use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyT;
 use Typhoon\Type\NegativeIntT;
@@ -34,16 +34,16 @@ use Typhoon\Type\NonPositiveIntT;
 use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectOpenT;
+use Typhoon\Type\ObjectDefaultT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
-use Typhoon\Type\ParentOpenT;
+use Typhoon\Type\ParentDefaultT;
 use Typhoon\Type\ParentT;
 use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\ScalarT;
-use Typhoon\Type\SelfOpenT;
+use Typhoon\Type\SelfDefaultT;
 use Typhoon\Type\SelfT;
-use Typhoon\Type\StaticOpenT;
+use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\SuperClass;
@@ -157,7 +157,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function arrayOpen(ArrayOpenT $type): mixed
+    public function arrayDefault(ArrayDefaultT $type): mixed
     {
         /** @var ArrayT */
         static $reduced = new ArrayT();
@@ -165,7 +165,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function iterableOpen(IterableOpenT $type): mixed
+    public function iterableDefault(IterableDefaultT $type): mixed
     {
         /** @var IterableT */
         static $reduced = new IterableT();
@@ -173,7 +173,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function objectOpen(ObjectOpenT $type): mixed
+    public function objectDefault(ObjectDefaultT $type): mixed
     {
         /** @var ObjectT */
         static $reduced = new ObjectT();
@@ -181,7 +181,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function selfOpen(SelfOpenT $type): mixed
+    public function selfDefault(SelfDefaultT $type): mixed
     {
         /** @var SelfT */
         static $reduced = new SelfT();
@@ -189,7 +189,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function parentOpen(ParentOpenT $type): mixed
+    public function parentDefault(ParentDefaultT $type): mixed
     {
         /** @var ParentT */
         static $reduced = new ParentT();
@@ -197,7 +197,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function staticOpen(StaticOpenT $type): mixed
+    public function staticDefault(StaticDefaultT $type): mixed
     {
         /** @var StaticT */
         static $reduced = new StaticT();
@@ -205,7 +205,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
-    public function callableOpen(CallableOpenT $type): mixed
+    public function callableDefault(CallableDefaultT $type): mixed
     {
         /** @var CallableT */
         static $reduced = new CallableT();

@@ -12,12 +12,12 @@ namespace Typhoon\Type;
  * @api
  * @implements Type<object>
  */
-enum ObjectOpenT implements Type
+enum StaticDefaultT implements Type
 {
     case T;
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->objectOpen($this);
+        return $visitor->staticDefault($this);
     }
 }

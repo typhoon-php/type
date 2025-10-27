@@ -162,7 +162,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function arrayOpen(ArrayOpenT $type): mixed;
+    public function arrayDefault(ArrayDefaultT $type): mixed;
 
     /**
      * @return TResult
@@ -172,7 +172,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function iterableOpen(IterableOpenT $type): mixed;
+    public function iterableDefault(IterableDefaultT $type): mixed;
 
     /**
      * @return TResult
@@ -182,7 +182,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function objectOpen(ObjectOpenT $type): mixed;
+    public function objectDefault(ObjectDefaultT $type): mixed;
 
     /**
      * @return TResult
@@ -192,7 +192,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function selfOpen(SelfOpenT $type): mixed;
+    public function selfDefault(SelfDefaultT $type): mixed;
 
     /**
      * @return TResult
@@ -202,7 +202,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function parentOpen(ParentOpenT $type): mixed;
+    public function parentDefault(ParentDefaultT $type): mixed;
 
     /**
      * @return TResult
@@ -212,7 +212,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function staticOpen(StaticOpenT $type): mixed;
+    public function staticDefault(StaticDefaultT $type): mixed;
 
     /**
      * @return TResult
@@ -222,7 +222,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function callableOpen(CallableOpenT $type): mixed;
+    public function callableDefault(CallableDefaultT $type): mixed;
 
     /**
      * @return TResult

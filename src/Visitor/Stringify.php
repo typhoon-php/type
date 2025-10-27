@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type\AliasT;
+use Typhoon\Type\ArrayDefaultT;
 use Typhoon\Type\ArrayElement;
 use Typhoon\Type\ArrayKeyT;
-use Typhoon\Type\ArrayOpenT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BoolT;
-use Typhoon\Type\CallableOpenT;
+use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
@@ -32,7 +32,7 @@ use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
 use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IsSupertypeT;
-use Typhoon\Type\IterableOpenT;
+use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyT;
 use Typhoon\Type\ListT;
@@ -48,18 +48,18 @@ use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectOpenT;
+use Typhoon\Type\ObjectDefaultT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
-use Typhoon\Type\ParentOpenT;
+use Typhoon\Type\ParentDefaultT;
 use Typhoon\Type\ParentT;
 use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\Property;
 use Typhoon\Type\ResourceT;
 use Typhoon\Type\ScalarT;
-use Typhoon\Type\SelfOpenT;
+use Typhoon\Type\SelfDefaultT;
 use Typhoon\Type\SelfT;
-use Typhoon\Type\StaticOpenT;
+use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
@@ -294,7 +294,7 @@ abstract class Stringify implements Visitor
         return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
     }
 
-    public function arrayOpen(ArrayOpenT $type): string
+    public function arrayDefault(ArrayDefaultT $type): string
     {
         return 'array';
     }
@@ -325,7 +325,7 @@ abstract class Stringify implements Visitor
         return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
     }
 
-    public function iterableOpen(IterableOpenT $type): string
+    public function iterableDefault(IterableDefaultT $type): string
     {
         return 'iterable';
     }
@@ -346,7 +346,7 @@ abstract class Stringify implements Visitor
         return \sprintf('iterable<%s, %s>', $key, $value);
     }
 
-    public function objectOpen(ObjectOpenT $type): string
+    public function objectDefault(ObjectDefaultT $type): string
     {
         return 'object';
     }
@@ -366,7 +366,7 @@ abstract class Stringify implements Visitor
         return \sprintf('object{%s}', implode(', ', array_map($this->property(...), $type->properties)));
     }
 
-    public function selfOpen(SelfOpenT $type): mixed
+    public function selfDefault(SelfDefaultT $type): mixed
     {
         return 'self';
     }
@@ -376,7 +376,7 @@ abstract class Stringify implements Visitor
         return $this->constructor('self', $type->templateArguments);
     }
 
-    public function parentOpen(ParentOpenT $type): mixed
+    public function parentDefault(ParentDefaultT $type): mixed
     {
         return 'parent';
     }
@@ -386,7 +386,7 @@ abstract class Stringify implements Visitor
         return $this->constructor('parent', $type->templateArguments);
     }
 
-    public function staticOpen(StaticOpenT $type): mixed
+    public function staticDefault(StaticDefaultT $type): mixed
     {
         return 'static';
     }
@@ -396,7 +396,7 @@ abstract class Stringify implements Visitor
         return $this->constructor('static', $type->templateArguments);
     }
 
-    public function callableOpen(CallableOpenT $type): string
+    public function callableDefault(CallableDefaultT $type): string
     {
         return 'callable';
     }

@@ -10,14 +10,14 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @implements Type<array>
+ * @implements Type<callable>
  */
-enum ArrayOpenT implements Type
+enum CallableDefaultT implements Type
 {
     case T;
 
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->arrayOpen($this);
+        return $visitor->callableDefault($this);
     }
 }

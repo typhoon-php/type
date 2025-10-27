@@ -43,22 +43,22 @@ return [
     single('scalar', 'scalar', 'union([bool, int, float, string])'),
     // array
     constr('list', 'list<V>', [tpl('V')], [prop('value', 'Type<V>', MixedT::T), prop('elements', 'array<non-negative-int, ArrayElement>'), prop('isNonEmpty', 'bool')]),
-    single('arrayOpen', 'array', 'array()'),
+    single('arrayDefault', 'array', 'array()'),
     constr('array', 'array<K, V>', [tpl('K', 'array-key'), tpl('V')], [prop('key', 'Type<K>', ArrayKeyT::T), prop('value', 'Type<V>', MixedT::T), prop('elements', 'array<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // iterable
-    single('iterableOpen', 'iterable', 'iterable()'),
+    single('iterableDefault', 'iterable', 'iterable()'),
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('key', 'Type<K>', MixedT::T), prop('value', 'Type<V>', MixedT::T)]),
     // object
-    single('objectOpen', 'object', 'object()'),
+    single('objectDefault', 'object', 'object()'),
     constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('superClasses', 'list<SuperClass>'), prop('properties', 'list<Property>')]),
-    single('selfOpen', 'object', 'self()'),
+    single('selfDefault', 'object', 'self()'),
     constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
-    single('parentOpen', 'object', 'parent()'),
+    single('parentDefault', 'object', 'parent()'),
     constr('parent', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
-    single('staticOpen', 'object', 'static()'),
+    single('staticDefault', 'object', 'static()'),
     constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
     // callable
-    single('callableOpen', 'callable', 'callable()'),
+    single('callableDefault', 'callable', 'callable()'),
     constr('callable', 'T', [tpl('T')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)]),
     constr('closure', 'T', [tpl('T', '\Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nobject(superClasses: [superClass(\\Closure::class)]),\ncallable(\$templates, \$parameters, \$returns),\n])"),
     // resource

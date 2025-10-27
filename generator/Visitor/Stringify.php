@@ -25,12 +25,12 @@ use Typhoon\Type\ListT;
 use Typhoon\Type\LiteralT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
-use Typhoon\Type\ParentOpenT;
+use Typhoon\Type\ParentDefaultT;
 use Typhoon\Type\ParentT;
 use Typhoon\Type\Property;
-use Typhoon\Type\SelfOpenT;
+use Typhoon\Type\SelfDefaultT;
 use Typhoon\Type\SelfT;
-use Typhoon\Type\StaticOpenT;
+use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringValueT;
 use Typhoon\Type\SuperClass;
@@ -193,7 +193,7 @@ abstract class Stringify implements Visitor
         return \sprintf('%s%s: %s', $property->name, $property->isOptional ? '?' : '', $property->type->accept($this));
     }
 
-    public function selfOpen(SelfOpenT $type): mixed
+    public function selfDefault(SelfDefaultT $type): mixed
     {
         return 'self';
     }
@@ -203,7 +203,7 @@ abstract class Stringify implements Visitor
         return $this->constructor('self', $type->templateArguments);
     }
 
-    public function parentOpen(ParentOpenT $type): mixed
+    public function parentDefault(ParentDefaultT $type): mixed
     {
         return 'parent';
     }
@@ -213,7 +213,7 @@ abstract class Stringify implements Visitor
         return $this->constructor('parent', $type->templateArguments);
     }
 
-    public function staticOpen(StaticOpenT $type): mixed
+    public function staticDefault(StaticDefaultT $type): mixed
     {
         return 'static';
     }
