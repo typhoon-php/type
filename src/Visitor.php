@@ -177,6 +177,11 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function namedObjectT(NamedObjectT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function objectT(ObjectT $type): mixed;
 
     /**

@@ -25,6 +25,7 @@ use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyT;
 use Typhoon\Type\ListT;
 use Typhoon\Type\LiteralT;
+use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
 use Typhoon\Type\Parameter;
@@ -36,7 +37,6 @@ use Typhoon\Type\SelfT;
 use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringValueT;
-use Typhoon\Type\SuperClass;
 use Typhoon\Type\Template;
 use Typhoon\Type\TemplateT;
 use Typhoon\Type\TernaryT;
@@ -175,25 +175,19 @@ abstract class Stringify implements Visitor
         return \sprintf('iterable<%s, %s>', $key, $value);
     }
 
+    public function namedObjectT(NamedObjectT $type): string
+    {
+        return $this->constructor($type->class, $type->templateArguments);
+    }
+
     public function objectT(ObjectT $type): string
     {
-        $templates = $this->templates($type->templates);
-
-        $superClasses = array_map(
-            fn(SuperClass $class): string => $this->constructor($class->class, $class->templateArguments),
-            $type->superClasses,
-        );
-
-        if ($superClasses !== [] && $templates === '' && $type->properties === []) {
-            return implode('&', $superClasses);
-        }
-
         return \sprintf(
             'object%s%s{%s}',
-            $templates,
+            $this->templates($type->templates),
             implode('', array_map(
-                fn(SuperClass $class): string => '@' . $this->constructor($class->class, $class->templateArguments),
-                $type->superClasses,
+                fn(NamedObjectT $inherited): string => '@' . $this->namedObjectT($inherited),
+                $type->superTypes,
             )),
             implode(', ', array_map($this->property(...), $type->properties)),
         );

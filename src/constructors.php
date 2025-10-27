@@ -261,16 +261,16 @@ const objectT = ObjectDefaultT::T;
 /**
  * @api
  * @param list<Template> $templates
- * @param list<class-string|SuperClass> $superClasses
+ * @param list<class-string|NamedObjectT> $superTypes
  * @param list<Property> $properties
  */
-function objectT(array $templates = [], array $superClasses = [], array $properties = []): ObjectT
+function objectT(array $templates = [], array $superTypes = [], array $properties = []): ObjectT
 {
     return new ObjectT(
         $templates,
         array_map(
-            static fn(string|SuperClass $s): SuperClass => $s instanceof SuperClass ? $s : new SuperClass($s),
-            $superClasses,
+            static fn(string|NamedObjectT $s): NamedObjectT => $s instanceof NamedObjectT ? $s : new NamedObjectT($s),
+            $superTypes,
         ),
         $properties,
     );
@@ -278,12 +278,14 @@ function objectT(array $templates = [], array $superClasses = [], array $propert
 
 /**
  * @api
- * @param class-string $class
+ * @template T of object
+ * @param class-string<T> $class
  * @param list<Type> $templateArguments
+ * @return NamedObjectT<T>
  */
-function namedObjectT(string $class, array $templateArguments = []): ObjectT
+function namedObjectT(string $class, array $templateArguments = []): NamedObjectT
 {
-    return new ObjectT(superClasses: [new SuperClass($class, $templateArguments)]);
+    return new NamedObjectT($class, $templateArguments);
 }
 
 /**

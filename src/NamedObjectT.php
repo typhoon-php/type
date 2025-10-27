@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
@@ -7,8 +11,9 @@ namespace Typhoon\Type;
 /**
  * @api
  * @template-covariant T of object = object
+ * @implements Type<T>
  */
-final readonly class SuperClass
+final readonly class NamedObjectT implements Type
 {
     /**
      * @param class-string<T> $class
@@ -18,4 +23,9 @@ final readonly class SuperClass
         public string $class,
         public array $templateArguments = [],
     ) {}
+
+    public function accept(Visitor $visitor): mixed
+    {
+        return $visitor->namedObjectT($this);
+    }
 }

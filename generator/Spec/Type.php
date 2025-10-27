@@ -8,7 +8,6 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\EnumType;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\Parameter;
-use Typhoon\Type\SuperClass;
 use Typhoon\Type\Type as TypeI;
 use Typhoon\Type\Visitor;
 
@@ -149,12 +148,12 @@ final readonly class Type
             static function (array $matches) use ($typesByName, &$firstType): string {
                 $match = $matches[0];
 
-                if ($match[0] === '$') {
-                    return '$type->' . substr($match, 1);
+                if ($match === '$t') {
+                    return '$type';
                 }
 
-                if ($match === 'superClass') {
-                    return 'new \\' . SuperClass::class;
+                if ($match[0] === '$') {
+                    return '$type->' . substr($match, 1);
                 }
 
                 $type = $typesByName[$match . 'T'] ?? null;

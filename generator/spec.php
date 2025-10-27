@@ -47,7 +47,8 @@ return [
     constr('array', 'array<K, V>', [tpl('K', 'array-key'), tpl('V')], [prop('key', 'Type<K>', ArrayKeyT::T), prop('value', 'Type<V>', MixedT::T), prop('elements', 'array<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
     single('objectDefault', 'object', 'object()'),
-    constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('superClasses', 'list<SuperClass>'), prop('properties', 'list<Property>')]),
+    constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', 'list<Type>')], 'object(superTypes: [$t])'),
+    constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('superTypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
     single('selfDefault', 'object', 'self()'),
     constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
     single('parentDefault', 'object', 'parent()'),
@@ -60,7 +61,7 @@ return [
     // callable
     single('callableDefault', 'callable', 'callable()'),
     constr('callable', 'T', [tpl('T')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)]),
-    constr('closure', 'T', [tpl('T', '\Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nobject(superClasses: [superClass(\\Closure::class)]),\ncallable(\$templates, \$parameters, \$returns),\n])"),
+    constr('closure', 'T', [tpl('T', 'Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nnamedObject(Closure::class),\ncallable(\$templates, \$parameters, \$returns),\n])"),
     // resource
     single('resource', 'resource'),
     // intersection

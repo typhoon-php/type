@@ -28,6 +28,7 @@ use Typhoon\Type\IsSupertypeT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyT;
+use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NegativeIntT;
 use Typhoon\Type\NonNegativeIntT;
 use Typhoon\Type\NonPositiveIntT;
@@ -46,7 +47,6 @@ use Typhoon\Type\SelfT;
 use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
-use Typhoon\Type\SuperClass;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\UnionT;
 use Typhoon\Type\ValueT;
@@ -173,6 +173,11 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    public function namedObjectT(NamedObjectT $type): mixed
+    {
+        return (new ObjectT(superTypes: [$type]))->accept($this);
+    }
+
     public function selfDefaultT(SelfDefaultT $type): mixed
     {
         /** @var SelfT */
@@ -216,7 +221,7 @@ abstract class Reduced implements Visitor
     public function closureT(ClosureT $type): mixed
     {
         return (new IntersectionT([
-            new ObjectT(superClasses: [new SuperClass(\Closure::class)]),
+            new NamedObjectT(\Closure::class),
             new CallableT($type->templates, $type->parameters, $type->returns),
         ]))->accept($this);
     }
