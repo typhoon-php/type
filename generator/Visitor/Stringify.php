@@ -7,9 +7,11 @@ namespace Typhoon\Type\Generator\Visitor;
 use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayElement;
 use Typhoon\Type\ArrayT;
+use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClassT;
+use Typhoon\Type\ClosureT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\FloatValueT;
@@ -25,6 +27,7 @@ use Typhoon\Type\ListT;
 use Typhoon\Type\LiteralT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
+use Typhoon\Type\Parameter;
 use Typhoon\Type\ParentDefaultT;
 use Typhoon\Type\ParentT;
 use Typhoon\Type\Property;
@@ -34,11 +37,13 @@ use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringValueT;
 use Typhoon\Type\SuperClass;
+use Typhoon\Type\Template;
 use Typhoon\Type\TemplateT;
 use Typhoon\Type\TernaryT;
 use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
 use Typhoon\Type\ValueT;
+use Typhoon\Type\Variance;
 use Typhoon\Type\Visitor;
 
 /**
@@ -172,17 +177,26 @@ abstract class Stringify implements Visitor
 
     public function object(ObjectT $type): string
     {
+        $templates = $this->templates($type->templates);
+
         $superClasses = array_map(
             fn(SuperClass $class): string => $this->constructor($class->class, $class->templateArguments),
             $type->superClasses,
         );
 
-        if ($superClasses !== [] && $type->templates === [] && $type->properties === []) {
+        if ($superClasses !== [] && $templates === '' && $type->properties === []) {
             return implode('&', $superClasses);
         }
 
-        // todo templates & super classes
-        return \sprintf('object{%s}', implode(', ', array_map($this->property(...), $type->properties)));
+        return \sprintf(
+            'object%s%s{%s}',
+            $templates,
+            implode('', array_map(
+                fn(SuperClass $class): string => '@' . $this->constructor($class->class, $class->templateArguments),
+                $type->superClasses,
+            )),
+            implode(', ', array_map($this->property(...), $type->properties)),
+        );
     }
 
     /**
@@ -221,6 +235,41 @@ abstract class Stringify implements Visitor
     public function static(StaticT $type): string
     {
         return $this->constructor('static', $type->templateArguments);
+    }
+
+    public function callable(CallableT $type): string
+    {
+        return \sprintf(
+            'callable%s(%s): %s',
+            $this->templates($type->templates),
+            implode(', ', array_map($this->parameter(...), $type->parameters)),
+            $type->returns->accept($this),
+        );
+    }
+
+    public function closure(ClosureT $type): string
+    {
+        return \sprintf(
+            'Closure%s(%s): %s',
+            $this->templates($type->templates),
+            implode(', ', array_map($this->parameter(...), $type->parameters)),
+            $type->returns->accept($this),
+        );
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function parameter(Parameter $parameter): string
+    {
+        /** @phpstan-ignore return.type */
+        return \sprintf(
+            '%s%s%s%s',
+            $parameter->type->accept($this),
+            $parameter->isPassedByReference ? '&' : '',
+            $parameter->isVariadic ? '...' : '',
+            $parameter->hasDefault ? '=' : '',
+        );
     }
 
     /**
@@ -306,18 +355,57 @@ abstract class Stringify implements Visitor
     }
 
     /**
-     * @var ?\SplObjectStorage<TemplateT, non-negative-int>
+     * @param list<Template> $templates
      */
-    private ?\SplObjectStorage $templates = null;
+    private function templates(array $templates): string
+    {
+        if ($templates === []) {
+            return '';
+        }
+
+        return \sprintf('<%s>', implode(', ', array_map($this->templateX(...), $templates)));
+    }
+
+    private function templateX(Template $template): string
+    {
+        $lowerBound = $template->lowerBound->accept($this);
+        $upperBound = $template->upperBound->accept($this);
+
+        return \sprintf(
+            '%s%s%s%s',
+            match ($template->variance) {
+                Variance::Invariant => '',
+                Variance::Covariant => 'out ',
+                Variance::Contravariant => 'in ',
+            },
+            $this->templateNames()[$template->type] ??= $template->name,
+            $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
+            $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
+        );
+    }
+
+    /** @var ?\SplObjectStorage<TemplateT, non-empty-string> */
+    private ?\SplObjectStorage $templateNames = null;
+
+    private int $unknownTemplateIndex = 0;
+
+    /**
+     * @return \SplObjectStorage<TemplateT, non-empty-string>
+     */
+    private function templateNames(): \SplObjectStorage
+    {
+        if ($this->templateNames !== null) {
+            return $this->templateNames;
+        }
+
+        /** @var \SplObjectStorage<TemplateT, non-empty-string> */
+        $templates = new \SplObjectStorage();
+
+        return $this->templateNames = $templates;
+    }
 
     public function template(TemplateT $type): string
     {
-        if ($this->templates === null) {
-            /** @var \SplObjectStorage<TemplateT, non-negative-int> */
-            $templates = new \SplObjectStorage();
-            $this->templates = $templates;
-        }
-
-        return \sprintf('$T%s', $this->templates[$type] ??= $this->templates->count());
+        return $this->templateNames()[$type] ??= '$' . ($this->unknownTemplateIndex++);
     }
 }

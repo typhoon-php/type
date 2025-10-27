@@ -42,7 +42,7 @@ return [
     single('numeric', 'numeric', 'union([int, float, numericString])'),
     single('scalar', 'scalar', 'union([bool, int, float, string])'),
     // array
-    constr('list', 'list<V>', [tpl('V')], [prop('value', 'Type<V>', MixedT::T), prop('elements', 'array<non-negative-int, ArrayElement>'), prop('isNonEmpty', 'bool')]),
+    constr('list', 'list<V>', [tpl('V')], [prop('value', 'Type<V>', MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     single('arrayDefault', 'array', 'array()'),
     constr('array', 'array<K, V>', [tpl('K', 'array-key'), tpl('V')], [prop('key', 'Type<K>', ArrayKeyT::T), prop('value', 'Type<V>', MixedT::T), prop('elements', 'array<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // iterable

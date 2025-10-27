@@ -159,7 +159,7 @@ function nonEmptyListT(Type $value = mixedT): ListT
 
 /**
  * @api
- * @param array<non-negative-int, ArrayElement|Type> $elements
+ * @param list<ArrayElement|Type> $elements
  */
 function listShapeT(array $elements = []): ListT
 {
@@ -168,7 +168,7 @@ function listShapeT(array $elements = []): ListT
 
 /**
  * @api
- * @param array<non-negative-int, ArrayElement|Type> $elements
+ * @param list<ArrayElement|Type> $elements
  */
 function unsealedListShapeT(array $elements = [], Type $value = mixedT): ListT
 {
@@ -260,12 +260,39 @@ const objectT = ObjectDefaultT::T;
 
 /**
  * @api
+ * @param list<Template> $templates
+ * @param list<class-string|SuperClass> $superClasses
+ * @param list<Property> $properties
+ */
+function objectT(array $templates = [], array $superClasses = [], array $properties = []): ObjectT
+{
+    return new ObjectT(
+        $templates,
+        array_map(
+            static fn(string|SuperClass $s): SuperClass => $s instanceof SuperClass ? $s : new SuperClass($s),
+            $superClasses,
+        ),
+        $properties,
+    );
+}
+
+/**
+ * @api
  * @param class-string $class
  * @param list<Type> $templateArguments
  */
-function objectT(string $class, array $templateArguments = []): ObjectT
+function namedObjectT(string $class, array $templateArguments = []): ObjectT
 {
     return new ObjectT(superClasses: [new SuperClass($class, $templateArguments)]);
+}
+
+/**
+ * @api
+ * @param non-empty-string $name
+ */
+function prop(string $name, Type $type = mixedT, bool $isOptional = false): Property
+{
+    return new Property($name, $type, $isOptional);
 }
 
 const selfT = SelfDefaultT::T;
@@ -346,7 +373,7 @@ function constantT(string $name): ConstantT
 function classConstantT(string|Type $on, string $name): ClassConstantT
 {
     if (\is_string($on)) {
-        $on = objectT($on);
+        $on = namedObjectT($on);
     }
 
     return new ClassConstantT($on, $name);
@@ -360,7 +387,7 @@ function classConstantT(string|Type $on, string $name): ClassConstantT
 function classConstantMaskT(string|Type $on, string $namePrefix): ClassConstantMaskT
 {
     if (\is_string($on)) {
-        $on = objectT($on);
+        $on = namedObjectT($on);
     }
 
     return new ClassConstantMaskT($on, $namePrefix);
@@ -381,7 +408,7 @@ function template(string $name, Type $upperBound = mixedT, Type $lowerBound = ne
  * @param non-empty-string $name
  * @return Template<Variance::Covariant>
  */
-function templateCovariant(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
+function templateOut(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
 {
     return new Template($name, Variance::Covariant, $lowerBound, $upperBound);
 }
@@ -391,7 +418,7 @@ function templateCovariant(string $name, Type $upperBound = mixedT, Type $lowerB
  * @param non-empty-string $name
  * @return Template<Variance::Contravariant>
  */
-function templateContravariant(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
+function templateIn(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT): Template
 {
     return new Template($name, Variance::Contravariant, $lowerBound, $upperBound);
 }
@@ -515,7 +542,7 @@ function of(mixed $value): Type
         \is_float($value) => floatT($value),
         \is_string($value) => stringT($value),
         \is_array($value) => arrayShapeT(array_map(of(...), $value)),
-        \is_object($value) => objectT($value::class),
+        \is_object($value) => namedObjectT($value::class),
         \is_resource($value) => resourceT,
     };
 }

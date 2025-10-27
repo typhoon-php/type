@@ -68,11 +68,12 @@ final class StringifyTest extends TestCase
         yield [unsealedListShapeT(), 'list'];
         yield [listShapeT([intT]), 'list{int}'];
         yield [listShapeT([intT, stringT]), 'list{int, string}'];
-        yield [unsealedListShapeT([intT, 3 => stringT]), 'list{0: int, 3: string, ...}'];
+        yield [unsealedListShapeT([intT, 1 => stringT]), 'list{int, string, ...}'];
         yield [listShapeT([optional(intT)]), 'list{0?: int}'];
+        yield [listShapeT([stringT, optional(intT)]), 'list{0: string, 1?: int}'];
         yield [unsealedListShapeT([optional(intT)]), 'list{0?: int, ...}'];
         yield [listShapeT([optional(intT)]), 'list{0?: int}'];
-        yield [unsealedListShapeT([4 => floatT], value: stringT), 'list{4: float, ...<string>}'];
+        yield [unsealedListShapeT([floatT], value: stringT), 'list{float, ...<string>}'];
         yield [nonEmptyArrayT(), 'non-empty-array'];
         yield [nonEmptyArrayT(value: stringT), 'non-empty-array<string>'];
         yield [nonEmptyArrayT(stringT, intT), 'non-empty-array<string, int>'];
@@ -94,8 +95,8 @@ final class StringifyTest extends TestCase
         yield [arrayShapeT(['a' => optional(intT)]), "array{'a'?: int}"];
         yield [unsealedArrayShapeT(['a' => floatT], key: intT, value: stringT), "array{'a': float, ...<int, string>}"];
         yield [objectT, 'object'];
-        yield [objectT(\ArrayObject::class), 'ArrayObject'];
-        yield [objectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
+        yield [namedObjectT(\ArrayObject::class), 'ArrayObject'];
+        yield [namedObjectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
         yield [selfT, 'self'];
         yield [selfT([stringT]), 'self<string>'];
         yield [parentT, 'parent'];
@@ -113,10 +114,10 @@ final class StringifyTest extends TestCase
         yield [iterableT(value: stringT), 'iterable<string>'];
         yield [iterableT(stringT, intT), 'iterable<string, int>'];
         yield [callableT, 'callable'];
-        yield [callableT(), 'callable'];
-        // todo yield [callableT(returns: voidT), 'callable(): void'];
-        // todo yield [callableT([stringT]), 'callable(string): mixed'];
-        // todo yield [callableT([param(stringT, hasDefault: true)]), 'callable(string=): mixed'];
+        yield [callableT(), 'callable(): mixed'];
+        yield [callableT(returns: voidT), 'callable(): void'];
+        yield [callableT(parameters: [stringT]), 'callable(string): mixed'];
+        yield [callableT(parameters: [param(stringT, hasDefault: true)]), 'callable(string=): mixed'];
         // todo yield [callableT([param(stringT, isVariadic: true)]), 'callable(string...): mixed'];
         // todo yield [callableT([param(stringT, isVariadic: true)], neverT), 'callable(string...): never'];
         // todo yield [ClosureT(), 'Closure'];
@@ -143,5 +144,9 @@ final class StringifyTest extends TestCase
         yield [isSubtypeT(trueT, mixedT), '(true <: mixed)'];
         yield [isSupertypeT(trueT, mixedT), '(true :> mixed)'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
+        $T = template('T');
+        yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{$0, $1, $0}'];
+        $T = template('T', scalarT, stringT);
+        yield [callableT([$T], [$T->type], $T->type), 'callable<T of scalar super string>(T): T'];
     }
 }
