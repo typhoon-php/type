@@ -13,11 +13,12 @@ sophisticated types.
 Here are some examples of potential use-cases:
 
 ```php
-use Typhoon\Type\types;
+use function Typhoon\Type\listT;
+use const Typhoon\Type\numericT;
 
 $data = (new MyAwesomeJsonDecoder())->decode(
     json: '[1, 0.5, "213"]',
-    type: types::list(types::numeric),
+    type: listT(numericT),
 );
 
 var_dump($data);
@@ -34,7 +35,7 @@ array(3) {
 Or:
 
 ```php
-use Typhoon\Type\types;
+use function Typhoon\Type\namedObjectT;
 
 final readonly class GetUserResponse
 {
@@ -49,23 +50,23 @@ final readonly class GetUserResponse
     ) {}
 }
 
-echo (new MyAwesomeOpenApiGenerator())->generateSchema(types::object(GetUserResponse::class));
+echo new OpenApi()->generateSchemaFor(namedObjectT(GetUserResponse::class));
 ```
 
 ```yaml
 GetUserResponse:
-  type: object
-  properties:
-    id:
-      type: string
-      format: uuid
-      example: b609e6a9-bba6-4599-9faa-cc9977353bb4
-    name:
-      type: string
-      example: Hello world!
-    group:
-      type: string
-      enum: [ user, admin ]
+    type: object
+    properties:
+        id:
+            type: string
+            format: uuid
+            example: b609e6a9-bba6-4599-9faa-cc9977353bb4
+        name:
+            type: string
+            example: Hello world!
+        group:
+            type: string
+            enum: [ user, admin ]
 ```
 
 ## Installation
@@ -76,33 +77,21 @@ composer require typhoon/type
 
 ## Constructing types
 
-Typhoon types can be constructed via the `Typhoon\Type\types` static factory. Let's express this monstrous type via
+Typhoon types can be constructed via the `Typhoon\Type\*` constants and functions. Let's express this monstrous type via
 the Typhoon DSL:
 
-```
-array{
-    a: non-empty-string,
-    b?: int|float,
-    c: Traversable<numeric-string, false>,
-    d: callable(PDO::*, TSend#Generator=, scalar...): void,
-    ...
-}
-```
-
 ```php
-use Typhoon\Type\types;
-
-$type = types::unsealedArrayShape([
-    'a' => types::nonEmptyString,
-    'b' => types::optional(types::union(types::int, types::float)),
-    'c' => types::object(Traversable::class, [types::numericString, types::false]),
-    'd' => types::callable(
+$type = unsealedArrayShapeT([
+    'a' => nonEmptyStringT,
+    'b' => optional(orT(intT, floatT)),
+    'c' => namedObjectT(Traversable::class, [numericStringT, falseT]),
+    'd' => callableT(
         parameters: [
-            types::classConstantMask(PDO::class),
-            types::param(types::classTemplate(Generator::class, 'TSend'), hasDefault: true),
-            types::param(types::scalar, variadic: true),
+            classConstantMaskT(PDO::class),
+            param(namedObjectT(Generator::class), hasDefault: true),
+            param(scalarT, isVariadic: true),
         ],
-        return: types::void,
+        returns: voidT,
     ),
 ]);
 ```
@@ -112,8 +101,9 @@ As you can see, creating types in Typhoon is a lot of fun, especially if you wor
 ## Design
 
 Unlike other solutions, Typhoon Type does not expose concrete type classes in its API. Instead, it provides only
-a [common `Type` interface](../src/Type/Type.php), a [type factory `types`](../src/Type/types.php), and
-a [`TypeVisitor` with destructurization](../src/Type/TypeVisitor.php).
+a [common `Type` interface](src/Type.php), a [type constructors](src/constructors.php), and
+a [`Visitor` interface](src/Visitor.php).
+
 This approach gives several advantages:
 
 1. The visitor has only a minimal subset of type methods that must be implemented when describing a type algebra.
@@ -186,53 +176,51 @@ var_dump(types::callableString()->accept(new BasicIntChecker())); // false
 
 ### Native PHP types
 
-| PHPStan                 | Psalm                   | Typhoon                                                                                   |
-|-------------------------|-------------------------|-------------------------------------------------------------------------------------------|
-| `null`                  | `null`                  | `types::null`, `types::value(null)`                                                       |
-| `void`                  | `void`                  | `types::void`                                                                             |
-| `never`                 | `never`                 | `types::never`                                                                            |
-| `true`                  | `true`                  | `types::true`, `types::value(true)`                                                       |
-| `false`                 | `false`                 | `types::false`, `types::value(false)`                                                     |
-| `bool`, `boolean`       | `bool`                  | `types::bool`                                                                             |
-| `int`, `integer`        | `int`                   | `types::int`                                                                              |
-| `float`, `double`       | `float`                 | `types::float`                                                                            |
-| `string`                | `string`                | `types::string`                                                                           |
-| `resource`              | `resource`              | `types::resource`                                                                         |
-| `array`                 | `array`                 | `types::array`                                                                            |
-| `iterable`              | `iterable`              | `types::iterable`                                                                         |
-| `object`                | `object`                | `types::object`                                                                           |
-| `Foo`                   | `Foo`                   | `types::object(Foo::class)`                                                               |
-| `Closure`               | `Closure`               | `types::Closure` (an alias for `types::object(Closure::class)`)                           |
-| `Generator`             | `Generator`             | `types::Generator()` (an alias for `types::object(Generator::class)`)                     |
-| `self`                  | `self`                  | `types::self()`                                                                           |
-| `parent`                | `parent`                | `types::parent()`                                                                         |
-| `static`                | `static`                | `types::static()`                                                                         |
-| `callable`              | `callable`              | `types::callable`                                                                         |
-| `?string`               | `?string`               | `types::nullable(types::string)`                                                          |
-| `int\|string`           | `int\|string`           | `types::union(types::int, types::string)`                                                 |
-| `Countable&Traversable` | `Countable&Traversable` | `types::intersection(types::object(Countable::class), types::object(Traversable::class))` |
-| `mixed`                 | `mixed`                 | `types::mixed`                                                                            |
+| PHPStan                 | Psalm                   | Typhoon                                                                                                                                                     |
+|-------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `null`                  | `null`                  | `nullT`                                                                                                                                                     |
+| `void`                  | `void`                  | `voidT`                                                                                                                                                     |
+| `never`                 | `never`                 | `neverT`                                                                                                                                                    |
+| `true`                  | `true`                  | `trueT`                                                                                                                                                     |
+| `false`                 | `false`                 | `falseT`                                                                                                                                                    |
+| `bool`, `boolean`       | `bool`                  | `boolT`                                                                                                                                                     |
+| `int`, `integer`        | `int`                   | `intT`                                                                                                                                                      |
+| `float`, `double`       | `float`                 | `floatT`                                                                                                                                                    |
+| `string`                | `string`                | `stringT`                                                                                                                                                   |
+| `resource`              | `resource`              | `resourceT`                                                                                                                                                 |
+| `array`                 | `array`                 | `arrayT`                                                                                                                                                    |
+| `iterable`              | `iterable`              | `iterableT`                                                                                                                                                 |
+| `object`                | `object`                | `objectT`                                                                                                                                                   |
+| `Foo`                   | `Foo`                   | `namedObjectT(Foo::class)`                                                                                                                                  |
+| `Closure`               | `Closure`               | `closureT` (an alias for `namedObjectT(Closure::class)`)                                                                                                    |
+| `self`                  | `self`                  | `selfT`                                                                                                                                                     |
+| `parent`                | `parent`                | `parentT`                                                                                                                                                   |
+| `static`                | `static`                | `staticT`                                                                                                                                                   |
+| `callable`              | `callable`              | `callableT`                                                                                                                                                 |
+| `?string`               | `?string`               | `nullOrT(stringT)`                                                                                                                                          |
+| `int\|string`           | `int\|string`           | `unionT(intT, stringT)`, `orT(intT, stringT)`                                                                                                               |
+| `Countable&Traversable` | `Countable&Traversable` | `intersectionT(namedObjectT(Countable::class), namedObjectT(Traversable::class))`, `andT(namedObjectT(Countable::class), namedObjectT(Traversable::class))` |
+| `mixed`                 | `mixed`                 | `mixedT`                                                                                                                                                    |
 
 ### Numbers
 
-| PHPStan                   | Psalm                        | Typhoon                                                         |
-|---------------------------|------------------------------|-----------------------------------------------------------------|
-| `literal-int`             | `literal-int`                | `types::literalInt`                                             |
-| `123`                     | `123`                        | `types::int(123)`, `types::value(123)`                          |
-| `positive-int`            | `positive-int`               | `types::positiveInt`                                            |
-| `negative-int`            | `negative-int`               | `types::negativeInt`                                            |
-| `non-positive-int`        | `non-positive-int`           | `types::nonPositiveInt`                                         |
-| `non-negative-int`        | `non-negative-int`           | `types::nonNegativeInt`                                         |
-| `non-zero-int`            | `negative-int\|positive-int` | `types::nonZeroInt`                                             |
-| `int<-5, 6>`              | `int<-5, 6>`                 | `types::intRange(-5, 6)`                                        |
-| `int<min, 6>`             | `int<min, 6>`                | `types::intRange(max: 6)`                                       |
-| `int<-5, max>`            | `int<-5, max>`               | `types::intRange(min: -5)`                                      |
-| `int-mask<1, 2, 4>`       | `int-mask<1, 2, 4>`          | `types::intMask(1, 2, 4)`                                       |
-| `int-mask-of<Foo::INT_*>` | `int-mask-of<Foo::INT_*>`    | `types::intMaskOf(types::classConstantMask(Foo::class, 'INT_')` |
-| ❌                         | ❌                            | `types::literalFloat`                                           |
-| ❌                         | ❌                            | `types::floatRange(-0.001, 2.344)`                              |
-| `12.5`                    | `12.5`                       | `types::float(12.5)`, `types::value(12.5)`                      |
-| `numeric`                 | `numeric`                    | `types::numeric`                                                |
+| PHPStan                   | Psalm                        | Typhoon                                           |
+|---------------------------|------------------------------|---------------------------------------------------|
+| ❌                         | `literal-int`                | `literalT(intT)`                                  |
+| `123`                     | `123`                        | `intT(123)`                                       |
+| `positive-int`            | `positive-int`               | `positiveIntT`                                    |
+| `negative-int`            | `negative-int`               | `negativeIntT`                                    |
+| `non-positive-int`        | `non-positive-int`           | `nonPositiveIntT`                                 |
+| `non-negative-int`        | `non-negative-int`           | `nonNegativeIntT`                                 |
+| `non-zero-int`            | `negative-int\|positive-int` | `nonZeroIntT`                                     |
+| `int<-5, 6>`              | `int<-5, 6>`                 | `intRangeT(-5, 6)`                                |
+| `int<min, 6>`             | `int<min, 6>`                | `intRangeT(max: 6)`                               |
+| `int<-5, max>`            | `int<-5, max>`               | `intRangeT(min: -5)`                              |
+| `int-mask<1, 2, 4>`       | `int-mask<1, 2, 4>`          | `intMaskT(1, 2, 4)`                               |
+| `int-mask-of<Foo::INT_*>` | `int-mask-of<Foo::INT_*>`    | `intMaskT(classConstantMaskT(Foo::class, 'INT_')` |
+| ❌                         | ❌                            | `floatRangeT(-0.001, 2.344)`                      |
+| `12.5`                    | `12.5`                       | `floatT(12.5)`                                    |
+| `numeric`                 | `numeric`                    | `numericT`                                        |
 
 ### Strings
 
@@ -240,7 +228,7 @@ var_dump(types::callableString()->accept(new BasicIntChecker())); // false
 |-------------------------------------|-------------------------------------|-------------------------------------------------|
 | `non-empty-string`                  | `non-empty-string`                  | `types::nonEmptyString`                         |
 | `literal-string`                    | `literal-string`                    | `types::literalString`                          |
-| `'abc'`                             | `'abc'`                             | `types::string('abc')`, `types::value('abc')`   |
+| `'abc'`                             | `'abc'`                             | `types::string('abc')`                          |
 | `truthy-string`, `non-falsy-string` | `truthy-string`, `non-falsy-string` | `types::truthyString`, `types::nonFalsyString`  |
 | `numeric-string`                    | `numeric-string`                    | `types::numericString`                          |
 | `callable-string`                   | `callable-string`                   | `types::callableString()`                       |
@@ -290,14 +278,14 @@ var_dump(types::callableString()->accept(new BasicIntChecker())); // false
 
 ### Objects
 
-| PHPStan                 | Psalm                   | Typhoon                                                     |
-|-------------------------|-------------------------|-------------------------------------------------------------|
-| `Foo<string, float>`    | `Foo<string, float>`    | `types::object(Foo::class, [types::string, types::float])`  |
-| `self<string, float>`   | `self<string, float>`   | `types::self([types::string, types::float])`                |
-| `parent<string, float>` | `parent<string, float>` | `types::parent([types::string, types::float])`              |
-| `static<string, float>` | `static<string, float>` | `types::static([types::string, types::float])`              |
-| `object{prop: string}`  | `object{prop: string}`  | `types::object(['prop' => types::string])`                  |
-| `object{prop?: string}` | `object{prop?: string}` | `types::object(['prop' => types::optional(types::string)])` |
+| PHPStan                 | Psalm                   | Typhoon                                                          |
+|-------------------------|-------------------------|------------------------------------------------------------------|
+| `Foo<string, float>`    | `Foo<string, float>`    | `namedObjectT(Foo::class, [stringT, floatT])`                    |
+| `self<string, float>`   | `self<string, float>`   | `selfT([stringT, floatT])`                                       |
+| `parent<string, float>` | `parent<string, float>` | `parentT([stringT, floatT])`                                     |
+| `static<string, float>` | `static<string, float>` | `staticT([stringT, floatT])`                                     |
+| `object{prop: string}`  | `object{prop: string}`  | `objectT(properties: [prop('prop', stringT)])`                   |
+| `object{prop?: string}` | `object{prop?: string}` | `objectT(properties: [prop('prop', stringT, isOptional: true)])` |
 
 ### Callables
 
@@ -317,15 +305,12 @@ var_dump(types::callableString()->accept(new BasicIntChecker())); // false
 
 ### Other
 
-| PHPStan                             | Psalm                               | Typhoon                                                                                                                         |
-|-------------------------------------|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| `scalar`                            | `scalar`                            | `types::scalar`                                                                                                                 |
-| Template `T`                        | Template `T`                        | `types::functionTemplate('foo', 'T')`, `types::classTemplate(Foo::class, 'T')`, `types::methodTemplate(Foo::class, 'bar', 'T')` |
-| Alias `X`                           | Alias `X`                           | `types::classAlias(Foo::class, 'X')`                                                                                            |
-| `(T is string ? true : false)`      | `(T is string ? true : false)`      | `types::conditional($type, types::string, types::true, types::false)`                                                           |
-| `($return is true ? string : void)` | `($return is true ? string : void)` | `types::conditional(types::functionArg('var_export', 'return'), types::true, types::string, types::void)`                       |
-| `!null` (only in assertions)        | `!null` (only in assertions)        | `types::not(types::null)`                                                                                                       |
-| ❌                                   | `properties-of<T>`                  | ❌                                                                                                                               |
-| ❌                                   | `class-string-map<T of Foo, T>`     | ❌                                                                                                                               |
-| `open-resource`                     | `open-resource`                     | ❌                                                                                                                               |
-| `closed-resource`                   | `closed-resource`                   | ❌                                                                                                                               |
+| PHPStan                        | Psalm                           | Typhoon                                            |
+|--------------------------------|---------------------------------|----------------------------------------------------|
+| `scalar`                       | `scalar`                        | `scalarT`                                          |
+| Alias `X`                      | Alias `X`                       | `aliasT(Foo::class, 'X')`                          |
+| `(T is string ? true : false)` | `(T is string ? true : false)`  | `ternaryT(isSubtypeT($T, stringT), trueT, falseT)` |
+| ❌                              | `properties-of<T>`              | ❌                                                  |
+| ❌                              | `class-string-map<T of Foo, T>` | ❌                                                  |
+| `open-resource`                | `open-resource`                 | ❌                                                  |
+| `closed-resource`              | `closed-resource`               | ❌                                                  |
