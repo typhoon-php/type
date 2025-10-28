@@ -38,7 +38,7 @@ final class StringifyTest extends TestCase
         yield [nonNegativeIntT, 'non-negative-int'];
         yield [intT(123), '123'];
         yield [intT(-123), '-123'];
-        yield [intRangeT(), 'int<min, max>'];
+        yield [intRangeT(), 'int'];
         yield [intRangeT(min: 23), 'int<23, max>'];
         yield [intRangeT(max: 23), 'int<min, 23>'];
         yield [intRangeT(min: -100, max: 234), 'int<-100, 234>'];
@@ -48,6 +48,7 @@ final class StringifyTest extends TestCase
         yield [floatT, 'float'];
         yield [floatT(0.234), '0.234'];
         yield [floatT(-0.234), '-0.234'];
+        yield [floatRangeT(), 'float'];
         yield [floatRangeT(-0.99999, 1.232111111), 'float<-0.99999, 1.232111111>'];
         yield [numericT, 'numeric'];
         yield [arrayKeyT, 'array-key'];
