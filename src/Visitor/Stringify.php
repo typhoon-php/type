@@ -354,7 +354,7 @@ abstract class Stringify implements Visitor
             $this->templates($type->templates),
             implode('', array_map(
                 fn(NamedObjectT $inherited): string => ':' . $this->namedObjectT($inherited),
-                $type->superTypes,
+                $type->supertypes,
             )),
             implode(', ', array_map($this->property(...), $type->properties)),
         );

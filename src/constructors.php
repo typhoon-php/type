@@ -348,17 +348,17 @@ const objectT = ObjectDefaultT::T;
 /**
  * @api
  * @param list<Template> $templates
- * @param list<class-string|NamedObjectT> $superTypes
+ * @param list<class-string|NamedObjectT> $supertypes
  * @param array<non-empty-string, Type|Optional> $props
  * @return ObjectT<object>
  */
-function objectT(array $templates = [], array $superTypes = [], array $props = []): ObjectT
+function objectT(array $templates = [], array $supertypes = [], array $props = []): ObjectT
 {
     return new ObjectT(
         templates: $templates,
-        superTypes: array_map(
+        supertypes: array_map(
             static fn(string|NamedObjectT $s): NamedObjectT => $s instanceof NamedObjectT ? $s : new NamedObjectT($s),
-            $superTypes,
+            $supertypes,
         ),
         properties: array_map(
             static fn(string $name, Type|Optional $type): Property => new Property(

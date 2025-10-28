@@ -48,8 +48,8 @@ return [
     constr('array', 'T', [tpl('T', 'array')], [prop('keyType', 'Type', ArrayKeyT::T), prop('valueType', 'Type', MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
     single('objectDefault', 'object', 'object()'),
-    constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', 'list<Type>')], 'object(superTypes: [$t])'),
-    constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('superTypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
+    constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', 'list<Type>')], 'object(supertypes: [$t])'),
+    constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('supertypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
     single('selfDefault', 'object', 'self()'),
     constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
     single('parentDefault', 'object', 'parent()'),

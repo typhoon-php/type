@@ -18,12 +18,12 @@ final readonly class ObjectT implements Type
 {
     /**
      * @param list<Template> $templates
-     * @param list<NamedObjectT> $superTypes
+     * @param list<NamedObjectT> $supertypes
      * @param list<Property> $properties
      */
     public function __construct(
         public array $templates = [],
-        public array $superTypes = [],
+        public array $supertypes = [],
         public array $properties = [],
     ) {}
 

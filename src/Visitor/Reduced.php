@@ -204,7 +204,7 @@ abstract class Reduced implements Visitor
     #[\Override]
     public function namedObjectT(NamedObjectT $type): mixed
     {
-        return (new ObjectT(superTypes: [$type]))->accept($this);
+        return (new ObjectT(supertypes: [$type]))->accept($this);
     }
 
     #[\Override]

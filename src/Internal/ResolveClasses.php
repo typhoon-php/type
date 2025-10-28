@@ -41,11 +41,11 @@ final class ResolveClasses extends Fallback
 
     public function objectT(ObjectT $type): mixed
     {
-        if ($type->superTypes === []) {
+        if ($type->supertypes === []) {
             $this->fallback($type);
         }
 
-        return array_column($type->superTypes, 'class');
+        return array_column($type->supertypes, 'class');
     }
 
     public function intersectionT(IntersectionT $type): mixed
