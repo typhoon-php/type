@@ -17,7 +17,7 @@ use const Typhoon\Type\intT;
 use const Typhoon\Type\negativeIntT;
 use const Typhoon\Type\nonNegativeIntT;
 use const Typhoon\Type\nonPositiveIntT;
-use const Typhoon\Type\nonZeroInt;
+use const Typhoon\Type\nonZeroIntT;
 use const Typhoon\Type\positiveIntT;
 
 #[CoversClass(ResolveBitmask::class)]
@@ -48,7 +48,7 @@ final class ResolverBitmaskTest extends TestCase
         yield [positiveIntT, -1];
         yield [nonNegativeIntT, -1];
         yield [nonPositiveIntT, -1];
-        yield [nonZeroInt, -1];
+        yield [nonZeroIntT, -1];
         yield [intRangeT(1, 8), 0b1111];
         yield [orT(intT(4), intT(8)), 0b1100];
         yield [intRangeT(4, 4), 0b100];

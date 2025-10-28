@@ -49,7 +49,7 @@ const negativeIntT = NegativeIntT::T;
 
 const nonPositiveIntT = NonPositiveIntT::T;
 
-const nonZeroInt = NonZeroIntT::T;
+const nonZeroIntT = NonZeroIntT::T;
 
 const nonNegativeIntT = NonNegativeIntT::T;
 
