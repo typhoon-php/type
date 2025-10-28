@@ -297,7 +297,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function bitmaskT(BitmaskT $type): string
     {
-        return \sprintf('int-mask-of<%s>', $type->ints->accept($this));
+        return \sprintf('int-mask-of<%s>', $type->intType->accept($this));
     }
 
     #[\Override]
@@ -358,7 +358,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function classT(ClassT $type): string
     {
-        return \sprintf('class-string<%s>', $type->object->accept($this));
+        return \sprintf('class-string<%s>', $type->objectType->accept($this));
     }
 
     #[\Override]
@@ -388,7 +388,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function listT(ListT $type): string
     {
-        $value = $type->value->accept($this);
+        $value = $type->valueType->accept($this);
 
         $elements = implode(', ', array_map(fn(Type $type): string => $type->accept($this), $type->elements));
 
@@ -416,7 +416,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function arrayT(ArrayT $type): string
     {
-        $value = $type->value->accept($this);
+        $value = $type->valueType->accept($this);
 
         $elements = implode(', ', array_map($this->arrayElement(...), $type->elements));
 
@@ -426,7 +426,7 @@ abstract class Stringify implements Visitor
 
         $name = $type->isNonEmpty ? 'non-empty-array' : 'array';
 
-        $key = $type->key->accept($this);
+        $key = $type->keyType->accept($this);
 
         $unsealed = match ($key) {
             'array-key', 'int|string', 'string|int' => $value === 'mixed' ? '' : \sprintf('<%s>', $value),
@@ -511,8 +511,8 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function iterableT(IterableT $type): string
     {
-        $key = $type->key->accept($this);
-        $value = $type->value->accept($this);
+        $key = $type->keyType->accept($this);
+        $value = $type->valueType->accept($this);
 
         if ($key === 'mixed') {
             if ($value === 'mixed') {
@@ -538,7 +538,7 @@ abstract class Stringify implements Visitor
             'callable%s(%s): %s',
             $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
-            str_contains($return = $type->return->accept($this), 'callable')
+            str_contains($return = $type->returnType->accept($this), 'callable')
                 ? \sprintf('(%s)', $return)
                 : $return,
         );
@@ -557,7 +557,7 @@ abstract class Stringify implements Visitor
             'Closure%s(%s): %s',
             $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
-            $type->return->accept($this),
+            $type->returnType->accept($this),
         );
     }
 
@@ -594,49 +594,49 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function classConstantT(ClassConstantT $type): string
     {
-        return \sprintf('%s::%s', $type->class->accept($this), $type->name);
+        return \sprintf('%s::%s', $type->classType->accept($this), $type->name);
     }
 
     #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): string
     {
-        return \sprintf('%s::%s', $type->class->accept($this), $type->mask);
+        return \sprintf('%s::%s', $type->classType->accept($this), $type->mask);
     }
 
     #[\Override]
     public function keyOfT(KeyOfT $type): string
     {
-        return \sprintf('key-of<%s>', $type->array->accept($this));
+        return \sprintf('key-of<%s>', $type->arrayType->accept($this));
     }
 
     #[\Override]
     public function valueOfT(ValueOfT $type): string
     {
-        return \sprintf('value-of<%s>', $type->array->accept($this));
+        return \sprintf('value-of<%s>', $type->arrayType->accept($this));
     }
 
     #[\Override]
     public function offsetT(OffsetT $type): string
     {
-        return \sprintf('%s[%s]', $type->array->accept($this), $type->key->accept($this));
+        return \sprintf('%s[%s]', $type->arrayType->accept($this), $type->keyType->accept($this));
     }
 
     #[\Override]
     public function isSubtypeT(IsSubtypeT $type): string
     {
-        return \sprintf('(%s <: %s)', $type->left->accept($this), $type->right->accept($this));
+        return \sprintf('(%s <: %s)', $type->leftType->accept($this), $type->rightType->accept($this));
     }
 
     #[\Override]
     public function isSupertypeT(IsSupertypeT $type): mixed
     {
-        return \sprintf('(%s :> %s)', $type->left->accept($this), $type->right->accept($this));
+        return \sprintf('(%s :> %s)', $type->leftType->accept($this), $type->rightType->accept($this));
     }
 
     #[\Override]
     public function ternaryT(TernaryT $type): string
     {
-        return \sprintf('(%s ? %s : %s)', $type->condition->accept($this), $type->then->accept($this), $type->else->accept($this));
+        return \sprintf('(%s ? %s : %s)', $type->conditionType->accept($this), $type->thenType->accept($this), $type->elseType->accept($this));
     }
 
     #[\Override]

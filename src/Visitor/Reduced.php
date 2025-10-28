@@ -266,19 +266,19 @@ abstract class Reduced implements Visitor
     {
         return (new IntersectionT([
             ClosureDefaultT::T,
-            new CallableT($type->templates, $type->parameters, $type->return),
+            new CallableT($type->templates, $type->parameters, $type->returnType),
         ]))->accept($this);
     }
 
     #[\Override]
     public function valueOfT(ValueOfT $type): mixed
     {
-        return (new OffsetT($type->array, new KeyOfT($type->array)))->accept($this);
+        return (new OffsetT($type->arrayType, new KeyOfT($type->arrayType)))->accept($this);
     }
 
     #[\Override]
     public function isSupertypeT(IsSupertypeT $type): mixed
     {
-        return (new IsSubtypeT($type->right, $type->left))->accept($this);
+        return (new IsSubtypeT($type->rightType, $type->leftType))->accept($this);
     }
 }

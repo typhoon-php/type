@@ -20,7 +20,7 @@ final readonly class ListT implements Type
      * @param list<Type> $elements
      */
     public function __construct(
-        public Type $value = MixedT::T,
+        public Type $valueType = MixedT::T,
         public array $elements = [],
         public bool $isNonEmpty = false,
     ) {}

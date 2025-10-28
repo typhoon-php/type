@@ -17,7 +17,7 @@ namespace Typhoon\Type;
 final readonly class BitmaskT implements Type
 {
     public function __construct(
-        public Type $ints,
+        public Type $intType,
     ) {}
 
     #[\Override]

@@ -20,8 +20,8 @@ final readonly class ArrayT implements Type
      * @param list<ArrayElement> $elements
      */
     public function __construct(
-        public Type $key = ArrayKeyT::T,
-        public Type $value = MixedT::T,
+        public Type $keyType = ArrayKeyT::T,
+        public Type $valueType = MixedT::T,
         public array $elements = [],
         public bool $isNonEmpty = false,
     ) {}

@@ -17,10 +17,10 @@ namespace Typhoon\Type;
 final readonly class KeyOfT implements Type
 {
     /**
-     * @param Type<T> $array
+     * @param Type<T> $arrayType
      */
     public function __construct(
-        public Type $array,
+        public Type $arrayType,
     ) {}
 
     #[\Override]

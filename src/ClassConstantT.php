@@ -20,7 +20,7 @@ final readonly class ClassConstantT implements Type
      * @param non-empty-string $name
      */
     public function __construct(
-        public Type $class,
+        public Type $classType,
         public string $name,
     ) {}
 

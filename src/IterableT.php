@@ -18,12 +18,12 @@ namespace Typhoon\Type;
 final readonly class IterableT implements Type
 {
     /**
-     * @param Type<K> $key
-     * @param Type<V> $value
+     * @param Type<K> $keyType
+     * @param Type<V> $valueType
      */
     public function __construct(
-        public Type $key = MixedT::T,
-        public Type $value = MixedT::T,
+        public Type $keyType = MixedT::T,
+        public Type $valueType = MixedT::T,
     ) {}
 
     #[\Override]

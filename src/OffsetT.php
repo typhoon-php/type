@@ -18,12 +18,12 @@ namespace Typhoon\Type;
 final readonly class OffsetT implements Type
 {
     /**
-     * @param Type<T> $array
-     * @param Type<K> $key
+     * @param Type<T> $arrayType
+     * @param Type<K> $keyType
      */
     public function __construct(
-        public Type $array,
-        public Type $key,
+        public Type $arrayType,
+        public Type $keyType,
     ) {}
 
     #[\Override]

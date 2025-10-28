@@ -181,7 +181,7 @@ final class Is extends Fallback
 
     public function bitmaskT(BitmaskT $type): mixed
     {
-        return \is_int($this->value) && $this->value & $type->ints->accept(new ResolveBitmask());
+        return \is_int($this->value) && $this->value & $type->intType->accept(new ResolveBitmask());
     }
 
     public function constantT(ConstantT $type): mixed
@@ -197,7 +197,7 @@ final class Is extends Fallback
     {
         $lastConstant = null;
 
-        foreach ($type->class->accept(new ResolveClasses()) as $class) {
+        foreach ($type->classType->accept(new ResolveClasses()) as $class) {
             $constant = $class . '::' . $type->name;
 
             if (\defined($constant)) {
@@ -251,7 +251,7 @@ final class Is extends Fallback
 
         foreach ($remainingElements as $key => $value) {
             /** @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType */
-            if (!is($key, $type->key) || !is($value, $type->value)) {
+            if (!is($key, $type->keyType) || !is($value, $type->valueType)) {
                 return false;
             }
         }

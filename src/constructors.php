@@ -210,7 +210,7 @@ function listT(Type $value = mixedT): ListT
 function nonEmptyListT(Type $value = mixedT): ListT
 {
     /** @var ListT<non-empty-list<V>> */
-    return new ListT(value: $value, isNonEmpty: true);
+    return new ListT(valueType: $value, isNonEmpty: true);
 }
 
 /**
@@ -244,7 +244,7 @@ function unsealedListShapeT(array $elements = [], Type $value = mixedT): ListT
 function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
     /** @var ArrayT<array<K, V>> */
-    return new ArrayT(key: $key, value: $value);
+    return new ArrayT(keyType: $key, valueType: $value);
 }
 
 /**
@@ -258,7 +258,7 @@ function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 function nonEmptyArrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
     /** @var ArrayT<non-empty-array<K, V>> */
-    return new ArrayT(key: $key, value: $value, isNonEmpty: true);
+    return new ArrayT(keyType: $key, valueType: $value, isNonEmpty: true);
 }
 
 /**
@@ -279,8 +279,8 @@ function arrayShapeT(array $elements = []): ArrayT
 function unsealedArrayShapeT(array $elements = [], Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
     return new ArrayT(
-        key: $key,
-        value: $value,
+        keyType: $key,
+        valueType: $value,
         elements: array_map(
             static fn(int|string $key, Type|Optional $type): ArrayElement => new ArrayElement(
                 key: $key,
@@ -445,7 +445,7 @@ function callableT(array $templates = [], array $params = [], Type $return = mix
             static fn(Parameter|Type $p): Parameter => $p instanceof Parameter ? $p : new Parameter(type: $p),
             $params,
         ),
-        return: $return,
+        returnType: $return,
     );
 }
 
@@ -464,7 +464,7 @@ function closureT(array $templates = [], array $params = [], Type $return = mixe
             static fn(Parameter|Type $p): Parameter => $p instanceof Parameter ? $p : new Parameter(type: $p),
             $params,
         ),
-        return: $return,
+        returnType: $return,
     );
 }
 

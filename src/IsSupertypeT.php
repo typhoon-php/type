@@ -17,8 +17,8 @@ namespace Typhoon\Type;
 final readonly class IsSupertypeT implements Type
 {
     public function __construct(
-        public Type $left,
-        public Type $right,
+        public Type $leftType,
+        public Type $rightType,
     ) {}
 
     #[\Override]

@@ -17,10 +17,10 @@ namespace Typhoon\Type;
 final readonly class ClassT implements Type
 {
     /**
-     * @param Type<T> $object
+     * @param Type<T> $objectType
      */
     public function __construct(
-        public Type $object,
+        public Type $objectType,
     ) {}
 
     #[\Override]

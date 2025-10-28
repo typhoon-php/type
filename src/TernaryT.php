@@ -18,14 +18,14 @@ namespace Typhoon\Type;
 final readonly class TernaryT implements Type
 {
     /**
-     * @param Type<bool> $condition
-     * @param Type<Then> $then
-     * @param Type<Else> $else
+     * @param Type<bool> $conditionType
+     * @param Type<Then> $thenType
+     * @param Type<Else> $elseType
      */
     public function __construct(
-        public Type $condition,
-        public Type $then,
-        public Type $else,
+        public Type $conditionType,
+        public Type $thenType,
+        public Type $elseType,
     ) {}
 
     #[\Override]

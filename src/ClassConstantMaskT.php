@@ -20,7 +20,7 @@ final readonly class ClassConstantMaskT implements Type
      * @param non-empty-string $mask
      */
     public function __construct(
-        public Type $class,
+        public Type $classType,
         public string $mask,
     ) {}
 
