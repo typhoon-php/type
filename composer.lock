@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e179e46e6b1273eb0b80f531f5643fd0",
+    "content-hash": "32af138a2351e3e212460dcd9eebebbf",
     "packages": [
         {
             "name": "symfony/polyfill-php83",
@@ -85,6 +85,67 @@
                 }
             ],
             "time": "2025-07-08T02:45:35+00:00"
+        },
+        {
+            "name": "typhoon/float-to-string",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/typhoon-php/float-to-string.git",
+                "reference": "315d8f06948d442aabaca62972ead71499c36b31"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/typhoon-php/float-to-string/zipball/315d8f06948d442aabaca62972ead71499c36b31",
+                "reference": "315d8f06948d442aabaca62972ead71499c36b31",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8.2",
+                "phpunit/phpunit": "^10.5.58"
+            },
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": false,
+                    "forward-command": true,
+                    "target-directory": "tools"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/floatToString.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Valentin Udaltsov",
+                    "email": "udaltsov.valentin@gmail.com"
+                },
+                {
+                    "name": "Typhoon Team",
+                    "homepage": "https://github.com/orgs/typhoon-php/people"
+                }
+            ],
+            "description": "A function that converts any float to a numeric string in PHP",
+            "support": {
+                "issues": "https://github.com/typhoon-php/float-to-string/issues",
+                "source": "https://github.com/typhoon-php/float-to-string/tree/0.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://www.tinkoff.ru/cf/5MqZQas2dk7",
+                    "type": "custom"
+                }
+            ],
+            "time": "2025-10-28T18:56:15+00:00"
         }
     ],
     "packages-dev": [

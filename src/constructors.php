@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\Type\Generator\Generator;
-use function Typhoon\Type\Internal\floatToString;
+use function Typhoon\floatToString;
 
 if (class_exists(Generator::class, autoload: false)) {
     return;

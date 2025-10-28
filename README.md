@@ -5,9 +5,7 @@
 [![Code Coverage](https://codecov.io/gh/typhoon-php/type/branch/0.5.x/graph/badge.svg)](https://codecov.io/gh/typhoon-php/type/tree/0.5.x)
 
 Typhoon Type is an object abstraction over the modern PHP type system. Use this library to build tools that work with
-sophisticated types.
-
-Here are some examples of potential use-cases:
+sophisticated types:
 
 ```php
 use function Typhoon\Type\arrayShapeT;
@@ -37,8 +35,9 @@ composer require typhoon/type
 
 ## Constructing types
 
-Typhoon types can be constructed via the `Typhoon\Type\*` constants and functions. Let's express the `flip()` function
-using our DSL:
+Typhoon types can be constructed via the `Typhoon\Type\*` constants and functions.
+
+Let's express the `flip()` function's signature using our DSL:
 
 ```php
 use function Typhoon\Type\callableT;
@@ -67,7 +66,7 @@ $flipType = callableT(
 
 ## Printing types
 
-To cast any type to string, use the `Typhoon\Type\stringify()` function:
+To print any type, use `stringify()`:
 
 ```php
 use function Typhoon\Type\stringify;
@@ -194,18 +193,18 @@ var_dump(stringify($flipType));
 
 ### PHPDoc callables
 
-| PHPStan                             | Psalm                        | Typhoon                                                          |
-|-------------------------------------|------------------------------|------------------------------------------------------------------|
-| `callable-string`                   | `callable-string`            | `andT(callableT, stringT)`                                       |
-| `callable&array`                    | `callable-array`             | `andT(callableT, arrayT)`                                        |
-| `callable(string): void`            | `callable(string): void`     | `callableT(params: [stringT], return: voidT)`                    |
-| `callable(string=): mixed`          | `callable(string=): mixed`   | `callableT(params: [paramT(stringT, default: true)])`            |
-| ❌ (could be `callable(string='a')`) | ❌                            | `callableT(params: [paramT(stringT, default: stringT('a'))])`    |
-| `callable(...string): mixed`        | `callable(...string): mixed` | `callableT(params: [paramT(stringT, variadic: true)])`           |
-| `callable(&string): mixed`          | `callable(&string): mixed`   | `callableT(params: [paramT(stringT, byRef: true)])`              |
-| `callable<T>(T): ?T`                | ❌                            | `callableT([$T = template('T')], [$T->type], nullOrT($T->type))` |
-| `pure-callable`                     | `pure-callable`              | ❌                                                                |
-| `Closure` types                     | `Closure` types              | same as above via `closureT(...)`                                |
+| PHPStan                             | Psalm                        | Typhoon                                                            |
+|-------------------------------------|------------------------------|--------------------------------------------------------------------|
+| `callable-string`                   | `callable-string`            | `andT(callableT, stringT)`                                         |
+| `callable&array`                    | `callable-array`             | `andT(callableT, arrayT)`                                          |
+| `callable(string): void`            | `callable(string): void`     | `callableT(params: [stringT], return: voidT)`                      |
+| `callable(string=): mixed`          | `callable(string=): mixed`   | `callableT(params: [param(type: stringT, default: true)])`         |
+| ❌ (could be `callable(string='a')`) | ❌                            | `callableT(params: [param(type: stringT, default: stringT('a'))])` |
+| `callable(...string): mixed`        | `callable(...string): mixed` | `callableT(params: [param(type: stringT, variadic: true)])`        |
+| `callable(&string): mixed`          | `callable(&string): mixed`   | `callableT(params: [param(type: stringT, byRef: true)])`           |
+| `callable<T>(T): ?T`                | ❌                            | `callableT([$T = template('T')], [$T->type], nullOrT($T->type))`   |
+| `pure-callable`                     | `pure-callable`              | ❌                                                                  |
+| `Closure` types                     | `Closure` types              | same as above via `closureT(...)`                                  |
 
 ### Other PHPDoc types
 

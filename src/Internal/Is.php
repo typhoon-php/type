@@ -39,6 +39,7 @@ use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
 use Typhoon\Type\Visitor\Fallback;
 use Typhoon\Type\VoidT;
+use function Typhoon\floatToString;
 use function Typhoon\Type\stringify;
 
 /**
