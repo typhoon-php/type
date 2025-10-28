@@ -2,10 +2,7 @@
 
 [![PHP Version Requirement](https://img.shields.io/packagist/dependency-v/typhoon/type/php)](https://packagist.org/packages/typhoon/type)
 [![GitHub Release](https://img.shields.io/github/v/release/typhoon-php/type)](https://github.com/typhoon-php/type/releases)
-[![Psalm Level](https://shepherd.dev/github/typhoon-php/type/level.svg)](https://shepherd.dev/github/typhoon-php/type)
-[![Psalm Type Coverage](https://shepherd.dev/github/typhoon-php/type/coverage.svg)](https://shepherd.dev/github/typhoon-php/type)
-[![Code Coverage](https://codecov.io/gh/typhoon-php/type/branch/0.4.x/graph/badge.svg)](https://codecov.io/gh/typhoon-php/type/tree/0.4.x)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Ftyphoon-php%2Ftype%2F0.4.x)](https://dashboard.stryker-mutator.io/reports/github.com/typhoon-php/type/0.4.x)
+[![Code Coverage](https://codecov.io/gh/typhoon-php/type/branch/0.5.x/graph/badge.svg)](https://codecov.io/gh/typhoon-php/type/tree/0.5.x)
 
 Typhoon Type is an object abstraction over the modern PHP type system. Use this library to build tools that work with
 sophisticated types.
@@ -13,60 +10,23 @@ sophisticated types.
 Here are some examples of potential use-cases:
 
 ```php
-use function Typhoon\Type\listT;
-use const Typhoon\Type\numericT;
-
-$data = (new MyAwesomeJsonDecoder())->decode(
-    json: '[1, 0.5, "213"]',
-    type: listT(numericT),
-);
-
-var_dump($data);
-```
-
-```
-array(3) {
-  [0] => int(1)
-  [1] => float(0.5)
-  [2] => string(3) "213"
-}
-```
-
-Or:
-
-```php
+use function Typhoon\Type\arrayShapeT;
 use function Typhoon\Type\namedObjectT;
+use function Typhoon\Type\nonEmptyListT;
 
-final readonly class GetUserResponse
-{
-    /**
-     * @param non-empty-string $name
-     * @param 'user'|'admin' $group
-     */
-    public function __construct(
-        public Uuid $id,
-        public string $name,
-        public string $group,
-    ) {}
-}
+$json = <<<JSON
+    {
+        "people": [
+            {"name": "Valentin"},
+            {"name": "Andrey"}
+        ],
+    }
+    JSON;
 
-echo new OpenApi()->generateSchemaFor(namedObjectT(GetUserResponse::class));
-```
 
-```yaml
-GetUserResponse:
-    type: object
-    properties:
-        id:
-            type: string
-            format: uuid
-            example: b609e6a9-bba6-4599-9faa-cc9977353bb4
-        name:
-            type: string
-            example: Hello world!
-        group:
-            type: string
-            enum: [ user, admin ]
+$request = new Mapper()->map($json, arrayShapeT([
+    'people' => nonEmptyListT(namedObjectT(People::class)),
+]));
 ```
 
 ## Installation
@@ -77,240 +37,184 @@ composer require typhoon/type
 
 ## Constructing types
 
-Typhoon types can be constructed via the `Typhoon\Type\*` constants and functions. Let's express this monstrous type via
-the Typhoon DSL:
+Typhoon types can be constructed via the `Typhoon\Type\*` constants and functions. Let's express the `flip()` function
+using our DSL:
 
 ```php
-$type = unsealedArrayShapeT([
-    'a' => nonEmptyStringT,
-    'b' => optional(orT(intT, floatT)),
-    'c' => namedObjectT(Traversable::class, [numericStringT, falseT]),
-    'd' => callableT(
-        parameters: [
-            classConstantMaskT(PDO::class),
-            param(namedObjectT(Generator::class), hasDefault: true),
-            param(scalarT, isVariadic: true),
-        ],
-        returns: voidT,
-    ),
-]);
+use function Typhoon\Type\callableT;
+use function Typhoon\Type\template;
+
+/**
+ * @template X
+ * @template Y
+ * @template Z
+ * @param callable(X, Y): Z $fn
+ * @return callable(Y, X): Z
+ */
+$flip = static fn (callable $fn)
+     => static fn (mixed $y, mixed $x) => $fn($x, $y);
+
+$flipType = callableT(
+    templates: [
+        $X = template('X'),
+        $Y = template('Y'),
+        $Z = template('Z'),
+    ],
+    params: [callableT(params: [$X->type, $Y->type], return: $Z->type)],
+    return: callableT(params: [$Y->type, $X->type], return: $Z->type),
+);
 ```
-
-As you can see, creating types in Typhoon is a lot of fun, especially if you work in IDE with autocompletion 😉
-
-## Design
-
-Unlike other solutions, Typhoon Type does not expose concrete type classes in its API. Instead, it provides only
-a [common `Type` interface](src/Type.php), a [type constructors](src/constructors.php), and
-a [`Visitor` interface](src/Visitor.php).
-
-This approach gives several advantages:
-
-1. The visitor has only a minimal subset of type methods that must be implemented when describing a type algebra.
-   Complexity of the other types is hidden and can be completely ignored.
-2. Memory efficient enums can be used for all atomic types and for aliases of commonly used compound types.
-3. Using of downcasting via the `instanceof` operator is automatically discouraged, since all `Type` implementations are
-   `@internal` (
-   see [PHPStan: Why Is instanceof *Type Wrong and Getting Deprecated?](https://phpstan.org/blog/why-is-instanceof-type-wrong-and-getting-deprecated)).
 
 ## Printing types
 
 To cast any type to string, use the `Typhoon\Type\stringify()` function:
 
 ```php
-use Typhoon\Type\types;
 use function Typhoon\Type\stringify;
 
-var_dump(
-   stringify(
-       types::Generator(
-           key: types::nonNegativeInt,
-           value: types::classTemplate(Foo::class, 'T'),
-           send: types::scalar,
-       ),
-   ),
-); // Generator<int<0, max>, T#Foo, scalar, mixed>
+var_dump(stringify($flipType));
+
+// callable<X, Y, Z>(callable(X, Y): Z): callable(Y, X): Z
 ```
 
-### Comparing types
+## Supported types
 
-Typhoon team is currently working on a type comparator. Until it is released, you can
-use [DefaultTypeVisitor](../src/Type/DefaultTypeVisitor.php) for simple checks:
+### Native
 
-```php
-use Typhoon\Type\Type;
-use Typhoon\Type\types;
-use Typhoon\Type\Visitor\Fallback;
+| Native                  | Typhoon                                                                                                                                                     |
+|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `null`                  | `nullT`                                                                                                                                                     |
+| `void`                  | `voidT`                                                                                                                                                     |
+| `never`                 | `neverT`                                                                                                                                                    |
+| `false`                 | `falseT`                                                                                                                                                    |
+| `true`                  | `trueT`                                                                                                                                                     |
+| `bool`                  | `boolT`                                                                                                                                                     |
+| `int`                   | `intT`                                                                                                                                                      |
+| `float`                 | `floatT`                                                                                                                                                    |
+| `string`                | `stringT`                                                                                                                                                   |
+| `array`                 | `arrayT`                                                                                                                                                    |
+| `object`                | `objectT`                                                                                                                                                   |
+| `Foo`                   | `namedObjectT(Foo::class)`                                                                                                                                  |
+| `self`                  | `selfT`                                                                                                                                                     |
+| `parent`                | `parentT`                                                                                                                                                   |
+| `static`                | `staticT`                                                                                                                                                   |
+| `iterable`              | `iterableT`                                                                                                                                                 |
+| `callable`              | `callableT`                                                                                                                                                 |
+| `Closure`               | `closureT` or `namedObjectT(Closure::class)`                                                                                                                |
+| `resource`              | `resourceT`                                                                                                                                                 |
+| `?string`               | `nullOrT(stringT)`                                                                                                                                          |
+| `int\|string`           | `unionT(intT, stringT)`, `orT(intT, stringT)`                                                                                                               |
+| `Countable&Traversable` | `intersectionT(namedObjectT(Countable::class), namedObjectT(Traversable::class))`, `andT(namedObjectT(Countable::class), namedObjectT(Traversable::class))` |
+| `mixed`                 | `mixedT`                                                                                                                                                    |
 
-/**
- * @extends Fallback<bool>
- */
-final class BasicIntChecker extends Fallback
-{
-    public function int(Type $type, Type $minType, Type $maxType): mixed
-    {
-        return true;
-    }
+### PHPDoc numbers
 
-    public function intValue(Type $type, int $value): mixed
-    {
-        return true;
-    }
+| PHPStan                   | Psalm                        | Typhoon                                            |
+|---------------------------|------------------------------|----------------------------------------------------|
+| ❌                         | `literal-int`                | `literalT(intT)`                                   |
+| `123`                     | `123`                        | `intT(123)`                                        |
+| `positive-int`            | `positive-int`               | `positiveIntT`                                     |
+| `negative-int`            | `negative-int`               | `negativeIntT`                                     |
+| `non-positive-int`        | `non-positive-int`           | `nonPositiveIntT`                                  |
+| `non-negative-int`        | `non-negative-int`           | `nonNegativeIntT`                                  |
+| `non-zero-int`            | `negative-int\|positive-int` | `nonZeroIntT`                                      |
+| `int<-5, 6>`              | `int<-5, 6>`                 | `intRangeT(-5, 6)`                                 |
+| `int<min, 6>`             | `int<min, 6>`                | `intRangeT(max: 6)`                                |
+| `int<-5, max>`            | `int<-5, max>`               | `intRangeT(min: -5)`                               |
+| `int-mask<1, 2, 4>`       | `int-mask<1, 2, 4>`          | `intMaskT(1, 2, 4)`                                |
+| `int-mask-of<Foo::INT_*>` | `int-mask-of<Foo::INT_*>`    | `intMaskT(classConstantMaskT(Foo::class, 'INT_*')` |
+| ❌                         | ❌                            | `floatRangeT(-0.001, 2.344)`                       |
+| `12.5`                    | `12.5`                       | `floatT(12.5)`                                     |
+| `numeric`                 | `numeric`                    | `numericT`                                         |
 
-    public function intMask(Type $type, Type $ofType): bool
-    {
-        return true;
-    }
+### PHPDoc strings
 
-    protected function default(Type $type): bool
-    {
-        return false;
-    }
-}
+| PHPStan                             | Psalm                               | Typhoon                                                      |
+|-------------------------------------|-------------------------------------|--------------------------------------------------------------|
+| `non-empty-string`                  | `non-empty-string`                  | `nonEmptyStringT`                                            |
+| `truthy-string`, `non-falsy-string` | `truthy-string`, `non-falsy-string` | `truthyStringT`, `nonFalsyStringT`                           |
+| `numeric-string`                    | `numeric-string`                    | `numericStringT`                                             |
+| `lowercase-string`                  | `lowercase-string`                  | `lowercaseString`                                            |
+| `'abc'`                             | `'abc'`                             | `stringT('abc')`                                             |
+| `class-string<Foo>`                 | `class-string<Foo>`                 | `classT(Foo::class))`, `classStringT(Foo::class))`           |
+| `Foo::class`                        | `Foo::class`                        | `stringT(Foo::class)`, `classConstantT(Foo::class, 'class')` |
+| ❌                                   | `interface-string`                  | ❌                                                            |
+| ❌                                   | `trait-string`                      | ❌                                                            |
+| ❌                                   | `enum-string`                       | ❌                                                            |
+| ❌                                   | `lowercase-string`                  | ❌                                                            |
+| `literal-string`                    | `literal-string`                    | `literalStringT`                                             |
+| `callable-string`                   | `callable-string`                   | `andT(callableT, stringT)`                                   |
 
-var_dump(types::positiveInt->accept(new BasicIntChecker())); // true
-var_dump(types::callableString()->accept(new BasicIntChecker())); // false
-```
+### PHPDoc constants
 
-## Compatibility with Psalm and PHPStan
+| PHPStan       | Psalm       | Typhoon                                  |
+|---------------|-------------|------------------------------------------|
+| `PHP_INT_MAX` | ❌           | `constantT('PHP_INT_MAX')`               |
+| `Foo::BAR`    | `Foo::BAR`  | `classConstantT(Foo::class, 'BAR')`      |
+| `Foo::IS_*`   | `Foo::IS_*` | `classConstantMaskT(Foo::class, 'IS_*')` |
 
-### Native PHP types
+### PHPDoc arrays and iterables
 
-| PHPStan                 | Psalm                   | Typhoon                                                                                                                                                     |
-|-------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `null`                  | `null`                  | `nullT`                                                                                                                                                     |
-| `void`                  | `void`                  | `voidT`                                                                                                                                                     |
-| `never`                 | `never`                 | `neverT`                                                                                                                                                    |
-| `true`                  | `true`                  | `trueT`                                                                                                                                                     |
-| `false`                 | `false`                 | `falseT`                                                                                                                                                    |
-| `bool`, `boolean`       | `bool`                  | `boolT`                                                                                                                                                     |
-| `int`, `integer`        | `int`                   | `intT`                                                                                                                                                      |
-| `float`, `double`       | `float`                 | `floatT`                                                                                                                                                    |
-| `string`                | `string`                | `stringT`                                                                                                                                                   |
-| `resource`              | `resource`              | `resourceT`                                                                                                                                                 |
-| `array`                 | `array`                 | `arrayT`                                                                                                                                                    |
-| `iterable`              | `iterable`              | `iterableT`                                                                                                                                                 |
-| `object`                | `object`                | `objectT`                                                                                                                                                   |
-| `Foo`                   | `Foo`                   | `namedObjectT(Foo::class)`                                                                                                                                  |
-| `Closure`               | `Closure`               | `closureT` (an alias for `namedObjectT(Closure::class)`)                                                                                                    |
-| `self`                  | `self`                  | `selfT`                                                                                                                                                     |
-| `parent`                | `parent`                | `parentT`                                                                                                                                                   |
-| `static`                | `static`                | `staticT`                                                                                                                                                   |
-| `callable`              | `callable`              | `callableT`                                                                                                                                                 |
-| `?string`               | `?string`               | `nullOrT(stringT)`                                                                                                                                          |
-| `int\|string`           | `int\|string`           | `unionT(intT, stringT)`, `orT(intT, stringT)`                                                                                                               |
-| `Countable&Traversable` | `Countable&Traversable` | `intersectionT(namedObjectT(Countable::class), namedObjectT(Traversable::class))`, `andT(namedObjectT(Countable::class), namedObjectT(Traversable::class))` |
-| `mixed`                 | `mixed`                 | `mixedT`                                                                                                                                                    |
+| PHPStan                              | Psalm                                | Typhoon                                         |
+|--------------------------------------|--------------------------------------|-------------------------------------------------|
+| `array-key`                          | `array-key`                          | `arrayKeyT`                                     |
+| `Foo[]`                              | `Foo[]`                              | `arrayT(value: objectT(Foo::class))`            |
+| `list<string>`                       | `list<string>`                       | `listT(stringT)`                                |
+| `non-empty-list<string>`             | `non-empty-list<string>`             | `nonEmptyListT(stringT)`                        |
+| `list{int, string}`                  | `list{int, string}`                  | `listShapeT([intT, stringT])`                   |
+| `list{int, 1?: string}`              | `list{int, 1?: string}`              | `arrayShapeT([intT, optional(stringT)])`        |
+| `list{int, ...}`                     | `list{int, ...}`                     | `unsealedListShapeT([intT])`                    |
+| ❌                                    | `list{int, ...<string>}`             | `unsealedListShapeT([intT], stringT)`           |
+| `array<string>`                      | `array<string>`                      | `arrayT(value: stringT)`                        |
+| `array<int, string>`                 | `array<int, string>`                 | `arrayT(intT, stringT)`                         |
+| `non-empty-array<array-key, string>` | `non-empty-array<array-key, string>` | `nonEmptyArrayT(arrayKeyT, stringT)`            |
+| `array{}`                            | `array{}`                            | `arrayShapeT()`                                 |
+| `array{int, string}`                 | `array{int, string}`                 | `arrayShapeT([intT, stringT])`                  |
+| `array{int, a?: string}`             | `array{int, a?: string}`             | `arrayShapeT([intT, 'a' => optional(stringT)])` |
+| `array{int, ...}`                    | `array{int, ...}`                    | `unsealedArrayShapeT([intT])`                   |
+| ❌                                    | `array{float, ...<int, string>}`     | `unsealedArrayShapeT([floatT], intT, stringT)`  |
+| `key-of<Foo::ARRAY>`                 | `key-of<Foo::ARRAY>`                 | `keyOfT(classConstantT(Foo::class, 'ARRAY'))`   |
+| `value-of<Foo::ARRAY>`               | `value-of<Foo::ARRAY>`               | `valueOfT(classConstantT(Foo::class, 'ARRAY'))` |
+| `TArray[TKey]`                       | `TArray[TKey]`                       | `offsetT($TArray->type, $TKey->type)`           |
+| `iterable<object, string>`           | `iterable<object, string>`           | `iterableT(objectT, stringT)`                   |
+| `iterable<string>`                   | `iterable<string>`                   | `iterableT(value: stringT)`                     |
+| `callable&array`                     | `callable-array`                     | `andT(callableT, arrayT)`                       |
 
-### Numbers
+### PHPDoc objects
 
-| PHPStan                   | Psalm                        | Typhoon                                           |
-|---------------------------|------------------------------|---------------------------------------------------|
-| ❌                         | `literal-int`                | `literalT(intT)`                                  |
-| `123`                     | `123`                        | `intT(123)`                                       |
-| `positive-int`            | `positive-int`               | `positiveIntT`                                    |
-| `negative-int`            | `negative-int`               | `negativeIntT`                                    |
-| `non-positive-int`        | `non-positive-int`           | `nonPositiveIntT`                                 |
-| `non-negative-int`        | `non-negative-int`           | `nonNegativeIntT`                                 |
-| `non-zero-int`            | `negative-int\|positive-int` | `nonZeroIntT`                                     |
-| `int<-5, 6>`              | `int<-5, 6>`                 | `intRangeT(-5, 6)`                                |
-| `int<min, 6>`             | `int<min, 6>`                | `intRangeT(max: 6)`                               |
-| `int<-5, max>`            | `int<-5, max>`               | `intRangeT(min: -5)`                              |
-| `int-mask<1, 2, 4>`       | `int-mask<1, 2, 4>`          | `intMaskT(1, 2, 4)`                               |
-| `int-mask-of<Foo::INT_*>` | `int-mask-of<Foo::INT_*>`    | `intMaskT(classConstantMaskT(Foo::class, 'INT_')` |
-| ❌                         | ❌                            | `floatRangeT(-0.001, 2.344)`                      |
-| `12.5`                    | `12.5`                       | `floatT(12.5)`                                    |
-| `numeric`                 | `numeric`                    | `numericT`                                        |
+| PHPStan                           | Psalm                   | Typhoon                                               |
+|-----------------------------------|-------------------------|-------------------------------------------------------|
+| `Foo<string, float>`              | `Foo<string, float>`    | `namedObjectT(Foo::class, [stringT, floatT])`         |
+| `self<string, float>`             | `self<string, float>`   | `selfT([stringT, floatT])`                            |
+| `parent<string, float>`           | `parent<string, float>` | `parentT([stringT, floatT])`                          |
+| `static<string, float>`           | `static<string, float>` | `staticT([stringT, floatT])`                          |
+| `object{prop: string}`            | `object{prop: string}`  | `objectShapeT(['prop' => stringT])`                   |
+| `object{prop?: string}`           | `object{prop?: string}` | `objectShapeT(['prop' => optional(stringT))])`        |
+| ❌ (could be `object<T>{prop: T}`) | ❌                       | `objectT([$T = template('T')], ['prop' => $T->type])` |
 
-### Strings
+### PHPDoc callables
 
-| PHPStan                             | Psalm                               | Typhoon                                         |
-|-------------------------------------|-------------------------------------|-------------------------------------------------|
-| `non-empty-string`                  | `non-empty-string`                  | `types::nonEmptyString`                         |
-| `literal-string`                    | `literal-string`                    | `types::literalString`                          |
-| `'abc'`                             | `'abc'`                             | `types::string('abc')`                          |
-| `truthy-string`, `non-falsy-string` | `truthy-string`, `non-falsy-string` | `types::truthyString`, `types::nonFalsyString`  |
-| `numeric-string`                    | `numeric-string`                    | `types::numericString`                          |
-| `callable-string`                   | `callable-string`                   | `types::callableString()`                       |
-| `class-string<Foo>`                 | `class-string<Foo>`                 | `types::classString(types::object(Foo::class))` |
-| `Foo::class`                        | `Foo::class`                        | `types::class(Foo::class)`                      |
-| `class-string`                      | `class-string`                      | `types::classString`                            |
-| ❌                                   | `interface-string`                  | ❌                                               |
-| ❌                                   | `trait-string`                      | ❌                                               |
-| ❌                                   | `enum-string`                       | ❌                                               |
-| ❌                                   | `lowercase-string`                  | ❌                                               |
+| PHPStan                             | Psalm                        | Typhoon                                                          |
+|-------------------------------------|------------------------------|------------------------------------------------------------------|
+| `callable-string`                   | `callable-string`            | `andT(callableT, stringT)`                                       |
+| `callable&array`                    | `callable-array`             | `andT(callableT, arrayT)`                                        |
+| `callable(string): void`            | `callable(string): void`     | `callableT(params: [stringT], return: voidT)`                    |
+| `callable(string=): mixed`          | `callable(string=): mixed`   | `callableT(params: [paramT(stringT, default: true)])`            |
+| ❌ (could be `callable(string='a')`) | ❌                            | `callableT(params: [paramT(stringT, default: stringT('a'))])`    |
+| `callable(...string): mixed`        | `callable(...string): mixed` | `callableT(params: [paramT(stringT, variadic: true)])`           |
+| `callable(&string): mixed`          | `callable(&string): mixed`   | `callableT(params: [paramT(stringT, byRef: true)])`              |
+| `callable<T>(T): ?T`                | ❌                            | `callableT([$T = template('T')], [$T->type], nullOrT($T->type))` |
+| `pure-callable`                     | `pure-callable`              | ❌                                                                |
+| `Closure` types                     | `Closure` types              | same as above via `closureT(...)`                                |
 
-### Constants
+### Other PHPDoc types
 
-| PHPStan       | Psalm         | Typhoon                                                                                   |
-|---------------|---------------|-------------------------------------------------------------------------------------------|
-| `PHP_INT_MAX` | `PHP_INT_MAX` | `types::constant('PHP_INT_MAX')`                                                          |
-| `Foo::BAR`    | `Foo::BAR`    | `types::classConstant(Foo::class, 'BAR')`                                                 |
-| `Foo::IS_*`   | `Foo::IS_*`   | `types::classConstant(Foo::class, 'IS_*')`, `types::classConstantMask(Foo::class, 'IS_')` |
-
-### Arrays and iterables
-
-| PHPStan                                                          | Psalm                                     | Typhoon                                                                                                             |
-|------------------------------------------------------------------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
-| `array-key`                                                      | `array-key`                               | `types::arrayKey`                                                                                                   |
-| `Foo[]`                                                          | `Foo[]`                                   | `types::array(value: types::object(Foo::class))`                                                                    |
-| `list<string>`                                                   | `list<string>`                            | `types::list(types::string)`                                                                                        |
-| `non-empty-list<string>`                                         | `non-empty-list<string>`                  | `types::nonEmptyList(types::string)`                                                                                |
-| `list{int, string}`                                              | `list{int, string}`                       | `types::listShape([types::int, types::string])`                                                                     |
-| `list{int, 1?: string}`                                          | `list{int, 1?: string}`                   | `types::listShape([types::int, types::optional(types::string)])`                                                    |
-| `list{int, ...}`                                                 | `list{int, ...}`                          | `types::unsealedListShape([types::int])`                                                                            |
-| ❌ ([issue](https://github.com/phpstan/phpdoc-parser/issues/245)) | `list{int, ...<string>}`                  | `types::unsealedListShape([types::int], types::string)`                                                             |
-| `array<string>`                                                  | `array<string>`                           | `types::array(value: types::string)`                                                                                |
-| `array<int, string>`                                             | `array<int, string>`                      | `types::array(types::int, types::string)`                                                                           |
-| `non-empty-array<array-key, string>`                             | `non-empty-array<array-key, string>`      | `types::nonEmptyArray(types::arrayKey, types::string)`                                                              |
-| `array{}`                                                        | `array{}`                                 | `types::array()`                                                                                                    |
-| `array{int, string}`                                             | `array{int, string}`                      | `types::arrayShape([types::int, types::string])`                                                                    |
-| `array{int, a?: string}`                                         | `array{int, a?: string}`                  | `types::arrayShape([types::int, 'a' => types::optional(types::string)])`                                            |
-| `array{int, ...}`                                                | `array{int, ...}`                         | `types::unsealedArrayShape([types::int])`                                                                           |
-| ❌ ([issue](https://github.com/phpstan/phpdoc-parser/issues/245)) | `array{float, ...<int, string>}`          | `types::unsealedArrayShape([types::float], types::int, types::string)`                                              |
-| `key-of<Foo::ARRAY>`                                             | `key-of<Foo::ARRAY>`                      | `types::keyOf(types::classConstant(Foo::class, 'ARRAY'))`                                                           |
-| `value-of<Foo::ARRAY>`                                           | `value-of<Foo::ARRAY>`                    | `types::valueOf(types::classConstant(Foo::class, 'ARRAY'))`                                                         |
-| `TArray[TKey]`                                                   | `TArray[TKey]`                            | `types::offset($arrayType, $keyType)`                                                                               |
-| `iterable<object, string>`                                       | `iterable<object, string>`                | `types::iterable(types::object, types::string)`                                                                     |
-| `iterable<string>`                                               | `iterable<string>`                        | `types::iterable(value: types::string)`                                                                             |
-| `Generator<TKey, TValue, TSend, TReturn>`                        | `Generator<TKey, TValue, TSend, TReturn>` | `types::object(Generator::class, [$key, $value, $send, $return])`, `types::Generator($key, $value, $send, $return)` |
-| `callable&array`                                                 | `callable-array`                          | `types::callableArray()`                                                                                            |
-
-### Objects
-
-| PHPStan                 | Psalm                   | Typhoon                                                          |
-|-------------------------|-------------------------|------------------------------------------------------------------|
-| `Foo<string, float>`    | `Foo<string, float>`    | `namedObjectT(Foo::class, [stringT, floatT])`                    |
-| `self<string, float>`   | `self<string, float>`   | `selfT([stringT, floatT])`                                       |
-| `parent<string, float>` | `parent<string, float>` | `parentT([stringT, floatT])`                                     |
-| `static<string, float>` | `static<string, float>` | `staticT([stringT, floatT])`                                     |
-| `object{prop: string}`  | `object{prop: string}`  | `objectT(properties: [prop('prop', stringT)])`                   |
-| `object{prop?: string}` | `object{prop?: string}` | `objectT(properties: [prop('prop', stringT, isOptional: true)])` |
-
-### Callables
-
-| PHPStan                      | Psalm                        | Typhoon                                                             |
-|------------------------------|------------------------------|---------------------------------------------------------------------|
-| `callable-string`            | `callable-string`            | `types::callableString()`                                           |
-| `callable&array`             | `callable-array`             | `types::callableArray()`                                            |
-| `callable(string): void`     | `callable(string): void`     | `types::callable([types::string], types::void)`                     |
-| `callable(string=): mixed`   | `callable(string=): mixed`   | `types::callable([types::param(types::string, hasDefault: true)])`  |
-| `callable(...string): mixed` | `callable(...string): mixed` | `types::callable([types::param(types::string, variadic: true)])`    |
-| `callable(&string): mixed`   | `callable(&string): mixed`   | `types::callable([types::param(types::string, byReference: true)])` |
-| `Closure(string): void`      | `Closure(string): void`      | `types::Closure([types::string], types::void)`                      |
-| `Closure(string=): mixed`    | `Closure(string=): mixed`    | `types::Closure([types::param(types::string, hasDefault: true)])`   |
-| `Closure(...string): mixed`  | `Closure(...string): mixed`  | `types::Closure([types::param(types::string, variadic: true)])`     |
-| `Closure(&string): mixed`    | `Closure(&string): mixed`    | `types::Closure([types::param(types::string, byReference: true)])`  |
-| `pure-callable`              | `pure-callable`              | ❌                                                                   |
-
-### Other
-
-| PHPStan                        | Psalm                           | Typhoon                                            |
-|--------------------------------|---------------------------------|----------------------------------------------------|
-| `scalar`                       | `scalar`                        | `scalarT`                                          |
-| Alias `X`                      | Alias `X`                       | `aliasT(Foo::class, 'X')`                          |
-| `(T is string ? true : false)` | `(T is string ? true : false)`  | `ternaryT(isSubtypeT($T, stringT), trueT, falseT)` |
-| ❌                              | `properties-of<T>`              | ❌                                                  |
-| ❌                              | `class-string-map<T of Foo, T>` | ❌                                                  |
-| `open-resource`                | `open-resource`                 | ❌                                                  |
-| `closed-resource`              | `closed-resource`               | ❌                                                  |
+| PHPStan                        | Psalm                           | Typhoon                                                  |
+|--------------------------------|---------------------------------|----------------------------------------------------------|
+| `scalar`                       | `scalar`                        | `scalarT`                                                |
+| Alias `X`                      | Alias `X`                       | `aliasT(Foo::class, 'X')`                                |
+| `(T is string ? true : false)` | `(T is string ? true : false)`  | `ternaryT(isSubtypeT($T->type, stringT), trueT, falseT)` |
+| ❌                              | `properties-of<T>`              | ❌                                                        |
+| ❌                              | `class-string-map<T of Foo, T>` | ❌                                                        |
+| `open-resource`                | `open-resource`                 | ❌                                                        |
+| `closed-resource`              | `closed-resource`               | ❌                                                        |
