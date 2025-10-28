@@ -319,13 +319,13 @@ function valueT(Type $array): ValueOfT
  * @api
  * @template T
  * @template K
- * @param Type<T> $value
+ * @param Type<T> $array
  * @param Type<K> $key
  * @return OffsetT<T, K>
  */
-function offsetT(Type $value, Type $key): OffsetT
+function offsetT(Type $array, Type $key): OffsetT
 {
-    return new OffsetT($value, $key);
+    return new OffsetT($array, $key);
 }
 
 const iterableT = IterableDefaultT::T;
