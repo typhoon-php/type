@@ -230,8 +230,10 @@ final class Is extends Fallback
             return false;
         }
 
-        foreach ($type->elements as $key => $element) {
-            if (!\array_key_exists($key, $this->value)) {
+        $remainingElements = $this->value;
+
+        foreach ($type->elements as $element) {
+            if (!\array_key_exists($element->key, $this->value)) {
                 if ($element->isOptional) {
                     continue;
                 }
@@ -239,16 +241,14 @@ final class Is extends Fallback
                 return false;
             }
 
-            if (!is($this->value[$key], $element->type)) {
+            if (!is($this->value[$element->key], $element->type)) {
                 return false;
             }
+
+            unset($remainingElements[$element->key]);
         }
 
-        foreach ($this->value as $key => $value) {
-            if (isset($type->elements[$key])) {
-                continue;
-            }
-
+        foreach ($remainingElements as $key => $value) {
             /** @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType */
             if (!is($key, $type->key) || !is($value, $type->value)) {
                 return false;

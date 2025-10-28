@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 /**
- * @api
+ * @internal
  */
-final readonly class ArrayElement
+final readonly class Optional
 {
     public function __construct(
-        public int|string $key,
         public Type $type,
-        public bool $isOptional = false,
     ) {}
 }

@@ -43,9 +43,9 @@ return [
     single('numeric', 'numeric', 'union([int, float, numericString])'),
     single('scalar', 'scalar', 'union([bool, int, float, string])'),
     // array
-    constr('list', 'list<V>', [tpl('V')], [prop('value', 'Type<V>', MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
+    constr('list', 'T', [tpl('T', 'list')], [prop('value', 'Type', MixedT::T), prop('elements', 'list<Type>'), prop('isNonEmpty', 'bool')]),
     single('arrayDefault', 'array', 'array()'),
-    constr('array', 'array<K, V>', [tpl('K', 'array-key'), tpl('V')], [prop('key', 'Type<K>', ArrayKeyT::T), prop('value', 'Type<V>', MixedT::T), prop('elements', 'array<ArrayElement>'), prop('isNonEmpty', 'bool')]),
+    constr('array', 'T', [tpl('T', 'array')], [prop('key', 'Type', ArrayKeyT::T), prop('value', 'Type', MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
     single('objectDefault', 'object', 'object()'),
     constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', 'list<Type>')], 'object(superTypes: [$t])'),
@@ -61,9 +61,9 @@ return [
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('key', 'Type<K>', MixedT::T), prop('value', 'Type<V>', MixedT::T)]),
     // callable
     single('callableDefault', 'callable', 'callable()'),
-    constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)]),
+    constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('return', 'Type', MixedT::T)]),
     single('closureDefault', 'Closure', 'namedObject(Closure::class)'),
-    constr('closure', 'T', [tpl('T', 'Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returns', 'Type', MixedT::T)], "intersection([\nclosureDefault,\ncallable(\$templates, \$parameters, \$returns),\n])"),
+    constr('closure', 'T', [tpl('T', 'Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('return', 'Type', MixedT::T)], "intersection([\nclosureDefault,\ncallable(\$templates, \$parameters, \$return),\n])"),
     // resource
     single('resource', 'resource'),
     // intersection

@@ -10,17 +10,14 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @template-covariant K of array-key = array-key
- * @template-covariant V = mixed
- * @implements Type<array<K, V>>
+ * @template-covariant T of array = array
+ * @implements Type<T>
  * @codeCoverageIgnore
  */
 final readonly class ArrayT implements Type
 {
     /**
-     * @param Type<K> $key
-     * @param Type<V> $value
-     * @param array<ArrayElement> $elements
+     * @param list<ArrayElement> $elements
      */
     public function __construct(
         public Type $key = ArrayKeyT::T,

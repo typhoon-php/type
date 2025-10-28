@@ -23,7 +23,7 @@ final readonly class CallableT implements Type
     public function __construct(
         public array $templates = [],
         public array $parameters = [],
-        public Type $returns = MixedT::T,
+        public Type $return = MixedT::T,
     ) {}
 
     #[\Override]

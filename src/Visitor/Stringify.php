@@ -91,33 +91,22 @@ abstract class Stringify implements Visitor
     private int $unknownTemplateIndex = 0;
 
     /**
-     * @param array<ArrayElement> $elements
+     * @return non-empty-string
      */
-    private function arrayElements(array $elements): string
+    protected function arrayElement(ArrayElement $element): string
     {
-        if (array_is_list($elements) && array_all($elements, static fn(ArrayElement $e) => !$e->isOptional)) {
-            return implode(', ', array_map(
-                fn(ArrayElement $element): string => $element->type->accept($this),
-                $elements,
-            ));
-        }
-
-        return implode(', ', array_map(
-            fn(int|string $key, ArrayElement $element): string => \sprintf(
-                '%s%s: %s',
-                \is_int($key) ? $key : $this->stringValueT(new StringValueT($key)),
-                $element->isOptional ? '?' : '',
-                $element->type->accept($this),
-            ),
-            array_keys($elements),
-            $elements,
-        ));
+        return \sprintf(
+            '%s%s: %s',
+            \is_int($element->key) ? $element->key : $this->stringValueT(new StringValueT($element->key)),
+            $element->isOptional ? '?' : '',
+            $element->type->accept($this),
+        );
     }
 
     /**
      * @return non-empty-string
      */
-    private function property(Property $property): string
+    protected function property(Property $property): string
     {
         return \sprintf('%s%s: %s', $property->name, $property->isOptional ? '?' : '', $property->type->accept($this));
     }
@@ -125,16 +114,37 @@ abstract class Stringify implements Visitor
     /**
      * @return non-empty-string
      */
-    private function parameter(Parameter $parameter): string
+    protected function parameter(Parameter $parameter): string
     {
-        /** @phpstan-ignore return.type */
-        return \sprintf(
-            '%s%s%s%s',
-            $parameter->type->accept($this),
-            $parameter->isPassedByReference ? '&' : '',
-            $parameter->isVariadic ? '...' : '',
-            $parameter->hasDefault ? '=' : '',
-        );
+        $string = $parameter->type->accept($this);
+
+        if ($parameter->name !== null) {
+            $string .= ' ';
+        }
+
+        if ($parameter->isPassedByReference) {
+            $string .= '&';
+
+            // todo $parameter->outType
+        }
+
+        if ($parameter->isVariadic) {
+            $string .= '...';
+        }
+
+        if ($parameter->name !== null) {
+            $string .= '$' . $parameter->name;
+        }
+
+        if ($parameter->hasDefault) {
+            $string .= '=';
+
+            if ($parameter->defaultType !== null) {
+                $string .= $parameter->defaultType->accept($this);
+            }
+        }
+
+        return $string;
     }
 
     /**
@@ -142,7 +152,7 @@ abstract class Stringify implements Visitor
      * @param list<Type> $templateArguments
      * @return non-empty-string
      */
-    private function constructor(string $name, array $templateArguments): string
+    protected function constructor(string $name, array $templateArguments): string
     {
         if ($templateArguments === []) {
             return $name;
@@ -157,7 +167,7 @@ abstract class Stringify implements Visitor
     /**
      * @param list<Template> $templates
      */
-    private function templates(array $templates): string
+    protected function templates(array $templates): string
     {
         if ($templates === []) {
             return '';
@@ -166,13 +176,13 @@ abstract class Stringify implements Visitor
         return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
     }
 
-    private function template(Template $template): string
+    protected function template(Template $template): string
     {
         $lowerBound = $template->lowerBound->accept($this);
         $upperBound = $template->upperBound->accept($this);
 
         return \sprintf(
-            '%s%s%s%s',
+            '%s%s%s%s%s',
             match ($template->variance) {
                 Variance::Invariant => '',
                 Variance::Covariant => 'out ',
@@ -181,13 +191,14 @@ abstract class Stringify implements Visitor
             $this->templateNames()[$template->type] ??= $template->name,
             $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
             $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
+            $template->default === null ? '' : ' = ' . $template->default->accept($this),
         );
     }
 
     /**
      * @return \SplObjectStorage<TemplateT, non-empty-string>
      */
-    private function templateNames(): \SplObjectStorage
+    final protected function templateNames(): \SplObjectStorage
     {
         if ($this->templateNames !== null) {
             return $this->templateNames;
@@ -379,7 +390,7 @@ abstract class Stringify implements Visitor
     {
         $value = $type->value->accept($this);
 
-        $elements = $this->arrayElements($type->elements);
+        $elements = implode(', ', array_map(fn(Type $type): string => $type->accept($this), $type->elements));
 
         if ($value === 'never') {
             return \sprintf('list{%s}', $elements);
@@ -407,7 +418,7 @@ abstract class Stringify implements Visitor
     {
         $value = $type->value->accept($this);
 
-        $elements = $this->arrayElements($type->elements);
+        $elements = implode(', ', array_map($this->arrayElement(...), $type->elements));
 
         if ($value === 'never') {
             return \sprintf('array{%s}', $elements);
@@ -527,7 +538,7 @@ abstract class Stringify implements Visitor
             'callable%s(%s): %s',
             $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
-            $type->returns->accept($this),
+            $type->return->accept($this),
         );
     }
 
@@ -544,7 +555,7 @@ abstract class Stringify implements Visitor
             'Closure%s(%s): %s',
             $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
-            $type->returns->accept($this),
+            $type->return->accept($this),
         );
     }
 

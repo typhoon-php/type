@@ -20,6 +20,7 @@ final readonly class Template
         public Variance $variance = Variance::Invariant,
         public Type $lowerBound = NeverT::T,
         public Type $upperBound = MixedT::T,
+        public ?Type $default = null,
     ) {
         $this->type = new TemplateT();
     }

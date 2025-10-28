@@ -10,15 +10,14 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @template-covariant V = mixed
- * @implements Type<list<V>>
+ * @template-covariant T of list = list
+ * @implements Type<T>
  * @codeCoverageIgnore
  */
 final readonly class ListT implements Type
 {
     /**
-     * @param Type<V> $value
-     * @param list<ArrayElement> $elements
+     * @param list<Type> $elements
      */
     public function __construct(
         public Type $value = MixedT::T,

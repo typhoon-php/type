@@ -9,10 +9,16 @@ namespace Typhoon\Type;
  */
 final readonly class Parameter
 {
+    /**
+     * @param ?non-empty-string $name
+     */
     public function __construct(
-        public Type $type,
+        public ?string $name = null,
+        public Type $type = NeverT::T,
         public bool $hasDefault = false,
-        public bool $isVariadic = false,
+        public ?Type $defaultType = null,
         public bool $isPassedByReference = false,
+        public ?Type $outType = null,
+        public bool $isVariadic = false,
     ) {}
 }

@@ -266,7 +266,7 @@ abstract class Reduced implements Visitor
     {
         return (new IntersectionT([
             ClosureDefaultT::T,
-            new CallableT($type->templates, $type->parameters, $type->returns),
+            new CallableT($type->templates, $type->parameters, $type->return),
         ]))->accept($this);
     }
 
