@@ -66,9 +66,10 @@ final readonly class Type
                 ->addImplement(TypeI::class);
             $enum->addCase('T');
             $enum->addMethod('accept')
+                ->addAttribute(\Override::class)
+                ->setParameters([(new Parameter('visitor'))->setType(Visitor::class)])
                 ->setReturnType('mixed')
-                ->addBody("return \$visitor->{$this->name}(\$this);")
-                ->addParameter('visitor')->setType(Visitor::class);
+                ->addBody("return \$visitor->{$this->name}(\$this);");
 
             return $enum;
         }
@@ -101,6 +102,7 @@ final readonly class Type
 
         $class
             ->addMethod('accept')
+            ->addAttribute(\Override::class)
             ->setParameters([(new Parameter('visitor'))->setType(Visitor::class)])
             ->setReturnType('mixed')
             ->addBody(\sprintf('return $visitor->%s($this);', $this->name));
@@ -127,22 +129,22 @@ final readonly class Type
      */
     public function reducedMethod(array $types): Method
     {
-        $code = $this->reducedBody($types) ?? throw new \LogicException();
-
         return (new Method($this->name))
+            ->addAttribute(\Override::class)
             ->setPublic()
             ->setParameters([(new Parameter('type'))->setType($this->className())])
             ->setReturnType('mixed')
-            ->setBody($code);
+            ->setBody($this->reducedBody($types));
     }
 
     /**
      * @param list<Type> $types
+     * @return non-empty-string
      */
-    private function reducedBody(array $types): ?string
+    private function reducedBody(array $types): string
     {
         if ($this->reduced === null) {
-            return null;
+            throw new \LogicException(\sprintf('Type `%s` is not reducible', $this->name));
         }
 
         $typesByName = array_column($types, null, 'name');
@@ -201,6 +203,7 @@ final readonly class Type
     public function fallbackMethod(): Method
     {
         return (new Method($this->name))
+            ->addAttribute(\Override::class)
             ->setPublic()
             ->setParameters([(new Parameter('type'))->setType($this->className())])
             ->setReturnType('mixed')
@@ -210,6 +213,7 @@ final readonly class Type
     public function stringifyMethod(): Method
     {
         return (new Method($this->name))
+            ->addAttribute(\Override::class)
             ->setPublic()
             ->setParameters([(new Parameter('type'))->setType($this->className())])
             ->setReturnType('string')

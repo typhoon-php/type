@@ -17,6 +17,7 @@ enum FalseT implements Type
 {
     case T;
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->falseT($this);

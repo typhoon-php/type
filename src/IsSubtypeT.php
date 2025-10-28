@@ -21,6 +21,7 @@ final readonly class IsSubtypeT implements Type
         public Type $right,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->isSubtypeT($this);

@@ -20,6 +20,7 @@ final readonly class IntMaskT implements Type
         public Type $ints,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->intMaskT($this);

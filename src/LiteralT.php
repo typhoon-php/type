@@ -23,6 +23,7 @@ final readonly class LiteralT implements Type
         public Type $type,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->literalT($this);

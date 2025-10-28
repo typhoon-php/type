@@ -17,6 +17,7 @@ enum LiteralStringT implements Type
 {
     case T;
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->literalStringT($this);

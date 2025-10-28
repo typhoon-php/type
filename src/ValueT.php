@@ -23,6 +23,7 @@ final readonly class ValueT implements Type
         public Type $array,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->valueT($this);

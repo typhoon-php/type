@@ -23,6 +23,7 @@ final readonly class IntersectionT implements Type
         public array $types,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->intersectionT($this);

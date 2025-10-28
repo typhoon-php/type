@@ -26,6 +26,7 @@ final readonly class OffsetT implements Type
         public Type $key,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->offsetT($this);

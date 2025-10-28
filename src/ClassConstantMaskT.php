@@ -21,6 +21,7 @@ final readonly class ClassConstantMaskT implements Type
         public string $namePrefix = '',
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->classConstantMaskT($this);

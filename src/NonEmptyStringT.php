@@ -17,6 +17,7 @@ enum NonEmptyStringT implements Type
 {
     case T;
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->nonEmptyStringT($this);

@@ -55,186 +55,223 @@ use Typhoon\Type\VoidT;
  */
 abstract class Fallback extends Reduced
 {
+    #[\Override]
     public function neverT(NeverT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function voidT(VoidT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function nullT(NullT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function falseT(FalseT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function trueT(TrueT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function intRangeT(IntRangeT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function intMaskT(IntMaskT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function floatRangeT(FloatRangeT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function stringT(StringT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function nonEmptyStringT(NonEmptyStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function truthyStringT(TruthyStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function numericStringT(NumericStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function lowercaseStringT(LowercaseStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function stringValueT(StringValueT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function classStringT(ClassStringT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function listT(ListT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function arrayT(ArrayT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function objectT(ObjectT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function selfT(SelfT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function parentT(ParentT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function staticT(StaticT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function iterableT(IterableT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function callableT(CallableT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function resourceT(ResourceT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function intersectionT(IntersectionT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function unionT(UnionT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function literalT(LiteralT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function constantT(ConstantT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function classConstantT(ClassConstantT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function keyT(KeyT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function offsetT(OffsetT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function isSubtypeT(IsSubtypeT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function ternaryT(TernaryT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function aliasT(AliasT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function templateT(TemplateT $type): mixed
     {
         return $this->fallback($type);
     }
 
+    #[\Override]
     public function mixedT(MixedT $type): mixed
     {
         return $this->fallback($type);

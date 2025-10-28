@@ -16,6 +16,7 @@ namespace Typhoon\Type;
  */
 final readonly class TemplateT implements Type
 {
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->templateT($this);

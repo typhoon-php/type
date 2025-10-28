@@ -23,6 +23,7 @@ final readonly class UnionT implements Type
         public array $types,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->unionT($this);

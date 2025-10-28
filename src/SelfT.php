@@ -23,6 +23,7 @@ final readonly class SelfT implements Type
         public array $templateArguments = [],
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->selfT($this);

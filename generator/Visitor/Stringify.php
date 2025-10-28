@@ -52,42 +52,50 @@ use Typhoon\Type\Visitor;
  */
 abstract class Stringify implements Visitor
 {
+    #[\Override]
     public function intValueT(IntValueT $type): string
     {
         return (string) $type->value;
     }
 
+    #[\Override]
     public function intRangeT(IntRangeT $type): string
     {
         return \sprintf('int<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
     }
 
+    #[\Override]
     public function intMaskT(IntMaskT $type): string
     {
         return \sprintf('int-mask-of<%s>', $type->ints->accept($this));
     }
 
+    #[\Override]
     public function floatValueT(FloatValueT $type): string
     {
         return $type->value;
     }
 
+    #[\Override]
     public function floatRangeT(FloatRangeT $type): string
     {
         return \sprintf('float<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
     }
 
+    #[\Override]
     public function stringValueT(StringValueT $type): string
     {
         /** @var non-empty-string */
         return str_replace("\n", '\n', var_export($type->value, return: true));
     }
 
+    #[\Override]
     public function classStringT(ClassStringT $type): string
     {
         return \sprintf('class-string<%s>', $type->object->accept($this));
     }
 
+    #[\Override]
     public function listT(ListT $type): string
     {
         $value = $type->value->accept($this);
@@ -109,6 +117,7 @@ abstract class Stringify implements Visitor
         return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
     }
 
+    #[\Override]
     public function arrayT(ArrayT $type): string
     {
         $value = $type->value->accept($this);
@@ -159,6 +168,7 @@ abstract class Stringify implements Visitor
         ));
     }
 
+    #[\Override]
     public function iterableT(IterableT $type): string
     {
         $key = $type->key->accept($this);
@@ -175,11 +185,13 @@ abstract class Stringify implements Visitor
         return \sprintf('iterable<%s, %s>', $key, $value);
     }
 
+    #[\Override]
     public function namedObjectT(NamedObjectT $type): string
     {
         return $this->constructor($type->class, $type->templateArguments);
     }
 
+    #[\Override]
     public function objectT(ObjectT $type): string
     {
         return \sprintf(
@@ -201,36 +213,43 @@ abstract class Stringify implements Visitor
         return \sprintf('%s%s: %s', $property->name, $property->isOptional ? '?' : '', $property->type->accept($this));
     }
 
+    #[\Override]
     public function selfDefaultT(SelfDefaultT $type): mixed
     {
         return 'self';
     }
 
+    #[\Override]
     public function selfT(SelfT $type): string
     {
         return $this->constructor('self', $type->templateArguments);
     }
 
+    #[\Override]
     public function parentDefaultT(ParentDefaultT $type): mixed
     {
         return 'parent';
     }
 
+    #[\Override]
     public function parentT(ParentT $type): string
     {
         return $this->constructor('parent', $type->templateArguments);
     }
 
+    #[\Override]
     public function staticDefaultT(StaticDefaultT $type): mixed
     {
         return 'static';
     }
 
+    #[\Override]
     public function staticT(StaticT $type): string
     {
         return $this->constructor('static', $type->templateArguments);
     }
 
+    #[\Override]
     public function callableT(CallableT $type): string
     {
         return \sprintf(
@@ -241,6 +260,7 @@ abstract class Stringify implements Visitor
         );
     }
 
+    #[\Override]
     public function closureT(ClosureT $type): string
     {
         return \sprintf(
@@ -283,66 +303,79 @@ abstract class Stringify implements Visitor
         )));
     }
 
+    #[\Override]
     public function constantT(ConstantT $type): string
     {
         return \sprintf('!%s', $type->name);
     }
 
+    #[\Override]
     public function classConstantT(ClassConstantT $type): string
     {
         return \sprintf('%s::%s', $type->class->accept($this), $type->name);
     }
 
+    #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): string
     {
         return \sprintf('%s::%s*', $type->class->accept($this), $type->namePrefix);
     }
 
+    #[\Override]
     public function aliasT(AliasT $type): string
     {
         return \sprintf('%s@%s', $type->class, $type->name);
     }
 
+    #[\Override]
     public function literalT(LiteralT $type): string
     {
         return \sprintf('literal<%s>', $type->type->accept($this));
     }
 
+    #[\Override]
     public function intersectionT(IntersectionT $type): string
     {
         return implode('&', array_map(fn(Type $type): string => $type->accept($this), $type->types));
     }
 
+    #[\Override]
     public function unionT(UnionT $type): string
     {
         return \sprintf('(%s)', implode('|', array_map(fn(Type $type): string => $type->accept($this), $type->types)));
     }
 
+    #[\Override]
     public function keyT(KeyT $type): string
     {
         return \sprintf('key-of<%s>', $type->array->accept($this));
     }
 
+    #[\Override]
     public function valueT(ValueT $type): string
     {
         return \sprintf('value-of<%s>', $type->array->accept($this));
     }
 
+    #[\Override]
     public function offsetT(OffsetT $type): string
     {
         return \sprintf('%s[%s]', $type->array->accept($this), $type->key->accept($this));
     }
 
+    #[\Override]
     public function isSubtypeT(IsSubtypeT $type): string
     {
         return \sprintf('(%s <: %s)', $type->left->accept($this), $type->right->accept($this));
     }
 
+    #[\Override]
     public function isSupertypeT(IsSupertypeT $type): mixed
     {
         return \sprintf('(%s :> %s)', $type->left->accept($this), $type->right->accept($this));
     }
 
+    #[\Override]
     public function ternaryT(TernaryT $type): string
     {
         return \sprintf('(%s ? %s : %s)', $type->condition->accept($this), $type->then->accept($this), $type->else->accept($this));
@@ -398,6 +431,7 @@ abstract class Stringify implements Visitor
 
     private int $unknownTemplateIndex = 0;
 
+    #[\Override]
     public function templateT(TemplateT $type): string
     {
         return $this->templateNames()[$type] ??= '$' . ($this->unknownTemplateIndex++);

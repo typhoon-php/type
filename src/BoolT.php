@@ -17,6 +17,7 @@ enum BoolT implements Type
 {
     case T;
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->boolT($this);

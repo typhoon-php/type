@@ -28,6 +28,7 @@ final readonly class ClosureT implements Type
         public Type $returns = MixedT::T,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->closureT($this);

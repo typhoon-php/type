@@ -25,6 +25,7 @@ final readonly class FloatRangeT implements Type
         public ?string $max = null,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->floatRangeT($this);

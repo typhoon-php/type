@@ -27,6 +27,7 @@ final readonly class ObjectT implements Type
         public array $properties = [],
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->objectT($this);

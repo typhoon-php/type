@@ -26,6 +26,7 @@ final readonly class ListT implements Type
         public bool $isNonEmpty = false,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->listT($this);

@@ -21,6 +21,7 @@ final readonly class IntRangeT implements Type
         public ?int $max = null,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->intRangeT($this);

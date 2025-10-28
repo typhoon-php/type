@@ -23,6 +23,7 @@ final readonly class ConstantT implements Type
         public string $name,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->constantT($this);

@@ -23,6 +23,7 @@ final readonly class FloatValueT implements Type
         public string $value,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->floatValueT($this);

@@ -23,6 +23,7 @@ final readonly class ClassStringT implements Type
         public Type $object,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->classStringT($this);

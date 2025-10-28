@@ -63,6 +63,7 @@ use Typhoon\Type\Visitor;
  */
 abstract class Reduced implements Visitor
 {
+    #[\Override]
     public function boolT(BoolT $type): mixed
     {
         /** @var UnionT */
@@ -71,6 +72,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function intT(IntT $type): mixed
     {
         /** @var IntRangeT */
@@ -79,11 +81,13 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function intValueT(IntValueT $type): mixed
     {
         return (new IntRangeT($type->value, $type->value))->accept($this);
     }
 
+    #[\Override]
     public function negativeIntT(NegativeIntT $type): mixed
     {
         /** @var IntRangeT */
@@ -92,6 +96,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function nonPositiveIntT(NonPositiveIntT $type): mixed
     {
         /** @var IntRangeT */
@@ -100,6 +105,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function nonZeroIntT(NonZeroIntT $type): mixed
     {
         /** @var UnionT */
@@ -108,6 +114,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function nonNegativeIntT(NonNegativeIntT $type): mixed
     {
         /** @var IntRangeT */
@@ -116,6 +123,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function positiveIntT(PositiveIntT $type): mixed
     {
         /** @var IntRangeT */
@@ -124,6 +132,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function floatT(FloatT $type): mixed
     {
         /** @var FloatRangeT */
@@ -132,11 +141,13 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function floatValueT(FloatValueT $type): mixed
     {
         return (new FloatRangeT($type->value, $type->value))->accept($this);
     }
 
+    #[\Override]
     public function literalStringT(LiteralStringT $type): mixed
     {
         /** @var LiteralT */
@@ -145,6 +156,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function arrayKeyT(ArrayKeyT $type): mixed
     {
         /** @var UnionT */
@@ -153,6 +165,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function numericT(NumericT $type): mixed
     {
         /** @var UnionT */
@@ -161,6 +174,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function scalarT(ScalarT $type): mixed
     {
         /** @var UnionT */
@@ -169,6 +183,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function arrayDefaultT(ArrayDefaultT $type): mixed
     {
         /** @var ArrayT */
@@ -177,6 +192,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function objectDefaultT(ObjectDefaultT $type): mixed
     {
         /** @var ObjectT */
@@ -185,11 +201,13 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function namedObjectT(NamedObjectT $type): mixed
     {
         return (new ObjectT(superTypes: [$type]))->accept($this);
     }
 
+    #[\Override]
     public function selfDefaultT(SelfDefaultT $type): mixed
     {
         /** @var SelfT */
@@ -198,6 +216,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function parentDefaultT(ParentDefaultT $type): mixed
     {
         /** @var ParentT */
@@ -206,6 +225,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function staticDefaultT(StaticDefaultT $type): mixed
     {
         /** @var StaticT */
@@ -214,6 +234,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function iterableDefaultT(IterableDefaultT $type): mixed
     {
         /** @var IterableT */
@@ -222,6 +243,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function callableDefaultT(CallableDefaultT $type): mixed
     {
         /** @var CallableT */
@@ -230,6 +252,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function closureDefaultT(ClosureDefaultT $type): mixed
     {
         /** @var NamedObjectT */
@@ -238,6 +261,7 @@ abstract class Reduced implements Visitor
         return $reduced->accept($this);
     }
 
+    #[\Override]
     public function closureT(ClosureT $type): mixed
     {
         return (new IntersectionT([
@@ -246,11 +270,13 @@ abstract class Reduced implements Visitor
         ]))->accept($this);
     }
 
+    #[\Override]
     public function valueT(ValueT $type): mixed
     {
         return (new OffsetT($type->array, new KeyT($type->array)))->accept($this);
     }
 
+    #[\Override]
     public function isSupertypeT(IsSupertypeT $type): mixed
     {
         return (new IsSubtypeT($type->right, $type->left))->accept($this);

@@ -27,6 +27,7 @@ final readonly class AliasT implements Type
         public array $templateArguments = [],
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->aliasT($this);

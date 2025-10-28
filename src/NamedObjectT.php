@@ -25,6 +25,7 @@ final readonly class NamedObjectT implements Type
         public array $templateArguments = [],
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->namedObjectT($this);

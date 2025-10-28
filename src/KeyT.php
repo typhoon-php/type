@@ -23,6 +23,7 @@ final readonly class KeyT implements Type
         public Type $array,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->keyT($this);

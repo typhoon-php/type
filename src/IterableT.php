@@ -26,6 +26,7 @@ final readonly class IterableT implements Type
         public Type $value = MixedT::T,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->iterableT($this);

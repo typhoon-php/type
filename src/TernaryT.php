@@ -28,6 +28,7 @@ final readonly class TernaryT implements Type
         public Type $else,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->ternaryT($this);

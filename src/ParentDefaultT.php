@@ -17,6 +17,7 @@ enum ParentDefaultT implements Type
 {
     case T;
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->parentDefaultT($this);

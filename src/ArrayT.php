@@ -29,6 +29,7 @@ final readonly class ArrayT implements Type
         public bool $isNonEmpty = false,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->arrayT($this);

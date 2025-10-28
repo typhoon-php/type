@@ -26,6 +26,7 @@ final readonly class CallableT implements Type
         public Type $returns = MixedT::T,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->callableT($this);

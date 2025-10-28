@@ -23,6 +23,7 @@ final readonly class IntValueT implements Type
         public int $value,
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->intValueT($this);

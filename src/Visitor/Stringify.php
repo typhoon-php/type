@@ -199,152 +199,182 @@ abstract class Stringify implements Visitor
         return $this->templateNames = $templates;
     }
 
+    #[\Override]
     public function neverT(NeverT $type): string
     {
         return 'never';
     }
 
+    #[\Override]
     public function voidT(VoidT $type): string
     {
         return 'void';
     }
 
+    #[\Override]
     public function nullT(NullT $type): string
     {
         return 'null';
     }
 
+    #[\Override]
     public function falseT(FalseT $type): string
     {
         return 'false';
     }
 
+    #[\Override]
     public function trueT(TrueT $type): string
     {
         return 'true';
     }
 
+    #[\Override]
     public function boolT(BoolT $type): string
     {
         return 'bool';
     }
 
+    #[\Override]
     public function intT(IntT $type): string
     {
         return 'int';
     }
 
+    #[\Override]
     public function intValueT(IntValueT $type): string
     {
         return (string) $type->value;
     }
 
+    #[\Override]
     public function intRangeT(IntRangeT $type): string
     {
         return \sprintf('int<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
     }
 
+    #[\Override]
     public function negativeIntT(NegativeIntT $type): string
     {
         return 'negative-int';
     }
 
+    #[\Override]
     public function nonPositiveIntT(NonPositiveIntT $type): string
     {
         return 'non-positive-int';
     }
 
+    #[\Override]
     public function nonZeroIntT(NonZeroIntT $type): string
     {
         return 'non-zero-int';
     }
 
+    #[\Override]
     public function nonNegativeIntT(NonNegativeIntT $type): string
     {
         return 'non-negative-int';
     }
 
+    #[\Override]
     public function positiveIntT(PositiveIntT $type): string
     {
         return 'positive-int';
     }
 
+    #[\Override]
     public function intMaskT(IntMaskT $type): string
     {
         return \sprintf('int-mask-of<%s>', $type->ints->accept($this));
     }
 
+    #[\Override]
     public function floatT(FloatT $type): string
     {
         return 'float';
     }
 
+    #[\Override]
     public function floatValueT(FloatValueT $type): string
     {
         return $type->value;
     }
 
+    #[\Override]
     public function floatRangeT(FloatRangeT $type): string
     {
         return \sprintf('float<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
     }
 
+    #[\Override]
     public function stringT(StringT $type): string
     {
         return 'string';
     }
 
+    #[\Override]
     public function nonEmptyStringT(NonEmptyStringT $type): string
     {
         return 'non-empty-string';
     }
 
+    #[\Override]
     public function truthyStringT(TruthyStringT $type): string
     {
         return 'truthy-string';
     }
 
+    #[\Override]
     public function numericStringT(NumericStringT $type): string
     {
         return 'numeric-string';
     }
 
+    #[\Override]
     public function lowercaseStringT(LowercaseStringT $type): string
     {
         return 'lowercase-string';
     }
 
+    #[\Override]
     public function stringValueT(StringValueT $type): string
     {
         /** @var non-empty-string */
         return str_replace("\n", '\n', var_export($type->value, return: true));
     }
 
+    #[\Override]
     public function classStringT(ClassStringT $type): string
     {
         return \sprintf('class-string<%s>', $type->object->accept($this));
     }
 
+    #[\Override]
     public function literalStringT(LiteralStringT $type): string
     {
         return 'literal-string';
     }
 
+    #[\Override]
     public function arrayKeyT(ArrayKeyT $type): string
     {
         return 'array-key';
     }
 
+    #[\Override]
     public function numericT(NumericT $type): string
     {
         return 'numeric';
     }
 
+    #[\Override]
     public function scalarT(ScalarT $type): string
     {
         return 'scalar';
     }
 
+    #[\Override]
     public function listT(ListT $type): string
     {
         $value = $type->value->accept($this);
@@ -366,11 +396,13 @@ abstract class Stringify implements Visitor
         return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
     }
 
+    #[\Override]
     public function arrayDefaultT(ArrayDefaultT $type): string
     {
         return 'array';
     }
 
+    #[\Override]
     public function arrayT(ArrayT $type): string
     {
         $value = $type->value->accept($this);
@@ -397,16 +429,19 @@ abstract class Stringify implements Visitor
         return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
     }
 
+    #[\Override]
     public function objectDefaultT(ObjectDefaultT $type): string
     {
         return 'object';
     }
 
+    #[\Override]
     public function namedObjectT(NamedObjectT $type): string
     {
         return $this->constructor($type->class, $type->templateArguments);
     }
 
+    #[\Override]
     public function objectT(ObjectT $type): string
     {
         return \sprintf(
@@ -420,41 +455,49 @@ abstract class Stringify implements Visitor
         );
     }
 
+    #[\Override]
     public function selfDefaultT(SelfDefaultT $type): mixed
     {
         return 'self';
     }
 
+    #[\Override]
     public function selfT(SelfT $type): string
     {
         return $this->constructor('self', $type->templateArguments);
     }
 
+    #[\Override]
     public function parentDefaultT(ParentDefaultT $type): mixed
     {
         return 'parent';
     }
 
+    #[\Override]
     public function parentT(ParentT $type): string
     {
         return $this->constructor('parent', $type->templateArguments);
     }
 
+    #[\Override]
     public function staticDefaultT(StaticDefaultT $type): mixed
     {
         return 'static';
     }
 
+    #[\Override]
     public function staticT(StaticT $type): string
     {
         return $this->constructor('static', $type->templateArguments);
     }
 
+    #[\Override]
     public function iterableDefaultT(IterableDefaultT $type): string
     {
         return 'iterable';
     }
 
+    #[\Override]
     public function iterableT(IterableT $type): string
     {
         $key = $type->key->accept($this);
@@ -471,11 +514,13 @@ abstract class Stringify implements Visitor
         return \sprintf('iterable<%s, %s>', $key, $value);
     }
 
+    #[\Override]
     public function callableDefaultT(CallableDefaultT $type): string
     {
         return 'callable';
     }
 
+    #[\Override]
     public function callableT(CallableT $type): string
     {
         return \sprintf(
@@ -486,11 +531,13 @@ abstract class Stringify implements Visitor
         );
     }
 
+    #[\Override]
     public function closureDefaultT(ClosureDefaultT $type): string
     {
         return 'Closure';
     }
 
+    #[\Override]
     public function closureT(ClosureT $type): string
     {
         return \sprintf(
@@ -501,81 +548,97 @@ abstract class Stringify implements Visitor
         );
     }
 
+    #[\Override]
     public function resourceT(ResourceT $type): string
     {
         return 'resource';
     }
 
+    #[\Override]
     public function intersectionT(IntersectionT $type): string
     {
         return implode('&', array_map(fn(Type $type): string => $type->accept($this), $type->types));
     }
 
+    #[\Override]
     public function unionT(UnionT $type): string
     {
         return \sprintf('(%s)', implode('|', array_map(fn(Type $type): string => $type->accept($this), $type->types)));
     }
 
+    #[\Override]
     public function literalT(LiteralT $type): string
     {
         return \sprintf('literal<%s>', $type->type->accept($this));
     }
 
+    #[\Override]
     public function constantT(ConstantT $type): string
     {
         return \sprintf('!%s', $type->name);
     }
 
+    #[\Override]
     public function classConstantT(ClassConstantT $type): string
     {
         return \sprintf('%s::%s', $type->class->accept($this), $type->name);
     }
 
+    #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): string
     {
         return \sprintf('%s::%s*', $type->class->accept($this), $type->namePrefix);
     }
 
+    #[\Override]
     public function keyT(KeyT $type): string
     {
         return \sprintf('key-of<%s>', $type->array->accept($this));
     }
 
+    #[\Override]
     public function valueT(ValueT $type): string
     {
         return \sprintf('value-of<%s>', $type->array->accept($this));
     }
 
+    #[\Override]
     public function offsetT(OffsetT $type): string
     {
         return \sprintf('%s[%s]', $type->array->accept($this), $type->key->accept($this));
     }
 
+    #[\Override]
     public function isSubtypeT(IsSubtypeT $type): string
     {
         return \sprintf('(%s <: %s)', $type->left->accept($this), $type->right->accept($this));
     }
 
+    #[\Override]
     public function isSupertypeT(IsSupertypeT $type): mixed
     {
         return \sprintf('(%s :> %s)', $type->left->accept($this), $type->right->accept($this));
     }
 
+    #[\Override]
     public function ternaryT(TernaryT $type): string
     {
         return \sprintf('(%s ? %s : %s)', $type->condition->accept($this), $type->then->accept($this), $type->else->accept($this));
     }
 
+    #[\Override]
     public function aliasT(AliasT $type): string
     {
         return \sprintf('%s@%s', $type->class, $type->name);
     }
 
+    #[\Override]
     public function templateT(TemplateT $type): string
     {
         return $this->templateNames()[$type] ??= '$' . ($this->unknownTemplateIndex++);
     }
 
+    #[\Override]
     public function mixedT(MixedT $type): string
     {
         return 'mixed';

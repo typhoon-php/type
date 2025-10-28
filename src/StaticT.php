@@ -23,6 +23,7 @@ final readonly class StaticT implements Type
         public array $templateArguments = [],
     ) {}
 
+    #[\Override]
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->staticT($this);
