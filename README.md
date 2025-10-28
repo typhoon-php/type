@@ -74,7 +74,7 @@ use function Typhoon\Type\stringify;
 
 var_dump(stringify($flipType));
 
-// callable<X, Y, Z>(callable(X, Y): Z): callable(Y, X): Z
+// callable<X, Y, Z>(callable(X, Y): Z): (callable(Y, X): Z)
 ```
 
 ## Supported types

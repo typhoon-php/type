@@ -245,7 +245,9 @@ abstract class Stringify implements Visitor
             'callable%s(%s): %s',
             $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
-            $type->return->accept($this),
+            str_contains($return = $type->return->accept($this), 'callable')
+                ? \sprintf('(%s)', $return)
+                : $return,
         );
     }
 
