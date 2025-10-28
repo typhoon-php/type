@@ -172,6 +172,16 @@ function optional(Type $type): Optional
 }
 
 /**
+ * @internal
+ */
+final readonly class Optional
+{
+    public function __construct(
+        public Type $type,
+    ) {}
+}
+
+/**
  * @api
  * @template V
  * @param Type<V> $value

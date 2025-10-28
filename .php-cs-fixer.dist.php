@@ -23,6 +23,7 @@ $config = (new Config())
 (new PhpCsFixerCodingStandard())->applyTo($config, [
     'final_public_method_for_abstract_class' => false,
     'numeric_literal_separator' => false,
+    'psr_autoloading' => false,
 ]);
 
 return $config;
