@@ -38,11 +38,19 @@ function intT(int $value): IntValueT
 
 /**
  * @api
- * @return IntRangeT<int>
+ * @return IntT|IntValueT<int>|IntRangeT<int>
  */
-function intRangeT(?int $min = null, ?int $max = null): IntRangeT
+function intRangeT(?int $min = null, ?int $max = null): IntT|IntValueT|IntRangeT
 {
-    return new IntRangeT(min: $min, max: $max);
+    if ($min === $max) {
+        if ($min === null) {
+            return intT;
+        }
+
+        return new IntValueT($min);
+    }
+
+    return new IntRangeT($min, $max);
 }
 
 const negativeIntT = NegativeIntT::T;
@@ -97,22 +105,22 @@ function floatT(float|string $value): FloatValueT
  * @api
  * @param null|float|numeric-string $min
  * @param null|float|numeric-string $max
- * @return FloatRangeT<float>
+ * @return FloatT|FloatValueT<float>|FloatRangeT<float>
  */
-function floatRangeT(null|float|string $min = null, null|float|string $max = null): FloatRangeT
+function floatRangeT(null|float|string $min = null, null|float|string $max = null): FloatT|FloatValueT|FloatRangeT
 {
-    return new FloatRangeT(
-        min: match (true) {
-            $min === null => null,
-            \is_float($min) => floatToString($min),
-            default => $min,
-        },
-        max: match (true) {
-            $max === null => null,
-            \is_float($max) => floatToString($max),
-            default => $max,
-        },
-    );
+    $min = \is_float($min) ? floatToString($min) : $min;
+    $max = \is_float($max) ? floatToString($max) : $max;
+
+    if ($min === $max) {
+        if ($min === null) {
+            return floatT;
+        }
+
+        return new FloatValueT($min);
+    }
+
+    return new FloatRangeT($min, $max);
 }
 
 const stringT = StringT::T;
