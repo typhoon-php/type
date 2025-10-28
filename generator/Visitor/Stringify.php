@@ -447,6 +447,6 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function templateT(TemplateT $type): string
     {
-        return $this->templateNames()[$type] ??= '$' . ($this->unknownTemplateIndex++);
+        return $this->templateNames()[$type] ??= 'T#' . ($this->unknownTemplateIndex++);
     }
 }

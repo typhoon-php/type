@@ -136,7 +136,7 @@ final class StringifyTest extends TestCase
         yield [isSupertypeT(trueT, mixedT), '(true :> mixed)'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
         $T = template('T');
-        yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{$0, $1, $0}'];
+        yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{T#0, T#1, T#0}'];
         $T = template('T', scalarT, stringT);
         yield [callableT([$T], [$T->type], $T->type), 'callable<T of scalar super string>(T): T'];
     }
