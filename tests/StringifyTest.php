@@ -137,7 +137,8 @@ final class StringifyTest extends TestCase
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
         $T = template('T');
         yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{T#0, T#1, T#0}'];
-        $T = template('T', scalarT, stringT);
-        yield [callableT([$T], [$T->type], $T->type), 'callable<T of scalar super string>(T): T'];
+        $TB = template('T', scalarT, stringT);
+        yield [callableT([$TB], [$TB->type], $TB->type), 'callable<T of scalar super string>(T): T'];
+        yield [objectT([$T], [namedObjectT(\stdClass::class, [intT])], ['p' => $T->type]), 'object<T>:stdClass<int>{p: T}'];
     }
 }
