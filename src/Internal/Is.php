@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Typhoon\Type\Visitor;
+namespace Typhoon\Type\Internal;
 
 use Typhoon\Type\ArrayDefaultT;
 use Typhoon\Type\BoolT;
@@ -32,12 +32,12 @@ use Typhoon\Type\TrueT;
 use Typhoon\Type\TruthyStringT;
 use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
+use Typhoon\Type\Visitor\Fallback;
 use Typhoon\Type\VoidT;
-use function Typhoon\Type\Internal\floatToString;
 use function Typhoon\Type\stringify;
 
 /**
- * @api
+ * @internal
  * @extends Fallback<bool>
  */
 abstract class Is extends Fallback
@@ -46,134 +46,134 @@ abstract class Is extends Fallback
         private readonly mixed $value,
     ) {}
 
-    public function never(NeverT $type): mixed
+    public function neverT(NeverT $type): mixed
     {
         return false;
     }
 
-    public function void(VoidT $type): mixed
+    public function voidT(VoidT $type): mixed
     {
         return false;
     }
 
-    public function null(NullT $type): mixed
+    public function nullT(NullT $type): mixed
     {
         return $this->value === null;
     }
 
-    public function false(FalseT $type): mixed
+    public function falseT(FalseT $type): mixed
     {
         return $this->value === false;
     }
 
-    public function true(TrueT $type): mixed
+    public function trueT(TrueT $type): mixed
     {
         return $this->value === true;
     }
 
-    public function bool(BoolT $type): mixed
+    public function boolT(BoolT $type): mixed
     {
         return \is_bool($this->value);
     }
 
-    public function int(IntT $type): mixed
+    public function intT(IntT $type): mixed
     {
         return \is_int($this->value);
     }
 
-    public function intValue(IntValueT $type): mixed
+    public function intValueT(IntValueT $type): mixed
     {
         return $this->value === $type->value;
     }
 
-    public function intRange(IntRangeT $type): mixed
+    public function intRangeT(IntRangeT $type): mixed
     {
         return \is_int($this->value)
             && ($type->min === null || $this->value >= $type->min)
             && ($type->max === null || $this->value <= $type->max);
     }
 
-    public function nonZeroInt(NonZeroIntT $type): mixed
+    public function nonZeroIntT(NonZeroIntT $type): mixed
     {
         return \is_int($this->value) && $this->value !== 0;
     }
 
-    public function float(FloatT $type): mixed
+    public function floatT(FloatT $type): mixed
     {
         return \is_float($this->value);
     }
 
-    public function floatValue(FloatValueT $type): mixed
+    public function floatValueT(FloatValueT $type): mixed
     {
         return \is_float($this->value) && floatToString($this->value) === $type->value;
     }
 
-    public function string(StringT $type): mixed
+    public function stringT(StringT $type): mixed
     {
         return \is_string($this->value);
     }
 
-    public function nonEmptyString(NonEmptyStringT $type): mixed
+    public function nonEmptyStringT(NonEmptyStringT $type): mixed
     {
         return \is_string($this->value) && $this->value !== '';
     }
 
-    public function truthyString(TruthyStringT $type): mixed
+    public function truthyStringT(TruthyStringT $type): mixed
     {
         return \is_string($this->value) && $this->value;
     }
 
-    public function numericString(NumericStringT $type): mixed
+    public function numericStringT(NumericStringT $type): mixed
     {
         return \is_string($this->value) && is_numeric($this->value);
     }
 
-    public function lowercaseString(LowercaseStringT $type): mixed
+    public function lowercaseStringT(LowercaseStringT $type): mixed
     {
         return \is_string($this->value) && strtolower($this->value) === $this->value;
     }
 
-    public function stringValue(StringValueT $type): mixed
+    public function stringValueT(StringValueT $type): mixed
     {
         return $this->value === $type->value;
     }
 
-    public function scalar(ScalarT $type): mixed
+    public function scalarT(ScalarT $type): mixed
     {
         return \is_scalar($this->value);
     }
 
-    public function numeric(NumericT $type): mixed
+    public function numericT(NumericT $type): mixed
     {
         return is_numeric($this->value);
     }
 
-    public function resource(ResourceT $type): mixed
+    public function resourceT(ResourceT $type): mixed
     {
         return \is_resource($this->value);
     }
 
-    public function arrayOpen(ArrayDefaultT $type): mixed
+    public function arrayDefaultT(ArrayDefaultT $type): mixed
     {
         return \is_array($this->value);
     }
 
-    public function callableOpen(CallableDefaultT $type): mixed
+    public function callableDefaultT(CallableDefaultT $type): mixed
     {
         return \is_callable($this->value);
     }
 
-    public function iterableOpen(IterableDefaultT $type): mixed
+    public function iterableDefaultT(IterableDefaultT $type): mixed
     {
         return is_iterable($this->value);
     }
 
-    public function objectOpen(ObjectDefaultT $type): mixed
+    public function objectDefaultT(ObjectDefaultT $type): mixed
     {
         return \is_object($this->value);
     }
 
-    public function intersection(IntersectionT $type): mixed
+    public function intersectionT(IntersectionT $type): mixed
     {
         foreach ($type->types as $each) {
             if (!$each->accept($this)) {
@@ -184,7 +184,7 @@ abstract class Is extends Fallback
         return true;
     }
 
-    public function union(UnionT $type): mixed
+    public function unionT(UnionT $type): mixed
     {
         foreach ($type->types as $each) {
             if ($each->accept($this)) {
@@ -195,7 +195,7 @@ abstract class Is extends Fallback
         return false;
     }
 
-    public function mixed(MixedT $type): mixed
+    public function mixedT(MixedT $type): mixed
     {
         return true;
     }
@@ -204,4 +204,15 @@ abstract class Is extends Fallback
     {
         throw new \RuntimeException(\sprintf('Type `%s` is not supported', stringify($type)));
     }
+}
+
+/**
+ * @internal
+ * @template T
+ * @param Type<T> $type
+ * @psalm-assert-if-true T $value
+ */
+function is(mixed $value, Type $type): bool
+{
+    return $type->accept(new class ($value) extends Is {});
 }
