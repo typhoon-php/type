@@ -21,4 +21,3 @@ $generator->generateTypes();
 $generator->generateVisitor();
 $generator->generateReduced();
 $generator->generateFallback();
-$generator->generateStringify();

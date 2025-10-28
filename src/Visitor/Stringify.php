@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @generated This file was generated, do not edit manually.
- */
-
 declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
@@ -85,130 +81,15 @@ use Typhoon\Type\VoidT;
  */
 abstract class Stringify implements Visitor
 {
-    /** @var ?\SplObjectStorage<TemplateT, non-empty-string> */
-    private ?\SplObjectStorage $templateNames = null;
-
     private int $unknownTemplateIndex = 0;
 
     /**
-     * @return non-empty-string
+     * @param \SplObjectStorage<TemplateT, non-empty-string> $templateNames
      */
-    protected function arrayElement(ArrayElement $element): string
-    {
-        return \sprintf(
-            '%s%s: %s',
-            \is_int($element->key) ? $element->key : $this->stringValueT(new StringValueT($element->key)),
-            $element->isOptional ? '?' : '',
-            $element->type->accept($this),
-        );
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function property(Property $property): string
-    {
-        return \sprintf('%s%s: %s', $property->name, $property->isOptional ? '?' : '', $property->type->accept($this));
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function parameter(Parameter $parameter): string
-    {
-        $string = $parameter->type->accept($this);
-
-        if ($parameter->name !== null) {
-            $string .= ' ';
-        }
-
-        if ($parameter->isPassedByReference) {
-            $string .= '&';
-
-            // todo $parameter->outType
-        }
-
-        if ($parameter->isVariadic) {
-            $string .= '...';
-        }
-
-        if ($parameter->name !== null) {
-            $string .= '$' . $parameter->name;
-        }
-
-        if ($parameter->hasDefault) {
-            $string .= '=';
-
-            if ($parameter->defaultType !== null) {
-                $string .= $parameter->defaultType->accept($this);
-            }
-        }
-
-        return $string;
-    }
-
-    /**
-     * @param non-empty-string $name
-     * @param list<Type> $templateArguments
-     * @return non-empty-string
-     */
-    protected function constructor(string $name, array $templateArguments): string
-    {
-        if ($templateArguments === []) {
-            return $name;
-        }
-
-        return \sprintf('%s<%s>', $name, implode(', ', array_map(
-            fn(Type $type): string => $type->accept($this),
-            $templateArguments,
-        )));
-    }
-
-    /**
-     * @param list<Template> $templates
-     */
-    protected function templates(array $templates): string
-    {
-        if ($templates === []) {
-            return '';
-        }
-
-        return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
-    }
-
-    protected function template(Template $template): string
-    {
-        $lowerBound = $template->lowerBound->accept($this);
-        $upperBound = $template->upperBound->accept($this);
-
-        return \sprintf(
-            '%s%s%s%s%s',
-            match ($template->variance) {
-                Variance::Invariant => '',
-                Variance::Covariant => 'out ',
-                Variance::Contravariant => 'in ',
-            },
-            $this->templateNames()[$template->type] ??= $template->name,
-            $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
-            $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
-            $template->default === null ? '' : ' = ' . $template->default->accept($this),
-        );
-    }
-
-    /**
-     * @return \SplObjectStorage<TemplateT, non-empty-string>
-     */
-    final protected function templateNames(): \SplObjectStorage
-    {
-        if ($this->templateNames !== null) {
-            return $this->templateNames;
-        }
-
-        /** @var \SplObjectStorage<TemplateT, non-empty-string> */
-        $templates = new \SplObjectStorage();
-
-        return $this->templateNames = $templates;
-    }
+    public function __construct(
+        /** @phpstan-ignore parameter.defaultValue */
+        protected readonly \SplObjectStorage $templateNames = new \SplObjectStorage(),
+    ) {}
 
     #[\Override]
     public function neverT(NeverT $type): string
@@ -440,6 +321,19 @@ abstract class Stringify implements Visitor
         return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
     }
 
+    /**
+     * @return non-empty-string
+     */
+    protected function arrayElement(ArrayElement $element): string
+    {
+        return \sprintf(
+            '%s%s: %s',
+            \is_int($element->key) ? $element->key : $this->stringValueT(new StringValueT($element->key)),
+            $element->isOptional ? '?' : '',
+            $element->type->accept($this),
+        );
+    }
+
     #[\Override]
     public function objectDefaultT(ObjectDefaultT $type): string
     {
@@ -464,6 +358,14 @@ abstract class Stringify implements Visitor
             )),
             implode(', ', array_map($this->property(...), $type->properties)),
         );
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    protected function property(Property $property): string
+    {
+        return \sprintf('%s%s: %s', $property->name, $property->isOptional ? '?' : '', $property->type->accept($this));
     }
 
     #[\Override]
@@ -500,6 +402,23 @@ abstract class Stringify implements Visitor
     public function staticT(StaticT $type): string
     {
         return $this->constructor('static', $type->templateArguments);
+    }
+
+    /**
+     * @param non-empty-string $name
+     * @param list<Type> $templateArguments
+     * @return non-empty-string
+     */
+    protected function constructor(string $name, array $templateArguments): string
+    {
+        if ($templateArguments === []) {
+            return $name;
+        }
+
+        return \sprintf('%s<%s>', $name, implode(', ', array_map(
+            fn(Type $type): string => $type->accept($this),
+            $templateArguments,
+        )));
     }
 
     #[\Override]
@@ -559,6 +478,42 @@ abstract class Stringify implements Visitor
             implode(', ', array_map($this->parameter(...), $type->parameters)),
             $type->returnType->accept($this),
         );
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    protected function parameter(Parameter $parameter): string
+    {
+        $string = $parameter->type->accept($this);
+
+        if ($parameter->name !== null) {
+            $string .= ' ';
+        }
+
+        if ($parameter->isPassedByReference) {
+            $string .= '&';
+
+            // todo $parameter->outType
+        }
+
+        if ($parameter->isVariadic) {
+            $string .= '...';
+        }
+
+        if ($parameter->name !== null) {
+            $string .= '$' . $parameter->name;
+        }
+
+        if ($parameter->hasDefault) {
+            $string .= '=';
+
+            if ($parameter->defaultType !== null) {
+                $string .= $parameter->defaultType->accept($this);
+            }
+        }
+
+        return $string;
     }
 
     #[\Override]
@@ -648,7 +603,38 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function templateT(TemplateT $type): string
     {
-        return $this->templateNames()[$type] ??= 'T#' . ($this->unknownTemplateIndex++);
+        return $this->templateNames[$type] ??= 'T#' . ($this->unknownTemplateIndex++);
+    }
+
+    /**
+     * @param list<Template> $templates
+     */
+    protected function templates(array $templates): string
+    {
+        if ($templates === []) {
+            return '';
+        }
+
+        return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
+    }
+
+    protected function template(Template $template): string
+    {
+        $lowerBound = $template->lowerBound->accept($this);
+        $upperBound = $template->upperBound->accept($this);
+
+        return \sprintf(
+            '%s%s%s%s%s',
+            match ($template->variance) {
+                Variance::Invariant => '',
+                Variance::Covariant => 'out ',
+                Variance::Contravariant => 'in ',
+            },
+            $this->templateNames[$template->type] ??= $template->name,
+            $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
+            $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
+            $template->default === null ? '' : ' = ' . $template->default->accept($this),
+        );
     }
 
     #[\Override]

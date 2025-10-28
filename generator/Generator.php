@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Generator;
 
-use Nette\PhpGenerator\Attribute;
 use Nette\PhpGenerator\ClassLike;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\InterfaceType;
-use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
@@ -121,39 +119,6 @@ final readonly class Generator
             ]);
 
         $this->write($this->createNamespace('Visitor')->add($visitor));
-    }
-
-    public function generateStringify(): void
-    {
-        $code = file_get_contents(__DIR__ . '/Visitor/Stringify.php');
-        \assert($code !== false);
-
-        $file = PhpFile::fromCode($code);
-
-        $namespace = array_first($file->getNamespaces());
-        \assert($namespace instanceof PhpNamespace);
-
-        (new \ReflectionClass($namespace))->getProperty('name')->setValue($namespace, self::NAMESPACE . '\Visitor');
-
-        $visitor = array_first($namespace->getClasses());
-        \assert($visitor instanceof ClassType);
-
-        foreach ($this->types as $type) {
-            if ($visitor->hasMethod($type->name)) {
-                $visitor->getMethod($type->name)->setAttributes([new Attribute(\Override::class, [])]);
-            } else {
-                $visitor->addMember($type->stringifyMethod());
-            }
-        }
-
-        $orderMap = array_combine(array_column($this->types, 'name'), array_keys($this->types));
-        $methods = $visitor->getMethods();
-
-        usort($methods, static fn(Method $a, Method $b): int => ($orderMap[$a->getName()] ?? -1) <=> ($orderMap[$b->getName()] ?? -1));
-
-        $visitor->setMethods($methods);
-
-        $this->write($namespace);
     }
 
     private function write(PhpNamespace $namespace): void

@@ -209,16 +209,6 @@ final readonly class Type
             ->setReturnType('mixed')
             ->setBody('return $this->fallback($type);');
     }
-
-    public function stringifyMethod(): Method
-    {
-        return (new Method($this->name))
-            ->addAttribute(\Override::class)
-            ->setPublic()
-            ->setParameters([(new Parameter('type'))->setType($this->className())])
-            ->setReturnType('string')
-            ->setBody($this->singleton ? "return '{$this->type}';" : "//todo\nreturn '{$this->name}';");
-    }
 }
 
 /**
