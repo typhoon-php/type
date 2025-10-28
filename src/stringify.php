@@ -12,9 +12,5 @@ use Typhoon\Type\Visitor\Stringify;
  */
 function stringify(Type $type): string
 {
-    /** @var ?Stringify */
-    static $stringifier = null;
-    $stringifier ??= new class extends Stringify {};
-
-    return $type->accept($stringifier);
+    return $type->accept(new class extends Stringify {});
 }
