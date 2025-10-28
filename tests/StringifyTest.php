@@ -123,8 +123,8 @@ final class StringifyTest extends TestCase
         yield [callableT(params: [param(type: stringT, byRef: true, variadic: true)]), 'callable(string&...): mixed'];
         yield [callableT(params: [param('a', stringT, byRef: true, variadic: true)]), 'callable(string &...$a): mixed'];
         yield [objectShapeT(), 'object{}'];
-        yield [objectShapeT(props: ['name' => stringT]), 'object{name: string}'];
-        yield [objectShapeT(props: ['name' => optional(stringT)]), 'object{name?: string}'];
+        yield [objectShapeT(['name' => stringT]), 'object{name: string}'];
+        yield [objectShapeT(['name' => optional(stringT)]), 'object{name?: string}'];
         yield [constantT('test'), '!test'];
         yield [classConstantT(\stdClass::class, 'test'), 'stdClass::test'];
         yield [keyT(arrayT), 'key-of<array>'];
@@ -134,9 +134,9 @@ final class StringifyTest extends TestCase
         yield [isSubtypeT(trueT, mixedT), '(true <: mixed)'];
         yield [isSupertypeT(trueT, mixedT), '(true :> mixed)'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
-        $T = tpl('T');
-        yield [listShapeT([$T->type, tpl('T')->type, $T->type]), 'list{$0, $1, $0}'];
-        $T = tpl('T', scalarT, stringT);
+        $T = template('T');
+        yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{$0, $1, $0}'];
+        $T = template('T', scalarT, stringT);
         yield [callableT([$T], [$T->type], $T->type), 'callable<T of scalar super string>(T): T'];
     }
 }

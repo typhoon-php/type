@@ -511,7 +511,7 @@ function classConstantMaskT(string|Type $class, string $mask): ClassConstantMask
  * @param non-empty-string $name
  * @return Template<Variance::Invariant>
  */
-function tpl(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
+function template(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
 {
     return new Template($name, lowerBound: $lowerBound, upperBound: $upperBound, default: $default);
 }
@@ -521,7 +521,7 @@ function tpl(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT,
  * @param non-empty-string $name
  * @return Template<Variance::Covariant>
  */
-function tplOut(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
+function templateOut(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
 {
     return new Template($name, Variance::Covariant, $lowerBound, $upperBound, $default);
 }
@@ -531,7 +531,7 @@ function tplOut(string $name, Type $upperBound = mixedT, Type $lowerBound = neve
  * @param non-empty-string $name
  * @return Template<Variance::Contravariant>
  */
-function tplIn(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
+function templateIn(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
 {
     return new Template($name, Variance::Contravariant, $lowerBound, $upperBound, $default);
 }
