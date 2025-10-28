@@ -588,7 +588,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function constantT(ConstantT $type): string
     {
-        return \sprintf('!%s', $type->name);
+        return \sprintf('const<%s>', $type->name);
     }
 
     #[\Override]

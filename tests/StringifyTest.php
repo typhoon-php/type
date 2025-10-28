@@ -126,7 +126,7 @@ final class StringifyTest extends TestCase
         yield [objectShapeT(), 'object{}'];
         yield [objectShapeT(['name' => stringT]), 'object{name: string}'];
         yield [objectShapeT(['name' => optional(stringT)]), 'object{name?: string}'];
-        yield [constantT('test'), '!test'];
+        yield [constantT('test'), 'const<test>'];
         yield [classConstantT(\stdClass::class, 'test'), 'stdClass::test'];
         yield [keyT(arrayT), 'key-of<array>'];
         yield [valueT(arrayT), 'value-of<array>'];
