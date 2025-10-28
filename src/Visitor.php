@@ -87,7 +87,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function intMaskT(IntMaskT $type): mixed;
+    public function bitmaskT(BitmaskT $type): mixed;
 
     /**
      * @return TResult
@@ -137,7 +137,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function classStringT(ClassStringT $type): mixed;
+    public function classT(ClassT $type): mixed;
 
     /**
      * @return TResult
@@ -287,12 +287,12 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function keyT(KeyT $type): mixed;
+    public function keyOfT(KeyOfT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function valueT(ValueT $type): mixed;
+    public function valueOfT(ValueOfT $type): mixed;
 
     /**
      * @return TResult

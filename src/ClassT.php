@@ -10,22 +10,22 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T = mixed
- * @implements Type<value-of<T>>
+ * @template-covariant T of object = object
+ * @implements Type<class-string<T>>
  * @codeCoverageIgnore
  */
-final readonly class ValueT implements Type
+final readonly class ClassT implements Type
 {
     /**
-     * @param Type<T> $array
+     * @param Type<T> $object
      */
     public function __construct(
-        public Type $array,
+        public Type $object,
     ) {}
 
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->valueT($this);
+        return $visitor->classT($this);
     }
 }

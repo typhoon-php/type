@@ -13,12 +13,13 @@ use Typhoon\Type\ArrayDefaultT;
 use Typhoon\Type\ArrayElement;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
+use Typhoon\Type\BitmaskT;
 use Typhoon\Type\BoolT;
 use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
-use Typhoon\Type\ClassStringT;
+use Typhoon\Type\ClassT;
 use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\ConstantT;
@@ -27,7 +28,6 @@ use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\FloatT;
 use Typhoon\Type\FloatValueT;
 use Typhoon\Type\IntersectionT;
-use Typhoon\Type\IntMaskT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
@@ -35,7 +35,7 @@ use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IsSupertypeT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
-use Typhoon\Type\KeyT;
+use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
 use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LiteralT;
@@ -74,7 +74,7 @@ use Typhoon\Type\TrueT;
 use Typhoon\Type\TruthyStringT;
 use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
-use Typhoon\Type\ValueT;
+use Typhoon\Type\ValueOfT;
 use Typhoon\Type\Variance;
 use Typhoon\Type\Visitor;
 use Typhoon\Type\VoidT;
@@ -284,7 +284,7 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function intMaskT(IntMaskT $type): string
+    public function bitmaskT(BitmaskT $type): string
     {
         return \sprintf('int-mask-of<%s>', $type->ints->accept($this));
     }
@@ -345,7 +345,7 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function classStringT(ClassStringT $type): string
+    public function classT(ClassT $type): string
     {
         return \sprintf('class-string<%s>', $type->object->accept($this));
     }
@@ -587,17 +587,17 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): string
     {
-        return \sprintf('%s::%s*', $type->class->accept($this), $type->namePrefix);
+        return \sprintf('%s::%s', $type->class->accept($this), $type->mask);
     }
 
     #[\Override]
-    public function keyT(KeyT $type): string
+    public function keyOfT(KeyOfT $type): string
     {
         return \sprintf('key-of<%s>', $type->array->accept($this));
     }
 
     #[\Override]
-    public function valueT(ValueT $type): string
+    public function valueOfT(ValueOfT $type): string
     {
         return \sprintf('value-of<%s>', $type->array->accept($this));
     }

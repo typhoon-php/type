@@ -28,7 +28,7 @@ use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IsSupertypeT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
-use Typhoon\Type\KeyT;
+use Typhoon\Type\KeyOfT;
 use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LiteralT;
 use Typhoon\Type\NamedObjectT;
@@ -52,7 +52,7 @@ use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\UnionT;
-use Typhoon\Type\ValueT;
+use Typhoon\Type\ValueOfT;
 use Typhoon\Type\Visitor;
 
 /**
@@ -271,9 +271,9 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function valueT(ValueT $type): mixed
+    public function valueOfT(ValueOfT $type): mixed
     {
-        return (new OffsetT($type->array, new KeyT($type->array)))->accept($this);
+        return (new OffsetT($type->array, new KeyOfT($type->array)))->accept($this);
     }
 
     #[\Override]

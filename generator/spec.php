@@ -24,7 +24,7 @@ return [
     single('nonZeroInt', 'non-zero-int', 'union([negativeInt, positiveInt])'),
     single('nonNegativeInt', 'non-negative-int', 'intRange(min: 0)'),
     single('positiveInt', 'positive-int', 'intRange(min: 1)'),
-    constr('intMask', 'T', [tpl('T', 'int')], [prop('ints', 'Type')]),
+    constr('bitmask', 'T', [tpl('T', 'int')], [prop('ints', 'Type')]),
     // float
     single('float', 'float', 'floatRange()'),
     constr('floatValue', 'T', [tpl('T', 'float')], [prop('value', 'numeric-string')], 'floatRange($value, $value)'),
@@ -36,7 +36,7 @@ return [
     single('numericString', 'numeric-string'),
     single('lowercaseString', 'lowercase-string'),
     constr('stringValue', 'T', [tpl('T', 'string')], [prop('value', 'T', nativeType: 'string')]),
-    constr('classString', 'class-string<T>', [tpl('T', 'object')], [prop('object', 'Type<T>')]),
+    constr('class', 'class-string<T>', [tpl('T', 'object')], [prop('object', 'Type<T>')]),
     single('literalString', 'literal-string', 'literal(string)'),
     // scalar aliases
     single('arrayKey', 'array-key', 'union([int, string])'),
@@ -75,10 +75,10 @@ return [
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
     constr('classConstant', 'T', [tpl('T')], [prop('class', 'Type'), prop('name', 'non-empty-string')]),
-    constr('classConstantMask', 'T', [tpl('T')], [prop('class', 'Type'), prop('namePrefix', 'string', '')]),
+    constr('classConstantMask', 'T', [tpl('T')], [prop('class', 'Type'), prop('mask', 'non-empty-string')]),
     // array-access
-    constr('key', 'key-of<T>', [tpl('T')], [prop('array', 'Type<T>')]),
-    constr('value', 'value-of<T>', [tpl('T')], [prop('array', 'Type<T>')], 'offset($array, key($array))'),
+    constr('keyOf', 'key-of<T>', [tpl('T')], [prop('array', 'Type<T>')]),
+    constr('valueOf', 'value-of<T>', [tpl('T')], [prop('array', 'Type<T>')], 'offset($array, keyOf($array))'),
     constr('offset', 'T[K]', [tpl('T'), tpl('K')], [prop('array', 'Type<T>'), prop('key', 'Type<K>')]),
     // relations
     constr('isSubtype', 'T', [tpl('T', 'bool')], [prop('left', 'Type'), prop('right', 'Type')]),

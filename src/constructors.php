@@ -59,14 +59,25 @@ const positiveIntT = PositiveIntT::T;
  * @api
  * @no-named-arguments
  * @param int|Type|list<int|Type> $ints
- * @return IntMaskT<int>
+ * @return BitmaskT<int>
  */
-function intMaskT(int|Type|array $ints, int|Type ...$moreInts): IntMaskT
+function bitmaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
 {
-    return new IntMaskT(orT(array_map(
+    return new BitmaskT(orT(array_map(
         static fn(int|Type $int): Type => \is_int($int) ? intT($int) : $int,
         [...(\is_array($ints) ? $ints : [$ints]), ...$moreInts],
     )));
+}
+
+/**
+ * @api
+ * @no-named-arguments
+ * @param int|Type|list<int|Type> $ints
+ * @return BitmaskT<int>
+ */
+function intMaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
+{
+    return bitmaskT($ints, ...$moreInts);
 }
 
 const floatT = FloatT::T;
@@ -131,15 +142,15 @@ function stringT(string $value): StringValueT
  * @api
  * @template T of object
  * @param class-string<T>|Type<T> $object
- * @return ClassStringT<T>
+ * @return ClassT<T>
  */
-function classStringT(string|Type $object): ClassStringT
+function classT(string|Type $object): ClassT
 {
     if (\is_string($object)) {
-        return new ClassStringT(namedObjectT($object));
+        return new ClassT(namedObjectT($object));
     }
 
-    return new ClassStringT($object);
+    return new ClassT($object);
 }
 
 const literalStringT = LiteralStringT::T;
@@ -267,22 +278,22 @@ function unsealedArrayShapeT(array $elements = [], Type $key = arrayKeyT, Type $
  * @api
  * @template T
  * @param Type<T> $array
- * @return KeyT<T>
+ * @return KeyOfT<T>
  */
-function keyT(Type $array): KeyT
+function keyT(Type $array): KeyOfT
 {
-    return new KeyT($array);
+    return new KeyOfT($array);
 }
 
 /**
  * @api
  * @template T
  * @param Type<T> $array
- * @return ValueT<T>
+ * @return ValueOfT<T>
  */
-function valueT(Type $array): ValueT
+function valueT(Type $array): ValueOfT
 {
-    return new ValueT($array);
+    return new ValueOfT($array);
 }
 
 /**
@@ -450,29 +461,30 @@ function constantT(string $name): ConstantT
 
 /**
  * @api
- * @param class-string|Type $on
+ * @param class-string|Type $class
  * @param non-empty-string $name
  */
-function classConstantT(string|Type $on, string $name): ClassConstantT
+function classConstantT(string|Type $class, string $name): ClassConstantT
 {
-    if (\is_string($on)) {
-        $on = namedObjectT($on);
+    if (\is_string($class)) {
+        $class = namedObjectT($class);
     }
 
-    return new ClassConstantT($on, $name);
+    return new ClassConstantT($class, $name);
 }
 
 /**
  * @api
- * @param class-string|Type $on
+ * @param class-string|Type $class
+ * @param non-empty-string $mask
  */
-function classConstantMaskT(string|Type $on, string $namePrefix = ''): ClassConstantMaskT
+function classConstantMaskT(string|Type $class, string $mask): ClassConstantMaskT
 {
-    if (\is_string($on)) {
-        $on = namedObjectT($on);
+    if (\is_string($class)) {
+        $class = namedObjectT($class);
     }
 
-    return new ClassConstantMaskT($on, $namePrefix);
+    return new ClassConstantMaskT($class, $mask);
 }
 
 /**

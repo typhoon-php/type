@@ -10,19 +10,22 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T of int = int
- * @implements Type<T>
+ * @template-covariant T = mixed
+ * @implements Type<value-of<T>>
  * @codeCoverageIgnore
  */
-final readonly class IntMaskT implements Type
+final readonly class ValueOfT implements Type
 {
+    /**
+     * @param Type<T> $array
+     */
     public function __construct(
-        public Type $ints,
+        public Type $array,
     ) {}
 
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->intMaskT($this);
+        return $visitor->valueOfT($this);
     }
 }

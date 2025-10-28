@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Generator;
 
+use Nette\PhpGenerator\Attribute;
 use Nette\PhpGenerator\ClassLike;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\InterfaceType;
@@ -138,7 +139,9 @@ final readonly class Generator
         \assert($visitor instanceof ClassType);
 
         foreach ($this->types as $type) {
-            if (!$visitor->hasMethod($type->name)) {
+            if ($visitor->hasMethod($type->name)) {
+                $visitor->getMethod($type->name)->setAttributes([new Attribute(\Override::class, [])]);
+            } else {
                 $visitor->addMember($type->stringifyMethod());
             }
         }

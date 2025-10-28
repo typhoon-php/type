@@ -10,19 +10,19 @@ namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayT;
+use Typhoon\Type\BitmaskT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
-use Typhoon\Type\ClassStringT;
+use Typhoon\Type\ClassT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\IntersectionT;
-use Typhoon\Type\IntMaskT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IterableT;
-use Typhoon\Type\KeyT;
+use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
 use Typhoon\Type\LiteralT;
 use Typhoon\Type\LowercaseStringT;
@@ -92,7 +92,7 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
-    public function intMaskT(IntMaskT $type): mixed
+    public function bitmaskT(BitmaskT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -140,7 +140,7 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
-    public function classStringT(ClassStringT $type): mixed
+    public function classT(ClassT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -236,7 +236,7 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
-    public function keyT(KeyT $type): mixed
+    public function keyOfT(KeyOfT $type): mixed
     {
         return $this->fallback($type);
     }

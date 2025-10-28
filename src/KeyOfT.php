@@ -14,7 +14,7 @@ namespace Typhoon\Type;
  * @implements Type<key-of<T>>
  * @codeCoverageIgnore
  */
-final readonly class KeyT implements Type
+final readonly class KeyOfT implements Type
 {
     /**
      * @param Type<T> $array
@@ -26,6 +26,6 @@ final readonly class KeyT implements Type
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->keyT($this);
+        return $visitor->keyOfT($this);
     }
 }

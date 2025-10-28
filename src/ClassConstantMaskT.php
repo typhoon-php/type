@@ -16,9 +16,12 @@ namespace Typhoon\Type;
  */
 final readonly class ClassConstantMaskT implements Type
 {
+    /**
+     * @param non-empty-string $mask
+     */
     public function __construct(
         public Type $class,
-        public string $namePrefix = '',
+        public string $mask,
     ) {}
 
     #[\Override]
