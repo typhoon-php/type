@@ -479,8 +479,6 @@ function callableT(array $templates = [], array $params = [], Type $return = mix
     );
 }
 
-const closureT = ClosureDefaultT::T;
-
 /**
  * @param list<Template<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $params

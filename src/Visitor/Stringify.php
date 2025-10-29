@@ -16,7 +16,6 @@ use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClassT;
-use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
@@ -32,7 +31,6 @@ use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
-use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LiteralT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
@@ -50,15 +48,12 @@ use Typhoon\Type\ObjectDefaultT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
 use Typhoon\Type\Parameter;
-use Typhoon\Type\ParentDefaultT;
 use Typhoon\Type\ParentT;
 use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\Property;
 use Typhoon\Type\ResourceT;
 use Typhoon\Type\ScalarT;
-use Typhoon\Type\SelfDefaultT;
 use Typhoon\Type\SelfT;
-use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
@@ -242,12 +237,6 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function literalStringT(LiteralStringT $type): string
-    {
-        return 'literal-string';
-    }
-
-    #[\Override]
     public function arrayKeyT(ArrayKeyT $type): string
     {
         return 'array-key';
@@ -349,13 +338,13 @@ abstract class Stringify implements Visitor
     public function objectT(ObjectT $type): string
     {
         return \sprintf(
-            'object%s%s{%s}',
+            'object%s%s%s',
             $this->templates($type->templates),
             implode('', array_map(
                 fn(NamedObjectT $inherited): string => ':' . $this->namedObjectT($inherited),
                 $type->supertypes,
             )),
-            implode(', ', array_map($this->property(...), $type->properties)),
+            $type->properties === [] ? '' : \sprintf('{%s}', implode(', ', array_map($this->property(...), $type->properties))),
         );
     }
 
@@ -373,33 +362,15 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function selfDefaultT(SelfDefaultT $type): mixed
-    {
-        return 'self';
-    }
-
-    #[\Override]
     public function selfT(SelfT $type): string
     {
         return $this->constructor('self', $type->templateArguments);
     }
 
     #[\Override]
-    public function parentDefaultT(ParentDefaultT $type): mixed
-    {
-        return 'parent';
-    }
-
-    #[\Override]
     public function parentT(ParentT $type): string
     {
         return $this->constructor('parent', $type->templateArguments);
-    }
-
-    #[\Override]
-    public function staticDefaultT(StaticDefaultT $type): mixed
-    {
-        return 'static';
     }
 
     #[\Override]
@@ -454,18 +425,18 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function callableT(CallableT $type): string
     {
-        return \sprintf(
+        $string = \sprintf(
             '(callable%s(%s): %s)',
             $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
             $this->stringify($type->returnType),
         );
-    }
 
-    #[\Override]
-    public function closureDefaultT(ClosureDefaultT $type): string
-    {
-        return 'Closure';
+        if ($string === '(callable(): mixed)') {
+            return 'callable';
+        }
+
+        return $string;
     }
 
     #[\Override]
@@ -536,7 +507,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function literalT(LiteralT $type): string
     {
-        return \sprintf('literal<%s>', $this->stringifyUnwrap($type->type));
+        return \sprintf('literal-%s', $this->stringify($type->type));
     }
 
     #[\Override]

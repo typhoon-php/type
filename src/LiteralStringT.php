@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @generated This file was generated, do not edit manually.
- */
-
 declare(strict_types=1);
 
 namespace Typhoon\Type;
@@ -11,7 +7,6 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<literal-string>
- * @codeCoverageIgnore
  */
 enum LiteralStringT implements Type
 {
@@ -20,6 +15,9 @@ enum LiteralStringT implements Type
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->literalStringT($this);
+        /** @var LiteralT */
+        static $type = new LiteralT(StringT::T);
+
+        return $visitor->literalT($type);
     }
 }

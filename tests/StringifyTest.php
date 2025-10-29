@@ -86,6 +86,7 @@ final class StringifyTest extends TestCase
         yield [nonEmptyArrayT(value: stringT), 'non-empty-array<string>'];
         yield [nonEmptyArrayT(stringT, intT), 'non-empty-array<string, int>'];
         yield [arrayT, 'array'];
+        yield [arrayT(), 'array'];
         yield [arrayT(nonEmptyStringT), 'array<non-empty-string, mixed>'];
         yield [arrayT(value: stringT), 'array<string>'];
         yield [arrayT(stringT, intT), 'array<string, int>'];
@@ -122,8 +123,8 @@ final class StringifyTest extends TestCase
         yield [iterableT(value: stringT), 'iterable<string>'];
         yield [iterableT(stringT, intT), 'iterable<string, int>'];
         yield [callableT, 'callable'];
-        yield [callableT(), 'callable(): mixed'];
-        yield [callableT(return: callableT()), 'callable(): (callable(): mixed)'];
+        yield [callableT(), 'callable'];
+        yield [callableT(return: callableT()), 'callable(): callable'];
         yield [callableT(return: voidT), 'callable(): void'];
         yield [callableT(params: [stringT]), 'callable(string): mixed'];
         yield [callableT(params: [param(type: stringT, default: true)]), 'callable(string=): mixed'];
@@ -132,11 +133,12 @@ final class StringifyTest extends TestCase
         yield [callableT(params: [param(type: stringT, byRef: true)]), 'callable(string&): mixed'];
         yield [callableT(params: [param(type: stringT, byRef: true, variadic: true)]), 'callable(string&...): mixed'];
         yield [callableT(params: [param('a', stringT, byRef: true, variadic: true)]), 'callable(string &...$a): mixed'];
-        yield [objectShapeT(), 'object{}'];
+        yield [objectShapeT(), 'object'];
         yield [objectShapeT(['name' => stringT]), 'object{name: string}'];
         yield [objectShapeT(['name' => optional(stringT)]), 'object{name?: string}'];
         yield [constantT('test'), 'const<test>'];
         yield [classConstantT(\stdClass::class, 'test'), 'stdClass::test'];
+        yield [classConstantMaskT(\stdClass::class, 'test_*'), 'stdClass::test_*'];
         yield [keyT(arrayT), 'key-of<array>'];
         yield [valueT(arrayT), 'value-of<array>'];
         yield [offsetT(nonEmptyListT(), intT(0)), 'non-empty-list[0]'];
@@ -144,6 +146,7 @@ final class StringifyTest extends TestCase
         yield [isSubtypeT(trueT, mixedT), 'true is mixed'];
         yield [isSupertypeT(boolT, falseT), 'false is bool'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
+        yield [literalT(intT), 'literal-int'];
         $T = template('T');
         yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{T#0, T#1, T#0}'];
         $TB = template('T', scalarT, stringT);

@@ -14,7 +14,6 @@ use Typhoon\Type\ArrayT;
 use Typhoon\Type\BoolT;
 use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\CallableT;
-use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
@@ -27,8 +26,6 @@ use Typhoon\Type\IntValueT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
-use Typhoon\Type\LiteralStringT;
-use Typhoon\Type\LiteralT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NegativeIntT;
 use Typhoon\Type\NonNegativeIntT;
@@ -39,14 +36,8 @@ use Typhoon\Type\NumericT;
 use Typhoon\Type\ObjectDefaultT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
-use Typhoon\Type\ParentDefaultT;
-use Typhoon\Type\ParentT;
 use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\ScalarT;
-use Typhoon\Type\SelfDefaultT;
-use Typhoon\Type\SelfT;
-use Typhoon\Type\StaticDefaultT;
-use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\Type;
@@ -147,15 +138,6 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function literalStringT(LiteralStringT $type): mixed
-    {
-        /** @var LiteralT */
-        static $reduced = new LiteralT(StringT::T);
-
-        return $reduced->accept($this);
-    }
-
-    #[\Override]
     public function arrayKeyT(ArrayKeyT $type): mixed
     {
         /** @var UnionT */
@@ -207,33 +189,6 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function selfDefaultT(SelfDefaultT $type): mixed
-    {
-        /** @var SelfT */
-        static $reduced = new SelfT();
-
-        return $reduced->accept($this);
-    }
-
-    #[\Override]
-    public function parentDefaultT(ParentDefaultT $type): mixed
-    {
-        /** @var ParentT */
-        static $reduced = new ParentT();
-
-        return $reduced->accept($this);
-    }
-
-    #[\Override]
-    public function staticDefaultT(StaticDefaultT $type): mixed
-    {
-        /** @var StaticT */
-        static $reduced = new StaticT();
-
-        return $reduced->accept($this);
-    }
-
-    #[\Override]
     public function iterableDefaultT(IterableDefaultT $type): mixed
     {
         /** @var IterableT */
@@ -252,19 +207,10 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function closureDefaultT(ClosureDefaultT $type): mixed
-    {
-        /** @var NamedObjectT */
-        static $reduced = new NamedObjectT(\Closure::class);
-
-        return $reduced->accept($this);
-    }
-
-    #[\Override]
     public function closureT(ClosureT $type): mixed
     {
         return (new IntersectionT([
-            ClosureDefaultT::T,
+            new NamedObjectT(\Closure::class),
             new CallableT($type->templates, $type->parameters, $type->returnType),
         ]))->accept($this);
     }

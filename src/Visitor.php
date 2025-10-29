@@ -142,11 +142,6 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function literalStringT(LiteralStringT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function arrayKeyT(ArrayKeyT $type): mixed;
 
     /**
@@ -192,27 +187,12 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function selfDefaultT(SelfDefaultT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function selfT(SelfT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function parentDefaultT(ParentDefaultT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function parentT(ParentT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function staticDefaultT(StaticDefaultT $type): mixed;
 
     /**
      * @return TResult
@@ -238,11 +218,6 @@ interface Visitor
      * @return TResult
      */
     public function callableT(CallableT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function closureDefaultT(ClosureDefaultT $type): mixed;
 
     /**
      * @return TResult

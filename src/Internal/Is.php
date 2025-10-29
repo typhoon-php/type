@@ -11,7 +11,6 @@ use Typhoon\Type\BoolT;
 use Typhoon\Type\CallableDefaultT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
-use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatT;
@@ -56,51 +55,61 @@ final class Is extends Fallback
         private readonly mixed $value,
     ) {}
 
+    #[\Override]
     public function neverT(NeverT $type): bool
     {
         return false;
     }
 
+    #[\Override]
     public function voidT(VoidT $type): bool
     {
         return false;
     }
 
+    #[\Override]
     public function nullT(NullT $type): bool
     {
         return $this->value === null;
     }
 
+    #[\Override]
     public function falseT(FalseT $type): bool
     {
         return $this->value === false;
     }
 
+    #[\Override]
     public function trueT(TrueT $type): bool
     {
         return $this->value === true;
     }
 
+    #[\Override]
     public function boolT(BoolT $type): bool
     {
         return \is_bool($this->value);
     }
 
+    #[\Override]
     public function intT(IntT $type): bool
     {
         return \is_int($this->value);
     }
 
+    #[\Override]
     public function intValueT(IntValueT $type): bool
     {
         return $this->value === $type->value;
     }
 
+    #[\Override]
     public function bitmaskT(BitmaskT $type): bool
     {
         return \is_int($this->value) && $this->value & $type->intType->accept(new ResolveBitmask());
     }
 
+    #[\Override]
     public function intRangeT(IntRangeT $type): bool
     {
         return \is_int($this->value)
@@ -108,66 +117,79 @@ final class Is extends Fallback
             && ($type->max === null || $this->value <= $type->max);
     }
 
+    #[\Override]
     public function nonZeroIntT(NonZeroIntT $type): bool
     {
         return \is_int($this->value) && $this->value !== 0;
     }
 
+    #[\Override]
     public function floatT(FloatT $type): bool
     {
         return \is_float($this->value);
     }
 
+    #[\Override]
     public function floatValueT(FloatValueT $type): bool
     {
         return \is_float($this->value) && floatToString($this->value) === $type->value;
     }
 
+    #[\Override]
     public function stringT(StringT $type): bool
     {
         return \is_string($this->value);
     }
 
+    #[\Override]
     public function nonEmptyStringT(NonEmptyStringT $type): bool
     {
         return \is_string($this->value) && $this->value !== '';
     }
 
+    #[\Override]
     public function truthyStringT(TruthyStringT $type): bool
     {
         return \is_string($this->value) && $this->value;
     }
 
+    #[\Override]
     public function numericStringT(NumericStringT $type): bool
     {
         return \is_string($this->value) && is_numeric($this->value);
     }
 
+    #[\Override]
     public function lowercaseStringT(LowercaseStringT $type): bool
     {
         return \is_string($this->value) && strtolower($this->value) === $this->value;
     }
 
+    #[\Override]
     public function stringValueT(StringValueT $type): bool
     {
         return $this->value === $type->value;
     }
 
+    #[\Override]
     public function scalarT(ScalarT $type): bool
     {
         return \is_scalar($this->value);
     }
 
+    #[\Override]
     public function numericT(NumericT $type): bool
     {
         return is_numeric($this->value);
     }
 
+    #[\Override]
     public function resourceT(ResourceT $type): bool
     {
         return \is_resource($this->value);
     }
 
+    #[\Override]
     public function listT(ListT $type): mixed
     {
         if (!\is_array($this->value) || !array_is_list($this->value)) {
@@ -198,11 +220,13 @@ final class Is extends Fallback
         return true;
     }
 
+    #[\Override]
     public function arrayDefaultT(ArrayDefaultT $type): bool
     {
         return \is_array($this->value);
     }
 
+    #[\Override]
     public function arrayT(ArrayT $type): bool
     {
         if (!\is_array($this->value)) {
@@ -241,11 +265,13 @@ final class Is extends Fallback
         return true;
     }
 
+    #[\Override]
     public function objectDefaultT(ObjectDefaultT $type): bool
     {
         return \is_object($this->value);
     }
 
+    #[\Override]
     public function namedObjectT(NamedObjectT $type): bool
     {
         if ($type->templateArguments !== []) {
@@ -255,11 +281,13 @@ final class Is extends Fallback
         return $this->value instanceof $type->class;
     }
 
+    #[\Override]
     public function iterableDefaultT(IterableDefaultT $type): bool
     {
         return is_iterable($this->value);
     }
 
+    #[\Override]
     public function iterableT(IterableT $type): mixed
     {
         if (!is_iterable($this->value)) {
@@ -276,16 +304,13 @@ final class Is extends Fallback
         return true;
     }
 
+    #[\Override]
     public function callableDefaultT(CallableDefaultT $type): bool
     {
         return \is_callable($this->value);
     }
 
-    public function closureDefaultT(ClosureDefaultT $type): mixed
-    {
-        return $this->value instanceof \Closure;
-    }
-
+    #[\Override]
     public function intersectionT(IntersectionT $type): bool
     {
         foreach ($type->types as $each) {
@@ -297,6 +322,7 @@ final class Is extends Fallback
         return true;
     }
 
+    #[\Override]
     public function unionT(UnionT $type): bool
     {
         foreach ($type->types as $each) {
@@ -308,6 +334,7 @@ final class Is extends Fallback
         return false;
     }
 
+    #[\Override]
     public function constantT(ConstantT $type): bool
     {
         if (!\defined($type->name)) {
@@ -321,6 +348,7 @@ final class Is extends Fallback
         return $this->value === \constant($type->name);
     }
 
+    #[\Override]
     public function classConstantT(ClassConstantT $type): bool
     {
         $constant = $type->class . '::' . $type->name;
@@ -332,6 +360,7 @@ final class Is extends Fallback
         return $this->value === \constant($constant);
     }
 
+    #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): bool
     {
         $pattern = \sprintf('/^%s$/D', str_replace('\*', '.*?', preg_quote($type->mask)));
@@ -345,11 +374,13 @@ final class Is extends Fallback
         return false;
     }
 
+    #[\Override]
     public function mixedT(MixedT $type): bool
     {
         return true;
     }
 
+    #[\Override]
     public function fallback(Type $type): never
     {
         throw new \RuntimeException(\sprintf('Type `%s` is not supported', stringify($type)));

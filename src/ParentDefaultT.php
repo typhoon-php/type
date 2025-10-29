@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @generated This file was generated, do not edit manually.
- */
-
 declare(strict_types=1);
 
 namespace Typhoon\Type;
@@ -11,7 +7,6 @@ namespace Typhoon\Type;
 /**
  * @api
  * @implements Type<object>
- * @codeCoverageIgnore
  */
 enum ParentDefaultT implements Type
 {
@@ -20,6 +15,9 @@ enum ParentDefaultT implements Type
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->parentDefaultT($this);
+        /** @var ParentT */
+        static $type = new ParentT();
+
+        return $visitor->parentT($type);
     }
 }

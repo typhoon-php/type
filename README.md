@@ -99,7 +99,6 @@ var_dump(stringify($flipType));
 | `static`                | `staticT`                                                                                                                                                   |
 | `iterable`              | `iterableT`                                                                                                                                                 |
 | `callable`              | `callableT`                                                                                                                                                 |
-| `Closure`               | `closureT` or `namedObjectT(Closure::class)`                                                                                                                |
 | `resource`              | `resourceT`                                                                                                                                                 |
 | `?string`               | `nullOrT(stringT)`                                                                                                                                          |
 | `int\|string`           | `unionT(intT, stringT)`, `orT(intT, stringT)`                                                                                                               |
