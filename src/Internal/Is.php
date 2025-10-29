@@ -363,10 +363,8 @@ final class Is extends Fallback
     #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): bool
     {
-        $pattern = \sprintf('/^%s$/D', str_replace('\*', '.*?', preg_quote($type->mask)));
-
         foreach ((new \ReflectionClass($type->class))->getConstants(\ReflectionClassConstant::IS_PUBLIC) as $name => $value) {
-            if (preg_match($pattern, $name) === 1 && $this->value === $value) {
+            if ($type->mask->match($name) && $this->value === $value) {
                 return true;
             }
         }

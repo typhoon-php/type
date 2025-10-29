@@ -525,7 +525,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): string
     {
-        return \sprintf('%s::%s', $type->class, $type->mask);
+        return \sprintf('%s::%s', $type->class, $type->mask->toString());
     }
 
     #[\Override]

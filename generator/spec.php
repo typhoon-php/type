@@ -70,7 +70,7 @@ return [
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
     constr('classConstant', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string')]),
-    constr('classConstantMask', 'T', [tpl('T')], [prop('class', 'class-string'), prop('mask', 'non-empty-string')]),
+    constr('classConstantMask', 'T', [tpl('T')], [prop('class', 'class-string'), prop('mask', 'Mask')]),
     // array-access
     constr('keyOf', 'key-of<T>', [tpl('T')], [prop('arrayType', 'Type<T>')]),
     constr('valueOf', 'value-of<T>', [tpl('T')], [prop('arrayType', 'Type<T>')], 'offset($arrayType, keyOf($arrayType))'),

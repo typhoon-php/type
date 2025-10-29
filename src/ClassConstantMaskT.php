@@ -18,11 +18,10 @@ final readonly class ClassConstantMaskT implements Type
 {
     /**
      * @param class-string $class
-     * @param non-empty-string $mask
      */
     public function __construct(
         public string $class,
-        public string $mask,
+        public Mask $mask,
     ) {}
 
     #[\Override]

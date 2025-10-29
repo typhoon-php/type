@@ -541,7 +541,7 @@ function classConstantT(string $class, string $name): ClassConstantT
  */
 function classConstantMaskT(string $class, string $mask): ClassConstantMaskT
 {
-    return new ClassConstantMaskT($class, $mask);
+    return new ClassConstantMaskT($class, new Mask($mask));
 }
 
 /**
