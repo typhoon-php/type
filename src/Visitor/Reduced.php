@@ -49,6 +49,7 @@ use Typhoon\Type\StaticDefaultT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\TrueT;
+use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
 use Typhoon\Type\ValueOfT;
 use Typhoon\Type\Visitor;
@@ -272,5 +273,22 @@ abstract class Reduced implements Visitor
     public function valueOfT(ValueOfT $type): mixed
     {
         return (new OffsetT($type->arrayType, new KeyOfT($type->arrayType)))->accept($this);
+    }
+
+    /**
+     * @return TResult
+     */
+    final public function visit(Type $type): mixed
+    {
+        return $type->accept($this);
+    }
+
+    /**
+     * @param list<Type> $types
+     * @return ($types is non-empty-list ? non-empty-list<TResult> : list<TResult>)
+     */
+    final public function visitMultiple(array $types): array
+    {
+        return array_map($this->visit(...), $types);
     }
 }
