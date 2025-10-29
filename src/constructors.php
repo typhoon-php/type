@@ -677,7 +677,9 @@ function of(mixed $value): Type
         \is_int($value) => intT($value),
         \is_float($value) => floatT($value),
         \is_string($value) => stringT($value),
-        \is_array($value) => arrayShapeT(array_map(of(...), $value)),
+        \is_array($value) => array_is_list($value)
+            ? listShapeT(array_map(of(...), $value))
+            : arrayShapeT(array_map(of(...), $value)),
         /** @phpstan-ignore argument.type, argument.templateType */
         \is_object($value) => namedObjectT($value::class),
         \is_resource($value) => resourceT,

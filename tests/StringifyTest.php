@@ -7,10 +7,57 @@ namespace Typhoon\Type;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Type\Visitor\Stringify;
 
 #[CoversClass(Stringify::class)]
+#[CoversFunction('Typhoon\Type\intT')]
+#[CoversFunction('Typhoon\Type\intRangeT')]
+#[CoversFunction('Typhoon\Type\bitmaskT')]
+#[CoversFunction('Typhoon\Type\intMaskT')]
+#[CoversFunction('Typhoon\Type\floatT')]
+#[CoversFunction('Typhoon\Type\floatRangeT')]
+#[CoversFunction('Typhoon\Type\stringT')]
+#[CoversFunction('Typhoon\Type\classT')]
+#[CoversFunction('Typhoon\Type\optional')]
+#[CoversFunction('Typhoon\Type\listT')]
+#[CoversFunction('Typhoon\Type\nonEmptyListT')]
+#[CoversFunction('Typhoon\Type\listShapeT')]
+#[CoversFunction('Typhoon\Type\unsealedListShapeT')]
+#[CoversFunction('Typhoon\Type\arrayT')]
+#[CoversFunction('Typhoon\Type\nonEmptyArrayT')]
+#[CoversFunction('Typhoon\Type\arrayShapeT')]
+#[CoversFunction('Typhoon\Type\unsealedArrayShapeT')]
+#[CoversFunction('Typhoon\Type\keyT')]
+#[CoversFunction('Typhoon\Type\valueT')]
+#[CoversFunction('Typhoon\Type\offsetT')]
+#[CoversFunction('Typhoon\Type\iterableT')]
+#[CoversFunction('Typhoon\Type\objectT')]
+#[CoversFunction('Typhoon\Type\objectShapeT')]
+#[CoversFunction('Typhoon\Type\namedObjectT')]
+#[CoversFunction('Typhoon\Type\selfT')]
+#[CoversFunction('Typhoon\Type\parentT')]
+#[CoversFunction('Typhoon\Type\staticT')]
+#[CoversFunction('Typhoon\Type\callableT')]
+#[CoversFunction('Typhoon\Type\closureT')]
+#[CoversFunction('Typhoon\Type\param')]
+#[CoversFunction('Typhoon\Type\constantT')]
+#[CoversFunction('Typhoon\Type\constantMaskT')]
+#[CoversFunction('Typhoon\Type\classConstantT')]
+#[CoversFunction('Typhoon\Type\classConstantMaskT')]
+#[CoversFunction('Typhoon\Type\template')]
+#[CoversFunction('Typhoon\Type\templateOut')]
+#[CoversFunction('Typhoon\Type\templateIn')]
+#[CoversFunction('Typhoon\Type\aliasT')]
+#[CoversFunction('Typhoon\Type\intersectionT')]
+#[CoversFunction('Typhoon\Type\andT')]
+#[CoversFunction('Typhoon\Type\unionT')]
+#[CoversFunction('Typhoon\Type\orT')]
+#[CoversFunction('Typhoon\Type\nullOrT')]
+#[CoversFunction('Typhoon\Type\isSubtypeT')]
+#[CoversFunction('Typhoon\Type\isSupertypeT')]
+#[CoversFunction('Typhoon\Type\ternaryT')]
 #[CoversFunction('Typhoon\Type\stringify')]
 final class StringifyTest extends TestCase
 {
@@ -47,8 +94,8 @@ final class StringifyTest extends TestCase
         yield [intRangeT(max: 23), 'int<min, 23>'];
         yield [intRangeT(min: -100, max: 234), 'int<-100, 234>'];
         yield [intMaskT(intT(1), intT(2), intT(4)), 'int-mask-of<1|2|4>'];
-        yield [intMaskT(unionT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
-        yield [intMaskT(classConstantT(\RecursiveIteratorIterator::class, 'LEAVES_ONLY')), 'int-mask-of<RecursiveIteratorIterator::LEAVES_ONLY>'];
+        yield [intMaskT(orT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
+        yield [intMaskT(constantMaskT('JSON_*')), 'int-mask-of<const<JSON_*>>'];
         yield [floatT, 'float'];
         yield [floatT('0.234'), '0.234'];
         yield [floatT(0.234), '0.234'];
@@ -114,12 +161,13 @@ final class StringifyTest extends TestCase
         yield [parentT([stringT]), 'parent<string>'];
         yield [staticT, 'static'];
         yield [staticT([stringT]), 'static<string>'];
-        yield [unionT(intT, stringT), 'int|string'];
-        yield [unionT(intT, unionT(stringT, floatT)), 'int|(string|float)'];
-        yield [unionT(intT, intersectionT(stringT, floatT)), 'int|string&float'];
-        yield [intersectionT(intT, stringT), 'int&string'];
-        yield [intersectionT(intT, intersectionT(stringT, floatT)), 'int&string&float'];
-        yield [intersectionT(intT, unionT(stringT, floatT)), 'int&(string|float)'];
+        yield [orT(intT, stringT), 'int|string'];
+        yield [orT(intT, orT(stringT, floatT)), 'int|(string|float)'];
+        yield [orT(intT, andT(stringT, floatT)), 'int|string&float'];
+        yield [nullOrT(stringT), 'null|string'];
+        yield [andT(intT, stringT), 'int&string'];
+        yield [andT(intT, andT(stringT, floatT)), 'int&string&float'];
+        yield [andT(intT, orT(stringT, floatT)), 'int&(string|float)'];
         yield [iterableT, 'iterable'];
         yield [iterableT(), 'iterable'];
         yield [iterableT(value: stringT), 'iterable<string>'];
@@ -168,5 +216,11 @@ final class StringifyTest extends TestCase
         yield [callableT([$TB], [$TB->type], $TB->type), 'callable<T of scalar super string>(T): T'];
         yield [objectT([$T], [namedObjectT(\stdClass::class, [intT])], ['p' => $T->type]), 'object<T>:stdClass<int>{p: T}'];
         yield [objectT([templateIn('I', default: intT), templateOut('O')]), 'object<in I = int, out O>'];
+    }
+
+    #[DoesNotPerformAssertions]
+    public function testConstructorsCoverage(): void
+    {
+        iterator_to_array(self::provideCases(), preserve_keys: false);
     }
 }
