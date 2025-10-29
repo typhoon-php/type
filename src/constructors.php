@@ -143,6 +143,8 @@ const numericStringT = NumericStringT::T;
 
 const lowercaseStringT = LowercaseStringT::T;
 
+const literalStringT = LiteralStringT::T;
+
 /**
  * @api
  * @template T of string
@@ -168,8 +170,6 @@ function classT(string|Type $object): ClassT
 
     return new ClassT($object);
 }
-
-const literalStringT = LiteralStringT::T;
 
 const numericT = NumericT::T;
 
@@ -657,17 +657,6 @@ function isSupertypeT(Type $left, Type $right): IsSubtypeT
 function ternaryT(Type $condition, Type $then, Type $else): TernaryT
 {
     return new TernaryT($condition, $then, $else);
-}
-
-/**
- * @api
- * @template T
- * @param Type<T> $type
- * @return LiteralT<T>
- */
-function literalT(Type $type): LiteralT
-{
-    return new LiteralT($type);
 }
 
 const mixedT = MixedT::T;

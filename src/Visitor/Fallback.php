@@ -25,7 +25,7 @@ use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
-use Typhoon\Type\LiteralT;
+use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NeverT;
@@ -135,6 +135,12 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
+    public function literalStringT(LiteralStringT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
     public function stringValueT(StringValueT $type): mixed
     {
         return $this->fallback($type);
@@ -208,12 +214,6 @@ abstract class Fallback extends Reduced
 
     #[\Override]
     public function unionT(UnionT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function literalT(LiteralT $type): mixed
     {
         return $this->fallback($type);
     }

@@ -132,6 +132,11 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function literalStringT(LiteralStringT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function stringValueT(StringValueT $type): mixed;
 
     /**
@@ -238,11 +243,6 @@ interface Visitor
      * @return TResult
      */
     public function unionT(UnionT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function literalT(LiteralT $type): mixed;
 
     /**
      * @return TResult

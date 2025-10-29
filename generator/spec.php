@@ -43,6 +43,7 @@ return [
     single('truthyString', 'truthy-string'),
     single('numericString', 'numeric-string'),
     single('lowercaseString', 'lowercase-string'),
+    single('literalString', 'literal-string'),
     constr('stringValue', 'T', [tpl('T', 'string')], [prop('value', 'T', nativeType: 'string')]),
     constr('class', 'class-string<T>', [tpl('T', 'object')], [prop('objectType', "{$type}<T>")]),
     // scalar aliases
@@ -73,8 +74,6 @@ return [
     constr('intersection', 'T', [tpl('T')], [prop('types', 'non-empty-list<Type>')]),
     // union
     constr('union', 'T', [tpl('T')], [prop('types', 'non-empty-list<Type<T>>')]),
-    // literal
-    constr('literal', 'T', [tpl('T')], [prop('type', "{$type}<T>")]),
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
     constr('constantMask', 'T', [tpl('T')], [prop('mask', $mask)]),

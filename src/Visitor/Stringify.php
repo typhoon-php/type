@@ -32,7 +32,7 @@ use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
-use Typhoon\Type\LiteralT;
+use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NamedObjectT;
@@ -223,6 +223,12 @@ abstract class Stringify implements Visitor
     public function lowercaseStringT(LowercaseStringT $type): string
     {
         return 'lowercase-string';
+    }
+
+    #[\Override]
+    public function literalStringT(LiteralStringT $type): mixed
+    {
+        return 'literal-string';
     }
 
     #[\Override]
@@ -510,12 +516,6 @@ abstract class Stringify implements Visitor
     public function unionT(UnionT $type): string
     {
         return \sprintf('(%s)', implode('|', array_map($this->stringify(...), $type->types)));
-    }
-
-    #[\Override]
-    public function literalT(LiteralT $type): string
-    {
-        return \sprintf('literal-%s', $this->stringify($type->type));
     }
 
     #[\Override]
