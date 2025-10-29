@@ -645,11 +645,11 @@ function isSubtypeT(Type $left, Type $right): IsSubtypeT
 
 /**
  * @api
- * @return IsSupertypeT<bool>
+ * @return IsSubtypeT<bool>
  */
-function isSupertypeT(Type $left, Type $right): IsSupertypeT
+function isSupertypeT(Type $left, Type $right): IsSubtypeT
 {
-    return new IsSupertypeT($left, $right);
+    return new IsSubtypeT($right, $left);
 }
 
 /**

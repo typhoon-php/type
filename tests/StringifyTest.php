@@ -132,8 +132,8 @@ final class StringifyTest extends TestCase
         yield [valueT(arrayT), 'value-of<array>'];
         yield [offsetT(nonEmptyListT(), intT(0)), 'non-empty-list[0]'];
         yield [ternaryT(trueT, then: intT, else: floatT), '(true ? int : float)'];
-        yield [isSubtypeT(trueT, mixedT), '(true <: mixed)'];
-        yield [isSupertypeT(trueT, mixedT), '(true :> mixed)'];
+        yield [isSubtypeT(trueT, mixedT), '(true is mixed)'];
+        yield [isSupertypeT(boolT, falseT), '(false is bool)'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
         $T = template('T');
         yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{T#0, T#1, T#0}'];

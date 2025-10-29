@@ -28,7 +28,6 @@ use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
 use Typhoon\Type\IsSubtypeT;
-use Typhoon\Type\IsSupertypeT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
@@ -579,13 +578,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function isSubtypeT(IsSubtypeT $type): string
     {
-        return \sprintf('(%s <: %s)', $type->leftType->accept($this), $type->rightType->accept($this));
-    }
-
-    #[\Override]
-    public function isSupertypeT(IsSupertypeT $type): mixed
-    {
-        return \sprintf('(%s :> %s)', $type->leftType->accept($this), $type->rightType->accept($this));
+        return \sprintf('(%s is %s)', $type->leftType->accept($this), $type->rightType->accept($this));
     }
 
     #[\Override]

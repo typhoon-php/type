@@ -24,8 +24,6 @@ use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
-use Typhoon\Type\IsSubtypeT;
-use Typhoon\Type\IsSupertypeT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
@@ -274,11 +272,5 @@ abstract class Reduced implements Visitor
     public function valueOfT(ValueOfT $type): mixed
     {
         return (new OffsetT($type->arrayType, new KeyOfT($type->arrayType)))->accept($this);
-    }
-
-    #[\Override]
-    public function isSupertypeT(IsSupertypeT $type): mixed
-    {
-        return (new IsSubtypeT($type->rightType, $type->leftType))->accept($this);
     }
 }

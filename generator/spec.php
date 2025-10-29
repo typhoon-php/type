@@ -82,7 +82,6 @@ return [
     constr('offset', 'T[K]', [tpl('T'), tpl('K')], [prop('arrayType', 'Type<T>'), prop('keyType', 'Type<K>')]),
     // relations
     constr('isSubtype', 'T', [tpl('T', 'bool')], [prop('leftType', 'Type'), prop('rightType', 'Type')]),
-    constr('isSupertype', 'T', [tpl('T', 'bool')], [prop('leftType', 'Type'), prop('rightType', 'Type')], 'isSubtype($rightType, $leftType)'),
     // ternary
     constr('ternary', 'Then|Else', [tpl('Then'), tpl('Else')], [prop('conditionType', 'Type<bool>'), prop('thenType', 'Type<Then>'), prop('elseType', 'Type<Else>')]),
     // alias

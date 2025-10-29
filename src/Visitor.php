@@ -307,11 +307,6 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function isSupertypeT(IsSupertypeT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function ternaryT(TernaryT $type): mixed;
 
     /**
