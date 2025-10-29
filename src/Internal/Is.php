@@ -9,7 +9,9 @@ use Typhoon\Type\ArrayT;
 use Typhoon\Type\BitmaskT;
 use Typhoon\Type\BoolT;
 use Typhoon\Type\CallableDefaultT;
+use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
+use Typhoon\Type\ClosureDefaultT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatT;
@@ -19,6 +21,8 @@ use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
 use Typhoon\Type\IterableDefaultT;
+use Typhoon\Type\IterableT;
+use Typhoon\Type\ListT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NamedObjectT;
@@ -52,180 +56,154 @@ final class Is extends Fallback
         private readonly mixed $value,
     ) {}
 
-    public function neverT(NeverT $type): mixed
+    public function neverT(NeverT $type): bool
     {
         return false;
     }
 
-    public function voidT(VoidT $type): mixed
+    public function voidT(VoidT $type): bool
     {
         return false;
     }
 
-    public function nullT(NullT $type): mixed
+    public function nullT(NullT $type): bool
     {
         return $this->value === null;
     }
 
-    public function falseT(FalseT $type): mixed
+    public function falseT(FalseT $type): bool
     {
         return $this->value === false;
     }
 
-    public function trueT(TrueT $type): mixed
+    public function trueT(TrueT $type): bool
     {
         return $this->value === true;
     }
 
-    public function boolT(BoolT $type): mixed
+    public function boolT(BoolT $type): bool
     {
         return \is_bool($this->value);
     }
 
-    public function intT(IntT $type): mixed
+    public function intT(IntT $type): bool
     {
         return \is_int($this->value);
     }
 
-    public function intValueT(IntValueT $type): mixed
+    public function intValueT(IntValueT $type): bool
     {
         return $this->value === $type->value;
     }
 
-    public function intRangeT(IntRangeT $type): mixed
+    public function bitmaskT(BitmaskT $type): bool
+    {
+        return \is_int($this->value) && $this->value & $type->intType->accept(new ResolveBitmask());
+    }
+
+    public function intRangeT(IntRangeT $type): bool
     {
         return \is_int($this->value)
             && ($type->min === null || $this->value >= $type->min)
             && ($type->max === null || $this->value <= $type->max);
     }
 
-    public function nonZeroIntT(NonZeroIntT $type): mixed
+    public function nonZeroIntT(NonZeroIntT $type): bool
     {
         return \is_int($this->value) && $this->value !== 0;
     }
 
-    public function floatT(FloatT $type): mixed
+    public function floatT(FloatT $type): bool
     {
         return \is_float($this->value);
     }
 
-    public function floatValueT(FloatValueT $type): mixed
+    public function floatValueT(FloatValueT $type): bool
     {
         return \is_float($this->value) && floatToString($this->value) === $type->value;
     }
 
-    public function stringT(StringT $type): mixed
+    public function stringT(StringT $type): bool
     {
         return \is_string($this->value);
     }
 
-    public function nonEmptyStringT(NonEmptyStringT $type): mixed
+    public function nonEmptyStringT(NonEmptyStringT $type): bool
     {
         return \is_string($this->value) && $this->value !== '';
     }
 
-    public function truthyStringT(TruthyStringT $type): mixed
+    public function truthyStringT(TruthyStringT $type): bool
     {
         return \is_string($this->value) && $this->value;
     }
 
-    public function numericStringT(NumericStringT $type): mixed
+    public function numericStringT(NumericStringT $type): bool
     {
         return \is_string($this->value) && is_numeric($this->value);
     }
 
-    public function lowercaseStringT(LowercaseStringT $type): mixed
+    public function lowercaseStringT(LowercaseStringT $type): bool
     {
         return \is_string($this->value) && strtolower($this->value) === $this->value;
     }
 
-    public function stringValueT(StringValueT $type): mixed
+    public function stringValueT(StringValueT $type): bool
     {
         return $this->value === $type->value;
     }
 
-    public function scalarT(ScalarT $type): mixed
+    public function scalarT(ScalarT $type): bool
     {
         return \is_scalar($this->value);
     }
 
-    public function numericT(NumericT $type): mixed
+    public function numericT(NumericT $type): bool
     {
         return is_numeric($this->value);
     }
 
-    public function resourceT(ResourceT $type): mixed
+    public function resourceT(ResourceT $type): bool
     {
         return \is_resource($this->value);
     }
 
-    public function arrayDefaultT(ArrayDefaultT $type): mixed
+    public function listT(ListT $type): mixed
+    {
+        if (!\is_array($this->value) || !array_is_list($this->value)) {
+            return false;
+        }
+
+        if ($type->isNonEmpty && $this->value === []) {
+            return false;
+        }
+
+        foreach ($type->elementTypes as $index => $elementType) {
+            if (!\array_key_exists($index, $this->value)) {
+                return false;
+            }
+
+            if (!is($this->value[$index], $elementType)) {
+                return false;
+            }
+        }
+
+        foreach (\array_slice($this->value, \count($type->elementTypes)) as $value) {
+            /** @phpstan-ignore function.alreadyNarrowedType */
+            if (!is($value, $type->valueType)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function arrayDefaultT(ArrayDefaultT $type): bool
     {
         return \is_array($this->value);
     }
 
-    public function callableDefaultT(CallableDefaultT $type): mixed
-    {
-        return \is_callable($this->value);
-    }
-
-    public function iterableDefaultT(IterableDefaultT $type): mixed
-    {
-        return is_iterable($this->value);
-    }
-
-    public function objectDefaultT(ObjectDefaultT $type): mixed
-    {
-        return \is_object($this->value);
-    }
-
-    public function bitmaskT(BitmaskT $type): mixed
-    {
-        return \is_int($this->value) && $this->value & $type->intType->accept(new ResolveBitmask());
-    }
-
-    public function constantT(ConstantT $type): mixed
-    {
-        if (!\defined($type->name)) {
-            throw new \LogicException(\sprintf('Constant `%s` is not defined', $type->name));
-        }
-
-        if ($type->name === 'NAN') {
-            return \is_float($this->value) && is_nan($this->value);
-        }
-
-        return $this->value === \constant($type->name);
-    }
-
-    public function classConstantT(ClassConstantT $type): mixed
-    {
-        $lastConstant = null;
-
-        foreach ($type->classType->accept(new ResolveClasses()) as $class) {
-            $constant = $class . '::' . $type->name;
-
-            if (\defined($constant)) {
-                $lastConstant = $constant;
-            }
-        }
-
-        if ($lastConstant !== null) {
-            return $this->value === \constant($lastConstant);
-        }
-
-        $this->fallback($type);
-    }
-
-    public function namedObjectT(NamedObjectT $type): mixed
-    {
-        if ($type->templateArguments !== []) {
-            $this->fallback($type);
-        }
-
-        return $this->value instanceof $type->class;
-    }
-
-    public function arrayT(ArrayT $type): mixed
+    public function arrayT(ArrayT $type): bool
     {
         if (!\is_array($this->value)) {
             return false;
@@ -263,7 +241,52 @@ final class Is extends Fallback
         return true;
     }
 
-    public function intersectionT(IntersectionT $type): mixed
+    public function objectDefaultT(ObjectDefaultT $type): bool
+    {
+        return \is_object($this->value);
+    }
+
+    public function namedObjectT(NamedObjectT $type): bool
+    {
+        if ($type->templateArguments !== []) {
+            $this->fallback($type);
+        }
+
+        return $this->value instanceof $type->class;
+    }
+
+    public function iterableDefaultT(IterableDefaultT $type): bool
+    {
+        return is_iterable($this->value);
+    }
+
+    public function iterableT(IterableT $type): mixed
+    {
+        if (!is_iterable($this->value)) {
+            return false;
+        }
+
+        foreach ($this->value as $key => $value) {
+            /** @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType */
+            if (!is($key, $type->keyType) || !is($value, $type->valueType)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function callableDefaultT(CallableDefaultT $type): bool
+    {
+        return \is_callable($this->value);
+    }
+
+    public function closureDefaultT(ClosureDefaultT $type): mixed
+    {
+        return $this->value instanceof \Closure;
+    }
+
+    public function intersectionT(IntersectionT $type): bool
     {
         foreach ($type->types as $each) {
             if (!$each->accept($this)) {
@@ -274,7 +297,7 @@ final class Is extends Fallback
         return true;
     }
 
-    public function unionT(UnionT $type): mixed
+    public function unionT(UnionT $type): bool
     {
         foreach ($type->types as $each) {
             if ($each->accept($this)) {
@@ -285,7 +308,44 @@ final class Is extends Fallback
         return false;
     }
 
-    public function mixedT(MixedT $type): mixed
+    public function constantT(ConstantT $type): bool
+    {
+        if (!\defined($type->name)) {
+            throw new \LogicException(\sprintf('Constant `%s` is not defined', $type->name));
+        }
+
+        if ($type->name === 'NAN') {
+            return \is_float($this->value) && is_nan($this->value);
+        }
+
+        return $this->value === \constant($type->name);
+    }
+
+    public function classConstantT(ClassConstantT $type): bool
+    {
+        $constant = $type->class . '::' . $type->name;
+
+        if (!\defined($constant)) {
+            throw new \LogicException(\sprintf('Constant `%s` is not defined', $constant));
+        }
+
+        return $this->value === \constant($constant);
+    }
+
+    public function classConstantMaskT(ClassConstantMaskT $type): bool
+    {
+        $pattern = \sprintf('/^%s$/D', str_replace('\*', '.*?', preg_quote($type->mask)));
+
+        foreach ((new \ReflectionClass($type->class))->getConstants(\ReflectionClassConstant::IS_PUBLIC) as $name => $value) {
+            if (preg_match($pattern, $name) === 1 && $this->value === $value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function mixedT(MixedT $type): bool
     {
         return true;
     }
