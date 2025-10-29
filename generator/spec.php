@@ -69,6 +69,7 @@ return [
     constr('literal', 'T', [tpl('T')], [prop('type', 'Type<T>')]),
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
+    constr('constantMask', 'T', [tpl('T')], [prop('mask', '\\' . Mask::class)]),
     constr('classConstant', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string')]),
     constr('classConstantMask', 'T', [tpl('T')], [prop('class', 'class-string'), prop('mask', 'Mask')]),
     // array-access

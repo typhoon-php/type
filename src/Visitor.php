@@ -252,6 +252,11 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function constantMaskT(ConstantMaskT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function classConstantT(ClassConstantT $type): mixed;
 
     /**

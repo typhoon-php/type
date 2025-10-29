@@ -15,6 +15,7 @@ use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClassT;
+use Typhoon\Type\ConstantMaskT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
@@ -219,6 +220,12 @@ abstract class Fallback extends Reduced
 
     #[\Override]
     public function constantT(ConstantT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function constantMaskT(ConstantMaskT $type): mixed
     {
         return $this->fallback($type);
     }

@@ -17,6 +17,7 @@ use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClassT;
 use Typhoon\Type\ClosureT;
+use Typhoon\Type\ConstantMaskT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
@@ -513,7 +514,13 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function constantT(ConstantT $type): string
     {
-        return \sprintf('const<%s>', $type->name);
+        return \sprintf('::%s', $type->name);
+    }
+
+    #[\Override]
+    public function constantMaskT(ConstantMaskT $type): mixed
+    {
+        return \sprintf('::%s', $type->mask->toString());
     }
 
     #[\Override]
