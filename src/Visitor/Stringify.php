@@ -427,29 +427,35 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function callableT(CallableT $type): string
     {
-        $string = \sprintf(
-            '(callable%s(%s): %s)',
-            $this->templates($type->templates),
-            implode(', ', array_map($this->parameter(...), $type->parameters)),
-            $this->stringify($type->returnType),
-        );
-
-        if ($string === '(callable(): mixed)') {
-            return 'callable';
-        }
-
-        return $string;
+        return $this->callables($type);
     }
 
     #[\Override]
     public function closureT(ClosureT $type): string
     {
-        return \sprintf(
-            '(Closure%s(%s): %s)',
+        return $this->callables($type);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    protected function callables(CallableT|ClosureT $type): string
+    {
+        $prefix = $type instanceof CallableT ? 'callable' : 'Closure';
+
+        $string = \sprintf(
+            '(%s%s(%s): %s)',
+            $prefix,
             $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
             $this->stringify($type->returnType),
         );
+
+        if ($string === "({$prefix}(): mixed)") {
+            return $prefix;
+        }
+
+        return $string;
     }
 
     /**

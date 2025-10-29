@@ -18,7 +18,6 @@ final class ConstructorsTest extends TestCase
         'templateIn',
         'of',
         'stringify',
-        'is', // todo remove
     ];
     private const NON_TYPE_CONSTRUCTOR_CONSTANTS = [
         'Typhoon\Type\MINUS_INF',

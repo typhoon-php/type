@@ -496,6 +496,15 @@ function constantT(string $name): ConstantT
 
 /**
  * @api
+ * @param non-empty-string $mask
+ */
+function constantMaskT(string $mask): ConstantMaskT
+{
+    return new ConstantMaskT(new Mask($mask));
+}
+
+/**
+ * @api
  * @param class-string $class
  * @param non-empty-string $name
  */
