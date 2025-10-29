@@ -38,10 +38,7 @@
     "autoload-dev": {
         "psr-4": {
             "Typhoon\\Type\\": "tests/"
-        },
-        "files": [
-            "src/Internal/Is.php"
-        ]
+        }
     },
     "config": {
         "allow-plugins": {
