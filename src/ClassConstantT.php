@@ -17,10 +17,11 @@ namespace Typhoon\Type;
 final readonly class ClassConstantT implements Type
 {
     /**
+     * @param class-string $class
      * @param non-empty-string $name
      */
     public function __construct(
-        public Type $classType,
+        public string $class,
         public string $name,
     ) {}
 

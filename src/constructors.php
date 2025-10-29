@@ -528,29 +528,21 @@ function constantT(string $name): ConstantT
 
 /**
  * @api
- * @param class-string|Type $class
+ * @param class-string $class
  * @param non-empty-string $name
  */
-function classConstantT(string|Type $class, string $name): ClassConstantT
+function classConstantT(string $class, string $name): ClassConstantT
 {
-    if (\is_string($class)) {
-        $class = namedObjectT($class);
-    }
-
     return new ClassConstantT($class, $name);
 }
 
 /**
  * @api
- * @param class-string|Type $class
+ * @param class-string $class
  * @param non-empty-string $mask
  */
-function classConstantMaskT(string|Type $class, string $mask): ClassConstantMaskT
+function classConstantMaskT(string $class, string $mask): ClassConstantMaskT
 {
-    if (\is_string($class)) {
-        $class = namedObjectT($class);
-    }
-
     return new ClassConstantMaskT($class, $mask);
 }
 

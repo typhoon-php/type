@@ -548,13 +548,13 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function classConstantT(ClassConstantT $type): string
     {
-        return \sprintf('%s::%s', $this->stringify($type->classType), $type->name);
+        return \sprintf('%s::%s', $type->class, $type->name);
     }
 
     #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): string
     {
-        return \sprintf('%s::%s', $this->stringify($type->classType), $type->mask);
+        return \sprintf('%s::%s', $type->class, $type->mask);
     }
 
     #[\Override]
