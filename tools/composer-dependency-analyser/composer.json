@@ -5,7 +5,7 @@
     "config": {
         "bump-after-update": "dev",
         "platform": {
-            "php": "8.1.30"
+            "php": "8.2"
         },
         "sort-packages": true
     }
