@@ -150,8 +150,8 @@ final class StringifyTest extends TestCase
         yield [objectShapeT(), 'object'];
         yield [objectShapeT(['name' => stringT]), 'object{name: string}'];
         yield [objectShapeT(['name' => optional(stringT)]), 'object{name?: string}'];
-        yield [constantT('JSON_THROW_ON_ERROR'), '::JSON_THROW_ON_ERROR'];
-        yield [constantMaskT('JSON_*'), '::JSON_*'];
+        yield [constantT('JSON_THROW_ON_ERROR'), 'const<JSON_THROW_ON_ERROR>'];
+        yield [constantMaskT('JSON_*'), 'const<JSON_*>'];
         yield [classConstantT(\stdClass::class, 'test'), 'stdClass::test'];
         yield [classConstantMaskT(\stdClass::class, 'test_*'), 'stdClass::test_*'];
         yield [keyT(arrayT), 'key-of<array>'];

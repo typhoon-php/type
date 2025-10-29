@@ -521,13 +521,13 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function constantT(ConstantT $type): string
     {
-        return \sprintf('::%s', $type->name);
+        return \sprintf('const<%s>', $type->name);
     }
 
     #[\Override]
     public function constantMaskT(ConstantMaskT $type): mixed
     {
-        return \sprintf('::%s', $type->mask->toString());
+        return \sprintf('const<%s>', $type->mask->toString());
     }
 
     #[\Override]
