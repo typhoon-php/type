@@ -190,6 +190,10 @@ final class Is extends Fallback
             throw new \LogicException(\sprintf('Constant `%s` is not defined', $type->name));
         }
 
+        if ($type->name === 'NAN') {
+            return \is_float($this->value) && is_nan($this->value);
+        }
+
         return $this->value === \constant($type->name);
     }
 

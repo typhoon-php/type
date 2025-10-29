@@ -20,6 +20,10 @@ final class ConstructorsTest extends TestCase
         'stringify',
         'is', // todo remove
     ];
+    private const NON_TYPE_CONSTRUCTOR_CONSTANTS = [
+        'Typhoon\Type\MINUS_INF',
+        'Typhoon\Type\MINUS_INF_NAME',
+    ];
 
     public function testAllSuffixedWithT(): void
     {
@@ -39,6 +43,10 @@ final class ConstructorsTest extends TestCase
 
         foreach (get_defined_constants(categorize: true)['user'] as $constant => $value) {
             if (!str_starts_with($constant, 'Typhoon\Type\\')) {
+                continue;
+            }
+
+            if (\in_array($constant, self::NON_TYPE_CONSTRUCTOR_CONSTANTS, true)) {
                 continue;
             }
 

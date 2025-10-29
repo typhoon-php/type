@@ -12,6 +12,7 @@ use Typhoon\Type\Type;
 use function Typhoon\Type\arrayShapeT;
 use function Typhoon\Type\classConstantT;
 use function Typhoon\Type\constantT;
+use function Typhoon\Type\floatT;
 use function Typhoon\Type\intMaskT;
 use function Typhoon\Type\intT;
 use const Typhoon\Type\arrayT;
@@ -48,6 +49,9 @@ final class IsTest extends TestCase
         yield [1, intMaskT(1), true];
         yield [8, intMaskT(1, 2, 4), false];
         yield [PHP_INT_MAX, constantT('PHP_INT_MAX'), true];
+        yield [INF, floatT(INF), true];
+        yield [-INF, floatT(-INF), true];
+        yield [NAN, floatT(NAN), true];
         yield [\DateTimeInterface::ATOM, classConstantT(\DateTimeInterface::class, 'ATOM'), true];
         yield [[], arrayT, true];
         yield [['a' => 1], arrayT, true];
