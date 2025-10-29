@@ -10,18 +10,12 @@ namespace Typhoon\Type;
 
 /**
  * @api
- * @template-covariant Then = mixed
- * @template-covariant Else = mixed
- * @implements Type<Then|Else>
+ * @template-covariant T of mixed = mixed
+ * @implements Type<T>
  * @codeCoverageIgnore
  */
 final readonly class TernaryT implements Type
 {
-    /**
-     * @param Type<bool> $conditionType
-     * @param Type<Then> $thenType
-     * @param Type<Else> $elseType
-     */
     public function __construct(
         public Type $conditionType,
         public Type $thenType,

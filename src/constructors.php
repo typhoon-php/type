@@ -28,7 +28,7 @@ const intT = IntT::T;
 
 /**
  * @api
- * @template T of int = never
+ * @template T of int
  * @param T $value
  * @return IntValueT<T>
  */
@@ -93,11 +93,10 @@ const floatT = FloatT::T;
 
 /**
  * @api
- * @template T of (int|float) = never
- * @param T|numeric-string|BigNumber $value
- * @return ($value is T ? Type<T> : Type<float>)
+ * @param float|numeric-string|BigNumber $value
+ * @return FloatValueT<float>
  */
-function floatT(int|float|string|BigNumber $value): Type
+function floatT(float|string|BigNumber $value): FloatValueT
 {
     return new FloatValueT(BigNumber::of($value));
 }
@@ -432,6 +431,7 @@ function staticT(array $templateArguments = []): StaticT
 const callableT = CallableDefaultT::T;
 
 /**
+ * @api
  * @param list<Template<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $params
  * @return CallableT<callable>
@@ -449,6 +449,7 @@ function callableT(array $templates = [], array $params = [], Type $return = mix
 }
 
 /**
+ * @api
  * @param list<Template<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $params
  * @return ClosureT<\Closure>
@@ -643,11 +644,6 @@ function isSupertypeT(Type $left, Type $right): IsSubtypeT
 
 /**
  * @api
- * @template Then
- * @template Else
- * @param Type<Then> $then
- * @param Type<Else> $else
- * @return TernaryT<Then|Else>
  */
 function ternaryT(Type $condition, Type $then, Type $else): TernaryT
 {
@@ -656,6 +652,9 @@ function ternaryT(Type $condition, Type $then, Type $else): TernaryT
 
 /**
  * @api
+ * @template T
+ * @param Type<T> $type
+ * @return LiteralT<T>
  */
 function literalT(Type $type): LiteralT
 {

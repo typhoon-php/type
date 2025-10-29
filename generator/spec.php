@@ -87,7 +87,7 @@ return [
     // relations
     constr('isSubtype', 'T', [tpl('T', 'bool')], [prop('leftType', $type), prop('rightType', $type)]),
     // ternary
-    constr('ternary', 'Then|Else', [tpl('Then'), tpl('Else')], [prop('conditionType', "{$type}<bool>"), prop('thenType', "{$type}<Then>"), prop('elseType', "{$type}<Else>")]),
+    constr('ternary', 'T', [tpl('T', 'mixed')], [prop('conditionType', $type), prop('thenType', $type), prop('elseType', $type)]),
     // alias
     constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), prop('templateArguments', 'list<Type>')]),
     // template
