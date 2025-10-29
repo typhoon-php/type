@@ -5,7 +5,13 @@ declare(strict_types=1);
 namespace Typhoon\Type\Generator\Spec;
 
 use Typhoon\Type\ArrayKeyT;
+use Typhoon\Type\Mask;
 use Typhoon\Type\MixedT;
+use Typhoon\Type\Type;
+
+$mask = '\\' . Mask::class;
+$type = '\\' . Type::class;
+$closure = '\\' . \Closure::class;
 
 return [
     single('never', 'never'),
@@ -24,7 +30,7 @@ return [
     single('nonZeroInt', 'non-zero-int', 'union([negativeInt, positiveInt])'),
     single('nonNegativeInt', 'non-negative-int', 'intRange(min: 0)'),
     single('positiveInt', 'positive-int', 'intRange(min: 1)'),
-    constr('bitmask', 'T', [tpl('T', 'int')], [prop('intType', 'Type')]),
+    constr('bitmask', 'T', [tpl('T', 'int')], [prop('intType', $type)]),
     // float
     single('float', 'float', 'floatRange()'),
     constr('floatValue', 'T', [tpl('T', 'float')], [prop('value', 'numeric-string')], 'floatRange($value, $value)'),
@@ -36,15 +42,15 @@ return [
     single('numericString', 'numeric-string'),
     single('lowercaseString', 'lowercase-string'),
     constr('stringValue', 'T', [tpl('T', 'string')], [prop('value', 'T', nativeType: 'string')]),
-    constr('class', 'class-string<T>', [tpl('T', 'object')], [prop('objectType', 'Type<T>')]),
+    constr('class', 'class-string<T>', [tpl('T', 'object')], [prop('objectType', "{$type}<T>")]),
     // scalar aliases
     single('arrayKey', 'array-key', 'union([int, string])'),
     single('numeric', 'numeric', 'union([int, float, numericString])'),
     single('scalar', 'scalar', 'union([bool, int, float, string])'),
     // array
-    constr('list', 'T', [tpl('T', 'list')], [prop('valueType', 'Type', MixedT::T), prop('elementTypes', 'list<Type>'), prop('isNonEmpty', 'bool')]),
+    constr('list', 'T', [tpl('T', 'list')], [prop('valueType', $type, MixedT::T), prop('elementTypes', 'list<Type>'), prop('isNonEmpty', 'bool')]),
     single('arrayDefault', 'array', 'array()'),
-    constr('array', 'T', [tpl('T', 'array')], [prop('keyType', 'Type', ArrayKeyT::T), prop('valueType', 'Type', MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
+    constr('array', 'T', [tpl('T', 'array')], [prop('keyType', $type, ArrayKeyT::T), prop('valueType', $type, MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
     single('objectDefault', 'object', 'object()'),
     constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', 'list<Type>')], 'object(supertypes: [$t])'),
@@ -54,11 +60,11 @@ return [
     constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
     // iterable
     single('iterableDefault', 'iterable', 'iterable()'),
-    constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('keyType', 'Type<K>', MixedT::T), prop('valueType', 'Type<V>', MixedT::T)]),
+    constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('keyType', "{$type}<K>", MixedT::T), prop('valueType', "{$type}<V>", MixedT::T)]),
     // callable
     single('callableDefault', 'callable', 'callable()'),
-    constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', 'Type', MixedT::T)]),
-    constr('closure', 'T', [tpl('T', 'Closure')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', 'Type', MixedT::T)], "intersection([\nnamedObject(Closure::class),\ncallable(\$templates, \$parameters, \$returnType),\n])"),
+    constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $type, MixedT::T)]),
+    constr('closure', 'T', [tpl('T', $closure)], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $type, MixedT::T)], "intersection([\nnamedObject({$closure}::class),\ncallable(\$templates, \$parameters, \$returnType),\n])"),
     // resource
     single('resource', 'resource'),
     // intersection
@@ -66,20 +72,20 @@ return [
     // union
     constr('union', 'T', [tpl('T')], [prop('types', 'non-empty-list<Type<T>>')]),
     // literal
-    constr('literal', 'T', [tpl('T')], [prop('type', 'Type<T>')]),
+    constr('literal', 'T', [tpl('T')], [prop('type', "{$type}<T>")]),
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
-    constr('constantMask', 'T', [tpl('T')], [prop('mask', '\\' . Mask::class)]),
+    constr('constantMask', 'T', [tpl('T')], [prop('mask', $mask)]),
     constr('classConstant', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string')]),
-    constr('classConstantMask', 'T', [tpl('T')], [prop('class', 'class-string'), prop('mask', 'Mask')]),
+    constr('classConstantMask', 'T', [tpl('T')], [prop('class', 'class-string'), prop('mask', $mask)]),
     // array-access
-    constr('keyOf', 'key-of<T>', [tpl('T')], [prop('arrayType', 'Type<T>')]),
-    constr('valueOf', 'value-of<T>', [tpl('T')], [prop('arrayType', 'Type<T>')], 'offset($arrayType, keyOf($arrayType))'),
-    constr('offset', 'T[K]', [tpl('T'), tpl('K')], [prop('arrayType', 'Type<T>'), prop('keyType', 'Type<K>')]),
+    constr('keyOf', 'key-of<T>', [tpl('T')], [prop('arrayType', "{$type}<T>")]),
+    constr('valueOf', 'value-of<T>', [tpl('T')], [prop('arrayType', "{$type}<T>")], 'offset($arrayType, keyOf($arrayType))'),
+    constr('offset', 'T[K]', [tpl('T'), tpl('K')], [prop('arrayType', "{$type}<T>"), prop('keyType', "{$type}<K>")]),
     // relations
-    constr('isSubtype', 'T', [tpl('T', 'bool')], [prop('leftType', 'Type'), prop('rightType', 'Type')]),
+    constr('isSubtype', 'T', [tpl('T', 'bool')], [prop('leftType', $type), prop('rightType', $type)]),
     // ternary
-    constr('ternary', 'Then|Else', [tpl('Then'), tpl('Else')], [prop('conditionType', 'Type<bool>'), prop('thenType', 'Type<Then>'), prop('elseType', 'Type<Else>')]),
+    constr('ternary', 'Then|Else', [tpl('Then'), tpl('Else')], [prop('conditionType', "{$type}<bool>"), prop('thenType', "{$type}<Then>"), prop('elseType', "{$type}<Else>")]),
     // alias
     constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), prop('templateArguments', 'list<Type>')]),
     // template

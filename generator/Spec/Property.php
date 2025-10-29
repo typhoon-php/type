@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Typhoon\Type\Generator\Spec;
 
 use Nette\PhpGenerator\PromotedParameter;
-use Typhoon\Type\Mask;
-use Typhoon\Type\Type as TypeI;
 
 final readonly class Property
 {
@@ -78,8 +76,6 @@ final readonly class Property
         return match ($type) {
             'numeric-string', 'non-empty-string', 'class-string', 'lowercase-string' => 'string',
             'list', 'non-empty-list', 'non-empty-array' => 'array',
-            'Type' => TypeI::class,
-            'Mask' => Mask::class,
             default => $type,
         };
     }
