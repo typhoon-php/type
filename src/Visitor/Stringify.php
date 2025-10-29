@@ -270,7 +270,7 @@ abstract class Stringify implements Visitor
     {
         $value = $this->stringifyUnwrap($type->valueType);
 
-        $elements = implode(', ', array_map($this->stringifyUnwrap(...), $type->elements));
+        $elements = implode(', ', array_map($this->stringifyUnwrap(...), $type->elementTypes));
 
         if ($value === 'never') {
             return \sprintf('list{%s}', $elements);

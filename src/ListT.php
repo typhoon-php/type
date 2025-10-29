@@ -17,11 +17,11 @@ namespace Typhoon\Type;
 final readonly class ListT implements Type
 {
     /**
-     * @param list<Type> $elements
+     * @param list<Type> $elementTypes
      */
     public function __construct(
         public Type $valueType = MixedT::T,
-        public array $elements = [],
+        public array $elementTypes = [],
         public bool $isNonEmpty = false,
     ) {}
 

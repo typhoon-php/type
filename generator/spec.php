@@ -43,7 +43,7 @@ return [
     single('numeric', 'numeric', 'union([int, float, numericString])'),
     single('scalar', 'scalar', 'union([bool, int, float, string])'),
     // array
-    constr('list', 'T', [tpl('T', 'list')], [prop('valueType', 'Type', MixedT::T), prop('elements', 'list<Type>'), prop('isNonEmpty', 'bool')]),
+    constr('list', 'T', [tpl('T', 'list')], [prop('valueType', 'Type', MixedT::T), prop('elementTypes', 'list<Type>'), prop('isNonEmpty', 'bool')]),
     single('arrayDefault', 'array', 'array()'),
     constr('array', 'T', [tpl('T', 'array')], [prop('keyType', 'Type', ArrayKeyT::T), prop('valueType', 'Type', MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
