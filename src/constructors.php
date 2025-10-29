@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\Type\Generator\Generator;
+use Typhoon\Type\Internal\Optional;
 use function Typhoon\floatToString;
 
 if (class_exists(Generator::class, autoload: false)) {
@@ -177,16 +178,6 @@ const arrayT = ArrayDefaultT::T;
 function optional(Type $type): Optional
 {
     return new Optional($type);
-}
-
-/**
- * @internal
- */
-final readonly class Optional
-{
-    public function __construct(
-        public Type $type,
-    ) {}
 }
 
 /**
