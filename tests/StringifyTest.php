@@ -42,8 +42,8 @@ final class StringifyTest extends TestCase
         yield [intRangeT(min: 23), 'int<23, max>'];
         yield [intRangeT(max: 23), 'int<min, 23>'];
         yield [intRangeT(min: -100, max: 234), 'int<-100, 234>'];
-        yield [intMaskT(intT(1), intT(2), intT(4)), 'int-mask-of<(1|2|4)>'];
-        yield [intMaskT(unionT(intT(1), intT(2), intT(4))), 'int-mask-of<(1|2|4)>'];
+        yield [intMaskT(intT(1), intT(2), intT(4)), 'int-mask-of<1|2|4>'];
+        yield [intMaskT(unionT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
         yield [intMaskT(classConstantT(\RecursiveIteratorIterator::class, 'LEAVES_ONLY')), 'int-mask-of<RecursiveIteratorIterator::LEAVES_ONLY>'];
         yield [floatT, 'float'];
         yield [floatT(0.234), '0.234'];
@@ -103,9 +103,9 @@ final class StringifyTest extends TestCase
         yield [parentT([stringT]), 'parent<string>'];
         yield [staticT, 'static'];
         yield [staticT([stringT]), 'static<string>'];
-        yield [unionT(intT, stringT), '(int|string)'];
-        yield [unionT(intT, unionT(stringT, floatT)), '(int|(string|float))'];
-        yield [unionT(intT, intersectionT(stringT, floatT)), '(int|string&float)'];
+        yield [unionT(intT, stringT), 'int|string'];
+        yield [unionT(intT, unionT(stringT, floatT)), 'int|(string|float)'];
+        yield [unionT(intT, intersectionT(stringT, floatT)), 'int|string&float'];
         yield [intersectionT(intT, stringT), 'int&string'];
         yield [intersectionT(intT, intersectionT(stringT, floatT)), 'int&string&float'];
         yield [intersectionT(intT, unionT(stringT, floatT)), 'int&(string|float)'];
@@ -115,6 +115,7 @@ final class StringifyTest extends TestCase
         yield [iterableT(stringT, intT), 'iterable<string, int>'];
         yield [callableT, 'callable'];
         yield [callableT(), 'callable(): mixed'];
+        yield [callableT(return: callableT()), 'callable(): (callable(): mixed)'];
         yield [callableT(return: voidT), 'callable(): void'];
         yield [callableT(params: [stringT]), 'callable(string): mixed'];
         yield [callableT(params: [param(type: stringT, default: true)]), 'callable(string=): mixed'];
@@ -131,9 +132,9 @@ final class StringifyTest extends TestCase
         yield [keyT(arrayT), 'key-of<array>'];
         yield [valueT(arrayT), 'value-of<array>'];
         yield [offsetT(nonEmptyListT(), intT(0)), 'non-empty-list[0]'];
-        yield [ternaryT(trueT, then: intT, else: floatT), '(true ? int : float)'];
-        yield [isSubtypeT(trueT, mixedT), '(true is mixed)'];
-        yield [isSupertypeT(boolT, falseT), '(false is bool)'];
+        yield [ternaryT(trueT, then: intT, else: floatT), 'true ? int : float'];
+        yield [isSubtypeT(trueT, mixedT), 'true is mixed'];
+        yield [isSupertypeT(boolT, falseT), 'false is bool'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
         $T = template('T');
         yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{T#0, T#1, T#0}'];
