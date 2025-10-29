@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use Brick\Math\BigNumber;
 use Typhoon\Type\Generator\Generator;
 use Typhoon\Type\Internal\Optional;
-use function Typhoon\floatToString;
 
 if (class_exists(Generator::class, autoload: false)) {
     return;
@@ -28,7 +28,7 @@ const intT = IntT::T;
 
 /**
  * @api
- * @template T of int
+ * @template T of int = never
  * @param T $value
  * @return IntValueT<T>
  */
@@ -91,76 +91,45 @@ function intMaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
 
 const floatT = FloatT::T;
 
-const MINUS_INF = -INF;
-const MINUS_INF_NAME = __NAMESPACE__ . '\MINUS_INF';
-
 /**
  * @api
- * @template T of float = never
- * @param numeric-string|T $value
+ * @template T of (int|float) = never
+ * @param T|numeric-string|BigNumber $value
  * @return ($value is T ? Type<T> : Type<float>)
  */
-function floatT(float|string $value): Type
+function floatT(int|float|string|BigNumber $value): Type
 {
-    return match (true) {
-        \is_string($value) => new FloatValueT($value),
-        is_nan($value) => constantT('NAN'),
-        $value === -INF => constantT(MINUS_INF_NAME),
-        $value === INF => constantT('INF'),
-        default => new FloatValueT(floatToString($value)),
-    };
+    return new FloatValueT(BigNumber::of($value));
 }
 
 /**
  * @api
- * @param null|float|numeric-string $min
- * @param null|float|numeric-string $max
+ * @param null|int|float|numeric-string|BigNumber $min
+ * @param null|int|float|numeric-string|BigNumber $max
  * @return Type<float>
  */
-function floatRangeT(null|float|string $min = null, null|float|string $max = null): Type
+function floatRangeT(null|int|float|string|BigNumber $min = null, null|int|float|string|BigNumber $max = null): Type
 {
-    $min = match (true) {
-        \is_float($min) => match (true) {
-            is_nan($min) => 'NAN',
-            $min === -INF => MINUS_INF_NAME,
-            $min === INF => 'INF',
-            default => floatToString($min),
-        },
-        $min === null => MINUS_INF_NAME,
-        default => $min,
-    };
-    $max = match (true) {
-        \is_float($max) => match (true) {
-            is_nan($max) => 'NAN',
-            $max === -INF => MINUS_INF_NAME,
-            $max === INF => 'INF',
-            default => floatToString($max),
-        },
-        $max === null => 'INF',
-        default => $min,
-    };
-
-    if ($min === $max) {
-        if (is_numeric($min)) {
-            return new FloatValueT($min);
+    if ($min === null) {
+        if ($max === null) {
+            return floatT;
         }
 
-        /** @var ConstantT<float> */
-        return new ConstantT($min);
+        return new FloatRangeT(max: BigNumber::of($max));
     }
 
-    if ($min === 'NAN' || $max === 'NAN') {
-        return neverT;
+    if ($max === null) {
+        return new FloatRangeT(min: BigNumber::of($min));
     }
 
-    if ($min === MINUS_INF_NAME && $max === 'INF') {
-        return floatT;
+    $min = BigNumber::of($min);
+    $max = BigNumber::of($max);
+
+    if ($min->isEqualTo($max)) {
+        return new FloatValueT($min);
     }
 
-    return new FloatRangeT(
-        min: is_numeric($min) ? $min : null,
-        max: is_numeric($max) ? $max : null,
-    );
+    return new FloatRangeT($min, $max);
 }
 
 const stringT = StringT::T;

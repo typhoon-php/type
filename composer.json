@@ -15,8 +15,8 @@
     ],
     "require": {
         "php": "^8.2",
-        "symfony/polyfill-php83": "^1.33",
-        "typhoon/float-to-string": "^0.1.0"
+        "brick/math": "^0.14.0",
+        "symfony/polyfill-php83": "^1.33"
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",

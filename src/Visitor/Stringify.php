@@ -185,13 +185,14 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function floatValueT(FloatValueT $type): string
     {
-        return $type->value;
+        /** @phpstan-ignore return.type */
+        return (string) $type->value;
     }
 
     #[\Override]
     public function floatRangeT(FloatRangeT $type): string
     {
-        return \sprintf('float<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
+        return \sprintf('float<%s, %s>', $type->min?->__toString() ?? 'min', $type->max?->__toString() ?? 'max');
     }
 
     #[\Override]

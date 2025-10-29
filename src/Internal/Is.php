@@ -13,6 +13,7 @@ use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
+use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\FloatT;
 use Typhoon\Type\FloatValueT;
 use Typhoon\Type\IntersectionT;
@@ -42,7 +43,6 @@ use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
 use Typhoon\Type\Visitor\Fallback;
 use Typhoon\Type\VoidT;
-use function Typhoon\floatToString;
 use function Typhoon\Type\stringify;
 
 /**
@@ -132,7 +132,15 @@ final class Is extends Fallback
     #[\Override]
     public function floatValueT(FloatValueT $type): bool
     {
-        return \is_float($this->value) && floatToString($this->value) === $type->value;
+        return \is_float($this->value) && $type->value->isEqualTo($this->value);
+    }
+
+    #[\Override]
+    public function floatRangeT(FloatRangeT $type): mixed
+    {
+        return \is_float($this->value)
+            && ($type->min?->isLessThanOrEqualTo($this->value) ?? true)
+            && ($type->max?->isGreaterThanOrEqualTo($this->value) ?? true);
     }
 
     #[\Override]

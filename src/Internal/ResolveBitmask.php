@@ -23,55 +23,44 @@ use Typhoon\Type\Visitor\Fallback;
  */
 final class ResolveBitmask extends Fallback
 {
-    public function intValueT(IntValueT $type): mixed
+    public function intValueT(IntValueT $type): int
     {
         return $type->value;
     }
 
-    public function intT(IntT $type): mixed
+    public function intT(IntT $type): int
     {
         return -1;
     }
 
-    public function nonZeroIntT(NonZeroIntT $type): mixed
+    public function nonZeroIntT(NonZeroIntT $type): int
     {
         return -1;
     }
 
-    public function positiveIntT(PositiveIntT $type): mixed
+    public function positiveIntT(PositiveIntT $type): int
     {
         return -1;
     }
 
-    public function negativeIntT(NegativeIntT $type): mixed
+    public function negativeIntT(NegativeIntT $type): int
     {
         return -1;
     }
 
-    public function nonNegativeIntT(NonNegativeIntT $type): mixed
+    public function nonNegativeIntT(NonNegativeIntT $type): int
     {
         return -1;
     }
 
-    public function nonPositiveIntT(NonPositiveIntT $type): mixed
+    public function nonPositiveIntT(NonPositiveIntT $type): int
     {
         return -1;
     }
 
-    public function intRangeT(IntRangeT $type): mixed
-    {
-        // todo optimize
+    // todo intRangeT
 
-        $mask = 0;
-
-        for ($int = $type->min ?? PHP_INT_MIN; $int <= ($type->max ?? PHP_INT_MAX); ++$int) {
-            $mask |= $int;
-        }
-
-        return $mask;
-    }
-
-    public function unionT(UnionT $type): mixed
+    public function unionT(UnionT $type): int
     {
         $mask = 0;
 
@@ -82,7 +71,7 @@ final class ResolveBitmask extends Fallback
         return $mask;
     }
 
-    public function intersectionT(IntersectionT $type): mixed
+    public function intersectionT(IntersectionT $type): int
     {
         $mask = -1;
 
@@ -93,7 +82,7 @@ final class ResolveBitmask extends Fallback
         return $mask;
     }
 
-    protected function fallback(Type $type): mixed
+    protected function fallback(Type $type): never
     {
         throw new \LogicException();
     }

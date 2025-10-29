@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use Brick\Math\BigNumber;
+
 /**
  * @api
  * @template-covariant T of float = float
@@ -16,11 +18,8 @@ namespace Typhoon\Type;
  */
 final readonly class FloatValueT implements Type
 {
-    /**
-     * @param numeric-string $value
-     */
     public function __construct(
-        public string $value,
+        public BigNumber $value,
     ) {}
 
     #[\Override]
