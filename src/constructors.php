@@ -91,37 +91,76 @@ function intMaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
 
 const floatT = FloatT::T;
 
+const MINUS_INF = -INF;
+const MINUS_INF_NAME = __NAMESPACE__ . '\MINUS_INF';
+
 /**
  * @api
  * @template T of float = never
  * @param numeric-string|T $value
- * @return ($value is T ? FloatValueT<T> : FloatValueT<float>)
+ * @return ($value is T ? Type<T> : Type<float>)
  */
-function floatT(float|string $value): FloatValueT
+function floatT(float|string $value): Type
 {
-    return new FloatValueT(\is_float($value) ? floatToString($value) : $value);
+    return match (true) {
+        \is_string($value) => new FloatValueT($value),
+        is_nan($value) => constantT('NAN'),
+        $value === -INF => constantT(MINUS_INF_NAME),
+        $value === INF => constantT('INF'),
+        default => new FloatValueT(floatToString($value)),
+    };
 }
 
 /**
  * @api
  * @param null|float|numeric-string $min
  * @param null|float|numeric-string $max
- * @return FloatT|FloatValueT<float>|FloatRangeT<float>
+ * @return Type<float>
  */
-function floatRangeT(null|float|string $min = null, null|float|string $max = null): FloatT|FloatValueT|FloatRangeT
+function floatRangeT(null|float|string $min = null, null|float|string $max = null): Type
 {
-    $min = \is_float($min) ? floatToString($min) : $min;
-    $max = \is_float($max) ? floatToString($max) : $max;
+    $min = match (true) {
+        \is_float($min) => match (true) {
+            is_nan($min) => 'NAN',
+            $min === -INF => MINUS_INF_NAME,
+            $min === INF => 'INF',
+            default => floatToString($min),
+        },
+        $min === null => MINUS_INF_NAME,
+        default => $min,
+    };
+    $max = match (true) {
+        \is_float($max) => match (true) {
+            is_nan($max) => 'NAN',
+            $max === -INF => MINUS_INF_NAME,
+            $max === INF => 'INF',
+            default => floatToString($max),
+        },
+        $max === null => 'INF',
+        default => $min,
+    };
 
     if ($min === $max) {
-        if ($min === null) {
-            return floatT;
+        if (is_numeric($min)) {
+            return new FloatValueT($min);
         }
 
-        return new FloatValueT($min);
+        /** @var ConstantT<float> */
+        return new ConstantT($min);
     }
 
-    return new FloatRangeT($min, $max);
+    if ($min === 'NAN' || $max === 'NAN') {
+        return neverT;
+    }
+
+    if ($min === MINUS_INF_NAME && $max === 'INF') {
+        return floatT;
+    }
+
+    return new FloatRangeT(
+        min: is_numeric($min) ? $min : null,
+        max: is_numeric($max) ? $max : null,
+    );
 }
 
 const stringT = StringT::T;

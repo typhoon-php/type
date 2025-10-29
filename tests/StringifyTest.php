@@ -46,9 +46,17 @@ final class StringifyTest extends TestCase
         yield [intMaskT(unionT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
         yield [intMaskT(classConstantT(\RecursiveIteratorIterator::class, 'LEAVES_ONLY')), 'int-mask-of<RecursiveIteratorIterator::LEAVES_ONLY>'];
         yield [floatT, 'float'];
+        yield [floatT('0.234'), '0.234'];
         yield [floatT(0.234), '0.234'];
+        yield [floatT(NAN), 'const<NAN>'];
+        yield [floatT(INF), 'const<INF>'];
+        yield [floatT(-INF), 'const<Typhoon\Type\MINUS_INF>'];
         yield [floatT(-0.234), '-0.234'];
         yield [floatRangeT(), 'float'];
+        yield [floatRangeT(NAN, NAN), 'const<NAN>'];
+        yield [floatRangeT(-INF, INF), 'float'];
+        yield [floatRangeT(INF, INF), 'const<INF>'];
+        yield [floatRangeT(-INF, -INF), 'const<Typhoon\Type\MINUS_INF>'];
         yield [floatRangeT(-0.99999, 1.232111111), 'float<-0.99999, 1.232111111>'];
         yield [numericT, 'numeric'];
         yield [arrayKeyT, 'array-key'];
