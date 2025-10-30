@@ -44,14 +44,6 @@ function intT(int $value): IntValueT
  */
 function intRangeT(?int $min = null, ?int $max = null): IntT|IntValueT|IntRangeT
 {
-    if ($min === $max) {
-        if ($min === null) {
-            return intT;
-        }
-
-        return new IntValueT($min);
-    }
-
     return new IntRangeT($min, $max);
 }
 
@@ -110,26 +102,10 @@ function floatT(float|string|BigDecimal $value): FloatValueT
  */
 function floatRangeT(null|int|float|string|BigDecimal $min = null, null|int|float|string|BigDecimal $max = null): Type
 {
-    if ($min === null) {
-        if ($max === null) {
-            return floatT;
-        }
-
-        return new FloatRangeT(max: BigDecimal::of($max));
-    }
-
-    if ($max === null) {
-        return new FloatRangeT(min: BigDecimal::of($min));
-    }
-
-    $min = BigDecimal::of($min);
-    $max = BigDecimal::of($max);
-
-    if ($min->isEqualTo($max)) {
-        return new FloatValueT($min);
-    }
-
-    return new FloatRangeT($min, $max);
+    return new FloatRangeT(
+        min: $min === null ? null : BigDecimal::of($min),
+        max: $max === null ? null : BigDecimal::of($max),
+    );
 }
 
 const stringT = StringT::T;
