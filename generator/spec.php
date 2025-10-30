@@ -51,16 +51,16 @@ return [
     single('numeric', 'numeric', 'union([int, float, numericString])'),
     single('scalar', 'scalar', 'union([bool, int, float, string])'),
     // array
-    constr('list', 'T', [tpl('T', 'list')], [prop('valueType', $type, MixedT::T), prop('elementTypes', 'list<Type>'), prop('isNonEmpty', 'bool')]),
+    constr('list', 'T', [tpl('T', 'list')], [prop('valueType', $type, MixedT::T), prop('elementTypes', "list<{$type}>"), prop('isNonEmpty', 'bool')]),
     single('arrayDefault', 'array', 'array()'),
     constr('array', 'T', [tpl('T', 'array')], [prop('keyType', $type, ArrayKeyT::T), prop('valueType', $type, MixedT::T), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
     single('objectDefault', 'object', 'object()'),
-    constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', 'list<Type>')], 'object(supertypes: [$t])'),
+    constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', "list<{$type}>")], 'object(supertypes: [$t])'),
     constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('supertypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
-    constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
-    constr('parent', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
-    constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', 'list<Type>')]),
+    constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$type}>")]),
+    constr('parent', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$type}>")]),
+    constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$type}>")]),
     // iterable
     single('iterableDefault', 'iterable', 'iterable()'),
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('keyType', "{$type}<K>", MixedT::T), prop('valueType', "{$type}<V>", MixedT::T)]),
@@ -71,9 +71,9 @@ return [
     // resource
     single('resource', 'resource'),
     // intersection
-    constr('intersection', 'T', [tpl('T')], [prop('types', 'non-empty-list<Type>')]),
+    constr('intersection', 'T', [tpl('T')], [prop('types', "non-empty-list<{$type}>")]),
     // union
-    constr('union', 'T', [tpl('T')], [prop('types', 'non-empty-list<Type<T>>')]),
+    constr('union', 'T', [tpl('T')], [prop('types', "non-empty-list<{$type}<T>>")]),
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
     constr('constantMask', 'T', [tpl('T')], [prop('mask', $mask)]),
@@ -88,7 +88,7 @@ return [
     // ternary
     constr('ternary', 'T', [tpl('T', 'mixed')], [prop('conditionType', $type), prop('thenType', $type), prop('elseType', $type)]),
     // alias
-    constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), prop('templateArguments', 'list<Type>')]),
+    constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), prop('templateArguments', "list<{$type}>")]),
     // template
     constr('template', 'T', [tpl('T')]),
     // mixed

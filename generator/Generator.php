@@ -93,12 +93,14 @@ final readonly class Generator
             ->setReturnType('mixed')
             ->setBody('return $type->accept($this);');
 
+        $type = TypeI::class;
+
         $visitor->addMethod('visitMultiple')
             ->setFinal()
             ->setComment(
-                <<<'PHPDOC'
-                    @param list<\Typhoon\Type\Type> $types
-                    @return ($types is non-empty-list ? non-empty-list<TResult> : list<TResult>)
+                <<<PHPDOC
+                    @param list<\\{$type}> \$types
+                    @return (\$types is non-empty-list ? non-empty-list<TResult> : list<TResult>)
                     PHPDOC,
             )
             ->setParameters([(new Parameter('types'))->setType('array')])
