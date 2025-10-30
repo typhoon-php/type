@@ -28,16 +28,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Typhoon\\Type\\": "src/"
+            "Typhoon\\": "src/"
         },
         "files": [
-            "src/constructors.php",
-            "src/stringify.php"
+            "src/Type/constructors.php",
+            "src/Type/stringify.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
-            "Typhoon\\Type\\": "tests/"
+            "Typhoon\\": "tests/"
         }
     },
     "config": {

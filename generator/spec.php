@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Typhoon\Type\Generator\Spec;
 
 use Brick\Math\BigDecimal;
+use Typhoon\Type;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\Mask;
 use Typhoon\Type\MixedT;
-use Typhoon\Type\Type;
 
 $typeClass = '\\' . Type::class;
 $bigDecimalClass = '\\' . BigDecimal::class;

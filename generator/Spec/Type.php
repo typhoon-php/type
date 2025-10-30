@@ -8,7 +8,7 @@ use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\EnumType;
 use Nette\PhpGenerator\Method;
 use Nette\PhpGenerator\Parameter;
-use Typhoon\Type\Type as TypeI;
+use Typhoon\Type as TypeI;
 use Typhoon\Type\Visitor;
 
 final readonly class Type

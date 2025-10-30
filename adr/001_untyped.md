@@ -60,9 +60,9 @@ This ensures accurate type variance checking between typed and untyped members.
 ## Implementation Details
 
 * Add `untypedT` as a new type in the system.
-* Reduce it to `mixed` during normalization in [`Reduced`](../src/Visitor/Reduced.php).
+* Reduce it to `mixed` during normalization in [`Reduced`](../src/Type/Visitor/Reduced.php).
 * Do **not** add a public constructor — this type is not intended for regular use.
-  Advanced users can access it through the low-level API: [`UntypedT::T`](../src/UntypedT.php).
+  Advanced users can access it through the low-level API: [`UntypedT::T`](../src/Type/UntypedT.php).
 * Use `'untyped-mixed'` as its string representation to avoid naming collisions with the `untyped` class name.
 
 ## References
