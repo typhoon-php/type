@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **[BC Break:]** Add an `untyped` type, see [ADR](adr/001_untyped.md).
+- Add [Architecture Decision Records](adr).
 
 ### Changed
 
 - **BC Break:** Use `BigDecimal` for floats, see [002_float_precision.md](adr/002_float_precision.md).
+- **BC Break:** Move `Typhoon\Type\Type` interface to `Typhoon\Type`.
 
 ## [0.5.1]
 
