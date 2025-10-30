@@ -94,5 +94,6 @@ return [
     // template
     constr('template', 'T', [tpl('T')]),
     // mixed
+    single('untyped', 'mixed', 'mixed'),
     single('mixed', 'mixed', 'union([null, scalar, arrayDefault, objectDefault, resource])'),
 ];

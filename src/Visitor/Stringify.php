@@ -65,6 +65,7 @@ use Typhoon\Type\TrueT;
 use Typhoon\Type\TruthyStringT;
 use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
+use Typhoon\Type\UntypedT;
 use Typhoon\Type\ValueOfT;
 use Typhoon\Type\Variance;
 use Typhoon\Type\Visitor;
@@ -633,6 +634,12 @@ abstract class Stringify implements Visitor
     public function mixedT(MixedT $type): string
     {
         return 'mixed';
+    }
+
+    #[\Override]
+    public function untypedT(UntypedT $type): mixed
+    {
+        return 'untyped-mixed';
     }
 
     /**

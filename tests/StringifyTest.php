@@ -180,6 +180,7 @@ final class StringifyTest extends TestCase
         yield [iterableT(stringT, intT), 'iterable<string, int>'];
         yield [callableT, 'callable'];
         yield [callableT(), 'callable'];
+        yield [callableT(return: UntypedT::T), 'callable(): untyped-mixed'];
         yield [callableT([template('T')]), 'callable<T>(): mixed'];
         yield [callableT(return: callableT()), 'callable(): callable'];
         yield [callableT(return: voidT), 'callable(): void'];

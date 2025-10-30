@@ -302,5 +302,10 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function untypedT(UntypedT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function mixedT(MixedT $type): mixed;
 }
