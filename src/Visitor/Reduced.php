@@ -45,6 +45,7 @@ use Typhoon\Type\StringT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\Type;
 use Typhoon\Type\UnionT;
+use Typhoon\Type\UntypedT;
 use Typhoon\Type\ValueOfT;
 use Typhoon\Type\Visitor;
 
@@ -222,6 +223,12 @@ abstract class Reduced implements Visitor
     public function valueOfT(ValueOfT $type): mixed
     {
         return (new OffsetT($type->arrayType, new KeyOfT($type->arrayType)))->accept($this);
+    }
+
+    #[\Override]
+    public function untypedT(UntypedT $type): mixed
+    {
+        return MixedT::T->accept($this);
     }
 
     #[\Override]

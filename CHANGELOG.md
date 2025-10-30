@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0]
 
+### Added
+
+- **[BC Break:]** Add an `untyped` type, see [ADR](adr/untyped.md).
+
 ### Changed
 
 - **BC Break:** Use `BigDecimal` for floats, see [002_float_precision.md](adr/002_float_precision.md).
