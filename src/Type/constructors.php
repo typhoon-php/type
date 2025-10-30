@@ -40,9 +40,9 @@ function intT(int $value): IntValueT
 
 /**
  * @api
- * @return IntT|IntValueT<int>|IntRangeT<int>
+ * @return IntRangeT<int>
  */
-function intRangeT(?int $min = null, ?int $max = null): IntT|IntValueT|IntRangeT
+function intRangeT(?int $min = null, ?int $max = null): IntRangeT
 {
     return new IntRangeT($min, $max);
 }
@@ -98,9 +98,9 @@ function floatT(float|string|BigDecimal $value): FloatValueT
  * @api
  * @param null|int|float|numeric-string|BigDecimal $min
  * @param null|int|float|numeric-string|BigDecimal $max
- * @return Type<float>
+ * @return FloatRangeT<float>
  */
-function floatRangeT(null|int|float|string|BigDecimal $min = null, null|int|float|string|BigDecimal $max = null): Type
+function floatRangeT(null|int|float|string|BigDecimal $min = null, null|int|float|string|BigDecimal $max = null): FloatRangeT
 {
     return new FloatRangeT(
         min: $min === null ? null : BigDecimal::of($min),
