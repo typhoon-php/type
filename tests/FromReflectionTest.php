@@ -11,8 +11,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversFunction('Typhoon\Type\fromReflection')]
 final class FromReflectionTest extends TestCase
 {
-    #[DataProvider('provideCases')]
-    public function test(\Closure $fn, Type $expectedType): void
+    #[DataProvider('provideTypesCases')]
+    public function testTypes(\Closure $fn, Type $expectedType): void
     {
         $returnType = (new \ReflectionFunction($fn))->getReturnType();
 
@@ -24,9 +24,8 @@ final class FromReflectionTest extends TestCase
     /**
      * @return \Generator<array-key, array{\Closure, Type}>
      */
-    public static function provideCases(): iterable
+    public static function provideTypesCases(): iterable
     {
-        yield [static fn() => null, mixedT];
         yield [static fn(): null => null, nullT];
         yield [static function (): void {}, voidT];
         yield [static fn(): never => throw new \LogicException(), neverT];
@@ -73,6 +72,14 @@ final class FromReflectionTest extends TestCase
                 namedObjectT(\Traversable::class),
             ),
         ];
+    }
+
+    public function testItReturnsNullIfReflectionIsNull(): void
+    {
+        $type = fromReflection(null);
+
+        /** @phpstan-ignore staticMethod.alreadyNarrowedType */
+        self::assertNull($type);
     }
 
     public function testItThrowsIfNameIsTrait(): void
