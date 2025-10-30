@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Stringify alias template arguments.
+- Stringified float never looks like an int anymore: .0 is added when needed.
 
 ## [0.5.0] 2025-10-30
 
