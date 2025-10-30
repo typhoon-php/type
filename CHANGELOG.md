@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **[BC Break:]** Add an `untyped` type, see [ADR](adr/untyped.md).
+- **[BC Break:]** Add an `untyped` type, see [ADR](adr/001_untyped.md).
 
 ### Changed
 
