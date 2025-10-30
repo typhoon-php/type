@@ -1,6 +1,6 @@
 # ADR-001: Untyped
 
-## Status
+## Accepted
 
 Proposed
 
@@ -68,3 +68,12 @@ This ensures accurate type variance checking between typed and untyped members.
 ## References
 
 * [PHP covariance and contravariance rules](https://www.php.net/manual/en/language.oop5.variance.php)
+
+## Metadata
+
+| Field              | Value                                                           |
+|--------------------|-----------------------------------------------------------------|
+| **Date**           | 2025-10-31                                                      |
+| **Implemented in** | [#52](https://github.com/typhoon-php/type/pull/52)              |
+| **Released in**    | [0.6.0](https://github.com/typhoon-php/type/releases/tag/0.6.0) |
+| **Author**         | [@vudaltsov](https://github.com/vudaltsov)                      |
