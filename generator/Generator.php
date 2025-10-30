@@ -150,7 +150,9 @@ final readonly class Generator
 
         $file->addNamespace($namespace);
 
-        file_put_contents($this->resolveFileName($namespace), (new PsrPrinter())->printFile($file));
+        $code = preg_replace("/'%(.*?)%'/s", '$1', (new PsrPrinter())->printFile($file));
+
+        file_put_contents($this->resolveFileName($namespace), $code);
     }
 
     /**

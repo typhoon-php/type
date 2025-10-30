@@ -14,16 +14,23 @@ final readonly class Property
     private string $nativeType;
 
     /**
+     * @var ?non-empty-string
+     */
+    private ?string $default;
+
+    /**
      * @param non-empty-string $name
      * @param non-empty-string $type
      * @param ?non-empty-string $nativeType
+     * @param ?non-empty-string $default
      */
     public function __construct(
         private string $name,
         private string $type,
         ?string $nativeType,
-        private mixed $default,
+        ?string $default,
     ) {
+        $this->default = $default === null ? null : "%{$default}%";
         $this->nativeType = $nativeType ?? self::guessNativeType($type);
     }
 
@@ -84,9 +91,10 @@ final readonly class Property
 /**
  * @param non-empty-string $name
  * @param non-empty-string $type
+ * @param ?non-empty-string $default
  * @param ?non-empty-string $nativeType
  */
-function prop(string $name, string $type, mixed $default = null, ?string $nativeType = null): Property
+function prop(string $name, string $type, ?string $default = null, ?string $nativeType = null): Property
 {
     return new Property(
         name: $name,
