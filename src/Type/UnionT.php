@@ -23,7 +23,11 @@ final readonly class UnionT implements Type
      */
     public function __construct(
         public array $types,
-    ) {}
+    ) {
+        if (\count($types) < 2) {
+            throw new \ValueError(\sprintf('`%s` requires at least two types, got %d', self::class, \count($types)));
+        }
+    }
 
     #[\Override]
     public function accept(Visitor $visitor): mixed

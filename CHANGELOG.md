@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **BC Break:** Use `BigDecimal` for floats, see [002_float_precision.md](adr/002_float_precision.md).
 - **BC Break:** Move `Typhoon\Type\Type` interface to `Typhoon\Type`.
+- **BC Break:** Require `Typhoon\Type\UnionT` to have at least 2 types.
+- **BC Break:** Require `Typhoon\Type\IntersectionT` to have at least 2 types.
 
 ## [0.5.1]
 

@@ -32,6 +32,7 @@ final readonly class Type
         private array $templates,
         private array $properties,
         private ?string $reduced,
+        private string $check,
     ) {
         $this->name = $name . 'T';
     }
@@ -96,6 +97,7 @@ final readonly class Type
 
             $class
                 ->addMethod('__construct')
+                ->setBody($this->check)
                 ->setComment(implode("\n", $constructorPhpDoc))
                 ->setParameters($constructorParams);
         }
@@ -225,6 +227,7 @@ function single(string $name, string $type, ?string $reduced = null): Type
         templates: [],
         properties: [],
         reduced: $reduced,
+        check: '',
     );
 }
 
@@ -235,7 +238,7 @@ function single(string $name, string $type, ?string $reduced = null): Type
  * @param list<Property> $properties
  * @param ?non-empty-string $reduced
  */
-function constr(string $name, string $type, array $templates = [], array $properties = [], ?string $reduced = null): Type
+function constr(string $name, string $type, array $templates = [], array $properties = [], ?string $reduced = null, string $check = ''): Type
 {
     return new Type(
         singleton: false,
@@ -244,5 +247,6 @@ function constr(string $name, string $type, array $templates = [], array $proper
         templates: $templates,
         properties: $properties,
         reduced: $reduced,
+        check: $check,
     );
 }

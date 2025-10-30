@@ -16,6 +16,11 @@ $closureClass = '\\' . \Closure::class;
 $maskClass = '\\' . Mask::class;
 $mixedT = \sprintf('\%s::T', MixedT::class);
 $arrayKeyT = \sprintf('\%s::T', ArrayKeyT::class);
+$unionCheck = <<<'PHP'
+    if (\count($types) < 2) {
+        throw new \ValueError(\sprintf('`%s` requires at least two types, got %d', self::class, \count($types)));
+    }
+    PHP;
 
 return [
     single('never', 'never'),
@@ -73,9 +78,9 @@ return [
     // resource
     single('resource', 'resource'),
     // intersection
-    constr('intersection', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}>")]),
+    constr('intersection', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}>")], check: $unionCheck),
     // union
-    constr('union', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}<T>>")]),
+    constr('union', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}<T>>")], check: $unionCheck),
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
     constr('constantMask', 'T', [tpl('T')], [prop('mask', $maskClass)]),
