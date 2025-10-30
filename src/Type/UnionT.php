@@ -14,7 +14,6 @@ use Typhoon\Type;
  * @api
  * @template-covariant T = mixed
  * @implements Type<T>
- * @codeCoverageIgnore
  */
 final readonly class UnionT implements Type
 {
@@ -29,6 +28,9 @@ final readonly class UnionT implements Type
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {

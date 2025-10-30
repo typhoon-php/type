@@ -70,44 +70,46 @@ final readonly class Type
                 ->addAttribute(\Override::class)
                 ->setParameters([(new Parameter('visitor'))->setType(Visitor::class)])
                 ->setReturnType('mixed')
-                ->addBody("return \$visitor->{$this->name}(\$this);");
+                ->setBody("return \$visitor->{$this->name}(\$this);");
 
             return $enum;
         }
 
         $class = (new ClassType($this->shortClassName()))
-            ->setComment(implode("\n", [
-                '@api',
-                ...array_map(static fn(Template $t) => $t->declaration(), $this->templates),
-                "@implements Type<{$this->type}>",
-                '@codeCoverageIgnore',
-            ]))
+            ->addComment('@api')
+            ->addComment(implode("\n", array_map(static fn(Template $t) => $t->declaration(), $this->templates)))
+            ->addComment("@implements Type<{$this->type}>")
             ->setFinal()
             ->setReadOnly()
             ->addImplement(TypeI::class);
 
         if ($this->properties !== []) {
-            $constructorPhpDoc = [];
+            $constructor = $class
+                ->addMethod('__construct')
+                ->setBody($this->check);
+
             $constructorParams = [];
 
             foreach ($this->properties as $property) {
-                $constructorPhpDoc[] = $property->paramPhpDoc();
+                $constructor->addComment($property->paramPhpDoc());
                 $constructorParams[] = $property->promotedParameter();
             }
 
-            $class
-                ->addMethod('__construct')
-                ->setBody($this->check)
-                ->setComment(implode("\n", $constructorPhpDoc))
-                ->setParameters($constructorParams);
+            $constructor->setParameters($constructorParams);
         }
 
-        $class
+        $accept = $class
             ->addMethod('accept')
             ->addAttribute(\Override::class)
             ->setParameters([(new Parameter('visitor'))->setType(Visitor::class)])
             ->setReturnType('mixed')
-            ->addBody(\sprintf('return $visitor->%s($this);', $this->name));
+            ->setBody(\sprintf('return $visitor->%s($this);', $this->name));
+
+        if ($this->check === '') {
+            $class->addComment('@codeCoverageIgnore');
+        } else {
+            $accept->addComment('@codeCoverageIgnore');
+        }
 
         return $class;
     }

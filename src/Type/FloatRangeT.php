@@ -15,7 +15,6 @@ use Typhoon\Type;
  * @api
  * @template-covariant T of float = float
  * @implements Type<T>
- * @codeCoverageIgnore
  */
 final readonly class FloatRangeT implements Type
 {
@@ -33,6 +32,9 @@ final readonly class FloatRangeT implements Type
         }
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
