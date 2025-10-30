@@ -27,7 +27,6 @@ use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
 use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LowercaseStringT;
-use Typhoon\Type\MixedT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NonEmptyStringT;
 use Typhoon\Type\NullT;
@@ -274,12 +273,6 @@ abstract class Fallback extends Reduced
 
     #[\Override]
     public function templateT(TemplateT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function mixedT(MixedT $type): mixed
     {
         return $this->fallback($type);
     }

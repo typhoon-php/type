@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.1]
 
+### Added
+
+- Add a reduced representation for the `mixed` type.
+
 ### Fixed
 
 - Stringify alias template arguments.

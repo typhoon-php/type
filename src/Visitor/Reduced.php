@@ -26,17 +26,20 @@ use Typhoon\Type\IntValueT;
 use Typhoon\Type\IterableDefaultT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
+use Typhoon\Type\MixedT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NegativeIntT;
 use Typhoon\Type\NonNegativeIntT;
 use Typhoon\Type\NonPositiveIntT;
 use Typhoon\Type\NonZeroIntT;
+use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
 use Typhoon\Type\ObjectDefaultT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
 use Typhoon\Type\PositiveIntT;
+use Typhoon\Type\ResourceT;
 use Typhoon\Type\ScalarT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\TrueT;
@@ -219,6 +222,15 @@ abstract class Reduced implements Visitor
     public function valueOfT(ValueOfT $type): mixed
     {
         return (new OffsetT($type->arrayType, new KeyOfT($type->arrayType)))->accept($this);
+    }
+
+    #[\Override]
+    public function mixedT(MixedT $type): mixed
+    {
+        /** @var UnionT */
+        static $reduced = new UnionT([NullT::T, ScalarT::T, ArrayDefaultT::T, ObjectDefaultT::T, ResourceT::T]);
+
+        return $reduced->accept($this);
     }
 
     /**
