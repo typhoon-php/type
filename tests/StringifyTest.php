@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Brick\Math\BigDecimal;
-use Brick\Math\BigInteger;
-use Brick\Math\BigRational;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -100,14 +97,15 @@ final class StringifyTest extends TestCase
         yield [intMaskT(orT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
         yield [intMaskT(constantMaskT('JSON_*')), 'int-mask-of<const<JSON_*>>'];
         yield [floatT, 'float'];
-        yield [floatT('0.234'), '0.234'];
+        yield [floatT(0), '0.0'];
+        yield [floatT('0'), '0.0'];
+        yield [floatT(0.0), '0.0'];
+        yield [floatT('0.0'), '0.0'];
         yield [floatT(0.234), '0.234'];
+        yield [floatT('0.234'), '0.234'];
         yield [floatT(-0.234), '-0.234'];
+        yield [floatT('-0.234'), '-0.234'];
         yield [floatT(1), '1.0'];
-        yield [floatT(BigDecimal::one()), '1.0'];
-        yield [floatT(BigInteger::one()), '1.0'];
-        yield [floatT(BigRational::nd(1, 3)), '1/3'];
-        yield [floatT(BigRational::of(1)), '1.0'];
         yield [floatRangeT(), 'float'];
         yield [floatRangeT(-0.99999, 1.232111111), 'float<-0.99999, 1.232111111>'];
         yield [floatRangeT(max: 1.3), 'float<min, 1.3>'];
