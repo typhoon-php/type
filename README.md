@@ -111,7 +111,6 @@ var_dump(stringify($flipType));
 
 | PHPStan                   | Psalm                        | Typhoon                                            |
 |---------------------------|------------------------------|----------------------------------------------------|
-| ❌                         | `literal-int`                | `literalT(intT)`                                   |
 | `123`                     | `123`                        | `intT(123)`                                        |
 | `positive-int`            | `positive-int`               | `positiveIntT`                                     |
 | `negative-int`            | `negative-int`               | `negativeIntT`                                     |
@@ -129,27 +128,28 @@ var_dump(stringify($flipType));
 
 ### PHPDoc strings
 
-| PHPStan                             | Psalm                               | Typhoon                                                      |
-|-------------------------------------|-------------------------------------|--------------------------------------------------------------|
-| `non-empty-string`                  | `non-empty-string`                  | `nonEmptyStringT`                                            |
-| `truthy-string`, `non-falsy-string` | `truthy-string`, `non-falsy-string` | `truthyStringT`, `nonFalsyStringT`                           |
-| `numeric-string`                    | `numeric-string`                    | `numericStringT`                                             |
-| `lowercase-string`                  | `lowercase-string`                  | `lowercaseString`                                            |
-| `'abc'`                             | `'abc'`                             | `stringT('abc')`                                             |
-| `class-string<Foo>`                 | `class-string<Foo>`                 | `classT(Foo::class))`, `classStringT(Foo::class))`           |
-| `Foo::class`                        | `Foo::class`                        | `stringT(Foo::class)`, `classConstantT(Foo::class, 'class')` |
-| ❌                                   | `interface-string`                  | ❌                                                            |
-| ❌                                   | `trait-string`                      | ❌                                                            |
-| ❌                                   | `enum-string`                       | ❌                                                            |
-| ❌                                   | `lowercase-string`                  | ❌                                                            |
-| `literal-string`                    | `literal-string`                    | `literalStringT`                                             |
-| `callable-string`                   | `callable-string`                   | `andT(callableT, stringT)`                                   |
+| PHPStan                             | Psalm                               | Typhoon                                                                              |
+|-------------------------------------|-------------------------------------|--------------------------------------------------------------------------------------|
+| `non-empty-string`                  | `non-empty-string`                  | `nonEmptyStringT`                                                                    |
+| `truthy-string`, `non-falsy-string` | `truthy-string`, `non-falsy-string` | `truthyStringT`, `nonFalsyStringT`                                                   |
+| `numeric-string`                    | `numeric-string`                    | `numericStringT`                                                                     |
+| `lowercase-string`                  | `lowercase-string`                  | `lowercaseString`                                                                    |
+| `'abc'`                             | `'abc'`                             | `stringT('abc')`                                                                     |
+| `class-string<Foo>`                 | `class-string<Foo>`                 | `classT(Foo::class)`, `classStringT(Foo::class)`, `classT(namedObjectT(Foo::class))` |
+| `Foo::class`                        | `Foo::class`                        | `stringT(Foo::class)`, `classConstantT(Foo::class, 'class')`                         |
+| ❌                                   | `interface-string`                  | ❌                                                                                    |
+| ❌                                   | `trait-string`                      | ❌                                                                                    |
+| ❌                                   | `enum-string`                       | ❌                                                                                    |
+| ❌                                   | `lowercase-string`                  | ❌                                                                                    |
+| `literal-string`                    | `literal-string`                    | `literalStringT`                                                                     |
+| `callable-string`                   | `callable-string`                   | `andT(callableT, stringT)`                                                           |
 
 ### PHPDoc constants
 
 | PHPStan       | Psalm       | Typhoon                                  |
 |---------------|-------------|------------------------------------------|
 | `PHP_INT_MAX` | ❌           | `constantT('PHP_INT_MAX')`               |
+| ❌             | ❌           | `constantMaskT('JSON_*')`                |
 | `Foo::BAR`    | `Foo::BAR`  | `classConstantT(Foo::class, 'BAR')`      |
 | `Foo::IS_*`   | `Foo::IS_*` | `classConstantMaskT(Foo::class, 'IS_*')` |
 
