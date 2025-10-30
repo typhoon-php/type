@@ -14,8 +14,8 @@ $typeClass = '\\' . Type::class;
 $bigNumberClass = '\\' . BigNumber::class;
 $closureClass = '\\' . \Closure::class;
 $maskClass = '\\' . Mask::class;
-$mixedT = \sprintf('\\%s::T', MixedT::class);
-$arrayKeyT = \sprintf('\\%s::T', ArrayKeyT::class);
+$mixedT = \sprintf('\%s::T', MixedT::class);
+$arrayKeyT = \sprintf('\%s::T', ArrayKeyT::class);
 
 return [
     single('never', 'never'),
