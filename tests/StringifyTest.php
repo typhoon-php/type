@@ -209,6 +209,7 @@ final class StringifyTest extends TestCase
         yield [isSubtypeT(trueT, mixedT), 'true is mixed'];
         yield [isSupertypeT(boolT, falseT), 'false is bool'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
+        yield [aliasT(\stdClass::class, 'A', [stringT]), 'stdClass@A<string>'];
         $T = template('T');
         yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{T#0, T#1, T#0}'];
         yield 'unknown generic name is preserved' => [listShapeT([$T->type, callableT([$T])]), 'list{T#0, callable<T#0>(): mixed}'];

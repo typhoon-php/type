@@ -584,7 +584,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function aliasT(AliasT $type): string
     {
-        return \sprintf('%s@%s', $type->class, $type->name);
+        return $this->constructor(\sprintf('%s@%s', $type->class, $type->name), $type->templateArguments);
     }
 
     #[\Override]
