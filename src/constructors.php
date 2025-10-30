@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Brick\Math\BigNumber;
+use Brick\Math\BigDecimal;
 use Typhoon\Type\Generator\Generator;
 use Typhoon\Type\Internal\Optional;
 
@@ -93,36 +93,36 @@ const floatT = FloatT::T;
 
 /**
  * @api
- * @param float|numeric-string|BigNumber $value
+ * @param float|numeric-string|BigDecimal $value
  * @return FloatValueT<float>
  */
-function floatT(float|string|BigNumber $value): FloatValueT
+function floatT(float|string|BigDecimal $value): FloatValueT
 {
-    return new FloatValueT(BigNumber::of($value));
+    return new FloatValueT(BigDecimal::of($value));
 }
 
 /**
  * @api
- * @param null|int|float|numeric-string|BigNumber $min
- * @param null|int|float|numeric-string|BigNumber $max
+ * @param null|int|float|numeric-string|BigDecimal $min
+ * @param null|int|float|numeric-string|BigDecimal $max
  * @return Type<float>
  */
-function floatRangeT(null|int|float|string|BigNumber $min = null, null|int|float|string|BigNumber $max = null): Type
+function floatRangeT(null|int|float|string|BigDecimal $min = null, null|int|float|string|BigDecimal $max = null): Type
 {
     if ($min === null) {
         if ($max === null) {
             return floatT;
         }
 
-        return new FloatRangeT(max: BigNumber::of($max));
+        return new FloatRangeT(max: BigDecimal::of($max));
     }
 
     if ($max === null) {
-        return new FloatRangeT(min: BigNumber::of($min));
+        return new FloatRangeT(min: BigDecimal::of($min));
     }
 
-    $min = BigNumber::of($min);
-    $max = BigNumber::of($max);
+    $min = BigDecimal::of($min);
+    $max = BigDecimal::of($max);
 
     if ($min->isEqualTo($max)) {
         return new FloatValueT($min);

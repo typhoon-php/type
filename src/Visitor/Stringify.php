@@ -185,13 +185,13 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function floatValueT(FloatValueT $type): string
     {
-        $string = (string) $type->value;
+        $value = $type->value;
 
-        if (str_contains($string, '.') || str_contains($string, '/')) {
-            return $string;
+        if ($value->getScale() === 0) {
+            return $value->toScale(1)->__toString();
         }
 
-        return $string . '.0';
+        return $value->__toString();
     }
 
     #[\Override]
