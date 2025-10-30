@@ -9,11 +9,11 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type;
-use Typhoon\Type\ArrayDefaultT;
+use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BoolT;
-use Typhoon\Type\CallableDefaultT;
+use Typhoon\Type\CallableBareT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\FalseT;
@@ -24,7 +24,7 @@ use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
-use Typhoon\Type\IterableDefaultT;
+use Typhoon\Type\IterableBareT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
 use Typhoon\Type\MixedT;
@@ -36,7 +36,7 @@ use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectDefaultT;
+use Typhoon\Type\ObjectBareT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
 use Typhoon\Type\PositiveIntT;
@@ -169,7 +169,7 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function arrayDefaultT(ArrayDefaultT $type): mixed
+    public function arrayBareT(ArrayBareT $type): mixed
     {
         /** @var ArrayT */
         static $reduced = new ArrayT();
@@ -178,7 +178,7 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function objectDefaultT(ObjectDefaultT $type): mixed
+    public function objectBareT(ObjectBareT $type): mixed
     {
         /** @var ObjectT */
         static $reduced = new ObjectT();
@@ -193,7 +193,7 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function iterableDefaultT(IterableDefaultT $type): mixed
+    public function iterableBareT(IterableBareT $type): mixed
     {
         /** @var IterableT */
         static $reduced = new IterableT();
@@ -202,7 +202,7 @@ abstract class Reduced implements Visitor
     }
 
     #[\Override]
-    public function callableDefaultT(CallableDefaultT $type): mixed
+    public function callableBareT(CallableBareT $type): mixed
     {
         /** @var CallableT */
         static $reduced = new CallableT();
@@ -235,7 +235,7 @@ abstract class Reduced implements Visitor
     public function mixedT(MixedT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([NullT::T, ScalarT::T, ArrayDefaultT::T, ObjectDefaultT::T, ResourceT::T]);
+        static $reduced = new UnionT([NullT::T, ScalarT::T, ArrayBareT::T, ObjectBareT::T, ResourceT::T]);
 
         return $reduced->accept($this);
     }

@@ -10,16 +10,16 @@ use Typhoon\Type;
  * @api
  * @implements Type<object>
  */
-enum StaticDefaultT implements Type
+enum ParentBareT implements Type
 {
     case T;
 
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        /** @var StaticT */
-        static $type = new StaticT();
+        /** @var ParentT */
+        static $type = new ParentT();
 
-        return $visitor->staticT($type);
+        return $visitor->parentT($type);
     }
 }
