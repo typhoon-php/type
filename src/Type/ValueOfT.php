@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
+declare(strict_types=1);
+
+namespace Typhoon\Type;
+
+use Typhoon\Type;
+
+/**
+ * @api
+ * @template-covariant T = mixed
+ * @implements Type<value-of<T>>
+ * @codeCoverageIgnore
+ */
+final readonly class ValueOfT implements Type
+{
+    /**
+     * @param Type<T> $arrayType
+     */
+    public function __construct(
+        public Type $arrayType,
+    ) {}
+
+    #[\Override]
+    public function accept(Visitor $visitor): mixed
+    {
+        return $visitor->valueOfT($this);
+    }
+}

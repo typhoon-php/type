@@ -13,4 +13,4 @@ parameters:
             message: '#^PHPDoc tag @template T for class Typhoon\\Type\\CallableT with bound type callable is not supported\.$#'
             identifier: generics.notSupportedBound
             count: 1
-            path: src/CallableT.php
+            path: src/Type/CallableT.php

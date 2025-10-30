@@ -93,7 +93,7 @@ rounding errors and requires minimal maintenance.
   
   floatValueT(BigNumber::of('1/3')->toScale(10, RoundingMode::HALF_UP));
   ```
-* In [`Stringify`](../src/Visitor/Stringify.php), when stringifying floats with a zero scale, set the scale to `1`
+* In [`Stringify`](../src/Type/Visitor/Stringify.php), when stringifying floats with a zero scale, set the scale to `1`
   to visually distinguish floats from integers:
 
   ```php

@@ -12,8 +12,8 @@ use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
 use Symfony\Component\Finder\Finder;
+use Typhoon\Type as TypeI;
 use Typhoon\Type\Generator\Spec\Type;
-use Typhoon\Type\Type as TypeI;
 use Typhoon\Type\Visitor;
 
 final readonly class Generator
@@ -22,18 +22,18 @@ final readonly class Generator
     private const NAMESPACE = 'Typhoon\Type';
 
     /**
-     * @param non-empty-string $srcDir
+     * @param non-empty-string $typeDir
      * @param non-empty-list<Type> $types
      */
     public function __construct(
-        private string $srcDir,
+        private string $typeDir,
         private array $types,
     ) {}
 
     public function cleanUp(): void
     {
         $files = Finder::create()
-            ->in($this->srcDir)
+            ->in($this->typeDir)
             ->name('*.php')
             ->contains(self::GENERATED_NOTICE);
 
@@ -173,7 +173,7 @@ final readonly class Generator
 
         $subDir = str_replace('\\', '/', substr($namespace->getName(), \strlen(self::NAMESPACE)));
 
-        $fileName = \sprintf('%s%s/%s.php', $this->srcDir, $subDir, $className);
+        $fileName = \sprintf('%s%s/%s.php', $this->typeDir, $subDir, $className);
 
         $dir = \dirname($fileName);
 

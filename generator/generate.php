@@ -15,7 +15,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 /** @var non-empty-list<Type> */
 $types = require __DIR__ . '/spec.php';
 
-$generator = new Generator(__DIR__ . '/../src', $types);
+$generator = new Generator(__DIR__ . '/../src/Type', $types);
 $generator->cleanUp();
 $generator->generateTypes();
 $generator->generateVisitor();
