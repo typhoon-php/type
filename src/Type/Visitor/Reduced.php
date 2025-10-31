@@ -13,7 +13,6 @@ use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BoolT;
-use Typhoon\Type\CallableBareT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClosureT;
 use Typhoon\Type\FalseT;
@@ -197,15 +196,6 @@ abstract class Reduced implements Visitor
     {
         /** @var IterableT */
         static $reduced = new IterableT();
-
-        return $reduced->accept($this);
-    }
-
-    #[\Override]
-    public function callableBareT(CallableBareT $type): mixed
-    {
-        /** @var CallableT */
-        static $reduced = new CallableT();
 
         return $reduced->accept($this);
     }

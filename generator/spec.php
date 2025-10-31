@@ -67,7 +67,7 @@ return [
     single('iterableBare', 'iterable', 'iterable()'),
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('keyType', "{$typeClass}<K>", $mixedT), prop('valueType', "{$typeClass}<V>", $mixedT)]),
     // callable
-    single('callableBare', 'callable', 'callable()'),
+    single('callableBare', 'callable'),
     constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)]),
     constr('closure', 'T', [tpl('T', $closureClass)], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)], "intersection([\nnamedObject({$closureClass}::class),\ncallable(\$templates, \$parameters, \$returnType),\n])"),
     // resource
