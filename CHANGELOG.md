@@ -16,6 +16,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **BC Break:** Use `BigDecimal` for floats, see [002_float_precision.md](adr/002_float_precision.md).
 - **BC Break:** Move `Typhoon\Type\Type` interface to `Typhoon\Type`.
+- **BC Break:** Use `PHP_INT_MIN`, `PHP_INT_MAX` for `IntRangeT` limits instead of `null`.
+- **BC Break:** Rename `ArrayDefaultT` to `ArrayBareT`. 
+- **BC Break:** Rename `ObjectDefaultT` to `ObjectBareT`. 
+- **BC Break:** Rename `IterableDefaultT` to `IterableBareT`. 
+- **BC Break:** Rename `CallableDefaultT` to `CallableBareT`. 
+- **BC Break:** Rename `SelfDefaultT` to `SelfBareT`. 
+- **BC Break:** Rename `ParentDefaultT` to `ParentBareT`. 
+- **BC Break:** Rename `StaticDefaultT` to `StaticBareT`. 
+- **BC Break:** Rename `Visitor::arrayDefaultT` to `Visitor::arrayBearT`. 
+- **BC Break:** Rename `Visitor::objectDefaultT` to `Visitor::objectBearT`. 
+- **BC Break:** Rename `Visitor::iterableDefaultT` to `Visitor::iterableBearT`. 
+- **BC Break:** Rename `Visitor::callableDefaultT` to `Visitor::callableBearT`. 
 
 ## [0.5.1]
 
