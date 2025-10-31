@@ -113,10 +113,13 @@ excludes valid ones.
 Therefore, it’s safer to treat the bare callable as **existential**: it can be stored and passed around,
 but **must not be called** without explicit refinement.
 
+## Consequences
+
+* Static analyzers should treat invocations of untyped callables as unsafe.
+
 ## Implementation Details
 
 * Remove `CallableDefaultT` from [`Reduced`](../src/Visitor/Reduced.php).
-* Static analyzers should treat invocations of untyped callables as unsafe.
 
 ## Metadata
 
