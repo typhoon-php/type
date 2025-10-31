@@ -12,7 +12,7 @@ use Typhoon\Type;
 use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BitmaskT;
-use Typhoon\Type\CallableDefaultT;
+use Typhoon\Type\CallableBareT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
@@ -195,7 +195,7 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
-    public function callableDefaultT(CallableDefaultT $type): mixed
+    public function callableBareT(CallableBareT $type): mixed
     {
         return $this->fallback($type);
     }
