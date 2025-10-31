@@ -45,6 +45,7 @@ call(static fn (string $a): int => 1);
 ```
 
 ✅ Detects arity mismatch.
+
 ❌ Too restrictive — does not allow passing arbitrary callables.
 
 ### 2. `callable(never...): mixed`
@@ -65,6 +66,7 @@ call(static fn (string $a): int => 1);
 ```
 
 ✅ Detects mismatch in parameters.
+
 ❌ Too restrictive — does not allow passing arbitrary callables.
 
 ### 3. `callable(never): mixed`
@@ -85,6 +87,7 @@ call(static fn (string $a): int => 1);
 ```
 
 ✅ Detects invalid invocation.
+
 ❌ Callables with two or more parameters no longer match:
 
 ```php
