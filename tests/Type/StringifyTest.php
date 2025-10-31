@@ -223,6 +223,7 @@ final class StringifyTest extends TestCase
         yield [callableT([template('T', scalarT, stringT, type: $T)], [$T], $T), 'callable<T of scalar super string>(T): T'];
         yield [objectT([template('T', type: $T)], [namedObjectT(\stdClass::class, [intT])], ['p' => $T]), 'object<T>:stdClass<int>{p: T}'];
         yield [objectT([templateIn('I', default: intT), templateOut('O')]), 'object<in I = int, out O>'];
+        yield [objectT([template('T', type: $T), template('T2', $T)]), 'object<T, T2 of T>'];
     }
 
     #[DoesNotPerformAssertions]
