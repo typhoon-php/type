@@ -104,7 +104,7 @@ rounding errors and requires minimal maintenance.
   stringify(floatValueT(1.0)); // 1.0
   stringify(floatValueT(BigDecimal::one())); // 1.0
   
-  // note that these numbers equal:
+  // note that these numbers are equal:
   var_dump(BigDecimal::one()->isEqualTo('1.0')); // true
   ```
 
