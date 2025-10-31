@@ -42,7 +42,7 @@ function intT(int $value): IntValueT
  * @api
  * @return IntRangeT<int>
  */
-function intRangeT(?int $min = null, ?int $max = null): IntRangeT
+function intRangeT(int $min = PHP_INT_MIN, int $max = PHP_INT_MAX): IntRangeT
 {
     return new IntRangeT($min, $max);
 }

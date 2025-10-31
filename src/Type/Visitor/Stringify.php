@@ -138,7 +138,11 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function intRangeT(IntRangeT $type): string
     {
-        return \sprintf('int<%s, %s>', $type->min ?? 'min', $type->max ?? 'max');
+        return \sprintf(
+            'int<%s, %s>',
+            $type->min === PHP_INT_MIN ? 'min' : $type->min,
+            $type->max === PHP_INT_MAX ? 'max' : $type->max,
+        );
     }
 
     #[\Override]

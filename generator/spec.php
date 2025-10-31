@@ -28,7 +28,7 @@ return [
     // int
     single('int', 'int', 'intRange()'),
     constr('intValue', 'T', [tpl('T', 'int')], [prop('value', 'T', nativeType: 'int')], 'intRange($value, $value)'),
-    constr('intRange', 'T', [tpl('T', 'int')], [prop('min', '?int'), prop('max', '?int')]),
+    constr('intRange', 'T', [tpl('T', 'int')], [prop('min', 'int', 'PHP_INT_MIN'), prop('max', 'int', 'PHP_INT_MIN')]),
     single('negativeInt', 'negative-int', 'intRange(max: -1)'),
     single('nonPositiveInt', 'non-positive-int', 'intRange(max: 0)'),
     single('nonZeroInt', 'non-zero-int', 'union([negativeInt, positiveInt])'),
