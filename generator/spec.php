@@ -16,31 +16,6 @@ $closureClass = '\\' . \Closure::class;
 $maskClass = '\\' . Mask::class;
 $mixedT = \sprintf('\%s::T', MixedT::class);
 $arrayKeyT = \sprintf('\%s::T', ArrayKeyT::class);
-$unionCheck = <<<'PHP'
-    if (\count($types) < 2) {
-        throw new \ValueError(\sprintf('`%s` requires at least two types, got %d', self::class, \count($types)));
-    }
-    PHP;
-$intRangeCheck = <<<'PHP'
-    if ($min !== null && $max !== null && $min > $max) {
-        throw new \ValueError(sprintf(
-            '`%s` requires min to be less than or equal to max, got min=%d, max=%d',
-            self::class,
-            $min,
-            $max,
-        ));
-    }
-    PHP;
-$floatRangeCheck = <<<'PHP'
-    if ($min !== null && $max !== null && $min->isGreaterThan($max)) {
-        throw new \ValueError(sprintf(
-            '`%s` requires min to be less than or equal to max, got min=%d, max=%d',
-            self::class,
-            $min,
-            $max,
-        ));
-    }
-    PHP;
 
 return [
     single('never', 'never'),
@@ -53,7 +28,7 @@ return [
     // int
     single('int', 'int', 'intRange()'),
     constr('intValue', 'T', [tpl('T', 'int')], [prop('value', 'T', nativeType: 'int')], 'intRange($value, $value)'),
-    constr('intRange', 'T', [tpl('T', 'int')], [prop('min', '?int'), prop('max', '?int')], check: $intRangeCheck),
+    constr('intRange', 'T', [tpl('T', 'int')], [prop('min', '?int'), prop('max', '?int')]),
     single('negativeInt', 'negative-int', 'intRange(max: -1)'),
     single('nonPositiveInt', 'non-positive-int', 'intRange(max: 0)'),
     single('nonZeroInt', 'non-zero-int', 'union([negativeInt, positiveInt])'),
@@ -63,7 +38,7 @@ return [
     // float
     single('float', 'float', 'floatRange()'),
     constr('floatValue', 'T', [tpl('T', 'float')], [prop('value', $bigDecimalClass)], 'floatRange($value, $value)'),
-    constr('floatRange', 'T', [tpl('T', 'float')], [prop('min', '?' . $bigDecimalClass), prop('max', '?' . $bigDecimalClass)], check: $floatRangeCheck),
+    constr('floatRange', 'T', [tpl('T', 'float')], [prop('min', '?' . $bigDecimalClass), prop('max', '?' . $bigDecimalClass)]),
     // string
     single('string', 'string'),
     single('nonEmptyString', 'non-empty-string'),
@@ -98,9 +73,9 @@ return [
     // resource
     single('resource', 'resource'),
     // intersection
-    constr('intersection', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}>")], check: $unionCheck),
+    constr('intersection', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}>")]),
     // union
-    constr('union', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}<T>>")], check: $unionCheck),
+    constr('union', 'T', [tpl('T')], [prop('types', "non-empty-list<{$typeClass}<T>>")]),
     // constant
     constr('constant', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),
     constr('constantMask', 'T', [tpl('T')], [prop('mask', $maskClass)]),

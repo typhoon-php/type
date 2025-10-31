@@ -32,7 +32,6 @@ final readonly class Type
         private array $templates,
         private array $properties,
         private ?string $reduced,
-        private string $check,
     ) {
         $this->name = $name . 'T';
     }
@@ -79,15 +78,13 @@ final readonly class Type
             ->addComment('@api')
             ->addComment(implode("\n", array_map(static fn(Template $t) => $t->declaration(), $this->templates)))
             ->addComment("@implements Type<{$this->type}>")
+            ->addComment('@codeCoverageIgnore')
             ->setFinal()
             ->setReadOnly()
             ->addImplement(TypeI::class);
 
         if ($this->properties !== []) {
-            $constructor = $class
-                ->addMethod('__construct')
-                ->setBody($this->check);
-
+            $constructor = $class->addMethod('__construct');
             $constructorParams = [];
 
             foreach ($this->properties as $property) {
@@ -98,18 +95,12 @@ final readonly class Type
             $constructor->setParameters($constructorParams);
         }
 
-        $accept = $class
+        $class
             ->addMethod('accept')
             ->addAttribute(\Override::class)
             ->setParameters([(new Parameter('visitor'))->setType(Visitor::class)])
             ->setReturnType('mixed')
             ->setBody(\sprintf('return $visitor->%s($this);', $this->name));
-
-        if ($this->check === '') {
-            $class->addComment('@codeCoverageIgnore');
-        } else {
-            $accept->addComment('@codeCoverageIgnore');
-        }
 
         return $class;
     }
@@ -229,7 +220,6 @@ function single(string $name, string $type, ?string $reduced = null): Type
         templates: [],
         properties: [],
         reduced: $reduced,
-        check: '',
     );
 }
 
@@ -240,7 +230,7 @@ function single(string $name, string $type, ?string $reduced = null): Type
  * @param list<Property> $properties
  * @param ?non-empty-string $reduced
  */
-function constr(string $name, string $type, array $templates = [], array $properties = [], ?string $reduced = null, string $check = ''): Type
+function constr(string $name, string $type, array $templates = [], array $properties = [], ?string $reduced = null): Type
 {
     return new Type(
         singleton: false,
@@ -249,6 +239,5 @@ function constr(string $name, string $type, array $templates = [], array $proper
         templates: $templates,
         properties: $properties,
         reduced: $reduced,
-        check: $check,
     );
 }
