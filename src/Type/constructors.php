@@ -603,9 +603,9 @@ function orT(Type|array $types, Type ...$moreTypes): Type
  * @api
  * @template T
  * @param Type<T> $type
- * @return Type<null|T>
+ * @return UnionT<null|T>
  */
-function nullOrT(Type $type): Type
+function nullOrT(Type $type): UnionT
 {
     return new UnionT([nullT, $type]);
 }
