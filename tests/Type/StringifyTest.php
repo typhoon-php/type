@@ -218,11 +218,10 @@ final class StringifyTest extends TestCase
         yield [isSupertypeT(boolT, falseT), 'false is bool'];
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
         yield [aliasT(\stdClass::class, 'A', [stringT]), 'stdClass@A<string>'];
-        $T = template('T');
-        yield [listShapeT([$T, template('T2'), $T]), 'list{T, T2, T}'];
-        $TBound = template('T', scalarT, stringT);
-        yield [callableT([$TBound], [$TBound], $TBound), 'callable<T of scalar super string>(T): T'];
-        yield [objectT([$T], [namedObjectT(\stdClass::class, [intT])], ['p' => $T]), 'object<T>:stdClass<int>{p: T}'];
+        /** @phpstan-ignore argument.type */
+        yield [callableT([template('T', type: $T)], [$T], nullOrT($T)), 'callable<T>(T): (null|T)'];
+        yield [callableT([template('T', scalarT, stringT, type: $T)], [$T], $T), 'callable<T of scalar super string>(T): T'];
+        yield [objectT([template('T', type: $T)], [namedObjectT(\stdClass::class, [intT])], ['p' => $T]), 'object<T>:stdClass<int>{p: T}'];
         yield [objectT([templateIn('I', default: intT), templateOut('O')]), 'object<in I = int, out O>'];
     }
 

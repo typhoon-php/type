@@ -59,6 +59,7 @@ use Typhoon\Type\SelfT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
+use Typhoon\Type\Template;
 use Typhoon\Type\TemplateT;
 use Typhoon\Type\TernaryT;
 use Typhoon\Type\TrueT;
@@ -593,7 +594,7 @@ abstract class Stringify implements Visitor
     }
 
     /**
-     * @param list<TemplateT> $templates
+     * @param list<Template> $templates
      */
     protected function templates(array $templates): string
     {
@@ -604,7 +605,7 @@ abstract class Stringify implements Visitor
         return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
     }
 
-    protected function template(TemplateT $template): string
+    protected function template(Template $template): string
     {
         $lowerBound = $this->stringifyUnwrap($template->lowerBound);
         $upperBound = $this->stringifyUnwrap($template->upperBound);
