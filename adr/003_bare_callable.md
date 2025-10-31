@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -114,3 +114,12 @@ but **must not be called** without explicit refinement.
 
 * Remove `CallableDefaultT` from [`Reduced`](../src/Visitor/Reduced.php).
 * Static analyzers should treat invocations of untyped callables as unsafe.
+
+## Metadata
+
+| Field              | Value                                                           |
+|--------------------|-----------------------------------------------------------------|
+| **Date**           | 2025-10-31                                                      |
+| **Implemented in** | [#55](https://github.com/typhoon-php/type/pull/55)              |
+| **Released in**    | [0.6.0](https://github.com/typhoon-php/type/releases/tag/0.6.0) |
+| **Author**         | [@vudaltsov](https://github.com/vudaltsov)                      |

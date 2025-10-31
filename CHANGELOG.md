@@ -7,27 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.6.0]
 
+### Accepted ADRs
+ 
+- [ADR-001: Untyped](adr/001_untyped.md)
+- [ADR-002: Address Floating-Point Precision](adr/002_float_precision.md)
+- [ADR-003: Bare callable type has no sound PHPDoc representation](adr/003_bare_callable.md)
+
 ### Added
 
-- **[BC Break:]** Add an `untyped` type, see [ADR](adr/001_untyped.md).
-- Add [Architecture Decision Records](adr).
+- **[BC Break:]** Add an `untyped` type ([ADR](adr/001_untyped.md)).
+- Add `Fallback::callableBareT()` ([ADR](adr/003_bare_callable.md)).
 
 ### Changed
 
-- **BC Break:** Use `BigDecimal` for floats, see [002_float_precision.md](adr/002_float_precision.md).
-- **BC Break:** Move `Typhoon\Type\Type` interface to `Typhoon\Type`.
+- **BC Break:** Use `BigDecimal` for floats ([ADR](adr/002_float_precision.md)).
+- **BC Break:** Move `Typhoon\Type\Type` interface to `Typhoon\Type` ([#51](https://github.com/typhoon-php/type/pull/51)).
 - **BC Break:** Use `PHP_INT_MIN`, `PHP_INT_MAX` for `IntRangeT` limits instead of `null`.
-- **BC Break:** Rename `ArrayDefaultT` to `ArrayBareT`. 
-- **BC Break:** Rename `ObjectDefaultT` to `ObjectBareT`. 
-- **BC Break:** Rename `IterableDefaultT` to `IterableBareT`. 
-- **BC Break:** Rename `CallableDefaultT` to `CallableBareT`. 
-- **BC Break:** Rename `SelfDefaultT` to `SelfBareT`. 
-- **BC Break:** Rename `ParentDefaultT` to `ParentBareT`. 
-- **BC Break:** Rename `StaticDefaultT` to `StaticBareT`. 
-- **BC Break:** Rename `Visitor::arrayDefaultT` to `Visitor::arrayBearT`. 
-- **BC Break:** Rename `Visitor::objectDefaultT` to `Visitor::objectBearT`. 
-- **BC Break:** Rename `Visitor::iterableDefaultT` to `Visitor::iterableBearT`. 
-- **BC Break:** Rename `Visitor::callableDefaultT` to `Visitor::callableBearT`. 
+- **BC Break:** Rename `*DefaultT` to `*BareT`, `Visitor::*DefaultT()` to `Visitor::*BearT()` ([#56](https://github.com/typhoon-php/type/pull/56)).
+- **BC Break:** Remove `Reduced::callableBareT()` ([ADR](adr/003_bare_callable.md)).
 
 ## [0.5.1]
 
