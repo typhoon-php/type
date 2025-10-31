@@ -11,6 +11,8 @@ use Typhoon\Type;
  */
 final readonly class Template
 {
+    public TemplateT $type;
+
     /**
      * @param non-empty-string $name
      * @param TVariance $variance
@@ -21,6 +23,40 @@ final readonly class Template
         public Type $lowerBound = NeverT::T,
         public Type $upperBound = MixedT::T,
         public ?Type $default = null,
-        public TemplateT $type = new TemplateT(),
-    ) {}
+    ) {
+        $this->type = new TemplateT();
+    }
+
+    public function withLowerBound(Type $lowerBound): static
+    {
+        return new self(
+            name: $this->name,
+            variance: $this->variance,
+            lowerBound: $lowerBound,
+            upperBound: $this->upperBound,
+            default: $this->default,
+        );
+    }
+
+    public function withUpperBound(Type $upperBound): static
+    {
+        return new self(
+            name: $this->name,
+            variance: $this->variance,
+            lowerBound: $this->lowerBound,
+            upperBound: $upperBound,
+            default: $this->default,
+        );
+    }
+
+    public function withDefault(?Type $default): static
+    {
+        return new self(
+            name: $this->name,
+            variance: $this->variance,
+            lowerBound: $this->lowerBound,
+            upperBound: $this->upperBound,
+            default: $default,
+        );
+    }
 }
