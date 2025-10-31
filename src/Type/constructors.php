@@ -322,7 +322,7 @@ const objectT = ObjectBareT::T;
 
 /**
  * @api
- * @param list<Template> $templates
+ * @param list<TemplateT> $templates
  * @param list<class-string|NamedObjectT> $supertypes
  * @param array<non-empty-string, Type|Optional> $props
  * @return ObjectT<object>
@@ -409,7 +409,7 @@ const callableT = CallableBareT::T;
 
 /**
  * @api
- * @param list<Template<Variance::Invariant>> $templates
+ * @param list<TemplateT<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $params
  * @return CallableT<callable>
  */
@@ -427,7 +427,7 @@ function callableT(array $templates = [], array $params = [], Type $return = mix
 
 /**
  * @api
- * @param list<Template<Variance::Invariant>> $templates
+ * @param list<TemplateT<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $params
  * @return ClosureT<\Closure>
  */
@@ -503,31 +503,31 @@ function classConstantMaskT(string $class, string $mask): ClassConstantMaskT
 /**
  * @api
  * @param non-empty-string $name
- * @return Template<Variance::Invariant>
+ * @return TemplateT<Variance::Invariant>
  */
-function template(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
+function template(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): TemplateT
 {
-    return new Template($name, lowerBound: $lowerBound, upperBound: $upperBound, default: $default);
+    return new TemplateT($name, lowerBound: $lowerBound, upperBound: $upperBound, default: $default);
 }
 
 /**
  * @api
  * @param non-empty-string $name
- * @return Template<Variance::Covariant>
+ * @return TemplateT<Variance::Covariant>
  */
-function templateOut(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
+function templateOut(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): TemplateT
 {
-    return new Template($name, Variance::Covariant, $lowerBound, $upperBound, $default);
+    return new TemplateT($name, Variance::Covariant, $lowerBound, $upperBound, $default);
 }
 
 /**
  * @api
  * @param non-empty-string $name
- * @return Template<Variance::Contravariant>
+ * @return TemplateT<Variance::Contravariant>
  */
-function templateIn(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): Template
+function templateIn(string $name, Type $upperBound = mixedT, Type $lowerBound = neverT, ?Type $default = null): TemplateT
 {
-    return new Template($name, Variance::Contravariant, $lowerBound, $upperBound, $default);
+    return new TemplateT($name, Variance::Contravariant, $lowerBound, $upperBound, $default);
 }
 
 /**

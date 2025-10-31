@@ -9,11 +9,15 @@ use Typhoon\Type;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\Mask;
 use Typhoon\Type\MixedT;
+use Typhoon\Type\NeverT;
+use Typhoon\Type\Variance;
 
 $typeClass = '\\' . Type::class;
 $bigDecimalClass = '\\' . BigDecimal::class;
 $closureClass = '\\' . \Closure::class;
 $maskClass = '\\' . Mask::class;
+$varianceClass = '\\' . Variance::class;
+$neverT = \sprintf('\%s::T', NeverT::class);
 $mixedT = \sprintf('\%s::T', MixedT::class);
 $arrayKeyT = \sprintf('\%s::T', ArrayKeyT::class);
 
@@ -59,7 +63,7 @@ return [
     // object
     single('objectBare', 'object', 'object()'),
     constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', "list<{$typeClass}>")], 'object(supertypes: [$t])'),
-    constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('supertypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
+    constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<TemplateT>'), prop('supertypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
     constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
     constr('parent', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
     constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
@@ -68,8 +72,8 @@ return [
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('keyType', "{$typeClass}<K>", $mixedT), prop('valueType', "{$typeClass}<V>", $mixedT)]),
     // callable
     single('callableBare', 'callable'),
-    constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)]),
-    constr('closure', 'T', [tpl('T', $closureClass)], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)], "intersection([\nnamedObject({$closureClass}::class),\ncallable(\$templates, \$parameters, \$returnType),\n])"),
+    constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<TemplateT<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)]),
+    constr('closure', 'T', [tpl('T', $closureClass)], [prop('templates', 'list<TemplateT<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)], "intersection([\nnamedObject({$closureClass}::class),\ncallable(\$templates, \$parameters, \$returnType),\n])"),
     // resource
     single('resource', 'resource'),
     // intersection
@@ -92,7 +96,7 @@ return [
     // alias
     constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), prop('templateArguments', "list<{$typeClass}>")]),
     // template
-    constr('template', 'T', [tpl('T')]),
+    constr('template', 'T', [tpl('V', 'Variance'), tpl('T')], [prop('name', 'non-empty-string'), prop('variance', 'V', "{$varianceClass}::Invariant", $varianceClass), prop('lowerBound', $typeClass, $neverT), prop('upperBound', $typeClass, $mixedT), prop('default', '?' . $typeClass)]),
     // mixed
     single('untyped', 'mixed', 'mixed'),
     single('mixed', 'mixed', 'union([null, scalar, arrayBare, objectBare, resource])'),

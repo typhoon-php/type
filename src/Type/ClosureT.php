@@ -19,7 +19,7 @@ use Typhoon\Type;
 final readonly class ClosureT implements Type
 {
     /**
-     * @param list<Template<Variance::Invariant>> $templates
+     * @param list<TemplateT<Variance::Invariant>> $templates
      * @param list<Parameter> $parameters
      */
     public function __construct(

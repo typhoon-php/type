@@ -59,7 +59,6 @@ use Typhoon\Type\SelfT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
-use Typhoon\Type\Template;
 use Typhoon\Type\TemplateT;
 use Typhoon\Type\TernaryT;
 use Typhoon\Type\TrueT;
@@ -77,16 +76,6 @@ use Typhoon\Type\VoidT;
  */
 abstract class Stringify implements Visitor
 {
-    private int $unknownTemplateIndex = 0;
-
-    /**
-     * @param \SplObjectStorage<TemplateT, non-empty-string> $templateNames
-     */
-    public function __construct(
-        /** @phpstan-ignore parameter.defaultValue */
-        protected readonly \SplObjectStorage $templateNames = new \SplObjectStorage(),
-    ) {}
-
     #[\Override]
     public function neverT(NeverT $type): string
     {
@@ -600,11 +589,11 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function templateT(TemplateT $type): string
     {
-        return $this->templateNames[$type] ??= 'T#' . ($this->unknownTemplateIndex++);
+        return $type->name;
     }
 
     /**
-     * @param list<Template> $templates
+     * @param list<TemplateT> $templates
      */
     protected function templates(array $templates): string
     {
@@ -615,7 +604,7 @@ abstract class Stringify implements Visitor
         return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
     }
 
-    protected function template(Template $template): string
+    protected function template(TemplateT $template): string
     {
         $lowerBound = $this->stringifyUnwrap($template->lowerBound);
         $upperBound = $this->stringifyUnwrap($template->upperBound);
@@ -627,7 +616,7 @@ abstract class Stringify implements Visitor
                 Variance::Covariant => 'out ',
                 Variance::Contravariant => 'in ',
             },
-            $this->templateNames[$template->type] ??= $template->name,
+            $template->name,
             $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
             $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
             $template->default === null ? '' : ' = ' . $this->stringifyUnwrap($template->default),

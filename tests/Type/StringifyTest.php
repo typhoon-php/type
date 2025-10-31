@@ -219,11 +219,10 @@ final class StringifyTest extends TestCase
         yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
         yield [aliasT(\stdClass::class, 'A', [stringT]), 'stdClass@A<string>'];
         $T = template('T');
-        yield [listShapeT([$T->type, template('T')->type, $T->type]), 'list{T#0, T#1, T#0}'];
-        yield 'unknown generic name is preserved' => [listShapeT([$T->type, callableT([$T])]), 'list{T#0, callable<T#0>(): mixed}'];
-        $TB = template('T', scalarT, stringT);
-        yield [callableT([$TB], [$TB->type], $TB->type), 'callable<T of scalar super string>(T): T'];
-        yield [objectT([$T], [namedObjectT(\stdClass::class, [intT])], ['p' => $T->type]), 'object<T>:stdClass<int>{p: T}'];
+        yield [listShapeT([$T, template('T2'), $T]), 'list{T, T2, T}'];
+        $TBound = template('T', scalarT, stringT);
+        yield [callableT([$TBound], [$TBound], $TBound), 'callable<T of scalar super string>(T): T'];
+        yield [objectT([$T], [namedObjectT(\stdClass::class, [intT])], ['p' => $T]), 'object<T>:stdClass<int>{p: T}'];
         yield [objectT([templateIn('I', default: intT), templateOut('O')]), 'object<in I = int, out O>'];
     }
 

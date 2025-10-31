@@ -19,7 +19,7 @@ use Typhoon\Type;
 final readonly class ObjectT implements Type
 {
     /**
-     * @param list<Template> $templates
+     * @param list<TemplateT> $templates
      * @param list<NamedObjectT> $supertypes
      * @param list<Property> $properties
      */
