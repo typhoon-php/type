@@ -167,7 +167,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function arrayDefaultT(ArrayDefaultT $type): mixed;
+    public function arrayBareT(ArrayBareT $type): mixed;
 
     /**
      * @return TResult
@@ -177,7 +177,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function objectDefaultT(ObjectDefaultT $type): mixed;
+    public function objectBareT(ObjectBareT $type): mixed;
 
     /**
      * @return TResult
@@ -207,7 +207,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function iterableDefaultT(IterableDefaultT $type): mixed;
+    public function iterableBareT(IterableBareT $type): mixed;
 
     /**
      * @return TResult
@@ -217,7 +217,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function callableDefaultT(CallableDefaultT $type): mixed;
+    public function callableBareT(CallableBareT $type): mixed;
 
     /**
      * @return TResult

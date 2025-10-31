@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @generated This file was generated, do not edit manually.
+ */
+
 declare(strict_types=1);
 
 namespace Typhoon\Type;
@@ -9,17 +13,15 @@ use Typhoon\Type;
 /**
  * @api
  * @implements Type<object>
+ * @codeCoverageIgnore
  */
-enum SelfDefaultT implements Type
+enum ObjectBareT implements Type
 {
     case T;
 
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        /** @var SelfT */
-        static $type = new SelfT();
-
-        return $visitor->selfT($type);
+        return $visitor->objectBareT($this);
     }
 }

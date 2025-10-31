@@ -6,13 +6,13 @@ namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type;
 use Typhoon\Type\AliasT;
-use Typhoon\Type\ArrayDefaultT;
+use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayElement;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BitmaskT;
 use Typhoon\Type\BoolT;
-use Typhoon\Type\CallableDefaultT;
+use Typhoon\Type\CallableBareT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
@@ -29,7 +29,7 @@ use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
 use Typhoon\Type\IsSubtypeT;
-use Typhoon\Type\IterableDefaultT;
+use Typhoon\Type\IterableBareT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
@@ -46,7 +46,7 @@ use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectDefaultT;
+use Typhoon\Type\ObjectBareT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
 use Typhoon\Type\Parameter;
@@ -295,7 +295,7 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function arrayDefaultT(ArrayDefaultT $type): string
+    public function arrayBareT(ArrayBareT $type): string
     {
         return 'array';
     }
@@ -341,7 +341,7 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function objectDefaultT(ObjectDefaultT $type): string
+    public function objectBareT(ObjectBareT $type): string
     {
         return 'object';
     }
@@ -412,7 +412,7 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function iterableDefaultT(IterableDefaultT $type): string
+    public function iterableBareT(IterableBareT $type): string
     {
         return 'iterable';
     }
@@ -435,7 +435,7 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function callableDefaultT(CallableDefaultT $type): string
+    public function callableBareT(CallableBareT $type): string
     {
         return 'callable';
     }

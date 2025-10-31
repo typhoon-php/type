@@ -54,20 +54,20 @@ return [
     single('scalar', 'scalar', 'union([bool, int, float, string])'),
     // array
     constr('list', 'T', [tpl('T', 'list')], [prop('valueType', $typeClass, $mixedT), prop('elementTypes', "list<{$typeClass}>"), prop('isNonEmpty', 'bool')]),
-    single('arrayDefault', 'array', 'array()'),
+    single('arrayBare', 'array', 'array()'),
     constr('array', 'T', [tpl('T', 'array')], [prop('keyType', $typeClass, $arrayKeyT), prop('valueType', $typeClass, $mixedT), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
-    single('objectDefault', 'object', 'object()'),
+    single('objectBare', 'object', 'object()'),
     constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', "list<{$typeClass}>")], 'object(supertypes: [$t])'),
     constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('supertypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
     constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
     constr('parent', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
     constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
     // iterable
-    single('iterableDefault', 'iterable', 'iterable()'),
+    single('iterableBare', 'iterable', 'iterable()'),
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('keyType', "{$typeClass}<K>", $mixedT), prop('valueType', "{$typeClass}<V>", $mixedT)]),
     // callable
-    single('callableDefault', 'callable', 'callable()'),
+    single('callableBare', 'callable', 'callable()'),
     constr('callable', 'T', [tpl('T', 'callable')], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)]),
     constr('closure', 'T', [tpl('T', $closureClass)], [prop('templates', 'list<Template<Variance::Invariant>>'), prop('parameters', 'list<Parameter>'), prop('returnType', $typeClass, $mixedT)], "intersection([\nnamedObject({$closureClass}::class),\ncallable(\$templates, \$parameters, \$returnType),\n])"),
     // resource
@@ -95,5 +95,5 @@ return [
     constr('template', 'T', [tpl('T')]),
     // mixed
     single('untyped', 'mixed', 'mixed'),
-    single('mixed', 'mixed', 'union([null, scalar, arrayDefault, objectDefault, resource])'),
+    single('mixed', 'mixed', 'union([null, scalar, arrayBare, objectBare, resource])'),
 ];

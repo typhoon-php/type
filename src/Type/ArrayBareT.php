@@ -12,16 +12,16 @@ use Typhoon\Type;
 
 /**
  * @api
- * @implements Type<callable>
+ * @implements Type<array>
  * @codeCoverageIgnore
  */
-enum CallableDefaultT implements Type
+enum ArrayBareT implements Type
 {
     case T;
 
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->callableDefaultT($this);
+        return $visitor->arrayBareT($this);
     }
 }
