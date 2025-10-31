@@ -11,8 +11,6 @@ use Typhoon\Type;
  */
 final readonly class Template
 {
-    public TemplateT $type;
-
     /**
      * @param non-empty-string $name
      * @param TVariance $variance
@@ -23,7 +21,6 @@ final readonly class Template
         public Type $lowerBound = NeverT::T,
         public Type $upperBound = MixedT::T,
         public ?Type $default = null,
-    ) {
-        $this->type = new TemplateT();
-    }
+        public TemplateT $type = new TemplateT(),
+    ) {}
 }
