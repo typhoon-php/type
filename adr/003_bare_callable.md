@@ -40,12 +40,12 @@ function call(callable $callable): void
     $callable();
 }
 
-// [PHPStan] OK
+// [PHPStan] Parameter #1 $callable of function call expects callable(): mixed, Closure(string): 1 given.
 call(static fn (string $a): int => 1);
 ```
 
-✅ Accepts any callable.
-❌ Does not prevent runtime errors (arity mismatch).
+✅ Detects arity mismatch.
+❌ Too restrictive — does not allow passing arbitrary callables.
 
 ### 2. `callable(never...): mixed`
 
@@ -65,7 +65,7 @@ call(static fn (string $a): int => 1);
 ```
 
 ✅ Detects mismatch in parameters.
-❌ Too strict — forbids valid callables.
+❌ Too restrictive — does not allow passing arbitrary callables.
 
 ### 3. `callable(never): mixed`
 
@@ -107,7 +107,7 @@ call(static fn (string $a, int $b): int => 1);
 The native `callable` type cannot be expressed soundly in PHPDoc. Any attempt either allows unsound calls or
 excludes valid ones.
 
-Therefore, it’s safer to treat the bare callable as **opaque**: it can be stored and passed around,
+Therefore, it’s safer to treat the bare callable as **existential**: it can be stored and passed around,
 but **must not be called** without explicit refinement.
 
 ## Implementation Details
