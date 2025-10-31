@@ -71,9 +71,9 @@ This ensures accurate type variance checking between typed and untyped members.
 
 ## Metadata
 
-| Field              | Value                                                           |
-|--------------------|-----------------------------------------------------------------|
-| **Date**           | 2025-10-31                                                      |
-| **Implemented in** | [#52](https://github.com/typhoon-php/type/pull/52)              |
-| **Released in**    | [0.6.0](https://github.com/typhoon-php/type/releases/tag/0.6.0) |
-| **Author**         | [@vudaltsov](https://github.com/vudaltsov)                      |
+| Field              | Value                                                                                             |
+|--------------------|---------------------------------------------------------------------------------------------------|
+| **Date**           | 2025-10-31                                                                                        |
+| **Implemented in** | [#52](https://github.com/typhoon-php/type/pull/52)                                                |
+| **Released in**    | [0.6.0](https://github.com/typhoon-php/type/releases/tag/0.6.0)                                   |
+| **Author**         | [@vudaltsov](https://github.com/vudaltsov), [@klimick](https://github.com/klimick)                |
