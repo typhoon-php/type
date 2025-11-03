@@ -182,15 +182,17 @@ var_dump(stringify($flipType));
 
 ### PHPDoc objects
 
-| PHPStan                           | Psalm                   | Typhoon                                               |
-|-----------------------------------|-------------------------|-------------------------------------------------------|
-| `Foo<string, float>`              | `Foo<string, float>`    | `namedObjectT(Foo::class, [stringT, floatT])`         |
-| `self<string, float>`             | `self<string, float>`   | `selfT([stringT, floatT])`                            |
-| `parent<string, float>`           | `parent<string, float>` | `parentT([stringT, floatT])`                          |
-| `static<string, float>`           | `static<string, float>` | `staticT([stringT, floatT])`                          |
-| `object{prop: string}`            | `object{prop: string}`  | `objectShapeT(['prop' => stringT])`                   |
-| `object{prop?: string}`           | `object{prop?: string}` | `objectShapeT(['prop' => optional(stringT))])`        |
-| ❌ (could be `object<T>{prop: T}`) | ❌                       | `objectT([$T = template('T')], ['prop' => $T->type])` |
+| PHPStan                           | Psalm                   | Typhoon                                                  |
+|-----------------------------------|-------------------------|----------------------------------------------------------|
+| `Foo<string, float>`              | `Foo<string, float>`    | `namedObjectT(Foo::class, [stringT, floatT])`            |
+| MyClass<covariant string>         | ❌                       | `namedObjectT(MyClass::class, [covariant(stringT)])`     |
+| MyClass<contravariant string>     | ❌                       | `namedObjectT(MyClass::class, [contravariant(stringT)])` |
+| `self<string, float>`             | `self<string, float>`   | `selfT([stringT, floatT])`                               |
+| `parent<string, float>`           | `parent<string, float>` | `parentT([stringT, floatT])`                             |
+| `static<string, float>`           | `static<string, float>` | `staticT([stringT, floatT])`                             |
+| `object{prop: string}`            | `object{prop: string}`  | `objectShapeT(['prop' => stringT])`                      |
+| `object{prop?: string}`           | `object{prop?: string}` | `objectShapeT(['prop' => optional(stringT))])`           |
+| ❌ (could be `object<T>{prop: T}`) | ❌                       | `objectT([$T = template('T')], ['prop' => $T->type])`    |
 
 ### PHPDoc callables
 

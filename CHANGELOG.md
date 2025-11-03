@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **[BC Break:]** Add an `untyped` type ([ADR](adr/001_untyped.md)).
 - Add `Fallback::callableBareT()` ([ADR](adr/003_bare_callable.md)).
+- Add support for call-site variance: `namedObjectT(MyClass::class, [covariant(stringT)])`.
 
 ### Changed
 
