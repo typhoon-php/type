@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BC Break:** Use `PHP_INT_MIN`, `PHP_INT_MAX` for `IntRangeT` limits instead of `null`.
 - **BC Break:** Rename `*DefaultT` to `*BareT`, `Visitor::*DefaultT()` to `Visitor::*BearT()` ([#56](https://github.com/typhoon-php/type/pull/56)).
 - **BC Break:** Remove `Reduced::callableBareT()` ([ADR](adr/003_bare_callable.md)).
-- **BC Break:** Make `Stringify` final and allow composition via a `Visitor<non-empty-string>` parameter.
+- **BC Break:** Make `Stringify` final and allow composition via a `Visitor<non-empty-string>` parameter ([#54](https://github.com/typhoon-php/type/pull/54)).
 
 ## [0.5.1]
 
