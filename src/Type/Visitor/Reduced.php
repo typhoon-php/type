@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
-use Typhoon\Type;
 use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
@@ -228,22 +227,5 @@ abstract class Reduced implements Visitor
         static $reduced = new UnionT([NullT::T, ScalarT::T, ArrayBareT::T, ObjectBareT::T, ResourceT::T]);
 
         return $reduced->accept($this);
-    }
-
-    /**
-     * @return TResult
-     */
-    final public function visit(Type $type): mixed
-    {
-        return $type->accept($this);
-    }
-
-    /**
-     * @param list<Type> $types
-     * @return ($types is non-empty-list ? non-empty-list<TResult> : list<TResult>)
-     */
-    final public function visitMultiple(array $types): array
-    {
-        return array_map($this->visit(...), $types);
     }
 }
