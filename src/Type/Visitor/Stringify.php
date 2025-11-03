@@ -557,7 +557,8 @@ final readonly class Stringify implements Visitor
         }
 
         return \sprintf('<%s>', implode(', ', array_map(
-            fn(TemplateArgument $arg): string => sprintf('%s%s',
+            fn(TemplateArgument $arg): string => \sprintf(
+                '%s%s',
                 $arg->variance === null ? '' : lcfirst($arg->variance->name) . ' ',
                 $this->unsafe($arg->type),
             ),

@@ -12,7 +12,7 @@ use Typhoon\Type\MixedT;
 use Typhoon\Type\TemplateArgument;
 
 $typeClass = '\\' . Type::class;
-$templateArguments = prop('templateArguments', \sprintf('list<\\%s>', TemplateArgument::class));
+$templateArguments = prop('templateArguments', \sprintf('list<\%s>', TemplateArgument::class));
 $bigDecimalClass = '\\' . BigDecimal::class;
 $closureClass = '\\' . \Closure::class;
 $maskClass = '\\' . Mask::class;
