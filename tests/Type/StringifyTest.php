@@ -163,6 +163,8 @@ final class StringifyTest extends TestCase
         yield [objectT, 'object'];
         yield [namedObjectT(\ArrayObject::class), 'ArrayObject'];
         yield [namedObjectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
+        yield [namedObjectT(\ArrayObject::class, [covariant(stringT)]), 'ArrayObject<covariant string>'];
+        yield [namedObjectT(\ArrayObject::class, [contravariant(stringT)]), 'ArrayObject<contravariant string>'];
         yield [selfT, 'self'];
         yield [selfT([stringT]), 'self<string>'];
         yield [parentT, 'parent'];

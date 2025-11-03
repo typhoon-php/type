@@ -322,6 +322,21 @@ const objectT = ObjectBareT::T;
 
 /**
  * @api
+ * @template T of object
+ * @param class-string<T> $class
+ * @param list<Type|TemplateArgument> $templateArguments
+ * @return NamedObjectT<T>
+ */
+function namedObjectT(string $class, array $templateArguments = []): NamedObjectT
+{
+    return new NamedObjectT($class, array_map(
+        static fn(Type|TemplateArgument $a): TemplateArgument => $a instanceof TemplateArgument ? $a : new TemplateArgument($a),
+        $templateArguments,
+    ));
+}
+
+/**
+ * @api
  * @param list<Template> $templates
  * @param list<class-string|NamedObjectT> $supertypes
  * @param array<non-empty-string, Type|Optional> $props
@@ -357,52 +372,49 @@ function objectShapeT(array $props = []): ObjectT
     return objectT(props: $props);
 }
 
-/**
- * @api
- * @template T of object
- * @param class-string<T> $class
- * @param list<Type> $templateArguments
- * @return NamedObjectT<T>
- */
-function namedObjectT(string $class, array $templateArguments = []): NamedObjectT
-{
-    return new NamedObjectT($class, $templateArguments);
-}
-
 const selfT = SelfBareT::T;
 
 /**
  * @api
- * @param list<Type> $templateArguments
+ * @param list<Type|TemplateArgument> $templateArguments
  * @return SelfT<object>
  */
 function selfT(array $templateArguments = []): SelfT
 {
-    return new SelfT($templateArguments);
+    return new SelfT(array_map(
+        static fn(Type|TemplateArgument $a): TemplateArgument => $a instanceof TemplateArgument ? $a : new TemplateArgument($a),
+        $templateArguments,
+    ));
 }
 
 const parentT = ParentBareT::T;
 
 /**
  * @api
- * @param list<Type> $templateArguments
+ * @param list<Type|TemplateArgument> $templateArguments
  * @return ParentT<object>
  */
 function parentT(array $templateArguments = []): ParentT
 {
-    return new ParentT($templateArguments);
+    return new ParentT(array_map(
+        static fn(Type|TemplateArgument $a): TemplateArgument => $a instanceof TemplateArgument ? $a : new TemplateArgument($a),
+        $templateArguments,
+    ));
 }
 
 const staticT = StaticBareT::T;
 
 /**
  * @api
- * @param list<Type> $templateArguments
+ * @param list<Type|TemplateArgument> $templateArguments
  * @return StaticT<object>
  */
 function staticT(array $templateArguments = []): StaticT
 {
-    return new StaticT($templateArguments);
+    return new StaticT(array_map(
+        static fn(Type|TemplateArgument $a): TemplateArgument => $a instanceof TemplateArgument ? $a : new TemplateArgument($a),
+        $templateArguments,
+    ));
 }
 
 const callableT = CallableBareT::T;
@@ -500,6 +512,16 @@ function classConstantMaskT(string $class, string $mask): ClassConstantMaskT
     return new ClassConstantMaskT($class, new Mask($mask));
 }
 
+function covariant(Type $type): TemplateArgument
+{
+    return new TemplateArgument($type, Variance::Covariant);
+}
+
+function contravariant(Type $type): TemplateArgument
+{
+    return new TemplateArgument($type, Variance::Contravariant);
+}
+
 /**
  * @api
  * @param non-empty-string $name
@@ -572,11 +594,14 @@ function templateIn(
  * @api
  * @param class-string $class
  * @param non-empty-string $name
- * @param list<Type> $templateArguments
+ * @param list<Type|TemplateArgument> $templateArguments
  */
 function aliasT(string $class, string $name, array $templateArguments = []): AliasT
 {
-    return new AliasT($class, $name, $templateArguments);
+    return new AliasT($class, $name, array_map(
+        static fn(Type|TemplateArgument $a): TemplateArgument => $a instanceof TemplateArgument ? $a : new TemplateArgument($a),
+        $templateArguments,
+    ));
 }
 
 /**
