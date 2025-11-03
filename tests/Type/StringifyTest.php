@@ -51,6 +51,8 @@ use Typhoon\Type\Visitor\Stringify;
 #[CoversFunction('Typhoon\Type\template')]
 #[CoversFunction('Typhoon\Type\templateOut')]
 #[CoversFunction('Typhoon\Type\templateIn')]
+#[CoversFunction('Typhoon\Type\covariant')]
+#[CoversFunction('Typhoon\Type\contravariant')]
 #[CoversFunction('Typhoon\Type\aliasT')]
 #[CoversFunction('Typhoon\Type\intersectionT')]
 #[CoversFunction('Typhoon\Type\andT')]

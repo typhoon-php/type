@@ -11,13 +11,15 @@ use PHPUnit\Framework\TestCase;
 final class ConstructorsTest extends TestCase
 {
     private const NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
+        'contravariant',
+        'covariant',
+        'of',
         'optional',
         'param',
-        'template',
-        'templateOut',
-        'templateIn',
-        'of',
         'stringify',
+        'template',
+        'templateIn',
+        'templateOut',
     ];
     private const NON_TYPE_CONSTRUCTOR_CONSTANTS = [
         'Typhoon\Type\MINUS_INF',
