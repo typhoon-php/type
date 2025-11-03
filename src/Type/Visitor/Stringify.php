@@ -24,6 +24,7 @@ use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\FloatT;
 use Typhoon\Type\FloatValueT;
+use Typhoon\Type\Internal\Reference;
 use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
@@ -75,8 +76,44 @@ use Typhoon\Type\VoidT;
  * @api
  * @implements Visitor<non-empty-string>
  */
-abstract class Stringify implements Visitor
+final readonly class Stringify implements Visitor
 {
+    /**
+     * @var Reference<?Visitor<non-empty-string>>|\WeakReference<Visitor<non-empty-string>>
+     */
+    private Reference|\WeakReference $next;
+
+    /**
+     * @param null|Visitor<non-empty-string>|\WeakReference<Visitor<non-empty-string>> $next
+     */
+    public function __construct(null|Visitor|\WeakReference $next = null)
+    {
+        $this->next = $next instanceof \WeakReference ? $next : new Reference($next);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function safe(Type $type): string
+    {
+        return $type->accept($this->next->get() ?? $this);
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function unsafe(Type $type): string
+    {
+        $string = $this->safe($type);
+
+        if ($string[0] === '(') {
+            /** @phpstan-ignore return.type */
+            return substr($string, 1, -1);
+        }
+
+        return $string;
+    }
+
     #[\Override]
     public function neverT(NeverT $type): string
     {
@@ -168,7 +205,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function bitmaskT(BitmaskT $type): string
     {
-        return \sprintf('int-mask-of<%s>', $this->stringifyUnwrap($type->intType));
+        return \sprintf('int-mask-of<%s>', $this->unsafe($type->intType));
     }
 
     #[\Override]
@@ -241,7 +278,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function classT(ClassT $type): string
     {
-        return \sprintf('class-string<%s>', $this->stringifyUnwrap($type->objectType));
+        return \sprintf('class-string<%s>', $this->unsafe($type->objectType));
     }
 
     #[\Override]
@@ -265,9 +302,9 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function listT(ListT $type): string
     {
-        $value = $this->stringifyUnwrap($type->valueType);
+        $value = $this->unsafe($type->valueType);
 
-        $elements = implode(', ', array_map($this->stringifyUnwrap(...), $type->elementTypes));
+        $elements = implode(', ', array_map($this->unsafe(...), $type->elementTypes));
 
         if ($value === 'never') {
             return \sprintf('list{%s}', $elements);
@@ -275,13 +312,13 @@ abstract class Stringify implements Visitor
 
         $name = $type->isNonEmpty ? 'non-empty-list' : 'list';
 
-        $unsealed = $value === 'mixed' ? '' : \sprintf('<%s>', $value);
+        $unsealed = \sprintf('<%s>', $value);
 
         if ($elements === '') {
             return $name . $unsealed;
         }
 
-        return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
+        return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed === '<mixed>' ? '' : $unsealed);
     }
 
     #[\Override]
@@ -293,7 +330,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function arrayT(ArrayT $type): string
     {
-        $value = $this->stringifyUnwrap($type->valueType);
+        $value = $this->unsafe($type->valueType);
 
         $elements = implode(', ', array_map($this->arrayElement(...), $type->elements));
 
@@ -303,10 +340,10 @@ abstract class Stringify implements Visitor
 
         $name = $type->isNonEmpty ? 'non-empty-array' : 'array';
 
-        $key = $this->stringifyUnwrap($type->keyType);
+        $key = $this->unsafe($type->keyType);
 
         $unsealed = match ($key) {
-            'array-key', 'int|string', 'string|int' => $value === 'mixed' ? '' : \sprintf('<%s>', $value),
+            'array-key', 'int|string', 'string|int' => \sprintf('<%s>', $value),
             default => \sprintf('<%s, %s>', $key, $value),
         };
 
@@ -314,20 +351,7 @@ abstract class Stringify implements Visitor
             return $name . $unsealed;
         }
 
-        return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed);
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function arrayElement(ArrayElement $element): string
-    {
-        return \sprintf(
-            '%s%s: %s',
-            \is_int($element->key) ? $element->key : $this->stringValueT(new StringValueT($element->key)),
-            $element->isOptional ? '?' : '',
-            $this->stringifyUnwrap($element->type),
-        );
+        return \sprintf('%s{%s, ...%s}', $name, $elements, $unsealed === '<mixed>' ? '' : $unsealed);
     }
 
     #[\Override]
@@ -339,7 +363,7 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function namedObjectT(NamedObjectT $type): string
     {
-        return $this->constructor($type->class, $type->templateArguments);
+        return $type->class . $this->templateArguments($type->templateArguments);
     }
 
     #[\Override]
@@ -352,53 +376,26 @@ abstract class Stringify implements Visitor
                 fn(NamedObjectT $inherited): string => ':' . $this->namedObjectT($inherited),
                 $type->supertypes,
             )),
-            $type->properties === [] ? '' : \sprintf('{%s}', implode(', ', array_map($this->property(...), $type->properties))),
-        );
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function property(Property $property): string
-    {
-        return \sprintf(
-            '%s%s: %s',
-            $property->name,
-            $property->isOptional ? '?' : '',
-            $this->stringifyUnwrap($property->type),
+            \sprintf('{%s}', implode(', ', array_map($this->property(...), $type->properties))),
         );
     }
 
     #[\Override]
     public function selfT(SelfT $type): string
     {
-        return $this->constructor('self', $type->templateArguments);
+        return 'self' . $this->templateArguments($type->templateArguments);
     }
 
     #[\Override]
     public function parentT(ParentT $type): string
     {
-        return $this->constructor('parent', $type->templateArguments);
+        return 'parent' . $this->templateArguments($type->templateArguments);
     }
 
     #[\Override]
     public function staticT(StaticT $type): string
     {
-        return $this->constructor('static', $type->templateArguments);
-    }
-
-    /**
-     * @param non-empty-string $name
-     * @param list<Type> $templateArguments
-     * @return non-empty-string
-     */
-    protected function constructor(string $name, array $templateArguments): string
-    {
-        if ($templateArguments === []) {
-            return $name;
-        }
-
-        return \sprintf('%s<%s>', $name, implode(', ', array_map($this->stringifyUnwrap(...), $templateArguments)));
+        return 'static' . $this->templateArguments($type->templateArguments);
     }
 
     #[\Override]
@@ -410,14 +407,10 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function iterableT(IterableT $type): string
     {
-        $key = $this->stringifyUnwrap($type->keyType);
-        $value = $this->stringifyUnwrap($type->valueType);
+        $key = $this->unsafe($type->keyType);
+        $value = $this->unsafe($type->valueType);
 
         if ($key === 'mixed') {
-            if ($value === 'mixed') {
-                return 'iterable';
-            }
-
             return \sprintf('iterable<%s>', $value);
         }
 
@@ -431,73 +424,21 @@ abstract class Stringify implements Visitor
     }
 
     #[\Override]
-    public function callableT(CallableT $type): string
+    public function callableT(CallableT|ClosureT $type): string
     {
-        return $this->callables($type);
+        return \sprintf(
+            '(%s%s(%s): %s)',
+            $type instanceof CallableT ? 'callable' : 'Closure',
+            $this->templates($type->templates),
+            implode(', ', array_map($this->parameter(...), $type->parameters)),
+            $this->safe($type->returnType),
+        );
     }
 
     #[\Override]
     public function closureT(ClosureT $type): string
     {
-        return $this->callables($type);
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function callables(CallableT|ClosureT $type): string
-    {
-        $prefix = $type instanceof CallableT ? 'callable' : 'Closure';
-
-        $string = \sprintf(
-            '(%s%s(%s): %s)',
-            $prefix,
-            $this->templates($type->templates),
-            implode(', ', array_map($this->parameter(...), $type->parameters)),
-            $this->stringify($type->returnType),
-        );
-
-        if ($string === "({$prefix}(): mixed)") {
-            return $prefix;
-        }
-
-        return $string;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    protected function parameter(Parameter $parameter): string
-    {
-        $string = $this->stringify($parameter->type);
-
-        if ($parameter->name !== null) {
-            $string .= ' ';
-        }
-
-        if ($parameter->isPassedByReference) {
-            $string .= '&';
-
-            // todo $parameter->outType
-        }
-
-        if ($parameter->isVariadic) {
-            $string .= '...';
-        }
-
-        if ($parameter->name !== null) {
-            $string .= '$' . $parameter->name;
-        }
-
-        if ($parameter->hasDefault) {
-            $string .= '=';
-
-            if ($parameter->defaultType !== null) {
-                $string .= $this->stringify($parameter->defaultType);
-            }
-        }
-
-        return $string;
+        return $this->callableT($type);
     }
 
     #[\Override]
@@ -509,13 +450,13 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function intersectionT(IntersectionT $type): string
     {
-        return \sprintf('%s', implode('&', array_map($this->stringify(...), $type->types)));
+        return \sprintf('(%s)', implode('&', array_map($this->safe(...), $type->types)));
     }
 
     #[\Override]
     public function unionT(UnionT $type): string
     {
-        return \sprintf('(%s)', implode('|', array_map($this->stringify(...), $type->types)));
+        return \sprintf('(%s)', implode('|', array_map($this->safe(...), $type->types)));
     }
 
     #[\Override]
@@ -545,19 +486,19 @@ abstract class Stringify implements Visitor
     #[\Override]
     public function keyOfT(KeyOfT $type): string
     {
-        return \sprintf('key-of<%s>', $this->stringifyUnwrap($type->arrayType));
+        return \sprintf('key-of<%s>', $this->unsafe($type->arrayType));
     }
 
     #[\Override]
     public function valueOfT(ValueOfT $type): string
     {
-        return \sprintf('value-of<%s>', $this->stringifyUnwrap($type->arrayType));
+        return \sprintf('value-of<%s>', $this->unsafe($type->arrayType));
     }
 
     #[\Override]
     public function offsetT(OffsetT $type): string
     {
-        return \sprintf('%s[%s]', $this->stringify($type->arrayType), $this->stringifyUnwrap($type->keyType));
+        return \sprintf('%s[%s]', $this->safe($type->arrayType), $this->unsafe($type->keyType));
     }
 
     #[\Override]
@@ -565,8 +506,8 @@ abstract class Stringify implements Visitor
     {
         return \sprintf(
             '(%s is %s)',
-            $this->stringify($type->leftType),
-            $this->stringify($type->rightType),
+            $this->safe($type->leftType),
+            $this->safe($type->rightType),
         );
     }
 
@@ -575,53 +516,22 @@ abstract class Stringify implements Visitor
     {
         return \sprintf(
             '(%s ? %s : %s)',
-            $this->stringify($type->conditionType),
-            $this->stringify($type->thenType),
-            $this->stringify($type->elseType),
+            $this->safe($type->conditionType),
+            $this->safe($type->thenType),
+            $this->safe($type->elseType),
         );
     }
 
     #[\Override]
     public function aliasT(AliasT $type): string
     {
-        return $this->constructor(\sprintf('%s@%s', $type->class, $type->name), $type->templateArguments);
+        return \sprintf('%s@%s%s', $type->class, $type->name, $this->templateArguments($type->templateArguments));
     }
 
     #[\Override]
     public function templateT(TemplateT $type): string
     {
         return $type->name;
-    }
-
-    /**
-     * @param list<Template> $templates
-     */
-    protected function templates(array $templates): string
-    {
-        if ($templates === []) {
-            return '';
-        }
-
-        return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
-    }
-
-    protected function template(Template $template): string
-    {
-        $lowerBound = $this->stringifyUnwrap($template->lowerBound);
-        $upperBound = $this->stringifyUnwrap($template->upperBound);
-
-        return \sprintf(
-            '%s%s%s%s%s',
-            match ($template->variance) {
-                Variance::Invariant => '',
-                Variance::Covariant => 'out ',
-                Variance::Contravariant => 'in ',
-            },
-            $template->name,
-            $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
-            $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
-            $template->default === null ? '' : ' = ' . $this->stringifyUnwrap($template->default),
-        );
     }
 
     #[\Override]
@@ -637,23 +547,109 @@ abstract class Stringify implements Visitor
     }
 
     /**
-     * @return non-empty-string
+     * @param list<Type> $templateArguments
      */
-    private function stringify(Type $type): string
+    public function templateArguments(array $templateArguments): string
     {
-        return $type->accept($this);
+        if ($templateArguments === []) {
+            return '';
+        }
+
+        return \sprintf('<%s>', implode(', ', array_map($this->unsafe(...), $templateArguments)));
+    }
+
+    /**
+     * @param list<Template> $templates
+     */
+    public function templates(array $templates): string
+    {
+        if ($templates === []) {
+            return '';
+        }
+
+        return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
     }
 
     /**
      * @return non-empty-string
      */
-    private function stringifyUnwrap(Type $type): string
+    public function template(Template $template): string
     {
-        $string = $type->accept($this);
+        $lowerBound = $this->unsafe($template->lowerBound);
+        $upperBound = $this->unsafe($template->upperBound);
 
-        if ($string[0] === '(') {
-            /** @phpstan-ignore return.type */
-            return substr($string, 1, -1);
+        /** @phpstan-ignore return.type */
+        return \sprintf(
+            '%s%s%s%s%s',
+            match ($template->variance) {
+                Variance::Invariant => '',
+                Variance::Covariant => 'out ',
+                Variance::Contravariant => 'in ',
+            },
+            $template->name,
+            $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
+            $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
+            $template->default === null ? '' : ' = ' . $this->unsafe($template->default),
+        );
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function arrayElement(ArrayElement $element): string
+    {
+        return \sprintf(
+            '%s%s: %s',
+            $this->safe(\is_int($element->key) ? new IntValueT($element->key) : new StringValueT($element->key)),
+            $element->isOptional ? '?' : '',
+            $this->unsafe($element->type),
+        );
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function property(Property $property): string
+    {
+        return \sprintf(
+            '%s%s: %s',
+            $property->name,
+            $property->isOptional ? '?' : '',
+            $this->unsafe($property->type),
+        );
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    public function parameter(Parameter $parameter): string
+    {
+        $string = $this->safe($parameter->type);
+
+        if ($parameter->name !== null) {
+            $string .= ' ';
+        }
+
+        if ($parameter->isPassedByReference) {
+            $string .= '&';
+
+            // todo $parameter->outType
+        }
+
+        if ($parameter->isVariadic) {
+            $string .= '...';
+        }
+
+        if ($parameter->name !== null) {
+            $string .= '$' . $parameter->name;
+        }
+
+        if ($parameter->hasDefault) {
+            $string .= '=';
+
+            if ($parameter->defaultType !== null) {
+                $string .= $this->safe($parameter->defaultType);
+            }
         }
 
         return $string;
