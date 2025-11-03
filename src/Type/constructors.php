@@ -322,6 +322,18 @@ const objectT = ObjectBareT::T;
 
 /**
  * @api
+ * @template T of object
+ * @param class-string<T> $class
+ * @param list<Type> $templateArguments
+ * @return NamedObjectT<T>
+ */
+function namedObjectT(string $class, array $templateArguments = []): NamedObjectT
+{
+    return new NamedObjectT($class, $templateArguments);
+}
+
+/**
+ * @api
  * @param list<Template> $templates
  * @param list<class-string|NamedObjectT> $supertypes
  * @param array<non-empty-string, Type|Optional> $props
@@ -355,18 +367,6 @@ function objectT(array $templates = [], array $supertypes = [], array $props = [
 function objectShapeT(array $props = []): ObjectT
 {
     return objectT(props: $props);
-}
-
-/**
- * @api
- * @template T of object
- * @param class-string<T> $class
- * @param list<Type> $templateArguments
- * @return NamedObjectT<T>
- */
-function namedObjectT(string $class, array $templateArguments = []): NamedObjectT
-{
-    return new NamedObjectT($class, $templateArguments);
 }
 
 const selfT = SelfBareT::T;
