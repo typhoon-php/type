@@ -19,7 +19,7 @@ use Typhoon\Type;
 final readonly class StaticT implements Type
 {
     /**
-     * @param list<Type> $templateArguments
+     * @param list<TemplateArgument> $templateArguments
      */
     public function __construct(
         public array $templateArguments = [],

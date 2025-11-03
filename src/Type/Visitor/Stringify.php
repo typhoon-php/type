@@ -61,6 +61,7 @@ use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
 use Typhoon\Type\Template;
+use Typhoon\Type\TemplateArgument;
 use Typhoon\Type\TemplateT;
 use Typhoon\Type\TernaryT;
 use Typhoon\Type\TrueT;
@@ -547,7 +548,7 @@ final readonly class Stringify implements Visitor
     }
 
     /**
-     * @param list<Type> $templateArguments
+     * @param list<TemplateArgument> $templateArguments
      */
     public function templateArguments(array $templateArguments): string
     {
@@ -555,7 +556,14 @@ final readonly class Stringify implements Visitor
             return '';
         }
 
-        return \sprintf('<%s>', implode(', ', array_map($this->unsafe(...), $templateArguments)));
+        return \sprintf('<%s>', implode(', ', array_map(
+            fn(TemplateArgument $arg): string => \sprintf(
+                '%s%s',
+                $arg->variance === null ? '' : lcfirst($arg->variance->name) . ' ',
+                $this->unsafe($arg->type),
+            ),
+            $templateArguments,
+        )));
     }
 
     /**

@@ -9,8 +9,10 @@ use Typhoon\Type;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\Mask;
 use Typhoon\Type\MixedT;
+use Typhoon\Type\TemplateArgument;
 
 $typeClass = '\\' . Type::class;
+$templateArguments = prop('templateArguments', \sprintf('list<\%s>', TemplateArgument::class));
 $bigDecimalClass = '\\' . BigDecimal::class;
 $closureClass = '\\' . \Closure::class;
 $maskClass = '\\' . Mask::class;
@@ -58,11 +60,11 @@ return [
     constr('array', 'T', [tpl('T', 'array')], [prop('keyType', $typeClass, $arrayKeyT), prop('valueType', $typeClass, $mixedT), prop('elements', 'list<ArrayElement>'), prop('isNonEmpty', 'bool')]),
     // object
     single('objectBare', 'object', 'object()'),
-    constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), prop('templateArguments', "list<{$typeClass}>")], 'object(supertypes: [$t])'),
+    constr('namedObject', 'T', [tpl('T', 'object')], [prop('class', 'class-string<T>'), $templateArguments], 'object(supertypes: [$t])'),
     constr('object', 'T', [tpl('T', 'object')], [prop('templates', 'list<Template>'), prop('supertypes', 'list<NamedObjectT>'), prop('properties', 'list<Property>')]),
-    constr('self', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
-    constr('parent', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
-    constr('static', 'T', [tpl('T', 'object')], [prop('templateArguments', "list<{$typeClass}>")]),
+    constr('self', 'T', [tpl('T', 'object')], [$templateArguments]),
+    constr('parent', 'T', [tpl('T', 'object')], [$templateArguments]),
+    constr('static', 'T', [tpl('T', 'object')], [$templateArguments]),
     // iterable
     single('iterableBare', 'iterable', 'iterable()'),
     constr('iterable', 'iterable<K, V>', [tpl('K'), tpl('V')], [prop('keyType', "{$typeClass}<K>", $mixedT), prop('valueType', "{$typeClass}<V>", $mixedT)]),
@@ -90,7 +92,7 @@ return [
     // ternary
     constr('ternary', 'T', [tpl('T', 'mixed')], [prop('conditionType', $typeClass), prop('thenType', $typeClass), prop('elseType', $typeClass)]),
     // alias
-    constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), prop('templateArguments', "list<{$typeClass}>")]),
+    constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), $templateArguments]),
     // template
     // todo internal constructor
     constr('template', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),

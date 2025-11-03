@@ -21,7 +21,7 @@ final readonly class AliasT implements Type
     /**
      * @param class-string $class
      * @param non-empty-string $name
-     * @param list<Type> $templateArguments
+     * @param list<TemplateArgument> $templateArguments
      */
     public function __construct(
         public string $class,

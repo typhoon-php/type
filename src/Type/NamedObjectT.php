@@ -20,7 +20,7 @@ final readonly class NamedObjectT implements Type
 {
     /**
      * @param class-string<T> $class
-     * @param list<Type> $templateArguments
+     * @param list<TemplateArgument> $templateArguments
      */
     public function __construct(
         public string $class,
