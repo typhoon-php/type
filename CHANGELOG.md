@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.0]
+## [0.6.0] 2025-11-05
 
 ### Accepted ADRs
  
@@ -13,8 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [ADR-002: Address Floating-Point Precision](adr/002_float_precision.md)
 - [ADR-003: Bare callable type has no sound PHPDoc representation](adr/003_bare_callable.md)
 
+### Fixed
+
+- Stringify alias template arguments.
+- Add `.0` to floats with zero scale.
+
 ### Added
 
+- Add a reduced representation for the `mixed` type.
 - **[BC Break:]** Add an `untyped` type ([ADR](adr/001_untyped.md)).
 - Add `fromReflection(?ReflectionType): Type` function.
 
@@ -32,16 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BC Break:** Remove `Reduced::visit()` and `visitMultiple()` — let developer implement them.
 - **BC Break:** Remove `of()` for now — it cannot infer types correctly anyway.
 
-## [0.5.1]
-
 ### Added
-
-- Add a reduced representation for the `mixed` type.
-
-### Fixed
-
-- Stringify alias template arguments.
-- Stringified float never looks like an int anymore: .0 is added when needed.
 
 ## [0.5.0] 2025-10-30
 
