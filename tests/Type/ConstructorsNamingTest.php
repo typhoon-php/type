@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 final class ConstructorsNamingTest extends TestCase
 {
     private const NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
+        'fromReflection',
         'optional',
         'param',
         'stringify',
