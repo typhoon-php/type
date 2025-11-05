@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Stringify alias template arguments.
-- Add `.0` to floats with zero scale.
+- Add `.0` to stringified floats with zero scale.
 
 ### Added
 
