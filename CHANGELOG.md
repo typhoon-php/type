@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **[BC Break:]** Add an `untyped` type ([ADR](adr/001_untyped.md)).
-- Add `Fallback::callableBareT()` ([ADR](adr/003_bare_callable.md)).
 
 ### Changed
 
@@ -24,9 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BC Break:** Move `Typhoon\Type\Type` interface to `Typhoon\Type` ([#51](https://github.com/typhoon-php/type/pull/51)).
 - **BC Break:** Use `PHP_INT_MIN`, `PHP_INT_MAX` for `IntRangeT` limits instead of `null`.
 - **BC Break:** Rename `*DefaultT` to `*BareT`, `Visitor::*DefaultT()` to `Visitor::*BearT()` ([#56](https://github.com/typhoon-php/type/pull/56)).
-- **BC Break:** Remove `Reduced::callableBareT()` ([ADR](adr/003_bare_callable.md)).
+- **BC Break:** Move `Reduced::callableBareT()` to `Fallback::callableBareT()` ([ADR](adr/003_bare_callable.md)).
 - **BC Break:** Make `Stringify` final and allow composition via a `Visitor<non-empty-string>` parameter ([#54](https://github.com/typhoon-php/type/pull/54)).
+
+### Removed
+
 - **BC Break:** Remove `Reduced::visit()` and `visitMultiple()` — let developer implement them.
+- **BC Break:** Remove `of()` for now — it cannot infer types correctly anyway.
 
 ## [0.5.1]
 

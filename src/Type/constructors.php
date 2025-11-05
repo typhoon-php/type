@@ -675,28 +675,3 @@ function ternaryT(Type $condition, Type $then, Type $else): TernaryT
 }
 
 const mixedT = MixedT::T;
-
-/**
- * @api
- * @template T
- * @param T $value
- * @return Type<T>
- */
-function of(mixed $value): Type
-{
-    /** @phpstan-ignore match.unhandled, return.type */
-    return match (true) {
-        $value === null => nullT,
-        $value === false => falseT,
-        $value === true => trueT,
-        \is_int($value) => intT($value),
-        \is_float($value) => floatT($value),
-        \is_string($value) => stringT($value),
-        \is_array($value) => array_is_list($value)
-            ? listShapeT(array_map(of(...), $value))
-            : arrayShapeT(array_map(of(...), $value)),
-        /** @phpstan-ignore argument.type, argument.templateType */
-        \is_object($value) => namedObjectT($value::class),
-        \is_resource($value) => resourceT,
-    };
-}
