@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add a reduced representation for the `mixed` type.
-- **[BC Break:]** Add an `untyped` type ([ADR](adr/001_untyped.md)).
+- **BC Break:** Add an `untyped` type ([ADR](adr/001_untyped.md)).
 - Add `fromReflection(?ReflectionType): Type` function.
 
 ### Changed
