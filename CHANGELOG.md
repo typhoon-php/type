@@ -38,8 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BC Break:** Remove `Reduced::visit()` and `visitMultiple()` — let developer implement them.
 - **BC Break:** Remove `of()` for now — it cannot infer types correctly anyway.
 
-### Added
-
 ## [0.5.0] 2025-10-30
 
 The library was rewritten from scratch with a new philosophy in mind:
