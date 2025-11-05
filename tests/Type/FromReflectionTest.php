@@ -7,6 +7,7 @@ namespace Typhoon\Type;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Typhoon\Type;
 
 #[CoversFunction('Typhoon\Type\fromReflection')]
 final class FromReflectionTest extends TestCase
@@ -26,7 +27,7 @@ final class FromReflectionTest extends TestCase
      */
     public static function provideTypesCases(): iterable
     {
-        yield [static fn(): null => null, nullT];
+        yield [static fn() => 1, UntypedT::T];
         yield [static function (): void {}, voidT];
         yield [static fn(): never => throw new \LogicException(), neverT];
         yield [static fn(): false => false, falseT];
@@ -72,14 +73,6 @@ final class FromReflectionTest extends TestCase
                 namedObjectT(\Traversable::class),
             ),
         ];
-    }
-
-    public function testItReturnsNullIfReflectionIsNull(): void
-    {
-        $type = fromReflection(null);
-
-        /** @phpstan-ignore staticMethod.alreadyNarrowedType */
-        self::assertNull($type);
     }
 
     public function testItThrowsIfNameIsTrait(): void
