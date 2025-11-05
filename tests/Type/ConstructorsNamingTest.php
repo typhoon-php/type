@@ -8,23 +8,18 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 
 #[CoversNothing]
-final class ConstructorsTest extends TestCase
+final class ConstructorsNamingTest extends TestCase
 {
     private const NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
         'optional',
         'param',
-        'template',
-        'templateOut',
-        'templateIn',
-        'of',
         'stringify',
-    ];
-    private const NON_TYPE_CONSTRUCTOR_CONSTANTS = [
-        'Typhoon\Type\MINUS_INF',
-        'Typhoon\Type\MINUS_INF_NAME',
+        'template',
+        'templateIn',
+        'templateOut',
     ];
 
-    public function testAllSuffixedWithT(): void
+    public function testFunctionsSuffixedWithT(): void
     {
         foreach (get_defined_functions()['user'] as $function) {
             if (!str_starts_with($function, 'typhoon\type\\')) {
@@ -39,17 +34,14 @@ final class ConstructorsTest extends TestCase
 
             self::assertStringEndsWith('T', $shortName);
         }
+    }
 
+    public function testConstantsSuffixedWithT(): void
+    {
         foreach (get_defined_constants(categorize: true)['user'] as $constant => $value) {
-            if (!str_starts_with($constant, 'Typhoon\Type\\')) {
-                continue;
+            if (str_starts_with($constant, 'Typhoon\Type\\')) {
+                self::assertStringEndsWith('T', $constant);
             }
-
-            if (\in_array($constant, self::NON_TYPE_CONSTRUCTOR_CONSTANTS, true)) {
-                continue;
-            }
-
-            self::assertStringEndsWith('T', $constant);
         }
     }
 }
