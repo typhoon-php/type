@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **BC Break:** Rename `*DefaultT` to `*BareT`, `Visitor::*DefaultT()` to `Visitor::*BearT()` ([#56](https://github.com/typhoon-php/type/pull/56)).
 - **BC Break:** Move `Reduced::callableBareT()` to `Fallback::callableBareT()` ([ADR](adr/003_bare_callable.md)).
 - **BC Break:** Make `Stringify` final and allow composition via a `Visitor<non-empty-string>` parameter ([#54](https://github.com/typhoon-php/type/pull/54)).
+- **BC Break:** Add `Template::new()`, `Template::factory()` constructors, make primary private.
 
 ### Removed
 
