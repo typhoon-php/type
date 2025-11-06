@@ -50,7 +50,11 @@ final readonly class Template
     ): \Closure {
         $type = new TemplateT($name);
 
-        return static fn(Type $lowerBound = NeverT::T, Type $upperBound = MixedT::T, ?Type $default = null): self => new self(
+        return static fn(
+            Type $lowerBound = NeverT::T,
+            Type $upperBound = MixedT::T,
+            ?Type $default = null,
+        ): self => new self(
             name: $name,
             variance: $variance,
             lowerBound: $lowerBound,
