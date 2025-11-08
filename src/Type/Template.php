@@ -7,6 +7,7 @@ namespace Typhoon\Type;
 use Typhoon\Type;
 
 /**
+ * @api
  * @template TVariance of Variance = Variance
  */
 final readonly class Template
