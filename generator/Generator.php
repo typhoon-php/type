@@ -86,27 +86,6 @@ final readonly class Generator
             }
         }
 
-        $visitor->addMethod('visit')
-            ->setFinal()
-            ->setComment('@return TResult')
-            ->setParameters([(new Parameter('type'))->setType(TypeI::class)])
-            ->setReturnType('mixed')
-            ->setBody('return $type->accept($this);');
-
-        $type = TypeI::class;
-
-        $visitor->addMethod('visitMultiple')
-            ->setFinal()
-            ->setComment(
-                <<<PHPDOC
-                    @param list<\\{$type}> \$types
-                    @return (\$types is non-empty-list ? non-empty-list<TResult> : list<TResult>)
-                    PHPDOC,
-            )
-            ->setParameters([(new Parameter('types'))->setType('array')])
-            ->setReturnType('array')
-            ->setBody('return array_map($this->visit(...), $types);');
-
         $this->write($this->createNamespace('Visitor')->add($visitor));
     }
 
