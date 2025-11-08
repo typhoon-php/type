@@ -570,17 +570,6 @@ function templateIn(
 
 /**
  * @api
- * @param class-string $class
- * @param non-empty-string $name
- * @param list<Type> $templateArguments
- */
-function aliasT(string $class, string $name, array $templateArguments = []): AliasT
-{
-    return new AliasT($class, $name, $templateArguments);
-}
-
-/**
- * @api
  * @no-named-arguments
  * @param Type|list<Type> $types
  */

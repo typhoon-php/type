@@ -6,6 +6,8 @@ namespace Typhoon\Type\Generator\Spec;
 
 use Brick\Math\BigDecimal;
 use Typhoon\Type;
+use Typhoon\Type\AliasAtClassT;
+use Typhoon\Type\AliasAtFunctionT;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\Mask;
 use Typhoon\Type\MixedT;
@@ -91,7 +93,9 @@ return [
     // ternary
     constr('ternary', 'T', [tpl('T', 'mixed')], [prop('conditionType', $typeClass), prop('thenType', $typeClass), prop('elseType', $typeClass)]),
     // alias
-    constr('alias', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string'), $templateArgumentsProp]),
+    constr('aliasAtFunction', 'T', [tpl('T')], [prop('function', 'non-empty-string'), prop('name', 'non-empty-string')], 'alias($t)'),
+    constr('aliasAtClass', 'T', [tpl('T')], [prop('class', 'class-string'), prop('name', 'non-empty-string')], 'alias($t)'),
+    constr('alias', 'T', [tpl('T')], [prop('alias', \sprintf('\%s|\%s', AliasAtFunctionT::class, AliasAtClassT::class)), $templateArgumentsProp]),
     // template
     // todo internal constructor
     constr('template', 'T', [tpl('T')], [prop('name', 'non-empty-string')]),

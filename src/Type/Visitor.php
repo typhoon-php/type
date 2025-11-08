@@ -292,6 +292,16 @@ interface Visitor
     /**
      * @return TResult
      */
+    public function aliasAtFunctionT(AliasAtFunctionT $type): mixed;
+
+    /**
+     * @return TResult
+     */
+    public function aliasAtClassT(AliasAtClassT $type): mixed;
+
+    /**
+     * @return TResult
+     */
     public function aliasT(AliasT $type): mixed;
 
     /**

@@ -16,19 +16,20 @@ use Typhoon\Type;
  * @implements Type<T>
  * @codeCoverageIgnore
  */
-final readonly class AliasT implements Type
+final readonly class AliasAtClassT implements Type
 {
     /**
-     * @param list<Type> $templateArguments
+     * @param class-string $class
+     * @param non-empty-string $name
      */
     public function __construct(
-        public AliasAtFunctionT|AliasAtClassT $alias,
-        public array $templateArguments = [],
+        public string $class,
+        public string $name,
     ) {}
 
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->aliasT($this);
+        return $visitor->aliasAtClassT($this);
     }
 }

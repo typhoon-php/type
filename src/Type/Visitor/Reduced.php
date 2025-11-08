@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Visitor;
 
+use Typhoon\Type\AliasAtClassT;
+use Typhoon\Type\AliasAtFunctionT;
+use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
@@ -209,6 +212,18 @@ trait Reduced
     public function valueOfT(ValueOfT $type): mixed
     {
         return $this->offsetT(new OffsetT($type->arrayType, new KeyOfT($type->arrayType)));
+    }
+
+    #[\Override]
+    public function aliasAtFunctionT(AliasAtFunctionT $type): mixed
+    {
+        return (new AliasT($type))->accept($this);
+    }
+
+    #[\Override]
+    public function aliasAtClassT(AliasAtClassT $type): mixed
+    {
+        return (new AliasT($type))->accept($this);
     }
 
     #[\Override]

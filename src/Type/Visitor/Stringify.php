@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type;
+use Typhoon\Type\AliasAtClassT;
+use Typhoon\Type\AliasAtFunctionT;
 use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayElement;
@@ -523,9 +525,21 @@ final readonly class Stringify implements Visitor
     }
 
     #[\Override]
+    public function aliasAtFunctionT(AliasAtFunctionT $type): mixed
+    {
+        return \sprintf('%s@%s()', $type->name, $type->function);
+    }
+
+    #[\Override]
+    public function aliasAtClassT(AliasAtClassT $type): mixed
+    {
+        return \sprintf('%s@%s', $type->name, $type->class);
+    }
+
+    #[\Override]
     public function aliasT(AliasT $type): string
     {
-        return \sprintf('%s@%s%s', $type->class, $type->name, $this->templateArguments($type->templateArguments));
+        return $this->unsafe($type->alias) . $this->templateArguments($type->templateArguments);
     }
 
     #[\Override]
