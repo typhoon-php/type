@@ -63,7 +63,7 @@
         "fixcs": "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --diff --verbose",
         "generate": [
             "@php generator/generate.php",
-            "@fixcs",
+            "tools/php-cs-fixer/vendor/bin/php-cs-fixer fix --quiet",
             "git add ."
         ],
         "infection": "tools/infection/vendor/bin/infection --show-mutations",
