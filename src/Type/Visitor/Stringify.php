@@ -26,7 +26,6 @@ use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\FloatT;
 use Typhoon\Type\FloatValueT;
-use Typhoon\Type\Internal\Reference;
 use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
@@ -81,24 +80,18 @@ use Typhoon\Type\VoidT;
 final readonly class Stringify implements Visitor
 {
     /**
-     * @var Reference<?Visitor<non-empty-string>>|\WeakReference<Visitor<non-empty-string>>
+     * @param ?Visitor<non-empty-string> $next
      */
-    private Reference|\WeakReference $next;
-
-    /**
-     * @param null|Visitor<non-empty-string>|\WeakReference<Visitor<non-empty-string>> $next
-     */
-    public function __construct(null|Visitor|\WeakReference $next = null)
-    {
-        $this->next = $next instanceof \WeakReference ? $next : new Reference($next);
-    }
+    public function __construct(
+        private ?Visitor $next = null,
+    ) {}
 
     /**
      * @return non-empty-string
      */
     public function safe(Type $type): string
     {
-        return $type->accept($this->next->get() ?? $this);
+        return $type->accept($this->next ?? $this);
     }
 
     /**
@@ -106,7 +99,7 @@ final readonly class Stringify implements Visitor
      */
     public function unsafe(Type $type): string
     {
-        $string = $this->safe($type);
+        $string = $type->accept($this->next ?? $this);
 
         if ($string[0] === '(') {
             /** @phpstan-ignore return.type */
