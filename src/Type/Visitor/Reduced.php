@@ -61,7 +61,7 @@ abstract class Reduced implements Visitor
         /** @var UnionT */
         static $reduced = new UnionT([FalseT::T, TrueT::T]);
 
-        return $reduced->accept($this);
+        return $this->unionT($reduced);
     }
 
     #[\Override]
@@ -70,13 +70,13 @@ abstract class Reduced implements Visitor
         /** @var IntRangeT */
         static $reduced = new IntRangeT();
 
-        return $reduced->accept($this);
+        return $this->intRangeT($reduced);
     }
 
     #[\Override]
     public function intValueT(IntValueT $type): mixed
     {
-        return (new IntRangeT($type->value, $type->value))->accept($this);
+        return $this->intRangeT(new IntRangeT($type->value, $type->value));
     }
 
     #[\Override]
@@ -85,7 +85,7 @@ abstract class Reduced implements Visitor
         /** @var IntRangeT */
         static $reduced = new IntRangeT(max: -1);
 
-        return $reduced->accept($this);
+        return $this->intRangeT($reduced);
     }
 
     #[\Override]
@@ -94,7 +94,7 @@ abstract class Reduced implements Visitor
         /** @var IntRangeT */
         static $reduced = new IntRangeT(max: 0);
 
-        return $reduced->accept($this);
+        return $this->intRangeT($reduced);
     }
 
     #[\Override]
@@ -103,7 +103,7 @@ abstract class Reduced implements Visitor
         /** @var UnionT */
         static $reduced = new UnionT([NegativeIntT::T, PositiveIntT::T]);
 
-        return $reduced->accept($this);
+        return $this->unionT($reduced);
     }
 
     #[\Override]
@@ -112,7 +112,7 @@ abstract class Reduced implements Visitor
         /** @var IntRangeT */
         static $reduced = new IntRangeT(min: 0);
 
-        return $reduced->accept($this);
+        return $this->intRangeT($reduced);
     }
 
     #[\Override]
@@ -121,7 +121,7 @@ abstract class Reduced implements Visitor
         /** @var IntRangeT */
         static $reduced = new IntRangeT(min: 1);
 
-        return $reduced->accept($this);
+        return $this->intRangeT($reduced);
     }
 
     #[\Override]
@@ -130,13 +130,13 @@ abstract class Reduced implements Visitor
         /** @var FloatRangeT */
         static $reduced = new FloatRangeT();
 
-        return $reduced->accept($this);
+        return $this->floatRangeT($reduced);
     }
 
     #[\Override]
     public function floatValueT(FloatValueT $type): mixed
     {
-        return (new FloatRangeT($type->value, $type->value))->accept($this);
+        return $this->floatRangeT(new FloatRangeT($type->value, $type->value));
     }
 
     #[\Override]
@@ -145,7 +145,7 @@ abstract class Reduced implements Visitor
         /** @var UnionT */
         static $reduced = new UnionT([IntT::T, StringT::T]);
 
-        return $reduced->accept($this);
+        return $this->unionT($reduced);
     }
 
     #[\Override]
@@ -154,7 +154,7 @@ abstract class Reduced implements Visitor
         /** @var UnionT */
         static $reduced = new UnionT([IntT::T, FloatT::T, NumericStringT::T]);
 
-        return $reduced->accept($this);
+        return $this->unionT($reduced);
     }
 
     #[\Override]
@@ -163,7 +163,7 @@ abstract class Reduced implements Visitor
         /** @var UnionT */
         static $reduced = new UnionT([BoolT::T, IntT::T, FloatT::T, StringT::T]);
 
-        return $reduced->accept($this);
+        return $this->unionT($reduced);
     }
 
     #[\Override]
@@ -172,7 +172,7 @@ abstract class Reduced implements Visitor
         /** @var ArrayT */
         static $reduced = new ArrayT();
 
-        return $reduced->accept($this);
+        return $this->arrayT($reduced);
     }
 
     #[\Override]
@@ -181,13 +181,13 @@ abstract class Reduced implements Visitor
         /** @var ObjectT */
         static $reduced = new ObjectT();
 
-        return $reduced->accept($this);
+        return $this->objectT($reduced);
     }
 
     #[\Override]
     public function namedObjectT(NamedObjectT $type): mixed
     {
-        return (new ObjectT(supertypes: [$type]))->accept($this);
+        return $this->objectT(new ObjectT(supertypes: [$type]));
     }
 
     #[\Override]
@@ -196,28 +196,28 @@ abstract class Reduced implements Visitor
         /** @var IterableT */
         static $reduced = new IterableT();
 
-        return $reduced->accept($this);
+        return $this->iterableT($reduced);
     }
 
     #[\Override]
     public function closureT(ClosureT $type): mixed
     {
-        return (new IntersectionT([
+        return $this->intersectionT(new IntersectionT([
             new NamedObjectT(\Closure::class),
             new CallableT($type->templates, $type->parameters, $type->returnType),
-        ]))->accept($this);
+        ]));
     }
 
     #[\Override]
     public function valueOfT(ValueOfT $type): mixed
     {
-        return (new OffsetT($type->arrayType, new KeyOfT($type->arrayType)))->accept($this);
+        return $this->offsetT(new OffsetT($type->arrayType, new KeyOfT($type->arrayType)));
     }
 
     #[\Override]
     public function untypedT(UntypedT $type): mixed
     {
-        return MixedT::T->accept($this);
+        return $this->mixedT(MixedT::T);
     }
 
     #[\Override]
@@ -226,6 +226,6 @@ abstract class Reduced implements Visitor
         /** @var UnionT */
         static $reduced = new UnionT([NullT::T, ScalarT::T, ArrayBareT::T, ObjectBareT::T, ResourceT::T]);
 
-        return $reduced->accept($this);
+        return $this->unionT($reduced);
     }
 }

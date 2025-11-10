@@ -179,19 +179,15 @@ final readonly class Type
 
         \assert($code !== null && $firstType !== null);
 
-        if ($firstType->singleton) {
-            return "return {$code}->accept(\$this);";
-        }
-
-        if (str_contains($code, '$')) {
-            return "return ({$code})->accept(\$this);";
+        if ($firstType->singleton || str_contains($code, '$')) {
+            return "return \$this->{$firstType->name}({$code});";
         }
 
         return <<<PHP
             /** @var \\{$firstType->className()} */
             static \$reduced = {$code};
             
-            return \$reduced->accept(\$this);
+            return \$this->{$firstType->name}(\$reduced);
             PHP;
     }
 
