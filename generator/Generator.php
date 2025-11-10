@@ -11,6 +11,7 @@ use Nette\PhpGenerator\Parameter;
 use Nette\PhpGenerator\PhpFile;
 use Nette\PhpGenerator\PhpNamespace;
 use Nette\PhpGenerator\PsrPrinter;
+use Nette\PhpGenerator\TraitType;
 use Symfony\Component\Finder\Finder;
 use Typhoon\Type as TypeI;
 use Typhoon\Type\Generator\Spec\Type;
@@ -68,17 +69,9 @@ final readonly class Generator
 
     public function generateReduced(): void
     {
-        $visitor = (new ClassType('Reduced'))
-            ->addImplement(Visitor::class)
-            ->setAbstract()
-            ->setComment(
-                <<<'PHPDOC'
-                    @api
-                    @template-covariant TResult
-                    @implements Visitor<TResult>
-                    @codeCoverageIgnore
-                    PHPDOC,
-            );
+        $visitor = (new TraitType('Reduced'))
+            ->addComment('@api')
+            ->addComment('@codeCoverageIgnore');
 
         foreach ($this->types as $type) {
             if ($type->isReducible()) {
@@ -92,21 +85,19 @@ final readonly class Generator
     public function generateFallback(): void
     {
         $visitor = (new ClassType('Fallback'))
-            ->setExtends(Visitor::class . '\Reduced')
+            ->addImplement(Visitor::class)
             ->setAbstract()
             ->setComment(
                 <<<'PHPDOC'
                     @api
                     @template-covariant TResult
-                    @extends Reduced<TResult>
+                    @implements Visitor<TResult>
                     @codeCoverageIgnore
                     PHPDOC,
             );
 
         foreach ($this->types as $type) {
-            if (!$type->isReducible()) {
-                $visitor->addMember($type->fallbackMethod());
-            }
+            $visitor->addMember($type->fallbackMethod());
         }
 
         $visitor->addMethod('fallback')
