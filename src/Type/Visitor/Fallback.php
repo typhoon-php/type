@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type;
+use Typhoon\Type\AliasAtClassT;
+use Typhoon\Type\AliasAtFunctionT;
 use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayKeyT;
@@ -404,6 +406,18 @@ abstract class Fallback implements Visitor
 
     #[\Override]
     public function ternaryT(TernaryT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function aliasAtFunctionT(AliasAtFunctionT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function aliasAtClassT(AliasAtClassT $type): mixed
     {
         return $this->fallback($type);
     }

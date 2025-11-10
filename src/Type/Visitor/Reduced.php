@@ -217,13 +217,13 @@ trait Reduced
     #[\Override]
     public function aliasAtFunctionT(AliasAtFunctionT $type): mixed
     {
-        return (new AliasT($type))->accept($this);
+        return $this->aliasT(new AliasT($type));
     }
 
     #[\Override]
     public function aliasAtClassT(AliasAtClassT $type): mixed
     {
-        return (new AliasT($type))->accept($this);
+        return $this->aliasT(new AliasT($type));
     }
 
     #[\Override]
