@@ -19,8 +19,8 @@ use Typhoon\Type;
 final readonly class IntRangeT implements Type
 {
     public function __construct(
-        public int $min = PHP_INT_MIN,
-        public int $max = PHP_INT_MAX,
+        public ?int $min = null,
+        public ?int $max = null,
     ) {}
 
     #[\Override]

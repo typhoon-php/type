@@ -17,7 +17,7 @@ final class WeakVisitor extends Fallback
     /**
      * @var \WeakReference<Visitor<TResult>>
      */
-    private \WeakReference $visitor;
+    private readonly \WeakReference $visitor;
 
     /**
      * @param Visitor<TResult> $visitor
