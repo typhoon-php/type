@@ -177,10 +177,11 @@ function listT(Type $value = mixedT): ListT
  * @api
  * @template V
  * @param Type<V> $value
- * @return ListT<V>
+ * @return ListT<V>&Type<non-empty-list<V>>
  */
 function nonEmptyListT(Type $value = mixedT): ListT
 {
+    /** @var ListT<V>&Type<non-empty-list<V>> */
     return new ListT(valueType: $value, isNonEmpty: true);
 }
 
@@ -223,10 +224,11 @@ function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
  * @template V
  * @param Type<K> $key
  * @param Type<V> $value
- * @return ArrayT<K, V>
+ * @return ArrayT<K, V>&Type<non-empty-array<K, V>>
  */
 function nonEmptyArrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
+    /** @var ArrayT<K, V>&Type<non-empty-array<K, V>> */
     return new ArrayT($key, $value, isNonEmpty: true);
 }
 
