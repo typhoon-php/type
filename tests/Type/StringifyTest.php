@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Typhoon\Type;
 use Typhoon\Type\Visitor\Fallback;
 use Typhoon\Type\Visitor\Stringify;
+use Typhoon\Type\Visitor\WeakVisitor;
 
 #[CoversClass(Stringify::class)]
 #[CoversFunction('Typhoon\Type\intT')]
@@ -239,7 +240,7 @@ final class StringifyTest extends TestCase
 
             public function __construct()
             {
-                $this->stringify = new Stringify(\WeakReference::create($this));
+                $this->stringify = new Stringify(new WeakVisitor($this));
             }
 
             public function intT(IntT $type): string
