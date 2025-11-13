@@ -12,13 +12,14 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T of list = list
- * @implements Type<T>
+ * @template-covariant V = mixed
+ * @implements Type<list<V>>
  * @codeCoverageIgnore
  */
 final readonly class ListT implements Type
 {
     /**
+     * @param Type<V> $valueType
      * @param list<Type> $elementTypes
      */
     public function __construct(

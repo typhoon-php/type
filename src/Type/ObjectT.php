@@ -12,22 +12,12 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T of object = object
- * @implements Type<T>
+ * @implements Type<object>
  * @codeCoverageIgnore
  */
-final readonly class ObjectT implements Type
+enum ObjectT implements Type
 {
-    /**
-     * @param list<Template> $templates
-     * @param list<NamedObjectT> $supertypes
-     * @param list<Property> $properties
-     */
-    public function __construct(
-        public array $templates = [],
-        public array $supertypes = [],
-        public array $properties = [],
-    ) {}
+    case T;
 
     #[\Override]
     public function accept(Visitor $visitor): mixed

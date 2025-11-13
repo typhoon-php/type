@@ -12,13 +12,16 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T of array = array
- * @implements Type<T>
+ * @template-covariant K of array-key = array-key
+ * @template-covariant V = mixed
+ * @implements Type<array<K, V>>
  * @codeCoverageIgnore
  */
 final readonly class ArrayT implements Type
 {
     /**
+     * @param Type<K> $keyType
+     * @param Type<V> $valueType
      * @param list<ArrayElement> $elements
      */
     public function __construct(

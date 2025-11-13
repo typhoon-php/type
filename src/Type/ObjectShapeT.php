@@ -12,26 +12,22 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T = mixed
+ * @template-covariant T of object = object
  * @implements Type<T>
  * @codeCoverageIgnore
  */
-final readonly class AliasT implements Type
+final readonly class ObjectShapeT implements Type
 {
     /**
-     * @param class-string $class
-     * @param non-empty-string $name
-     * @param list<Type> $templateArguments
+     * @param list<Property> $properties
      */
     public function __construct(
-        public string $class,
-        public string $name,
-        public array $templateArguments = [],
+        public array $properties = [],
     ) {}
 
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
-        return $visitor->aliasT($this);
+        return $visitor->objectShapeT($this);
     }
 }

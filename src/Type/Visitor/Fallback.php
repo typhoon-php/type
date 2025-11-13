@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type;
-use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
@@ -31,12 +30,9 @@ use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
-use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IterableBareT;
 use Typhoon\Type\IterableT;
-use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
-use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NamedObjectT;
@@ -49,24 +45,16 @@ use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectBareT;
+use Typhoon\Type\ObjectShapeT;
 use Typhoon\Type\ObjectT;
-use Typhoon\Type\OffsetT;
-use Typhoon\Type\ParentT;
 use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\ResourceT;
 use Typhoon\Type\ScalarT;
-use Typhoon\Type\SelfT;
-use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
-use Typhoon\Type\TemplateT;
-use Typhoon\Type\TernaryT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\TruthyStringT;
 use Typhoon\Type\UnionT;
-use Typhoon\Type\UntypedT;
-use Typhoon\Type\ValueOfT;
 use Typhoon\Type\Visitor;
 use Typhoon\Type\VoidT;
 
@@ -217,12 +205,6 @@ abstract class Fallback implements Visitor
     }
 
     #[\Override]
-    public function literalStringT(LiteralStringT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
     public function stringValueT(StringValueT $type): mixed
     {
         return $this->fallback($type);
@@ -230,24 +212,6 @@ abstract class Fallback implements Visitor
 
     #[\Override]
     public function classT(ClassT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function arrayKeyT(ArrayKeyT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function numericT(NumericT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function scalarT(ScalarT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -271,7 +235,7 @@ abstract class Fallback implements Visitor
     }
 
     #[\Override]
-    public function objectBareT(ObjectBareT $type): mixed
+    public function objectT(ObjectT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -283,25 +247,7 @@ abstract class Fallback implements Visitor
     }
 
     #[\Override]
-    public function objectT(ObjectT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function selfT(SelfT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function parentT(ParentT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function staticT(StaticT $type): mixed
+    public function objectShapeT(ObjectShapeT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -343,18 +289,6 @@ abstract class Fallback implements Visitor
     }
 
     #[\Override]
-    public function intersectionT(IntersectionT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function unionT(UnionT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
     public function constantT(ConstantT $type): mixed
     {
         return $this->fallback($type);
@@ -379,49 +313,31 @@ abstract class Fallback implements Visitor
     }
 
     #[\Override]
-    public function keyOfT(KeyOfT $type): mixed
+    public function intersectionT(IntersectionT $type): mixed
     {
         return $this->fallback($type);
     }
 
     #[\Override]
-    public function valueOfT(ValueOfT $type): mixed
+    public function unionT(UnionT $type): mixed
     {
         return $this->fallback($type);
     }
 
     #[\Override]
-    public function offsetT(OffsetT $type): mixed
+    public function arrayKeyT(ArrayKeyT $type): mixed
     {
         return $this->fallback($type);
     }
 
     #[\Override]
-    public function isSubtypeT(IsSubtypeT $type): mixed
+    public function numericT(NumericT $type): mixed
     {
         return $this->fallback($type);
     }
 
     #[\Override]
-    public function ternaryT(TernaryT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function aliasT(AliasT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function templateT(TemplateT $type): mixed
-    {
-        return $this->fallback($type);
-    }
-
-    #[\Override]
-    public function untypedT(UntypedT $type): mixed
+    public function scalarT(ScalarT $type): mixed
     {
         return $this->fallback($type);
     }

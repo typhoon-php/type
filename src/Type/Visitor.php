@@ -132,32 +132,12 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function literalStringT(LiteralStringT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function stringValueT(StringValueT $type): mixed;
 
     /**
      * @return TResult
      */
     public function classT(ClassT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function arrayKeyT(ArrayKeyT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function numericT(NumericT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function scalarT(ScalarT $type): mixed;
 
     /**
      * @return TResult
@@ -177,7 +157,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function objectBareT(ObjectBareT $type): mixed;
+    public function objectT(ObjectT $type): mixed;
 
     /**
      * @return TResult
@@ -187,22 +167,7 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function objectT(ObjectT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function selfT(SelfT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function parentT(ParentT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function staticT(StaticT $type): mixed;
+    public function objectShapeT(ObjectShapeT $type): mixed;
 
     /**
      * @return TResult
@@ -237,16 +202,6 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function intersectionT(IntersectionT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function unionT(UnionT $type): mixed;
-
-    /**
-     * @return TResult
-     */
     public function constantT(ConstantT $type): mixed;
 
     /**
@@ -267,42 +222,27 @@ interface Visitor
     /**
      * @return TResult
      */
-    public function keyOfT(KeyOfT $type): mixed;
+    public function intersectionT(IntersectionT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function valueOfT(ValueOfT $type): mixed;
+    public function unionT(UnionT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function offsetT(OffsetT $type): mixed;
+    public function arrayKeyT(ArrayKeyT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function isSubtypeT(IsSubtypeT $type): mixed;
+    public function numericT(NumericT $type): mixed;
 
     /**
      * @return TResult
      */
-    public function ternaryT(TernaryT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function aliasT(AliasT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function templateT(TemplateT $type): mixed;
-
-    /**
-     * @return TResult
-     */
-    public function untypedT(UntypedT $type): mixed;
+    public function scalarT(ScalarT $type): mixed;
 
     /**
      * @return TResult

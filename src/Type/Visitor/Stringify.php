@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type;
-use Typhoon\Type\AliasT;
 use Typhoon\Type\ArrayBareT;
 use Typhoon\Type\ArrayElement;
 use Typhoon\Type\ArrayKeyT;
@@ -28,12 +27,9 @@ use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
 use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
-use Typhoon\Type\IsSubtypeT;
 use Typhoon\Type\IterableBareT;
 use Typhoon\Type\IterableT;
-use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
-use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LowercaseStringT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NamedObjectT;
@@ -46,28 +42,18 @@ use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectBareT;
+use Typhoon\Type\ObjectShapeT;
 use Typhoon\Type\ObjectT;
-use Typhoon\Type\OffsetT;
 use Typhoon\Type\Parameter;
-use Typhoon\Type\ParentT;
 use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\Property;
 use Typhoon\Type\ResourceT;
 use Typhoon\Type\ScalarT;
-use Typhoon\Type\SelfT;
-use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\StringValueT;
-use Typhoon\Type\Template;
-use Typhoon\Type\TemplateT;
-use Typhoon\Type\TernaryT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\TruthyStringT;
 use Typhoon\Type\UnionT;
-use Typhoon\Type\UntypedT;
-use Typhoon\Type\ValueOfT;
-use Typhoon\Type\Variance;
 use Typhoon\Type\Visitor;
 use Typhoon\Type\VoidT;
 
@@ -261,12 +247,6 @@ final readonly class Stringify implements Visitor
     }
 
     #[\Override]
-    public function literalStringT(LiteralStringT $type): mixed
-    {
-        return 'literal-string';
-    }
-
-    #[\Override]
     public function stringValueT(StringValueT $type): string
     {
         /** @var non-empty-string */
@@ -353,7 +333,7 @@ final readonly class Stringify implements Visitor
     }
 
     #[\Override]
-    public function objectBareT(ObjectBareT $type): string
+    public function objectT(ObjectT $type): string
     {
         return 'object';
     }
@@ -361,39 +341,17 @@ final readonly class Stringify implements Visitor
     #[\Override]
     public function namedObjectT(NamedObjectT $type): string
     {
-        return $type->class . $this->templateArguments($type->templateArguments);
+        if ($type->templateArguments === []) {
+            return $type->class;
+        }
+
+        return \sprintf('%s<%s>', $type->class, implode(', ', array_map($this->unsafe(...), $type->templateArguments)));
     }
 
     #[\Override]
-    public function objectT(ObjectT $type): string
+    public function objectShapeT(ObjectShapeT $type): string
     {
-        return \sprintf(
-            'object%s%s%s',
-            $this->templates($type->templates),
-            implode('', array_map(
-                fn(NamedObjectT $inherited): string => ':' . $this->namedObjectT($inherited),
-                $type->supertypes,
-            )),
-            \sprintf('{%s}', implode(', ', array_map($this->property(...), $type->properties))),
-        );
-    }
-
-    #[\Override]
-    public function selfT(SelfT $type): string
-    {
-        return 'self' . $this->templateArguments($type->templateArguments);
-    }
-
-    #[\Override]
-    public function parentT(ParentT $type): string
-    {
-        return 'parent' . $this->templateArguments($type->templateArguments);
-    }
-
-    #[\Override]
-    public function staticT(StaticT $type): string
-    {
-        return 'static' . $this->templateArguments($type->templateArguments);
+        return \sprintf('object{%s}', implode(', ', array_map($this->property(...), $type->properties)));
     }
 
     #[\Override]
@@ -425,9 +383,8 @@ final readonly class Stringify implements Visitor
     public function callableT(CallableT|ClosureT $type): string
     {
         return \sprintf(
-            '(%s%s(%s): %s)',
+            '(%s(%s): %s)',
             $type instanceof CallableT ? 'callable' : 'Closure',
-            $this->templates($type->templates),
             implode(', ', array_map($this->parameter(...), $type->parameters)),
             $this->safe($type->returnType),
         );
@@ -482,66 +439,9 @@ final readonly class Stringify implements Visitor
     }
 
     #[\Override]
-    public function keyOfT(KeyOfT $type): string
-    {
-        return \sprintf('key-of<%s>', $this->unsafe($type->arrayType));
-    }
-
-    #[\Override]
-    public function valueOfT(ValueOfT $type): string
-    {
-        return \sprintf('value-of<%s>', $this->unsafe($type->arrayType));
-    }
-
-    #[\Override]
-    public function offsetT(OffsetT $type): string
-    {
-        return \sprintf('%s[%s]', $this->safe($type->arrayType), $this->unsafe($type->keyType));
-    }
-
-    #[\Override]
-    public function isSubtypeT(IsSubtypeT $type): string
-    {
-        return \sprintf(
-            '(%s is %s)',
-            $this->safe($type->leftType),
-            $this->safe($type->rightType),
-        );
-    }
-
-    #[\Override]
-    public function ternaryT(TernaryT $type): string
-    {
-        return \sprintf(
-            '(%s ? %s : %s)',
-            $this->safe($type->conditionType),
-            $this->safe($type->thenType),
-            $this->safe($type->elseType),
-        );
-    }
-
-    #[\Override]
-    public function aliasT(AliasT $type): string
-    {
-        return \sprintf('%s@%s%s', $type->class, $type->name, $this->templateArguments($type->templateArguments));
-    }
-
-    #[\Override]
-    public function templateT(TemplateT $type): string
-    {
-        return $type->name;
-    }
-
-    #[\Override]
     public function mixedT(MixedT $type): string
     {
         return 'mixed';
-    }
-
-    #[\Override]
-    public function untypedT(UntypedT $type): mixed
-    {
-        return 'untyped-mixed';
     }
 
     /**
@@ -554,41 +454,6 @@ final readonly class Stringify implements Visitor
         }
 
         return \sprintf('<%s>', implode(', ', array_map($this->unsafe(...), $templateArguments)));
-    }
-
-    /**
-     * @param list<Template> $templates
-     */
-    public function templates(array $templates): string
-    {
-        if ($templates === []) {
-            return '';
-        }
-
-        return \sprintf('<%s>', implode(', ', array_map($this->template(...), $templates)));
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function template(Template $template): string
-    {
-        $lowerBound = $this->unsafe($template->lowerBound);
-        $upperBound = $this->unsafe($template->upperBound);
-
-        /** @phpstan-ignore return.type */
-        return \sprintf(
-            '%s%s%s%s%s',
-            match ($template->variance) {
-                Variance::Invariant => '',
-                Variance::Covariant => 'out ',
-                Variance::Contravariant => 'in ',
-            },
-            $template->name,
-            $upperBound === 'mixed' ? '' : ' of ' . $upperBound,
-            $lowerBound === 'never' ? '' : ' super ' . $lowerBound,
-            $template->default === null ? '' : ' = ' . $this->unsafe($template->default),
-        );
     }
 
     /**
@@ -630,8 +495,6 @@ final readonly class Stringify implements Visitor
 
         if ($parameter->isPassedByReference) {
             $string .= '&';
-
-            // todo $parameter->outType
         }
 
         if ($parameter->isVariadic) {
@@ -644,10 +507,6 @@ final readonly class Stringify implements Visitor
 
         if ($parameter->hasDefault) {
             $string .= '=';
-
-            if ($parameter->defaultType !== null) {
-                $string .= $this->safe($parameter->defaultType);
-            }
         }
 
         return $string;

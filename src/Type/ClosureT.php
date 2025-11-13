@@ -19,11 +19,9 @@ use Typhoon\Type;
 final readonly class ClosureT implements Type
 {
     /**
-     * @param list<Template<Variance::Invariant>> $templates
      * @param list<Parameter> $parameters
      */
     public function __construct(
-        public array $templates = [],
         public array $parameters = [],
         public Type $returnType = MixedT::T,
     ) {}

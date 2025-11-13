@@ -60,7 +60,7 @@ const positiveIntT = PositiveIntT::T;
 /**
  * @api
  * @no-named-arguments
- * @param int|Type|list<int|Type> $ints
+ * @param int|Type|non-empty-list<int|Type> $ints
  * @return BitmaskT<int>
  */
 function bitmaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
@@ -74,7 +74,7 @@ function bitmaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
 /**
  * @api
  * @no-named-arguments
- * @param int|Type|list<int|Type> $ints
+ * @param int|Type|non-empty-list<int|Type> $ints
  * @return BitmaskT<int>
  */
 function intMaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
@@ -119,8 +119,6 @@ const nonFalsyStringT = TruthyStringT::T;
 const numericStringT = NumericStringT::T;
 
 const lowercaseStringT = LowercaseStringT::T;
-
-const literalStringT = LiteralStringT::T;
 
 /**
  * @api
@@ -168,11 +166,10 @@ function optional(Type $type): Optional
  * @api
  * @template V
  * @param Type<V> $value
- * @return ListT<list<V>>
+ * @return ListT<V>
  */
 function listT(Type $value = mixedT): ListT
 {
-    /** @var ListT<list<V>> */
     return new ListT($value);
 }
 
@@ -180,11 +177,10 @@ function listT(Type $value = mixedT): ListT
  * @api
  * @template V
  * @param Type<V> $value
- * @return ListT<non-empty-list<V>>
+ * @return ListT<V>
  */
 function nonEmptyListT(Type $value = mixedT): ListT
 {
-    /** @var ListT<non-empty-list<V>> */
     return new ListT(valueType: $value, isNonEmpty: true);
 }
 
@@ -201,7 +197,7 @@ function listShapeT(array $elements = []): ListT
 /**
  * @api
  * @param list<Type> $elements
- * @return ListT<list<mixed>>
+ * @return ListT<mixed>
  */
 function unsealedListShapeT(array $elements = [], Type $value = mixedT): ListT
 {
@@ -214,12 +210,11 @@ function unsealedListShapeT(array $elements = [], Type $value = mixedT): ListT
  * @template V
  * @param Type<K> $key
  * @param Type<V> $value
- * @return ArrayT<array<K, V>>
+ * @return ArrayT<K, V>
  */
 function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
-    /** @var ArrayT<array<K, V>> */
-    return new ArrayT(keyType: $key, valueType: $value);
+    return new ArrayT($key, $value);
 }
 
 /**
@@ -228,18 +223,17 @@ function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
  * @template V
  * @param Type<K> $key
  * @param Type<V> $value
- * @return ArrayT<non-empty-array<K, V>>
+ * @return ArrayT<K, V>
  */
 function nonEmptyArrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
-    /** @var ArrayT<non-empty-array<K, V>> */
-    return new ArrayT(keyType: $key, valueType: $value, isNonEmpty: true);
+    return new ArrayT($key, $value, isNonEmpty: true);
 }
 
 /**
  * @api
  * @param array<Type|Optional> $elements
- * @return ArrayT<array<mixed>>
+ * @return ArrayT<array-key, mixed>
  */
 function arrayShapeT(array $elements = []): ArrayT
 {
@@ -249,7 +243,7 @@ function arrayShapeT(array $elements = []): ArrayT
 /**
  * @api
  * @param array<Type|Optional> $elements
- * @return ArrayT<array<mixed>>
+ * @return ArrayT<array-key, mixed>
  */
 function unsealedArrayShapeT(array $elements = [], Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
@@ -268,41 +262,6 @@ function unsealedArrayShapeT(array $elements = [], Type $key = arrayKeyT, Type $
     );
 }
 
-/**
- * @api
- * @template T
- * @param Type<T> $array
- * @return KeyOfT<T>
- */
-function keyT(Type $array): KeyOfT
-{
-    return new KeyOfT($array);
-}
-
-/**
- * @api
- * @template T
- * @param Type<T> $array
- * @return ValueOfT<T>
- */
-function valueT(Type $array): ValueOfT
-{
-    return new ValueOfT($array);
-}
-
-/**
- * @api
- * @template T
- * @template K
- * @param Type<T> $array
- * @param Type<K> $key
- * @return OffsetT<T, K>
- */
-function offsetT(Type $array, Type $key): OffsetT
-{
-    return new OffsetT($array, $key);
-}
-
 const iterableT = IterableBareT::T;
 
 /**
@@ -318,7 +277,7 @@ function iterableT(Type $key = mixedT, Type $value = mixedT): IterableT
     return new IterableT($key, $value);
 }
 
-const objectT = ObjectBareT::T;
+const objectT = ObjectT::T;
 
 /**
  * @api
@@ -334,20 +293,13 @@ function namedObjectT(string $class, array $templateArguments = []): NamedObject
 
 /**
  * @api
- * @param list<Template> $templates
- * @param list<class-string|NamedObjectT> $supertypes
  * @param array<non-empty-string, Type|Optional> $props
- * @return ObjectT<object>
+ * @return ObjectShapeT<object>
  */
-function objectT(array $templates = [], array $supertypes = [], array $props = []): ObjectT
+function objectShapeT(array $props = []): ObjectShapeT
 {
-    return new ObjectT(
-        templates: $templates,
-        supertypes: array_map(
-            static fn(string|NamedObjectT $s): NamedObjectT => $s instanceof NamedObjectT ? $s : new NamedObjectT($s),
-            $supertypes,
-        ),
-        properties: array_map(
+    return new ObjectShapeT(
+        array_map(
             static fn(string $name, Type|Optional $type): Property => new Property(
                 name: $name,
                 type: $type instanceof Optional ? $type->type : $type,
@@ -359,66 +311,18 @@ function objectT(array $templates = [], array $supertypes = [], array $props = [
     );
 }
 
-/**
- * @api
- * @param array<non-empty-string, Type|Optional> $props
- * @return ObjectT<object>
- */
-function objectShapeT(array $props = []): ObjectT
-{
-    return objectT(props: $props);
-}
-
-const selfT = SelfBareT::T;
-
-/**
- * @api
- * @param list<Type> $templateArguments
- * @return SelfT<object>
- */
-function selfT(array $templateArguments = []): SelfT
-{
-    return new SelfT($templateArguments);
-}
-
-const parentT = ParentBareT::T;
-
-/**
- * @api
- * @param list<Type> $templateArguments
- * @return ParentT<object>
- */
-function parentT(array $templateArguments = []): ParentT
-{
-    return new ParentT($templateArguments);
-}
-
-const staticT = StaticBareT::T;
-
-/**
- * @api
- * @param list<Type> $templateArguments
- * @return StaticT<object>
- */
-function staticT(array $templateArguments = []): StaticT
-{
-    return new StaticT($templateArguments);
-}
-
 const callableT = CallableBareT::T;
 
 /**
  * @api
- * @param list<Template<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $params
  * @return CallableT<callable>
  */
-function callableT(array $templates = [], array $params = [], Type $return = mixedT): CallableT
+function callableT(array $params = [], Type $return = mixedT): CallableT
 {
     return new CallableT(
-        templates: $templates,
         parameters: array_map(
-            static fn(Parameter|Type $p): Parameter => $p instanceof Parameter ? $p : new Parameter(type: $p),
+            static fn(Parameter|Type $param): Parameter => $param instanceof Parameter ? $param : new Parameter($param),
             $params,
         ),
         returnType: $return,
@@ -427,16 +331,14 @@ function callableT(array $templates = [], array $params = [], Type $return = mix
 
 /**
  * @api
- * @param list<Template<Variance::Invariant>> $templates
  * @param list<Parameter|Type> $params
  * @return ClosureT<\Closure>
  */
-function closureT(array $templates = [], array $params = [], Type $return = mixedT): ClosureT
+function closureT(array $params = [], Type $return = mixedT): ClosureT
 {
     return new ClosureT(
-        templates: $templates,
         parameters: array_map(
-            static fn(Parameter|Type $p): Parameter => $p instanceof Parameter ? $p : new Parameter(type: $p),
+            static fn(Parameter|Type $param): Parameter => $param instanceof Parameter ? $param : new Parameter($param),
             $params,
         ),
         returnType: $return,
@@ -447,16 +349,14 @@ function closureT(array $templates = [], array $params = [], Type $return = mixe
  * @api
  * @param ?non-empty-string $name
  */
-function param(?string $name = null, Type $type = neverT, bool|Type $default = false, bool|Type $byRef = false, bool $variadic = false): Parameter
+function param(Type $type, bool $default = false, bool $byRef = false, bool $variadic = false, ?string $name = null): Parameter
 {
     return new Parameter(
-        name: $name,
         type: $type,
-        hasDefault: $default !== false,
-        defaultType: $default instanceof Type ? $default : null,
-        isPassedByReference: $byRef !== false,
-        outType: $byRef instanceof Type ? $byRef : null,
+        hasDefault: $default,
+        isPassedByReference: $byRef,
         isVariadic: $variadic,
+        name: $name,
     );
 }
 
@@ -502,105 +402,20 @@ function classConstantMaskT(string $class, string $mask): ClassConstantMaskT
 
 /**
  * @api
- * @param non-empty-string $name
- * @param-out TemplateT $type
- * @return Template<Variance::Invariant>
+ * @no-named-arguments
+ * @param Type|non-empty-list<Type> $types
  */
-function template(
-    string $name,
-    Type $upperBound = mixedT,
-    Type $lowerBound = neverT,
-    ?Type $default = null,
-    mixed &$type = null,
-): Template {
-    return Template::new(
-        name: $name,
-        lowerBound: $lowerBound,
-        upperBound: $upperBound,
-        default: $default,
-        type: $type,
-    );
-}
-
-/**
- * @api
- * @param non-empty-string $name
- * @param-out TemplateT $type
- * @return Template<Variance::Covariant>
- */
-function templateOut(
-    string $name,
-    Type $upperBound = mixedT,
-    Type $lowerBound = neverT,
-    ?Type $default = null,
-    mixed &$type = null,
-): Template {
-    return Template::new(
-        name: $name,
-        variance: Variance::Covariant,
-        lowerBound: $lowerBound,
-        upperBound: $upperBound,
-        default: $default,
-        type: $type,
-    );
-}
-
-/**
- * @api
- * @param non-empty-string $name
- * @param-out TemplateT $type
- * @return Template<Variance::Contravariant>
- */
-function templateIn(
-    string $name,
-    Type $upperBound = mixedT,
-    Type $lowerBound = neverT,
-    ?Type $default = null,
-    mixed &$type = null,
-): Template {
-    return Template::new(
-        name: $name,
-        variance: Variance::Contravariant,
-        lowerBound: $lowerBound,
-        upperBound: $upperBound,
-        default: $default,
-        type: $type,
-    );
-}
-
-/**
- * @api
- * @param class-string $class
- * @param non-empty-string $name
- * @param list<Type> $templateArguments
- */
-function aliasT(string $class, string $name, array $templateArguments = []): AliasT
+function intersectionT(Type|array $types, Type ...$moreTypes): IntersectionT
 {
-    return new AliasT($class, $name, $templateArguments);
+    return new IntersectionT([...(\is_array($types) ? $types : [$types]), ...$moreTypes]);
 }
 
 /**
  * @api
  * @no-named-arguments
- * @param Type|list<Type> $types
+ * @param Type|non-empty-list<Type> $types
  */
-function intersectionT(Type|array $types, Type ...$moreTypes): Type
-{
-    $types = [...(\is_array($types) ? $types : [$types]), ...$moreTypes];
-
-    return match (\count($types)) {
-        0 => mixedT,
-        1 => $types[0],
-        default => new IntersectionT($types),
-    };
-}
-
-/**
- * @api
- * @no-named-arguments
- * @param Type|list<Type> $types
- */
-function andT(Type|array $types, Type ...$moreTypes): Type
+function andT(Type|array $types, Type ...$moreTypes): IntersectionT
 {
     return intersectionT($types, ...$moreTypes);
 }
@@ -609,30 +424,24 @@ function andT(Type|array $types, Type ...$moreTypes): Type
  * @api
  * @no-named-arguments
  * @template T
- * @param Type<T>|list<Type<T>> $types
+ * @param Type<T>|non-empty-list<Type<T>> $types
  * @param Type<T> ...$moreTypes
- * @return Type<T>
+ * @return UnionT<T>
  */
-function unionT(Type|array $types, Type ...$moreTypes): Type
+function unionT(Type|array $types, Type ...$moreTypes): UnionT
 {
-    $types = [...(\is_array($types) ? $types : [$types]), ...$moreTypes];
-
-    return match (\count($types)) {
-        0 => neverT,
-        1 => $types[0],
-        default => new UnionT($types),
-    };
+    return new UnionT([...(\is_array($types) ? $types : [$types]), ...$moreTypes]);
 }
 
 /**
  * @api
  * @no-named-arguments
  * @template T
- * @param Type<T>|list<Type<T>> $types
+ * @param Type<T>|non-empty-list<Type<T>> $types
  * @param Type<T> ...$moreTypes
- * @return Type<T>
+ * @return UnionT<T>
  */
-function orT(Type|array $types, Type ...$moreTypes): Type
+function orT(Type|array $types, Type ...$moreTypes): UnionT
 {
     return unionT($types, ...$moreTypes);
 }
@@ -646,32 +455,6 @@ function orT(Type|array $types, Type ...$moreTypes): Type
 function nullOrT(Type $type): UnionT
 {
     return new UnionT([nullT, $type]);
-}
-
-/**
- * @api
- * @return IsSubtypeT<bool>
- */
-function isSubtypeT(Type $left, Type $right): IsSubtypeT
-{
-    return new IsSubtypeT($left, $right);
-}
-
-/**
- * @api
- * @return IsSubtypeT<bool>
- */
-function isSupertypeT(Type $left, Type $right): IsSubtypeT
-{
-    return new IsSubtypeT($right, $left);
-}
-
-/**
- * @api
- */
-function ternaryT(Type $condition, Type $then, Type $else): TernaryT
-{
-    return new TernaryT($condition, $then, $else);
 }
 
 const mixedT = MixedT::T;

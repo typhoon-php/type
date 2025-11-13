@@ -32,16 +32,10 @@ use Typhoon\Type\Visitor\WeakVisitor;
 #[CoversFunction('Typhoon\Type\nonEmptyArrayT')]
 #[CoversFunction('Typhoon\Type\arrayShapeT')]
 #[CoversFunction('Typhoon\Type\unsealedArrayShapeT')]
-#[CoversFunction('Typhoon\Type\keyT')]
-#[CoversFunction('Typhoon\Type\valueT')]
-#[CoversFunction('Typhoon\Type\offsetT')]
 #[CoversFunction('Typhoon\Type\iterableT')]
 #[CoversFunction('Typhoon\Type\objectT')]
 #[CoversFunction('Typhoon\Type\objectShapeT')]
 #[CoversFunction('Typhoon\Type\namedObjectT')]
-#[CoversFunction('Typhoon\Type\selfT')]
-#[CoversFunction('Typhoon\Type\parentT')]
-#[CoversFunction('Typhoon\Type\staticT')]
 #[CoversFunction('Typhoon\Type\callableT')]
 #[CoversFunction('Typhoon\Type\closureT')]
 #[CoversFunction('Typhoon\Type\param')]
@@ -49,18 +43,12 @@ use Typhoon\Type\Visitor\WeakVisitor;
 #[CoversFunction('Typhoon\Type\constantMaskT')]
 #[CoversFunction('Typhoon\Type\classConstantT')]
 #[CoversFunction('Typhoon\Type\classConstantMaskT')]
-#[CoversFunction('Typhoon\Type\template')]
-#[CoversFunction('Typhoon\Type\templateOut')]
-#[CoversFunction('Typhoon\Type\templateIn')]
 #[CoversFunction('Typhoon\Type\aliasT')]
 #[CoversFunction('Typhoon\Type\intersectionT')]
 #[CoversFunction('Typhoon\Type\andT')]
 #[CoversFunction('Typhoon\Type\unionT')]
 #[CoversFunction('Typhoon\Type\orT')]
 #[CoversFunction('Typhoon\Type\nullOrT')]
-#[CoversFunction('Typhoon\Type\isSubtypeT')]
-#[CoversFunction('Typhoon\Type\isSupertypeT')]
-#[CoversFunction('Typhoon\Type\ternaryT')]
 #[CoversFunction('Typhoon\Type\stringify')]
 final class StringifyTest extends TestCase
 {
@@ -123,7 +111,6 @@ final class StringifyTest extends TestCase
         yield [stringT("a'bcd"), "'a\\'bcd'"];
         yield [stringT("a\\\\'bcd"), "'a\\\\\\\\\\'bcd'"];
         yield [stringT("\n"), "'\\n'"];
-        yield [literalStringT, 'literal-string'];
         yield [lowercaseStringT, 'lowercase-string'];
         yield [classT(\stdClass::class), 'class-string<stdClass>'];
         yield [scalarT, 'scalar'];
@@ -164,12 +151,6 @@ final class StringifyTest extends TestCase
         yield [objectT, 'object'];
         yield [namedObjectT(\ArrayObject::class), 'ArrayObject'];
         yield [namedObjectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
-        yield [selfT, 'self'];
-        yield [selfT([stringT]), 'self<string>'];
-        yield [parentT, 'parent'];
-        yield [parentT([stringT]), 'parent<string>'];
-        yield [staticT, 'static'];
-        yield [staticT([stringT]), 'static<string>'];
         yield [orT(intT, stringT), 'int|string'];
         yield [orT(intT, orT(stringT, floatT)), 'int|(string|float)'];
         yield [orT(intT, andT(stringT, floatT)), 'int|(string&float)'];
@@ -182,28 +163,23 @@ final class StringifyTest extends TestCase
         yield [iterableT(stringT, intT), 'iterable<string, int>'];
         yield [callableT, 'callable'];
         yield [callableT(), 'callable(): mixed'];
-        yield [callableT(return: UntypedT::T), 'callable(): untyped-mixed'];
-        yield [callableT([template('T')]), 'callable<T>(): mixed'];
         yield [callableT(return: callableT()), 'callable(): (callable(): mixed)'];
         yield [callableT(return: voidT), 'callable(): void'];
         yield [callableT(params: [stringT]), 'callable(string): mixed'];
         yield [callableT(params: [param(type: stringT, default: true)]), 'callable(string=): mixed'];
-        yield [callableT(params: [param(type: stringT, default: numericStringT)]), 'callable(string=numeric-string): mixed'];
         yield [callableT(params: [param(type: stringT, variadic: true)]), 'callable(string...): mixed'];
         yield [callableT(params: [param(type: stringT, byRef: true)]), 'callable(string&): mixed'];
         yield [callableT(params: [param(type: stringT, byRef: true, variadic: true)]), 'callable(string&...): mixed'];
-        yield [callableT(params: [param('a', stringT, byRef: true, variadic: true)]), 'callable(string &...$a): mixed'];
+        yield [callableT(params: [param(type: stringT, byRef: true, variadic: true, name: 'a')]), 'callable(string &...$a): mixed'];
         yield [closureT(), 'Closure(): mixed'];
-        yield [closureT([template('T')]), 'Closure<T>(): mixed'];
         yield [closureT(return: closureT()), 'Closure(): (Closure(): mixed)'];
         yield [closureT(return: voidT), 'Closure(): void'];
         yield [closureT(params: [stringT]), 'Closure(string): mixed'];
         yield [closureT(params: [param(type: stringT, default: true)]), 'Closure(string=): mixed'];
-        yield [closureT(params: [param(type: stringT, default: numericStringT)]), 'Closure(string=numeric-string): mixed'];
         yield [closureT(params: [param(type: stringT, variadic: true)]), 'Closure(string...): mixed'];
         yield [closureT(params: [param(type: stringT, byRef: true)]), 'Closure(string&): mixed'];
         yield [closureT(params: [param(type: stringT, byRef: true, variadic: true)]), 'Closure(string&...): mixed'];
-        yield [closureT(params: [param('a', stringT, byRef: true, variadic: true)]), 'Closure(string &...$a): mixed'];
+        yield [closureT(params: [param(type: stringT, byRef: true, variadic: true, name: 'a')]), 'Closure(string &...$a): mixed'];
         yield [objectShapeT(), 'object{}'];
         yield [objectShapeT(['name' => stringT]), 'object{name: string}'];
         yield [objectShapeT(['name' => optional(stringT)]), 'object{name?: string}'];
@@ -211,20 +187,6 @@ final class StringifyTest extends TestCase
         yield [constantMaskT('JSON_*'), 'const<JSON_*>'];
         yield [classConstantT(\stdClass::class, 'test'), 'stdClass::test'];
         yield [classConstantMaskT(\stdClass::class, 'test_*'), 'stdClass::test_*'];
-        yield [keyT(arrayT), 'key-of<array>'];
-        yield [valueT(arrayT), 'value-of<array>'];
-        yield [offsetT(nonEmptyListT(), intT(0)), 'non-empty-list<mixed>[0]'];
-        yield [ternaryT(trueT, then: intT, else: floatT), 'true ? int : float'];
-        yield [isSubtypeT(trueT, mixedT), 'true is mixed'];
-        yield [isSupertypeT(boolT, falseT), 'false is bool'];
-        yield [aliasT(\stdClass::class, 'A'), 'stdClass@A'];
-        yield [aliasT(\stdClass::class, 'A', [stringT]), 'stdClass@A<string>'];
-        /** @phpstan-ignore argument.type */
-        yield [callableT([template('T', type: $T)], [$T], nullOrT($T)), 'callable<T>(T): (null|T)'];
-        yield [callableT([template('T', scalarT, stringT, type: $T)], [$T], $T), 'callable<T of scalar super string>(T): T'];
-        yield [objectT([template('T', type: $T)], [namedObjectT(\stdClass::class, [intT])], ['p' => $T]), 'object<T>:stdClass<int>{p: T}'];
-        yield [objectT([templateIn('I', default: intT), templateOut('O')]), 'object<in I = int, out O>{}'];
-        yield [objectT([template('T', type: $T), template('T2', $T)]), 'object<T, T2 of T>{}'];
     }
 
     #[DoesNotPerformAssertions]

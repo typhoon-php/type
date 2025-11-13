@@ -24,7 +24,6 @@ use Typhoon\Type\IntT;
 use Typhoon\Type\IntValueT;
 use Typhoon\Type\IterableBareT;
 use Typhoon\Type\IterableT;
-use Typhoon\Type\KeyOfT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NegativeIntT;
@@ -34,17 +33,14 @@ use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
 use Typhoon\Type\NumericT;
-use Typhoon\Type\ObjectBareT;
+use Typhoon\Type\ObjectShapeT;
 use Typhoon\Type\ObjectT;
-use Typhoon\Type\OffsetT;
 use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\ResourceT;
 use Typhoon\Type\ScalarT;
 use Typhoon\Type\StringT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\UnionT;
-use Typhoon\Type\UntypedT;
-use Typhoon\Type\ValueOfT;
 
 /**
  * @api
@@ -137,6 +133,42 @@ trait Reduced
     }
 
     #[\Override]
+    public function arrayBareT(ArrayBareT $type): mixed
+    {
+        /** @var ArrayT */
+        static $reduced = new ArrayT();
+
+        return $this->arrayT($reduced);
+    }
+
+    #[\Override]
+    public function objectT(ObjectT $type): mixed
+    {
+        /** @var ObjectShapeT */
+        static $reduced = new ObjectShapeT();
+
+        return $this->objectShapeT($reduced);
+    }
+
+    #[\Override]
+    public function iterableBareT(IterableBareT $type): mixed
+    {
+        /** @var IterableT */
+        static $reduced = new IterableT();
+
+        return $this->iterableT($reduced);
+    }
+
+    #[\Override]
+    public function closureT(ClosureT $type): mixed
+    {
+        return $this->intersectionT(new IntersectionT([
+            new NamedObjectT(\Closure::class),
+            new CallableT($type->parameters, $type->returnType),
+        ]));
+    }
+
+    #[\Override]
     public function arrayKeyT(ArrayKeyT $type): mixed
     {
         /** @var UnionT */
@@ -164,64 +196,10 @@ trait Reduced
     }
 
     #[\Override]
-    public function arrayBareT(ArrayBareT $type): mixed
-    {
-        /** @var ArrayT */
-        static $reduced = new ArrayT();
-
-        return $this->arrayT($reduced);
-    }
-
-    #[\Override]
-    public function objectBareT(ObjectBareT $type): mixed
-    {
-        /** @var ObjectT */
-        static $reduced = new ObjectT();
-
-        return $this->objectT($reduced);
-    }
-
-    #[\Override]
-    public function namedObjectT(NamedObjectT $type): mixed
-    {
-        return $this->objectT(new ObjectT(supertypes: [$type]));
-    }
-
-    #[\Override]
-    public function iterableBareT(IterableBareT $type): mixed
-    {
-        /** @var IterableT */
-        static $reduced = new IterableT();
-
-        return $this->iterableT($reduced);
-    }
-
-    #[\Override]
-    public function closureT(ClosureT $type): mixed
-    {
-        return $this->intersectionT(new IntersectionT([
-            new NamedObjectT(\Closure::class),
-            new CallableT($type->templates, $type->parameters, $type->returnType),
-        ]));
-    }
-
-    #[\Override]
-    public function valueOfT(ValueOfT $type): mixed
-    {
-        return $this->offsetT(new OffsetT($type->arrayType, new KeyOfT($type->arrayType)));
-    }
-
-    #[\Override]
-    public function untypedT(UntypedT $type): mixed
-    {
-        return $this->mixedT(MixedT::T);
-    }
-
-    #[\Override]
     public function mixedT(MixedT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([NullT::T, ScalarT::T, ArrayBareT::T, ObjectBareT::T, ResourceT::T]);
+        static $reduced = new UnionT([NullT::T, FalseT::T, TrueT::T, IntT::T, FloatT::T, StringT::T, ArrayBareT::T, ObjectT::T, ResourceT::T]);
 
         return $this->unionT($reduced);
     }
