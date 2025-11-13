@@ -6,37 +6,41 @@ namespace Typhoon\Type;
 
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
-use Typhoon\Type;
 
 #[CoversNothing]
 final class ConstructorsNamingTest extends TestCase
 {
-    public function testFunctionsAreSuffixedWithT(): void
+    private const NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
+        'fromReflection',
+        'optional',
+        'param',
+        'stringify',
+        'template',
+        'templateIn',
+        'templateOut',
+    ];
+
+    public function testFunctionsSuffixedWithT(): void
     {
         foreach (get_defined_functions()['user'] as $function) {
             if (!str_starts_with($function, 'typhoon\type\\')) {
                 continue;
             }
 
-            $reflection = new \ReflectionFunction($function);
-            $returnType = $reflection->getReturnType();
+            $shortName = (new \ReflectionFunction($function))->getShortName();
 
-            if (!$returnType instanceof \ReflectionNamedType) {
+            if (\in_array($shortName, self::NON_TYPE_CONSTRUCTOR_FUNCTIONS, true)) {
                 continue;
             }
 
-            if (!is_a($returnType->getName(), Type::class, allow_string: true)) {
-                continue;
-            }
-
-            self::assertStringEndsWith('T', $reflection->getShortName());
+            self::assertStringEndsWith('T', $shortName);
         }
     }
 
-    public function testConstantsAreSuffixedWithT(): void
+    public function testConstantsSuffixedWithT(): void
     {
         foreach (get_defined_constants(categorize: true)['user'] as $constant => $value) {
-            if ($value instanceof Type) {
+            if (str_starts_with($constant, 'Typhoon\Type\\')) {
                 self::assertStringEndsWith('T', $constant);
             }
         }
