@@ -104,14 +104,19 @@ final readonly class Stringify implements Visitor
      */
     public function unsafe(Type $type): string
     {
-        $string = $this->safe($type);
+        $string = $type->accept($this->next->get() ?? $this);
+        $offset = 0;
 
-        if ($string[0] === '(') {
-            /** @phpstan-ignore return.type */
-            return substr($string, 1, -1);
+        while ($string[$offset] === '(') {
+            ++$offset;
         }
 
-        return $string;
+        if ($offset === 0) {
+            return $string;
+        }
+
+        /** @phpstan-ignore return.type */
+        return substr($string, $offset, -$offset);
     }
 
     #[\Override]
