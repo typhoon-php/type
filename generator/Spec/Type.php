@@ -177,7 +177,9 @@ final readonly class Type
             $this->reduced,
         );
 
-        \assert($code !== null && $firstType !== null);
+        if ($code === null || $firstType === null) {
+            throw new \LogicException($this->name);
+        }
 
         if ($firstType->singleton || str_contains($code, '$')) {
             return "return \$this->{$firstType->name}({$code});";
