@@ -32,7 +32,6 @@
         },
         "files": [
             "src/Type/constructors.php",
-            "src/Type/fromReflection.php",
             "src/Type/stringify.php"
         ]
     },
