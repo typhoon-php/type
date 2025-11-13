@@ -7,7 +7,6 @@ namespace Typhoon\Type;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Type;
 use Typhoon\Type\Visitor\Fallback;
@@ -15,40 +14,6 @@ use Typhoon\Type\Visitor\Stringify;
 use Typhoon\Type\Visitor\WeakVisitor;
 
 #[CoversClass(Stringify::class)]
-#[CoversFunction('Typhoon\Type\intT')]
-#[CoversFunction('Typhoon\Type\intRangeT')]
-#[CoversFunction('Typhoon\Type\bitmaskT')]
-#[CoversFunction('Typhoon\Type\intMaskT')]
-#[CoversFunction('Typhoon\Type\floatT')]
-#[CoversFunction('Typhoon\Type\floatRangeT')]
-#[CoversFunction('Typhoon\Type\stringT')]
-#[CoversFunction('Typhoon\Type\classT')]
-#[CoversFunction('Typhoon\Type\optional')]
-#[CoversFunction('Typhoon\Type\listT')]
-#[CoversFunction('Typhoon\Type\nonEmptyListT')]
-#[CoversFunction('Typhoon\Type\listShapeT')]
-#[CoversFunction('Typhoon\Type\unsealedListShapeT')]
-#[CoversFunction('Typhoon\Type\arrayT')]
-#[CoversFunction('Typhoon\Type\nonEmptyArrayT')]
-#[CoversFunction('Typhoon\Type\arrayShapeT')]
-#[CoversFunction('Typhoon\Type\unsealedArrayShapeT')]
-#[CoversFunction('Typhoon\Type\iterableT')]
-#[CoversFunction('Typhoon\Type\objectT')]
-#[CoversFunction('Typhoon\Type\objectShapeT')]
-#[CoversFunction('Typhoon\Type\namedObjectT')]
-#[CoversFunction('Typhoon\Type\callableT')]
-#[CoversFunction('Typhoon\Type\closureT')]
-#[CoversFunction('Typhoon\Type\param')]
-#[CoversFunction('Typhoon\Type\constantT')]
-#[CoversFunction('Typhoon\Type\constantMaskT')]
-#[CoversFunction('Typhoon\Type\classConstantT')]
-#[CoversFunction('Typhoon\Type\classConstantMaskT')]
-#[CoversFunction('Typhoon\Type\aliasT')]
-#[CoversFunction('Typhoon\Type\intersectionT')]
-#[CoversFunction('Typhoon\Type\andT')]
-#[CoversFunction('Typhoon\Type\unionT')]
-#[CoversFunction('Typhoon\Type\orT')]
-#[CoversFunction('Typhoon\Type\nullOrT')]
 #[CoversFunction('Typhoon\Type\stringify')]
 final class StringifyTest extends TestCase
 {
@@ -189,12 +154,6 @@ final class StringifyTest extends TestCase
         yield [classConstantMaskT(\stdClass::class, 'test_*'), 'stdClass::test_*'];
     }
 
-    #[DoesNotPerformAssertions]
-    public function testConstructorsCoverage(): void
-    {
-        iterator_to_array(self::provideCases(), preserve_keys: false);
-    }
-
     public function testItCanBeExtended(): void
     {
         $myStringify = new /** @extends Fallback<non-empty-string> */ class extends Fallback {
@@ -216,8 +175,8 @@ final class StringifyTest extends TestCase
             }
         };
 
-        $string = listShapeT([listShapeT([intT])])->accept($myStringify);
+        $string = listShapeT([orT(intT, listT(intT))])->accept($myStringify);
 
-        self::assertSame('list{list{INT}}', $string);
+        self::assertSame('list{INT|list<INT>}', $string);
     }
 }

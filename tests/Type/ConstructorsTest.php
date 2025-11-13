@@ -4,11 +4,43 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\CoversFunction;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Type;
 
-#[CoversNothing]
+#[CoversFunction('Typhoon\Type\intT')]
+#[CoversFunction('Typhoon\Type\intRangeT')]
+#[CoversFunction('Typhoon\Type\bitmaskT')]
+#[CoversFunction('Typhoon\Type\intMaskT')]
+#[CoversFunction('Typhoon\Type\floatT')]
+#[CoversFunction('Typhoon\Type\floatRangeT')]
+#[CoversFunction('Typhoon\Type\stringT')]
+#[CoversFunction('Typhoon\Type\classT')]
+#[CoversFunction('Typhoon\Type\optional')]
+#[CoversFunction('Typhoon\Type\listT')]
+#[CoversFunction('Typhoon\Type\nonEmptyListT')]
+#[CoversFunction('Typhoon\Type\listShapeT')]
+#[CoversFunction('Typhoon\Type\unsealedListShapeT')]
+#[CoversFunction('Typhoon\Type\arrayT')]
+#[CoversFunction('Typhoon\Type\nonEmptyArrayT')]
+#[CoversFunction('Typhoon\Type\arrayShapeT')]
+#[CoversFunction('Typhoon\Type\unsealedArrayShapeT')]
+#[CoversFunction('Typhoon\Type\iterableT')]
+#[CoversFunction('Typhoon\Type\namedObjectT')]
+#[CoversFunction('Typhoon\Type\objectShapeT')]
+#[CoversFunction('Typhoon\Type\callableT')]
+#[CoversFunction('Typhoon\Type\closureT')]
+#[CoversFunction('Typhoon\Type\param')]
+#[CoversFunction('Typhoon\Type\constantT')]
+#[CoversFunction('Typhoon\Type\constantMaskT')]
+#[CoversFunction('Typhoon\Type\classConstantT')]
+#[CoversFunction('Typhoon\Type\classConstantMaskT')]
+#[CoversFunction('Typhoon\Type\intersectionT')]
+#[CoversFunction('Typhoon\Type\andT')]
+#[CoversFunction('Typhoon\Type\unionT')]
+#[CoversFunction('Typhoon\Type\orT')]
+#[CoversFunction('Typhoon\Type\nullOrT')]
 final class ConstructorsTest extends TestCase
 {
     private const NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
@@ -47,5 +79,11 @@ final class ConstructorsTest extends TestCase
                 self::assertStringEndsWith('T', $constant);
             }
         }
+    }
+
+    #[DoesNotPerformAssertions]
+    public function testConstructorsCoverage(): void
+    {
+        iterator_to_array(StringifyTest::provideCases(), preserve_keys: false);
     }
 }
