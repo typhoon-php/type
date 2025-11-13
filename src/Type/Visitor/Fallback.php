@@ -10,33 +10,52 @@ namespace Typhoon\Type\Visitor;
 
 use Typhoon\Type;
 use Typhoon\Type\AliasT;
+use Typhoon\Type\ArrayBareT;
+use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BitmaskT;
+use Typhoon\Type\BoolT;
 use Typhoon\Type\CallableBareT;
 use Typhoon\Type\CallableT;
 use Typhoon\Type\ClassConstantMaskT;
 use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClassT;
+use Typhoon\Type\ClosureT;
 use Typhoon\Type\ConstantMaskT;
 use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
+use Typhoon\Type\FloatT;
+use Typhoon\Type\FloatValueT;
 use Typhoon\Type\IntersectionT;
 use Typhoon\Type\IntRangeT;
+use Typhoon\Type\IntT;
+use Typhoon\Type\IntValueT;
 use Typhoon\Type\IsSubtypeT;
+use Typhoon\Type\IterableBareT;
 use Typhoon\Type\IterableT;
 use Typhoon\Type\KeyOfT;
 use Typhoon\Type\ListT;
 use Typhoon\Type\LiteralStringT;
 use Typhoon\Type\LowercaseStringT;
+use Typhoon\Type\MixedT;
+use Typhoon\Type\NamedObjectT;
+use Typhoon\Type\NegativeIntT;
 use Typhoon\Type\NeverT;
 use Typhoon\Type\NonEmptyStringT;
+use Typhoon\Type\NonNegativeIntT;
+use Typhoon\Type\NonPositiveIntT;
+use Typhoon\Type\NonZeroIntT;
 use Typhoon\Type\NullT;
 use Typhoon\Type\NumericStringT;
+use Typhoon\Type\NumericT;
+use Typhoon\Type\ObjectBareT;
 use Typhoon\Type\ObjectT;
 use Typhoon\Type\OffsetT;
 use Typhoon\Type\ParentT;
+use Typhoon\Type\PositiveIntT;
 use Typhoon\Type\ResourceT;
+use Typhoon\Type\ScalarT;
 use Typhoon\Type\SelfT;
 use Typhoon\Type\StaticT;
 use Typhoon\Type\StringT;
@@ -46,15 +65,18 @@ use Typhoon\Type\TernaryT;
 use Typhoon\Type\TrueT;
 use Typhoon\Type\TruthyStringT;
 use Typhoon\Type\UnionT;
+use Typhoon\Type\UntypedT;
+use Typhoon\Type\ValueOfT;
+use Typhoon\Type\Visitor;
 use Typhoon\Type\VoidT;
 
 /**
  * @api
  * @template-covariant TResult
- * @extends Reduced<TResult>
+ * @implements Visitor<TResult>
  * @codeCoverageIgnore
  */
-abstract class Fallback extends Reduced
+abstract class Fallback implements Visitor
 {
     #[\Override]
     public function neverT(NeverT $type): mixed
@@ -87,13 +109,73 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
+    public function boolT(BoolT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function intT(IntT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function intValueT(IntValueT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
     public function intRangeT(IntRangeT $type): mixed
     {
         return $this->fallback($type);
     }
 
     #[\Override]
+    public function negativeIntT(NegativeIntT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function nonPositiveIntT(NonPositiveIntT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function nonZeroIntT(NonZeroIntT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function nonNegativeIntT(NonNegativeIntT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function positiveIntT(PositiveIntT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
     public function bitmaskT(BitmaskT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function floatT(FloatT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function floatValueT(FloatValueT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -153,13 +235,49 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
+    public function arrayKeyT(ArrayKeyT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function numericT(NumericT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function scalarT(ScalarT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
     public function listT(ListT $type): mixed
     {
         return $this->fallback($type);
     }
 
     #[\Override]
+    public function arrayBareT(ArrayBareT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
     public function arrayT(ArrayT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function objectBareT(ObjectBareT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function namedObjectT(NamedObjectT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -189,6 +307,12 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
+    public function iterableBareT(IterableBareT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
     public function iterableT(IterableT $type): mixed
     {
         return $this->fallback($type);
@@ -202,6 +326,12 @@ abstract class Fallback extends Reduced
 
     #[\Override]
     public function callableT(CallableT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function closureT(ClosureT $type): mixed
     {
         return $this->fallback($type);
     }
@@ -255,6 +385,12 @@ abstract class Fallback extends Reduced
     }
 
     #[\Override]
+    public function valueOfT(ValueOfT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
     public function offsetT(OffsetT $type): mixed
     {
         return $this->fallback($type);
@@ -280,6 +416,18 @@ abstract class Fallback extends Reduced
 
     #[\Override]
     public function templateT(TemplateT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function untypedT(UntypedT $type): mixed
+    {
+        return $this->fallback($type);
+    }
+
+    #[\Override]
+    public function mixedT(MixedT $type): mixed
     {
         return $this->fallback($type);
     }

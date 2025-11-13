@@ -45,15 +45,12 @@ use Typhoon\Type\TrueT;
 use Typhoon\Type\UnionT;
 use Typhoon\Type\UntypedT;
 use Typhoon\Type\ValueOfT;
-use Typhoon\Type\Visitor;
 
 /**
  * @api
- * @template-covariant TResult
- * @implements Visitor<TResult>
  * @codeCoverageIgnore
  */
-abstract class Reduced implements Visitor
+trait Reduced
 {
     #[\Override]
     public function boolT(BoolT $type): mixed
