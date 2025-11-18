@@ -419,7 +419,7 @@ final readonly class Stringify implements Visitor
     #[\Override]
     public function constantMaskT(ConstantMaskT $type): mixed
     {
-        return \sprintf('const<%s>', $type->mask->toString());
+        return \sprintf('const<%s>', $type->mask->mask);
     }
 
     #[\Override]
@@ -431,7 +431,7 @@ final readonly class Stringify implements Visitor
     #[\Override]
     public function classConstantMaskT(ClassConstantMaskT $type): string
     {
-        return \sprintf('%s::%s', $type->class, $type->mask->toString());
+        return \sprintf('%s::%s', $type->class, $type->mask->mask);
     }
 
     #[\Override]

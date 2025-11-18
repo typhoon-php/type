@@ -18,21 +18,13 @@ final readonly class Mask
      * @param non-empty-string $mask
      */
     public function __construct(
-        private string $mask,
+        public string $mask,
     ) {
-        $this->pattern = \sprintf('/^%s$/D', str_replace('\*', '.*', preg_quote($mask)));
+        $this->pattern = \sprintf('/^%s$/D', str_replace('\*', '.*', preg_quote($mask, '/')));
     }
 
-    public function match(string $name): bool
+    public function test(string $name): bool
     {
         return preg_match($this->pattern, $name) === 1;
-    }
-
-    /**
-     * @return non-empty-string
-     */
-    public function toString(): string
-    {
-        return $this->mask;
     }
 }
