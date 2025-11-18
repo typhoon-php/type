@@ -78,6 +78,7 @@ final class StringifyTest extends TestCase
         yield [stringT("\n"), "'\\n'"];
         yield [lowercaseStringT, 'lowercase-string'];
         yield [classT(\stdClass::class), 'class-string<stdClass>'];
+        yield [classT(namedObjectT(\stdClass::class)), 'class-string<stdClass>'];
         yield [scalarT, 'scalar'];
         yield [resourceT, 'resource'];
         yield [nonEmptyListT(), 'non-empty-list<mixed>'];

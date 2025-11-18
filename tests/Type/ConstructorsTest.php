@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Typhoon\Type;
+use Typhoon\Type\Internal\Optional;
 
 #[CoversFunction('Typhoon\Type\intT')]
 #[CoversFunction('Typhoon\Type\intRangeT')]
@@ -41,6 +43,10 @@ use Typhoon\Type;
 #[CoversFunction('Typhoon\Type\unionT')]
 #[CoversFunction('Typhoon\Type\orT')]
 #[CoversFunction('Typhoon\Type\nullOrT')]
+#[CoversClass(ArrayElement::class)]
+#[CoversClass(Property::class)]
+#[CoversClass(Optional::class)]
+#[CoversClass(Parameter::class)]
 final class ConstructorsTest extends TestCase
 {
     private const NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
