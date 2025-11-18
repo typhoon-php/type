@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Brick\Math\BigDecimal;
 use Typhoon\Type;
 use Typhoon\Type\Generator\Generator;
 use Typhoon\Type\Internal\Optional;
@@ -87,26 +86,20 @@ const floatT = FloatT::T;
 
 /**
  * @api
- * @param float|numeric-string|BigDecimal $value
  * @return FloatValueT<float>
  */
-function floatT(float|string|BigDecimal $value): FloatValueT
+function floatT(float $value): FloatValueT
 {
-    return new FloatValueT(BigDecimal::of($value));
+    return new FloatValueT($value);
 }
 
 /**
  * @api
- * @param null|int|float|numeric-string|BigDecimal $min
- * @param null|int|float|numeric-string|BigDecimal $max
  * @return FloatRangeT<float>
  */
-function floatRangeT(null|int|float|string|BigDecimal $min = null, null|int|float|string|BigDecimal $max = null): FloatRangeT
+function floatRangeT(?float $min = null, ?float $max = null): FloatRangeT
 {
-    return new FloatRangeT(
-        min: $min === null ? null : BigDecimal::of($min),
-        max: $max === null ? null : BigDecimal::of($max),
-    );
+    return new FloatRangeT($min, $max);
 }
 
 const stringT = StringT::T;

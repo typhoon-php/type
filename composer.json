@@ -15,7 +15,6 @@
     ],
     "require": {
         "php": "^8.2",
-        "brick/math": "^0.14.0",
         "symfony/polyfill-php83": "^1.33"
     },
     "require-dev": {

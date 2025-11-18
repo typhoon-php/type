@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Typhoon\Type\Generator\Spec;
 
-use Brick\Math\BigDecimal;
 use Typhoon\Type;
 use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\Mask;
 use Typhoon\Type\MixedT;
 
 $typeClass = '\\' . Type::class;
-$bigDecimalClass = '\\' . BigDecimal::class;
 $closureClass = '\\' . \Closure::class;
 $maskClass = '\\' . Mask::class;
 $mixedT = \sprintf('\%s::T', MixedT::class);
@@ -38,8 +36,8 @@ return [
     constr('bitmask', 'T', [tpl('T', 'int')], [prop('intType', $typeClass)]),
     // float
     single('float', 'float', 'floatRange()'),
-    constr('floatValue', 'T', [tpl('T', 'float')], [prop('value', $bigDecimalClass)], 'floatRange($value, $value)'),
-    constr('floatRange', 'T', [tpl('T', 'float')], [prop('min', '?' . $bigDecimalClass), prop('max', '?' . $bigDecimalClass)]),
+    constr('floatValue', 'T', [tpl('T', 'float')], [prop('value', 'float')], 'floatRange($value, $value)'),
+    constr('floatRange', 'T', [tpl('T', 'float')], [prop('min', '?float'), prop('max', '?float')]),
     // string
     single('string', 'string'),
     single('nonEmptyString', 'non-empty-string'),

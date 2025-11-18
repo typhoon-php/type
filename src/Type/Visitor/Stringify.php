@@ -197,19 +197,22 @@ final readonly class Stringify implements Visitor
     #[\Override]
     public function floatValueT(FloatValueT $type): string
     {
-        $value = $type->value;
+        $string = $this->floatToString($type->value);
 
-        if ($value->getScale() === 0) {
-            return $value->toScale(1)->__toString();
-        }
-
-        return $value->__toString();
+        return match ($string) {
+            'NAN', 'INF', '-INF' => $string,
+            default => $string . (str_contains($string, '.') ? '' : '.0'),
+        };
     }
 
     #[\Override]
     public function floatRangeT(FloatRangeT $type): string
     {
-        return \sprintf('float<%s, %s>', $type->min?->__toString() ?? 'min', $type->max?->__toString() ?? 'max');
+        return \sprintf(
+            'float<%s, %s>',
+            $type->min === null ? 'min' : $this->floatToString($type->min),
+            $type->max === null ? 'max' : $this->floatToString($type->max),
+        );
     }
 
     #[\Override]
@@ -441,15 +444,27 @@ final readonly class Stringify implements Visitor
     }
 
     /**
-     * @param list<Type> $templateArguments
+     * @return non-empty-string
      */
-    public function templateArguments(array $templateArguments): string
+    public function floatToString(float $float): string
     {
-        if ($templateArguments === []) {
-            return '';
+        $string = (string) $float;
+
+        if (!preg_match('/\.(\d++)[eE]([+-])(\d++)/', $string, $matches)) {
+            return $string;
         }
 
-        return \sprintf('<%s>', implode(', ', array_map($this->unsafe(...), $templateArguments)));
+        if ($matches[2] === '+') {
+            return number_format($float, thousands_separator: '');
+        }
+
+        $decimals = (int) $matches[3];
+
+        if ($matches[1] !== '0') {
+            $decimals += \strlen($matches[1]);
+        }
+
+        return number_format($float, $decimals, thousands_separator: '');
     }
 
     /**

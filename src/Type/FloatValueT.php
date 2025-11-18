@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Brick\Math\BigDecimal;
 use Typhoon\Type;
 
 /**
@@ -20,7 +19,7 @@ use Typhoon\Type;
 final readonly class FloatValueT implements Type
 {
     public function __construct(
-        public BigDecimal $value,
+        public float $value,
     ) {}
 
     #[\Override]

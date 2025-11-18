@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Typhoon\Type;
 
-use Brick\Math\BigDecimal;
 use Typhoon\Type;
 
 /**
@@ -20,8 +19,8 @@ use Typhoon\Type;
 final readonly class FloatRangeT implements Type
 {
     public function __construct(
-        public ?BigDecimal $min = null,
-        public ?BigDecimal $max = null,
+        public ?float $min = null,
+        public ?float $max = null,
     ) {}
 
     #[\Override]
