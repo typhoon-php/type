@@ -65,10 +65,14 @@ const positiveIntT = PositiveIntT::T;
  */
 function bitmaskT(int|Type|array $ints, int|Type ...$moreInts): BitmaskT
 {
-    return new BitmaskT(orT(array_map(
-        static fn(int|Type $int): Type => \is_int($int) ? intT($int) : $int,
-        [...(\is_array($ints) ? $ints : [$ints]), ...$moreInts],
-    )));
+    return new BitmaskT(
+        new UnionT(
+            array_map(
+                static fn(int|Type $int): Type => \is_int($int) ? intT($int) : $int,
+                [...(\is_array($ints) ? $ints : [$ints]), ...$moreInts],
+            ),
+        ),
+    );
 }
 
 /**
@@ -409,16 +413,6 @@ function intersectionT(Type|array $types, Type ...$moreTypes): IntersectionT
 /**
  * @api
  * @no-named-arguments
- * @param Type|non-empty-list<Type> $types
- */
-function andT(Type|array $types, Type ...$moreTypes): IntersectionT
-{
-    return intersectionT($types, ...$moreTypes);
-}
-
-/**
- * @api
- * @no-named-arguments
  * @template T
  * @param Type<T>|non-empty-list<Type<T>> $types
  * @param Type<T> ...$moreTypes
@@ -427,19 +421,6 @@ function andT(Type|array $types, Type ...$moreTypes): IntersectionT
 function unionT(Type|array $types, Type ...$moreTypes): UnionT
 {
     return new UnionT([...(\is_array($types) ? $types : [$types]), ...$moreTypes]);
-}
-
-/**
- * @api
- * @no-named-arguments
- * @template T
- * @param Type<T>|non-empty-list<Type<T>> $types
- * @param Type<T> ...$moreTypes
- * @return UnionT<T>
- */
-function orT(Type|array $types, Type ...$moreTypes): UnionT
-{
-    return unionT($types, ...$moreTypes);
 }
 
 /**

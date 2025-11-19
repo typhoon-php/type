@@ -50,7 +50,7 @@ final class StringifyTest extends TestCase
         yield [intRangeT(max: 23), 'int<min, 23>'];
         yield [intRangeT(min: -100, max: 234), 'int<-100, 234>'];
         yield [intMaskT(intT(1), intT(2), intT(4)), 'int-mask-of<1|2|4>'];
-        yield [intMaskT(orT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
+        yield [intMaskT(unionT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
         yield [intMaskT(constantMaskT('JSON_*')), 'int-mask-of<const<JSON_*>>'];
         yield [floatT, 'float'];
         yield [floatT(0), '0.0'];
@@ -115,8 +115,8 @@ final class StringifyTest extends TestCase
         yield [nonEmptyArrayT(stringT, intT), 'non-empty-array<string, int>'];
         yield [arrayT, 'array'];
         yield [arrayT(), 'array<mixed>'];
-        yield [arrayT(orT(intT, stringT)), 'array<mixed>'];
-        yield [arrayT(orT(stringT, intT)), 'array<mixed>'];
+        yield [arrayT(unionT(intT, stringT)), 'array<mixed>'];
+        yield [arrayT(unionT(stringT, intT)), 'array<mixed>'];
         yield [arrayT(nonEmptyStringT), 'array<non-empty-string, mixed>'];
         yield [arrayT(value: stringT), 'array<string>'];
         yield [arrayT(stringT, intT), 'array<string, int>'];
@@ -136,12 +136,12 @@ final class StringifyTest extends TestCase
         yield [objectT, 'object'];
         yield [namedObjectT(\ArrayObject::class), 'ArrayObject'];
         yield [namedObjectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
-        yield [orT(intT, stringT), 'int|string'];
-        yield [orT(intT, orT(stringT, floatT)), 'int|(string|float)'];
-        yield [orT(intT, andT(stringT, floatT)), 'int|(string&float)'];
+        yield [unionT(intT, stringT), 'int|string'];
+        yield [unionT(intT, unionT(stringT, floatT)), 'int|(string|float)'];
+        yield [unionT(intT, intersectionT(stringT, floatT)), 'int|(string&float)'];
         yield [nullOrT(stringT), 'null|string'];
-        yield [andT(intT, stringT), 'int&string'];
-        yield [andT(intT, orT(stringT, floatT)), 'int&(string|float)'];
+        yield [intersectionT(intT, stringT), 'int&string'];
+        yield [intersectionT(intT, unionT(stringT, floatT)), 'int&(string|float)'];
         yield [iterableT, 'iterable'];
         yield [iterableT(), 'iterable<mixed>'];
         yield [iterableT(value: stringT), 'iterable<string>'];
@@ -196,7 +196,7 @@ final class StringifyTest extends TestCase
             }
         };
 
-        $string = listShapeT([orT(intT, listT(intT))])->accept($myStringify);
+        $string = listShapeT([unionT(intT, listT(intT))])->accept($myStringify);
 
         self::assertSame('list{INT|list<INT>}', $string);
     }
