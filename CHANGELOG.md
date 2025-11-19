@@ -5,15 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] 2025-11-18
+## [0.7.0] 2025-11-19
+
+In this release, we refocus the library on providing a minimal set of basic types.
+
+`typhoon/type` now contains only the types necessary for building runtime tools like `is()` or `HMap`.
+Complex types requiring reflection and/or additional context have been removed and will be implemented in
+`typhoon/algebra`.
+
+### Added
+
+- Add `WeakVisitor`.
 
 ### Changed
 
 - **BC Break:** Rename `Mask::match()` to `test()`.
+- **BC Break:** Use `float` in `FloatValueT` and `FloatRangeT`.
+- **BC Break:** Use nullable limits in `IntRangeT`.
+- **BC Break:** Use `K`, `V` templates in `ArrayT`.
+- **BC Break:** Remove `$templates` from `CallableT` and `ClosureT`.
+- **BC Break:** Simplify `Parameter::__construct()` signature.
+- **BC Break:** Make `Reduce` a trait.
+- **BC Break:** Rename `ObjectBareT` to `ObjectT`.
+- **BC Break:** Require at least one type in `intersectionT`, return `IntersectionT`.
+- **BC Break:** Require at least one type in `unionT`, return `UnionT`.
+- **BC Break:** Require at least one type in `bitmaskT`.
+- **BC Break:** Do not accept `WeakReference<Visitor>` in `Stringify` — use `WeakVisitor` instead.
 
 ### Removed
 
 - **BC Break:** Remove `Mask::toString()`, use `Mask::$mask` instead.
+- **BC Break:** Remove `fromReflection()` function, will be later implemented in a separate package.
+- **BC Break:** Remove `Template` and `Variance`, will be later implemented in algebra.
+- **BC Break:** Remove `Alias` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `IsSubtype` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `KeyOf` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `LiteralString` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `ObjectT` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `Offset` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `ParentBare` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `SelfBare` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `Self` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `StaticBare` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `Static` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `Template` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `Ternary` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `Untyped` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `ValueOf` and corresponding visitor methods, will be later implemented in algebra.
+- **BC Break:** Remove `andT()` and `orT()`.
 
 ## [0.6.0] 2025-11-05
 
