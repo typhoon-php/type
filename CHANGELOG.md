@@ -7,11 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.0] 2025-11-19
 
-In this release, we refocus the library on providing a minimal set of basic types.
-
-`typhoon/type` now contains only the types necessary for building runtime tools like `is()` or `HMap`.
-Complex types requiring reflection and/or additional context have been removed and will be implemented in
-`typhoon/algebra`.
+In this release, we refocus the library: `typhoon/type` now contains only the types necessary for building
+runtime tools like `is()` or `HMap`. Complex types requiring reflection and/or additional context have been removed
+and will be later implemented in `typhoon/algebra`.
 
 ### Added
 
