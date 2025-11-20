@@ -32,6 +32,7 @@ Complex types requiring reflection and/or additional context have been removed a
 - **BC Break:** Require at least one type in `bitmaskT`.
 - **BC Break:** Do not accept `WeakReference<Visitor>` in `Stringify` — use `WeakVisitor` instead.
 - **BC Break:** Rename `namedObjectT()` to `objectT()`.
+- Allow to pass `Mask` instance to `constantMaskT()` and `classConstantMaskT()`.
 
 ### Removed
 

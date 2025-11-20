@@ -373,11 +373,11 @@ function constantT(string $name): ConstantT
 
 /**
  * @api
- * @param non-empty-string $mask
+ * @param non-empty-string|Mask $mask
  */
-function constantMaskT(string $mask): ConstantMaskT
+function constantMaskT(string|Mask $mask): ConstantMaskT
 {
-    return new ConstantMaskT(new Mask($mask));
+    return new ConstantMaskT(\is_string($mask) ? new Mask($mask) : $mask);
 }
 
 /**
@@ -393,11 +393,11 @@ function classConstantT(string $class, string $name): ClassConstantT
 /**
  * @api
  * @param class-string $class
- * @param non-empty-string $mask
+ * @param non-empty-string|Mask $mask
  */
-function classConstantMaskT(string $class, string $mask): ClassConstantMaskT
+function classConstantMaskT(string $class, string|Mask $mask): ClassConstantMaskT
 {
-    return new ClassConstantMaskT($class, new Mask($mask));
+    return new ClassConstantMaskT($class, \is_string($mask) ? new Mask($mask) : $mask);
 }
 
 /**
