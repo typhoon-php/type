@@ -448,7 +448,7 @@ final readonly class Stringify implements Visitor
      */
     public function floatToString(float $float): string
     {
-        if ($float === NAN) {
+        if (is_nan($float)) {
             return 'NAN';
         }
 
