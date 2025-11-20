@@ -448,6 +448,10 @@ final readonly class Stringify implements Visitor
      */
     public function floatToString(float $float): string
     {
+        if ($float === NAN) {
+            return 'NAN';
+        }
+
         $string = (string) $float;
 
         if (!preg_match('/\.(\d++)[eE]([+-])(\d++)/', $string, $matches)) {
