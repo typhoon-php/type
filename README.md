@@ -22,11 +22,19 @@ $json = <<<JSON
         ],
     }
     JSON;
+    
+final readonly class Person
+{
+    public function __construct(
+        public string $name,
+    ) {}    
+}
 
-
-$request = new Mapper()->map($json, arrayShapeT([
+$type = arrayShapeT([
     'people' => nonEmptyListT(objectT(Person::class)),
-]));
+]);
+
+$request = new Mapper()->map($json, $type);
 ```
 
 ## Installation
@@ -42,9 +50,13 @@ To print any type, use `stringify()`:
 ```php
 use function Typhoon\Type\stringify;
 
-var_dump(stringify($flipType));
+$type = arrayShapeT([
+    'people' => nonEmptyListT(objectT(Person::class)),
+]);
 
-// callable<X, Y, Z>(callable(X, Y): Z): (callable(Y, X): Z)
+var_dump(stringify($type));
+
+// array{'people': non-empty-list<Person>}
 ```
 
 ## Supported types
