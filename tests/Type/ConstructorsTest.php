@@ -29,7 +29,7 @@ use Typhoon\Type\Internal\Optional;
 #[CoversFunction('Typhoon\Type\arrayShapeT')]
 #[CoversFunction('Typhoon\Type\unsealedArrayShapeT')]
 #[CoversFunction('Typhoon\Type\iterableT')]
-#[CoversFunction('Typhoon\Type\namedObjectT')]
+#[CoversFunction('Typhoon\Type\objectT')]
 #[CoversFunction('Typhoon\Type\objectShapeT')]
 #[CoversFunction('Typhoon\Type\callableT')]
 #[CoversFunction('Typhoon\Type\closureT')]

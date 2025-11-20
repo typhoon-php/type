@@ -101,7 +101,7 @@ final class StringifyTest extends TestCase
         yield [stringT("\n"), "'\\n'"];
         yield [lowercaseStringT, 'lowercase-string'];
         yield [classT(\stdClass::class), 'class-string<stdClass>'];
-        yield [classT(namedObjectT(\stdClass::class)), 'class-string<stdClass>'];
+        yield [classT(objectT(\stdClass::class)), 'class-string<stdClass>'];
         yield [scalarT, 'scalar'];
         yield [resourceT, 'resource'];
         yield [nonEmptyListT(), 'non-empty-list<mixed>'];
@@ -138,8 +138,8 @@ final class StringifyTest extends TestCase
         yield [arrayShapeT(['a' => optional(intT)]), "array{'a'?: int}"];
         yield [unsealedArrayShapeT(['a' => floatT], key: intT, value: stringT), "array{'a': float, ...<int, string>}"];
         yield [objectT, 'object'];
-        yield [namedObjectT(\ArrayObject::class), 'ArrayObject'];
-        yield [namedObjectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
+        yield [objectT(\ArrayObject::class), 'ArrayObject'];
+        yield [objectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
         yield [unionT(intT, stringT), 'int|string'];
         yield [unionT(intT, unionT(stringT, floatT)), 'int|(string|float)'];
         yield [unionT(intT, intersectionT(stringT, floatT)), 'int|(string&float)'];

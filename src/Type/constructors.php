@@ -138,7 +138,7 @@ function stringT(string $value): StringValueT
 function classT(string|Type $object): ClassT
 {
     if (\is_string($object)) {
-        return new ClassT(namedObjectT($object));
+        return new ClassT(objectT($object));
     }
 
     return new ClassT($object);
@@ -286,7 +286,7 @@ const objectT = ObjectT::T;
  * @param list<Type> $templateArguments
  * @return NamedObjectT<T>
  */
-function namedObjectT(string $class, array $templateArguments = []): NamedObjectT
+function objectT(string $class, array $templateArguments = []): NamedObjectT
 {
     return new NamedObjectT($class, $templateArguments);
 }
