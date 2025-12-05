@@ -454,7 +454,7 @@ final readonly class Stringify implements Visitor
 
         $string = (string) $float;
 
-        if (!preg_match('/\.(\d++)[eE]([+-])(\d++)/', $string, $matches)) {
+        if (preg_match('/\.(\d++)[eE]([+-])(\d++)/', $string, $matches) !== 1) {
             return $string;
         }
 

@@ -1,16 +1,31 @@
+includes:
+    - /composer/vendor/phpstan/phpstan-strict-rules/rules.neon
+    - /composer/vendor/phpstan/phpstan-phpunit/extension.neon
+    - /composer/vendor/phpstan/phpstan-phpunit/rules.neon
+
 parameters:
     level: max
     paths:
         - generator
         - src
         - tests
-    checkBenevolentUnionTypes: true
+    tmpDir: var/phpstan
     editorUrl: ''
-    editorUrlTitle: '%%file%%:%%line%%'
-    tmpDir: ./var/phpstan
+    editorUrlTitle: '%%relFile%%:%%line%%'
     ignoreErrors:
         -
             message: '#^PHPDoc tag @template T for class Typhoon\\Type\\CallableT with bound type callable is not supported\.$#'
             identifier: generics.notSupportedBound
             count: 1
             path: src/Type/CallableT.php
+
+    # strict rules
+    checkBenevolentUnionTypes: true
+    # checkMissingCallableSignature: true
+    # checkMissingOverrideMethodAttribute: true
+    checkUninitializedProperties: true
+    # rememberPossiblyImpureFunctionValues: false
+    reportAlwaysTrueInLastCondition: true
+    reportAnyTypeWideningInVarTag: true
+    reportPossiblyNonexistentConstantArrayOffset: true
+    reportPossiblyNonexistentGeneralArrayOffset: true

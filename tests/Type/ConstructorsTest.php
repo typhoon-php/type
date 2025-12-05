@@ -77,7 +77,7 @@ final class ConstructorsTest extends TestCase
 
     public function testConstantsAreSuffixedWithT(): void
     {
-        foreach (get_defined_constants(categorize: true)['user'] as $constant => $value) {
+        foreach (get_defined_constants(categorize: true)['user'] ?? [] as $constant => $value) {
             if (str_starts_with($constant, 'Typhoon\Type\\')) {
                 self::assertInstanceOf(Type::class, $value);
                 self::assertStringEndsWith('T', $constant);
