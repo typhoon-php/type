@@ -1,5 +1,10 @@
-/* export-ignore
-/adr/ -export-ignore
+* text eol=lf
+
+*.phar binary
+
+*.php diff=php
+
+* export-ignore
 /src/ -export-ignore
 /CHANGELOG.md -export-ignore
 /composer.json -export-ignore
