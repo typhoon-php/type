@@ -49,7 +49,7 @@ update: ## Update Composer dependencies
 .PHONY: u update
 
 install-lowest: ## Install lowest Composer dependencies (libraries only)
-	[ -f composer.lock ] && echo '`install-lowest` is not available in projects with composer.lock' && exit 1
+	@if [ -f composer.lock ]; then echo 'Recipe `install-lowest` is not available in projects with `composer.lock`'; exit 1; fi
 	$(COMPOSER) update --prefer-lowest --prefer-stable
 	@touch vendor/.lowest
 	@touch vendor
