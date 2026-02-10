@@ -64,7 +64,7 @@ rescaffold:
 	$(DOCKER) run \
 	  --volume .:/project \
 	  --user $(CONTAINER_USER) \
-	  --interactive --tty --rm \
+	  --interactive --tty --rm --init \
 	  --pull always \
 	  ghcr.io/phpyh/scaffolder:latest \
 	  --user-name-default '$(shell git config user.name 2>/dev/null || whoami 2>/dev/null)' \

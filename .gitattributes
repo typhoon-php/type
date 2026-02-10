@@ -1,4 +1,4 @@
-* text eol=lf
+* text=auto eol=lf
 
 *.phar binary
 
@@ -6,6 +6,7 @@
 
 * export-ignore
 /src/ -export-ignore
+/src/** -export-ignore
 /CHANGELOG.md -export-ignore
 /composer.json -export-ignore
 /LICENSE -export-ignore
