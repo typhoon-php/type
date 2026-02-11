@@ -73,6 +73,12 @@ rescaffold:
 	git add --all 2>/dev/null || true
 .PHONY: rescaffold
 
+generate:
+	$(RUN) php generator/generate.php
+	$(MAKE) fixer
+	git add .
+.PHONY: generate
+
 var:
 	mkdir var
 
