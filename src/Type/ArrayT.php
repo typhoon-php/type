@@ -12,8 +12,8 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant K of array-key = array-key
- * @template-covariant V = mixed
+ * @template K of array-key = array-key
+ * @template V = mixed
  * @implements Type<array<K, V>>
  * @codeCoverageIgnore
  */

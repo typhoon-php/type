@@ -185,9 +185,15 @@ final readonly class Type
             return "return \$this->{$firstType->name}({$code});";
         }
 
+        $unionFix = '';
+
+        if (str_contains($code, 'UnionT([')) {
+            $unionFix = ' // @phpstan-ignore argument.type';
+        }
+
         return <<<PHP
             /** @var \\{$firstType->className()} */
-            static \$reduced = {$code};
+            static \$reduced = {$code};{$unionFix}
             
             return \$this->{$firstType->name}(\$reduced);
             PHP;

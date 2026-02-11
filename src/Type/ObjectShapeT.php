@@ -12,7 +12,7 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T of object = object
+ * @template T of object = object
  * @implements Type<T>
  * @codeCoverageIgnore
  */

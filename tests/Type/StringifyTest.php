@@ -50,7 +50,7 @@ final class StringifyTest extends TestCase
         yield [intRangeT(max: 23), 'int<min, 23>'];
         yield [intRangeT(min: -100, max: 234), 'int<-100, 234>'];
         yield [intMaskT(intT(1), intT(2), intT(4)), 'int-mask-of<1|2|4>'];
-        yield [intMaskT(unionT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>'];
+        yield [intMaskT(unionT(intT(1), intT(2), intT(4))), 'int-mask-of<1|2|4>']; // @phpstan-ignore argument.type, argument.type
         yield [intMaskT(constantMaskT('JSON_*')), 'int-mask-of<const<JSON_*>>'];
         yield [floatT, 'float'];
         yield [floatT(0), '0.0'];
@@ -142,10 +142,10 @@ final class StringifyTest extends TestCase
         yield [objectT(\ArrayObject::class, [arrayKeyT, stringT]), 'ArrayObject<array-key, string>'];
         yield [unionT(intT, stringT), 'int|string'];
         yield [unionT(intT, unionT(stringT, floatT)), 'int|(string|float)'];
-        yield [unionT(intT, intersectionT(stringT, floatT)), 'int|(string&float)'];
+        yield [unionT(intT, intersectionT(stringT, scalarT)), 'int|(string&scalar)'];
         yield [nullOrT(stringT), 'null|string'];
-        yield [intersectionT(intT, stringT), 'int&string'];
-        yield [intersectionT(intT, unionT(stringT, floatT)), 'int&(string|float)'];
+        yield [intersectionT(intT, scalarT), 'int&scalar'];
+        yield [intersectionT(scalarT, unionT(stringT, floatT)), 'scalar&(string|float)'];
         yield [iterableT, 'iterable'];
         yield [iterableT(), 'iterable<mixed>'];
         yield [iterableT(value: stringT), 'iterable<string>'];

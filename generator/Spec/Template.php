@@ -20,7 +20,7 @@ final readonly class Template
     public function declaration(): string
     {
         return \sprintf(
-            '@template-covariant %s%s%s',
+            '@template %s%s%s',
             $this->name,
             $this->of === null ? '' : ' of ' . $this->of,
             $this->default === null ? '' : ' = ' . $this->default,

@@ -8,7 +8,7 @@ use Typhoon\Type\Visitor;
 
 /**
  * @api
- * @template-covariant T = mixed
+ * @template T = mixed
  */
 interface Type
 {

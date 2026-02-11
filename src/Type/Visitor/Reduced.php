@@ -52,7 +52,7 @@ trait Reduced
     public function boolT(BoolT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([FalseT::T, TrueT::T]);
+        static $reduced = new UnionT([FalseT::T, TrueT::T]); // @phpstan-ignore argument.type
 
         return $this->unionT($reduced);
     }
@@ -94,7 +94,7 @@ trait Reduced
     public function nonZeroIntT(NonZeroIntT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([NegativeIntT::T, PositiveIntT::T]);
+        static $reduced = new UnionT([NegativeIntT::T, PositiveIntT::T]); // @phpstan-ignore argument.type
 
         return $this->unionT($reduced);
     }
@@ -172,7 +172,7 @@ trait Reduced
     public function arrayKeyT(ArrayKeyT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([IntT::T, StringT::T]);
+        static $reduced = new UnionT([IntT::T, StringT::T]); // @phpstan-ignore argument.type
 
         return $this->unionT($reduced);
     }
@@ -181,7 +181,7 @@ trait Reduced
     public function numericT(NumericT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([IntT::T, FloatT::T, NumericStringT::T]);
+        static $reduced = new UnionT([IntT::T, FloatT::T, NumericStringT::T]); // @phpstan-ignore argument.type
 
         return $this->unionT($reduced);
     }
@@ -190,7 +190,7 @@ trait Reduced
     public function scalarT(ScalarT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([BoolT::T, IntT::T, FloatT::T, StringT::T]);
+        static $reduced = new UnionT([BoolT::T, IntT::T, FloatT::T, StringT::T]); // @phpstan-ignore argument.type
 
         return $this->unionT($reduced);
     }
@@ -199,7 +199,7 @@ trait Reduced
     public function mixedT(MixedT $type): mixed
     {
         /** @var UnionT */
-        static $reduced = new UnionT([NullT::T, FalseT::T, TrueT::T, IntT::T, FloatT::T, StringT::T, ArrayBareT::T, ObjectT::T, ResourceT::T]);
+        static $reduced = new UnionT([NullT::T, FalseT::T, TrueT::T, IntT::T, FloatT::T, StringT::T, ArrayBareT::T, ObjectT::T, ResourceT::T]); // @phpstan-ignore argument.type
 
         return $this->unionT($reduced);
     }

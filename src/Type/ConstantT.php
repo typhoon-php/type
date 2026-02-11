@@ -12,7 +12,7 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T = mixed
+ * @template T = mixed
  * @implements Type<T>
  * @codeCoverageIgnore
  */

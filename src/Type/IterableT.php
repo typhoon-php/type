@@ -12,8 +12,8 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant K = mixed
- * @template-covariant V = mixed
+ * @template K = mixed
+ * @template V = mixed
  * @implements Type<iterable<K, V>>
  * @codeCoverageIgnore
  */

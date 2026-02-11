@@ -226,8 +226,7 @@ function arrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
  */
 function nonEmptyArrayT(Type $key = arrayKeyT, Type $value = mixedT): ArrayT
 {
-    /** @var ArrayT<K, V>&Type<non-empty-array<K, V>> */
-    return new ArrayT($key, $value, isNonEmpty: true);
+    return new ArrayT($key, $value, isNonEmpty: true); // @phpstan-ignore return.type
 }
 
 /**
@@ -403,24 +402,35 @@ function classConstantMaskT(string $class, string|Mask $mask): ClassConstantMask
 /**
  * @api
  * @no-named-arguments
- * @param Type|non-empty-list<Type> $types
+ * @template T1
+ * @template T2
+ * @param Type<T1>|non-empty-list<Type<T1>> $type
+ * @param Type<T2> ...$types
+ * @return IntersectionT<T1&T2>
  */
-function intersectionT(Type|array $types, Type ...$moreTypes): IntersectionT
+function intersectionT(Type|array $type, Type ...$types): IntersectionT
 {
-    return new IntersectionT([...(\is_array($types) ? $types : [$types]), ...$moreTypes]);
+    return new IntersectionT([ // @phpstan-ignore return.type
+        ...(\is_array($type) ? $type : [$type]),
+        ...$types,
+    ]);
 }
 
 /**
  * @api
  * @no-named-arguments
- * @template T
- * @param Type<T>|non-empty-list<Type<T>> $types
- * @param Type<T> ...$moreTypes
- * @return UnionT<T>
+ * @template T1
+ * @template T2
+ * @param Type<T1>|non-empty-list<Type<T1>> $type
+ * @param Type<T2> ...$types
+ * @return UnionT<T1|T2>
  */
-function unionT(Type|array $types, Type ...$moreTypes): UnionT
+function unionT(Type|array $type, Type ...$types): UnionT
 {
-    return new UnionT([...(\is_array($types) ? $types : [$types]), ...$moreTypes]);
+    return new UnionT([ // @phpstan-ignore argument.type
+        ...(\is_array($type) ? $type : [$type]),
+        ...$types,
+    ]);
 }
 
 /**
@@ -431,7 +441,7 @@ function unionT(Type|array $types, Type ...$moreTypes): UnionT
  */
 function nullOrT(Type $type): UnionT
 {
-    return new UnionT([nullT, $type]);
+    return unionT(nullT, $type);
 }
 
 const mixedT = MixedT::T;

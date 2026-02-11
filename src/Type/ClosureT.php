@@ -12,7 +12,7 @@ use Typhoon\Type;
 
 /**
  * @api
- * @template-covariant T of \Closure = \Closure
+ * @template T of \Closure = \Closure
  * @implements Type<T>
  * @codeCoverageIgnore
  */
