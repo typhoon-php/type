@@ -3,8 +3,8 @@
 [![PHP Version Requirement](https://img.shields.io/packagist/dependency-v/typhoon/type/php)](https://packagist.org/packages/typhoon/type)
 [![GitHub Release](https://img.shields.io/github/v/release/typhoon-php/type)](https://github.com/typhoon-php/type/releases)
 [![PHPStan](https://img.shields.io/badge/phpstan%20level-max-brightgreen.svg?style=flat&logo=php)](phpstan.dist.neon)
-[![Code Coverage](https://codecov.io/gh/typhoon-php/type/branch/0.5.x/graph/badge.svg)](https://codecov.io/gh/typhoon-php/type/tree/0.5.x)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Ftyphoon-php%2Ftype%2F0.5.x)](https://dashboard.stryker-mutator.io/reports/github.com/typhoon-php/type/0.5.x)
+[![Code Coverage](https://codecov.io/gh/typhoon-php/type/branch/0.8.x/graph/badge.svg)](https://codecov.io/gh/typhoon-php/type/tree/0.8.x)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Ftyphoon-php%2Ftype%2F0.8.x)](https://dashboard.stryker-mutator.io/reports/github.com/typhoon-php/type/0.8.x)
 
 Typhoon Type is an object abstraction over the modern PHP type system. Use this library to build tools that work with
 sophisticated types:
