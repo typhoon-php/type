@@ -19,8 +19,8 @@ use Typhoon\Type\Visitor;
 
 final readonly class Generator
 {
-    private const GENERATED_NOTICE = '@generated This file was generated, do not edit manually.';
-    private const NAMESPACE = 'Typhoon\Type';
+    private const string GENERATED_NOTICE = '@generated This file was generated, do not edit manually.';
+    private const string NAMESPACE = 'Typhoon\Type';
 
     /**
      * @param non-empty-string $typeDir

@@ -47,7 +47,7 @@ use Typhoon\Type\Internal\Optional;
 #[CoversClass(Parameter::class)]
 final class ConstructorsTest extends TestCase
 {
-    private const NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
+    private const array NON_TYPE_CONSTRUCTOR_FUNCTIONS = [
         'optional',
         'param',
         'stringify',

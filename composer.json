@@ -18,12 +18,11 @@
         }
     ],
     "require": {
-        "php": "^8.2",
-        "symfony/polyfill-php83": "^1.33"
+        "php": "^8.3"
     },
     "require-dev": {
         "nette/php-generator": "^4.2.0",
-        "phpunit/phpunit": "^11.5.42",
+        "phpunit/phpunit": "^12",
         "symfony/finder": "^7.3.5",
         "symfony/polyfill-php85": "^1.33",
         "symfony/var-dumper": "^7.3.5"
