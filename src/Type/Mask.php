@@ -10,21 +10,22 @@ namespace Typhoon\Type;
 final readonly class Mask
 {
     /**
-     * @var non-empty-string
-     */
-    private string $pattern;
-
-    /**
      * @param non-empty-string $mask
      */
     public function __construct(
         public string $mask,
-    ) {
-        $this->pattern = \sprintf('/^%s$/D', str_replace('\*', '.*', preg_quote($mask, '/')));
-    }
+    ) {}
 
     public function test(string $name): bool
     {
-        return preg_match($this->pattern, $name) === 1;
+        return preg_match($this->pattern(), $name) === 1;
+    }
+
+    /**
+     * @return non-empty-string
+     */
+    private function pattern(): string
+    {
+        return \sprintf('/^%s$/D', str_replace('\*', '.*', preg_quote($this->mask, '/')));
     }
 }
