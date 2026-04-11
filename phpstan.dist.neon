@@ -6,7 +6,6 @@ includes:
 parameters:
     level: max
     paths:
-        - generator
         - src
         - tests
     tmpDir: var/phpstan

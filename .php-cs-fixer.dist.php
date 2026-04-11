@@ -10,7 +10,6 @@ use PHPyh\CodingStandard\PhpCsFixerCodingStandard;
 $config = (new Config())
     ->setFinder(
         Finder::create()
-            ->in(__DIR__ . '/generator')
             ->in(__DIR__ . '/src')
             ->in(__DIR__ . '/tests')
             ->append([

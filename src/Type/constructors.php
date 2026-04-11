@@ -5,14 +5,8 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\Type;
-use Typhoon\Type\Generator\Generator;
 use Typhoon\Type\Internal\Optional;
 
-// @codeCoverageIgnoreStart
-if (class_exists(Generator::class, autoload: false)) {
-    return;
-}
-/** @codeCoverageIgnoreEnd */
 const neverT = NeverT::T;
 
 const voidT = VoidT::T;
