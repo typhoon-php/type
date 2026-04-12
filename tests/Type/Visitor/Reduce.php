@@ -7,14 +7,14 @@ namespace Typhoon\Type\Visitor;
 use Typhoon\Type;
 
 /**
- * @extends Fallback<null>
+ * @extends Fallback<Type>
  */
-final class FallbackReduced extends Fallback
+final class Reduce extends Fallback
 {
     use Reduced;
 
     protected function fallback(Type $type): mixed
     {
-        return null;
+        return $type;
     }
 }
