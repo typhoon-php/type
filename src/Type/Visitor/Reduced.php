@@ -9,7 +9,11 @@ use Typhoon\Type\ArrayKeyT;
 use Typhoon\Type\ArrayT;
 use Typhoon\Type\BoolT;
 use Typhoon\Type\CallableT;
+use Typhoon\Type\ClassConstantMaskT;
+use Typhoon\Type\ClassConstantT;
 use Typhoon\Type\ClosureT;
+use Typhoon\Type\ConstantMaskT;
+use Typhoon\Type\ConstantT;
 use Typhoon\Type\FalseT;
 use Typhoon\Type\FloatRangeT;
 use Typhoon\Type\FloatT;
@@ -23,6 +27,7 @@ use Typhoon\Type\IterableT;
 use Typhoon\Type\MixedT;
 use Typhoon\Type\NamedObjectT;
 use Typhoon\Type\NegativeIntT;
+use Typhoon\Type\NeverT;
 use Typhoon\Type\NonNegativeIntT;
 use Typhoon\Type\NonPositiveIntT;
 use Typhoon\Type\NonZeroIntT;
@@ -162,6 +167,44 @@ trait Reduced
             new NamedObjectT(\Closure::class),
             new CallableT($type->parameters, $type->returnType),
         ]));
+    }
+
+    #[\Override]
+    public function constantMaskT(ConstantMaskT $type): mixed
+    {
+        $constants = [];
+
+        foreach (get_defined_constants() as $name => $_) {
+            if ($type->mask->test($name)) {
+                \assert($name !== '');
+                $constants[] = new ConstantT($name);
+            }
+        }
+
+        return match (\count($constants)) {
+            0 => $this->neverT(NeverT::T),
+            1 => $this->constantT($constants[0]),
+            default => $this->unionT(new UnionT($constants)),
+        };
+    }
+
+    #[\Override]
+    public function classConstantMaskT(ClassConstantMaskT $type): mixed
+    {
+        $constants = [];
+
+        foreach ((new \ReflectionClass($type->class))->getConstants(\ReflectionClassConstant::IS_PUBLIC) as $name => $_) {
+            if ($type->mask->test($name)) {
+                \assert($name !== '');
+                $constants[] = new ClassConstantT($type->class, $name);
+            }
+        }
+
+        return match (\count($constants)) {
+            0 => $this->neverT(NeverT::T),
+            1 => $this->classConstantT($constants[0]),
+            default => $this->unionT(new UnionT($constants)),
+        };
     }
 
     #[\Override]
