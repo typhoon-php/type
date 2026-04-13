@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Typhoon\Type;
 
 use Typhoon\Type;
+use Typhoon\Type\Internal\EvaluateBitmask;
 
 /**
  * @api
@@ -23,5 +24,10 @@ final readonly class BitmaskT implements Type
     public function accept(Visitor $visitor): mixed
     {
         return $visitor->bitmaskT($this);
+    }
+
+    public function evaluate(): int
+    {
+        return $this->intType->accept(new EvaluateBitmask($this));
     }
 }
