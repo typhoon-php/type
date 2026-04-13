@@ -29,4 +29,9 @@ final readonly class ClassConstantT implements Type
     {
         return $visitor->classConstantT($this);
     }
+
+    public function evaluate(): mixed
+    {
+        return $this->class::{$this->name};
+    }
 }
