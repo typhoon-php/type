@@ -314,6 +314,7 @@ const callableT = CallableBareT::T;
  * @api
  * @param list<Parameter|Type> $params
  * @return CallableT<callable>
+ * @phpstan-ignore missingType.callable
  */
 function callableT(array $params = [], Type $return = mixedT): CallableT
 {
@@ -330,6 +331,7 @@ function callableT(array $params = [], Type $return = mixedT): CallableT
  * @api
  * @param list<Parameter|Type> $params
  * @return ClosureT<\Closure>
+ * @phpstan-ignore missingType.callable
  */
 function closureT(array $params = [], Type $return = mixedT): ClosureT
 {
