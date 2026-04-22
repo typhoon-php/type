@@ -7,6 +7,10 @@ namespace Typhoon\Type;
 use Typhoon\Type;
 use Typhoon\Type\Internal\Optional;
 
+if (\defined('Typhoon\Type\neverT')) {
+    return;
+}
+
 const neverT = NeverT::T;
 
 const voidT = VoidT::T;

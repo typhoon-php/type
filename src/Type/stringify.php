@@ -7,6 +7,10 @@ namespace Typhoon\Type;
 use Typhoon\Type;
 use Typhoon\Type\Visitor\Stringify;
 
+if (\function_exists('Typhoon\Type\stringify')) {
+    return;
+}
+
 /**
  * @api
  * @return non-empty-string
