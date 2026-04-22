@@ -90,11 +90,11 @@ fixer-check: var ## Check code style using PHP-CS-Fixer
 	$(RUN) php-cs-fixer fix --diff --verbose --dry-run $(ARGS)
 .PHONY: fixer-check
 
-rector: var ## Fix code style using Rector
+rector: var vendor ## Fix code style using Rector
 	$(RUN) rector process $(ARGS)
 .PHONY: rector
 
-rector-check: var ## Check code style using Rector
+rector-check: var vendor ## Check code style using Rector
 	$(RUN) rector process --dry-run $(ARGS)
 .PHONY: rector-check
 

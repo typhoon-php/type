@@ -1,5 +1,0 @@
-{
-    "dockerComposeFile": "compose.yaml",
-    "service": "php",
-    "workspaceFolder": "/workspace"
-}

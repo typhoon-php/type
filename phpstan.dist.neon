@@ -20,10 +20,9 @@ parameters:
 
     # strict rules
     checkBenevolentUnionTypes: true
-    # checkMissingCallableSignature: true
-    # checkMissingOverrideMethodAttribute: true
+    checkMissingCallableSignature: true
     checkUninitializedProperties: true
-    # rememberPossiblyImpureFunctionValues: false
+    rememberPossiblyImpureFunctionValues: false
     reportAlwaysTrueInLastCondition: true
     reportAnyTypeWideningInVarTag: true
     reportPossiblyNonexistentConstantArrayOffset: true
